@@ -1,7 +1,7 @@
-import { freeResourceProducts } from '../free-resources';
+import { freeResourceProducts } from "../free-resources";
 
-describe('freeResourceProducts', () => {
-	it('attaches AB test copy to every free resource', () => {
+describe("freeResourceProducts", () => {
+	it("attaches AB test copy to every free resource", () => {
 		expect(freeResourceProducts.length).toBeGreaterThan(0);
 
 		for (const product of freeResourceProducts) {
@@ -16,9 +16,9 @@ describe('freeResourceProducts', () => {
 		}
 	});
 
-	it('defines a curated set of featured free resources', () => {
+	it("defines a curated set of featured free resources", () => {
 		const featuredFreebies = freeResourceProducts.filter(
-			(product) => product.isFeaturedFreeResource
+			(product) => product.isFeaturedFreeResource,
 		);
 
 		expect(featuredFreebies.length).toBeGreaterThan(0);

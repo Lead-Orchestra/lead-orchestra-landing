@@ -11,8 +11,8 @@
  * 4. Update both static and dynamic SEO files
  */
 
-import { DEFAULT_SEO } from '@/data/constants/seo';
-import type { SeoMeta } from './seo';
+import { DEFAULT_SEO } from "@/data/constants/seo";
+import type { SeoMeta } from "./seo";
 
 export interface NotionSeoPage {
 	pagePath: string; // e.g., "/", "/pricing", "/features"
@@ -22,8 +22,8 @@ export interface NotionSeoPage {
 	canonical?: string;
 	image?: string;
 	priority?: number;
-	changeFrequency?: SeoMeta['changeFrequency'];
-	type?: SeoMeta['type'];
+	changeFrequency?: SeoMeta["changeFrequency"];
+	type?: SeoMeta["type"];
 	datePublished?: string;
 	dateModified?: string;
 }
@@ -35,7 +35,8 @@ export function mapNotionSeoToSeoMeta(notionSeo: NotionSeoPage): SeoMeta {
 	return {
 		title: notionSeo.title || DEFAULT_SEO.title,
 		description: notionSeo.description || DEFAULT_SEO.description,
-		canonical: notionSeo.canonical || `${DEFAULT_SEO.canonical}${notionSeo.pagePath}`,
+		canonical:
+			notionSeo.canonical || `${DEFAULT_SEO.canonical}${notionSeo.pagePath}`,
 		keywords: notionSeo.keywords || DEFAULT_SEO.keywords,
 		image: notionSeo.image || DEFAULT_SEO.image,
 		type: notionSeo.type || DEFAULT_SEO.type,
@@ -51,11 +52,14 @@ export function mapNotionSeoToSeoMeta(notionSeo: NotionSeoPage): SeoMeta {
  * Extracts SEO metadata from Notion page content
  * Parses markdown content to find SEO-related sections
  */
-export function extractSeoFromNotionContent(content: string): Partial<NotionSeoPage> {
+export function extractSeoFromNotionContent(
+	content: string,
+): Partial<NotionSeoPage> {
 	const seo: Partial<NotionSeoPage> = {};
 
 	// Extract title (usually in H1 or first line)
-	const titleMatch = content.match(/^#\s+(.+)$/m) || content.match(/title[:\s]+(.+)/i);
+	const titleMatch =
+		content.match(/^#\s+(.+)$/m) || content.match(/title[:\s]+(.+)/i);
 	if (titleMatch) {
 		seo.title = titleMatch[1].trim();
 	}
@@ -72,7 +76,7 @@ export function extractSeoFromNotionContent(content: string): Partial<NotionSeoP
 	const keywordsMatch = content.match(/keywords?[:\s]+(.+?)(?:\n|$)/i);
 	if (keywordsMatch) {
 		seo.keywords = keywordsMatch[1]
-			.split(',')
+			.split(",")
 			.map((k) => k.trim())
 			.filter(Boolean);
 	}
@@ -85,7 +89,8 @@ export function extractSeoFromNotionContent(content: string): Partial<NotionSeoP
 
 	// Extract image
 	const imageMatch =
-		content.match(/image[:\s]+(.+?)(?:\n|$)/i) || content.match(/og:image[:\s]+(.+?)(?:\n|$)/i);
+		content.match(/image[:\s]+(.+?)(?:\n|$)/i) ||
+		content.match(/og:image[:\s]+(.+?)(?:\n|$)/i);
 	if (imageMatch) {
 		seo.image = imageMatch[1].trim();
 	}
@@ -97,7 +102,10 @@ export function extractSeoFromNotionContent(content: string): Partial<NotionSeoP
  * Merges Notion SEO data with existing static SEO
  * Preserves existing values if Notion data is missing
  */
-export function mergeSeoData(existing: SeoMeta, notion: Partial<NotionSeoPage>): SeoMeta {
+export function mergeSeoData(
+	existing: SeoMeta,
+	notion: Partial<NotionSeoPage>,
+): SeoMeta {
 	return {
 		...existing,
 		...(notion.title && { title: notion.title }),
@@ -118,7 +126,7 @@ export function mergeSeoData(existing: SeoMeta, notion: Partial<NotionSeoPage>):
  * Update this as you add SEO pages in Notion
  */
 export const NOTION_SEO_PAGE_MAP: Record<string, string> = {
-	'/': '2b2e9c25-ecb0-8002-a26d-e4431e05c790', // Brand guidelines (contains homepage SEO)
+	"/": "2b2e9c25-ecb0-8002-a26d-e4431e05c790", // Brand guidelines (contains homepage SEO)
 	// Add more mappings as you create SEO pages in Notion
 };
 
@@ -160,6 +168,6 @@ export async function syncDynamicSeoFromNotion() {
 	// - blog.ts: Blog post SEO
 	// - product.ts: Product page SEO
 
-	console.log('Syncing dynamic SEO from Notion...');
+	console.log("Syncing dynamic SEO from Notion...");
 	// TODO: Implement actual sync logic
 }

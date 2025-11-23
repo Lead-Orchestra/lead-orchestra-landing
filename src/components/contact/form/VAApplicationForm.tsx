@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-import { type VAFormValues, vaFormSchema } from '@/data/contact/va';
+import { type VAFormValues, vaFormSchema } from "@/data/contact/va";
 
-import MultiSelectDropdown from '@/components/ui/MultiSelectDropdown';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import MultiSelectDropdown from "@/components/ui/MultiSelectDropdown";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Form,
 	FormControl,
@@ -19,58 +19,58 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 const specialtyOptions = [
-	{ value: 'Lead Qualification', label: 'Lead Qualification' },
-	{ value: 'CRM Management', label: 'CRM Management' },
-	{ value: 'Email Outreach', label: 'Email Outreach' },
-	{ value: 'Appointment Booking', label: 'Appointment Booking' },
-	{ value: 'Data Enrichment', label: 'Data Enrichment' },
-	{ value: 'Data Entry', label: 'Data Entry' },
-	{ value: 'Phone Calling', label: 'Phone Calling' },
+	{ value: "Lead Qualification", label: "Lead Qualification" },
+	{ value: "CRM Management", label: "CRM Management" },
+	{ value: "Email Outreach", label: "Email Outreach" },
+	{ value: "Appointment Booking", label: "Appointment Booking" },
+	{ value: "Data Enrichment", label: "Data Enrichment" },
+	{ value: "Data Entry", label: "Data Entry" },
+	{ value: "Phone Calling", label: "Phone Calling" },
 ];
 
 const crmOptions = [
-	{ value: 'HubSpot', label: 'HubSpot' },
-	{ value: 'GoHighLevel', label: 'GoHighLevel' },
-	{ value: 'Salesforce', label: 'Salesforce' },
-	{ value: 'Zoho', label: 'Zoho' },
-	{ value: 'Follow Up Boss', label: 'Follow Up Boss' },
-	{ value: 'Outreach.io', label: 'Outreach.io' },
+	{ value: "HubSpot", label: "HubSpot" },
+	{ value: "GoHighLevel", label: "GoHighLevel" },
+	{ value: "Salesforce", label: "Salesforce" },
+	{ value: "Zoho", label: "Zoho" },
+	{ value: "Follow Up Boss", label: "Follow Up Boss" },
+	{ value: "Outreach.io", label: "Outreach.io" },
 ];
 
 const languageOptions = [
-	{ value: 'English', label: 'English' },
-	{ value: 'Spanish', label: 'Spanish' },
-	{ value: 'Mandarin', label: 'Mandarin' },
-	{ value: 'Korean', label: 'Korean' },
-	{ value: 'Portuguese', label: 'Portuguese' },
+	{ value: "English", label: "English" },
+	{ value: "Spanish", label: "Spanish" },
+	{ value: "Mandarin", label: "Mandarin" },
+	{ value: "Korean", label: "Korean" },
+	{ value: "Portuguese", label: "Portuguese" },
 ];
 
 const yearsExperienceOptions = [
-	{ value: '0-1', label: '0-1 years' },
-	{ value: '2-3', label: '2-3 years' },
-	{ value: '4-5', label: '4-5 years' },
-	{ value: '6-8', label: '6-8 years' },
-	{ value: '9+', label: '9+ years' },
+	{ value: "0-1", label: "0-1 years" },
+	{ value: "2-3", label: "2-3 years" },
+	{ value: "4-5", label: "4-5 years" },
+	{ value: "6-8", label: "6-8 years" },
+	{ value: "9+", label: "9+ years" },
 ];
 
 const hourlyRateOptions = [
-	{ value: '$15-25', label: '$15-25/hr' },
-	{ value: '$25-40', label: '$25-40/hr' },
-	{ value: '$40-60', label: '$40-60/hr' },
-	{ value: '$60-75', label: '$60-75/hr' },
-	{ value: '$75+', label: '$75+/hr' },
+	{ value: "$15-25", label: "$15-25/hr" },
+	{ value: "$25-40", label: "$25-40/hr" },
+	{ value: "$40-60", label: "$40-60/hr" },
+	{ value: "$60-75", label: "$60-75/hr" },
+	{ value: "$75+", label: "$75+/hr" },
 ];
 
 export default function VAApplicationForm() {
@@ -80,18 +80,18 @@ export default function VAApplicationForm() {
 	const form = useForm<VAFormValues>({
 		resolver: zodResolver(vaFormSchema),
 		defaultValues: {
-			firstName: '',
-			lastName: '',
-			email: '',
-			phone: '',
-			yearsExperience: '',
+			firstName: "",
+			lastName: "",
+			email: "",
+			phone: "",
+			yearsExperience: "",
 			specialties: [],
 			crmExperience: [],
 			languages: [],
 			availability: undefined,
-			hourlyRateRange: '',
-			portfolioUrl: '',
-			whyApply: '',
+			hourlyRateRange: "",
+			portfolioUrl: "",
+			whyApply: "",
 			termsAccepted: false,
 		},
 	});
@@ -99,23 +99,27 @@ export default function VAApplicationForm() {
 	const onSubmit = async (data: VAFormValues) => {
 		setIsSubmitting(true);
 		try {
-			const response = await fetch('/api/vas/apply', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const response = await fetch("/api/vas/apply", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(data),
 			});
 
 			if (!response.ok) {
-				const errorData = await response.json().catch(() => ({ message: 'Submission failed' }));
-				throw new Error(errorData.message || 'Failed to submit application');
+				const errorData = await response
+					.json()
+					.catch(() => ({ message: "Submission failed" }));
+				throw new Error(errorData.message || "Failed to submit application");
 			}
 
-			toast.success('VA application submitted successfully!');
+			toast.success("VA application submitted successfully!");
 			form.reset();
 		} catch (error) {
-			console.error('[VAApplicationForm] Submission error:', error);
+			console.error("[VAApplicationForm] Submission error:", error);
 			toast.error(
-				error instanceof Error ? error.message : 'Failed to submit application. Please try again.'
+				error instanceof Error
+					? error.message
+					: "Failed to submit application. Please try again.",
 			);
 		} finally {
 			setIsSubmitting(false);
@@ -168,7 +172,11 @@ export default function VAApplicationForm() {
 								<FormItem>
 									<FormLabel>Email</FormLabel>
 									<FormControl>
-										<Input type="email" placeholder="john@example.com" {...field} />
+										<Input
+											type="email"
+											placeholder="john@example.com"
+											{...field}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -182,7 +190,11 @@ export default function VAApplicationForm() {
 								<FormItem>
 									<FormLabel>Phone</FormLabel>
 									<FormControl>
-										<Input type="tel" placeholder="+1 (555) 123-4567" {...field} />
+										<Input
+											type="tel"
+											placeholder="+1 (555) 123-4567"
+											{...field}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -201,7 +213,10 @@ export default function VAApplicationForm() {
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Years of VA Experience</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
+									<Select
+										onValueChange={field.onChange}
+										defaultValue={field.value}
+									>
 										<FormControl>
 											<SelectTrigger>
 												<SelectValue placeholder="Select years of experience" />
@@ -263,7 +278,9 @@ export default function VAApplicationForm() {
 							name="languages"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Languages Spoken (select all that apply)</FormLabel>
+									<FormLabel>
+										Languages Spoken (select all that apply)
+									</FormLabel>
 									<FormControl>
 										<MultiSelectDropdown
 											options={languageOptions}
@@ -283,7 +300,10 @@ export default function VAApplicationForm() {
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Availability</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
+									<Select
+										onValueChange={field.onChange}
+										defaultValue={field.value}
+									>
 										<FormControl>
 											<SelectTrigger>
 												<SelectValue placeholder="Select availability" />
@@ -306,7 +326,10 @@ export default function VAApplicationForm() {
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Hourly Rate Range</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
+									<Select
+										onValueChange={field.onChange}
+										defaultValue={field.value}
+									>
 										<FormControl>
 											<SelectTrigger>
 												<SelectValue placeholder="Select hourly rate range" />
@@ -336,7 +359,7 @@ export default function VAApplicationForm() {
 											type="url"
 											placeholder="https://yourportfolio.com"
 											{...field}
-											value={field.value || ''}
+											value={field.value || ""}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -350,7 +373,8 @@ export default function VAApplicationForm() {
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Why do you want to join our VA marketplace? (min. 50 characters)
+										Why do you want to join our VA marketplace? (min. 50
+										characters)
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -371,7 +395,10 @@ export default function VAApplicationForm() {
 						render={({ field }) => (
 							<FormItem className="flex flex-row items-start space-x-3 space-y-0">
 								<FormControl>
-									<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+									<Checkbox
+										checked={field.value}
+										onCheckedChange={field.onChange}
+									/>
 								</FormControl>
 								<div className="space-y-1 leading-none">
 									<FormLabel>I accept the terms and conditions</FormLabel>
@@ -387,7 +414,7 @@ export default function VAApplicationForm() {
 								Submitting...
 							</>
 						) : (
-							'Submit Application'
+							"Submit Application"
 						)}
 					</Button>
 				</form>

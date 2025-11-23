@@ -1,5 +1,5 @@
 // src/lib/icons/FallbackIcon.tsx
-import type { FC, SVGProps } from 'react';
+import type { FC, SVGProps } from "react";
 
 const FallbackIcon: FC<SVGProps<SVGSVGElement>> = (props) => (
 	<svg

@@ -1,8 +1,8 @@
-import { mockProducts } from '@/data/products';
-import type { ProductType } from '@/types/products';
-import { getTestBaseUrl } from '@/utils/env';
-import { getTestimonialReviewData } from '@/utils/seo/schema';
-import type { SeoMeta } from '@/utils/seo/seo';
+import { mockProducts } from "@/data/products";
+import type { ProductType } from "@/types/products";
+import { getTestBaseUrl } from "@/utils/env";
+import { getTestimonialReviewData } from "@/utils/seo/schema";
+import type { SeoMeta } from "@/utils/seo/seo";
 
 /**
  * Fetch a product by slug (replace with real DB or API call in production)
@@ -22,14 +22,14 @@ export async function getSeoMetadataForProduct(slug: string): Promise<SeoMeta> {
 
 	if (!product) {
 		return {
-			title: 'Product Not Found',
-			description: 'The requested product could not be found.',
+			title: "Product Not Found",
+			description: "The requested product could not be found.",
 			canonical: pageUrl,
 			keywords: [],
-			image: '',
-			type: 'article',
+			image: "",
+			type: "article",
 			priority: 0.6, // * fallback
-			changeFrequency: 'monthly', // * fallback
+			changeFrequency: "monthly", // * fallback
 		};
 	}
 
@@ -37,22 +37,22 @@ export async function getSeoMetadataForProduct(slug: string): Promise<SeoMeta> {
 	const keywords = [
 		product.name,
 		...(product.types?.map((t) => t.name) || []),
-		'Deal Scale',
-		'shop',
-		'products',
-		'digital',
-		'ecommerce',
+		"Deal Scale",
+		"shop",
+		"products",
+		"digital",
+		"ecommerce",
 	];
 
 	return {
 		title: `${product.name} | Product | Deal Scale`,
-		description: product.description || 'Product details and features.',
+		description: product.description || "Product details and features.",
 		canonical: pageUrl,
 		keywords,
-		image: product.images?.[0] || '',
-		type: 'article',
+		image: product.images?.[0] || "",
+		type: "article",
 		priority: 0.6, // * or customize per product
-		changeFrequency: 'monthly', // * or customize per product
+		changeFrequency: "monthly", // * or customize per product
 		ratingValue: aggregateRating?.ratingValue,
 		reviewCount: aggregateRating?.reviewCount,
 	};

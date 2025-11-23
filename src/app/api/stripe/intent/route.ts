@@ -1,18 +1,17 @@
-import { mockDiscountCodes } from '@/data/discount/mockDiscountCodes';
+import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
 import {
 	createPaymentIntent,
 	deletePaymentIntent,
 	retrievePaymentIntent,
 	updatePaymentIntent,
-} from '@/lib/externalRequests/stripe';
-import type { ProductCategory } from '@/types/products';
-import type { PricingCategoryValue } from '@/types/service/plans';
-import { validateDiscountCode } from '@/utils/discountValidator';
-import { cookies } from 'next/headers';
-import { type NextRequest, NextResponse } from 'next/server';
-import type stripe from 'stripe';
-import { z } from 'zod';
-
+} from "@/lib/externalRequests/stripe";
+import type { ProductCategory } from "@/types/products";
+import type { PricingCategoryValue } from "@/types/service/plans";
+import { validateDiscountCode } from "@/utils/discountValidator";
+import { cookies } from "next/headers";
+import { type NextRequest, NextResponse } from "next/server";
+import type stripe from "stripe";
+import { z } from "zod";
 const paymentIntentSchema = z.object({
 	price: z.number().int().positive(),
 	description: z.string().min(1),
@@ -27,16 +26,17 @@ interface ErrorResponse {
 	code?: string;
 }
 
+export const runtime = 'edge';
 export async function POST(request: Request) {
 	try {
 		const rawBody = await request.text();
 		if (!rawBody.trim()) {
 			return NextResponse.json(
 				{
-					error: 'Invalid request payload',
-					details: 'Request body is required',
+					error: "Invalid request payload",
+					details: "Request body is required",
 				},
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -44,13 +44,13 @@ export async function POST(request: Request) {
 		try {
 			jsonBody = JSON.parse(rawBody);
 		} catch (parseError) {
-			console.error('Payment intent payload parse error:', parseError);
+			console.error("Payment intent payload parse error:", parseError);
 			return NextResponse.json(
 				{
-					error: 'Invalid request payload',
-					details: 'Malformed JSON',
+					error: "Invalid request payload",
+					details: "Malformed JSON",
 				},
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -58,21 +58,23 @@ export async function POST(request: Request) {
 		if (!validation.success) {
 			const errorMessage =
 				validation.error.errors
-					.map((issue) => `${issue.path.join('.') || 'payload'}: ${issue.message}`)
-					.join('; ') || 'Invalid payload';
+					.map(
+						(issue) => `${issue.path.join(".") || "payload"}: ${issue.message}`,
+					)
+					.join("; ") || "Invalid payload";
 
 			return NextResponse.json(
 				{
-					error: 'Invalid request payload',
+					error: "Invalid request payload",
 					details: errorMessage,
 				},
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		const { price, description, metadata } = validation.data;
 
-		console.log('Creating payment intent for:', { price, description });
+		console.log("Creating payment intent for:", { price, description });
 		const paymentIntent = await createPaymentIntent({
 			price,
 			description,
@@ -90,13 +92,13 @@ export async function POST(request: Request) {
 			created: paymentIntent.created,
 		});
 	} catch (error) {
-		console.error('Payment intent error:', error);
+		console.error("Payment intent error:", error);
 
 		const errorResponse: ErrorResponse = {
-			error: 'Failed to create payment intent',
+			error: "Failed to create payment intent",
 		};
 
-		if (typeof error === 'object' && error !== null) {
+		if (typeof error === "object" && error !== null) {
 			const stripeError = error as stripe.StripeRawError;
 			if (stripeError.code) {
 				errorResponse.details = stripeError.message;
@@ -115,13 +117,19 @@ export async function PUT(req: NextRequest) {
 		const { intentId, discountCode: codeToValidate } = await req.json();
 
 		if (!intentId) {
-			return NextResponse.json({ error: 'Payment Intent ID is required' }, { status: 400 });
+			return NextResponse.json(
+				{ error: "Payment Intent ID is required" },
+				{ status: 400 },
+			);
 		}
 
 		// 1. Retrieve the existing payment intent to get its current state from Stripe
 		const existingIntent = await retrievePaymentIntent(intentId);
 		if (!existingIntent) {
-			return NextResponse.json({ error: 'Payment Intent not found' }, { status: 404 });
+			return NextResponse.json(
+				{ error: "Payment Intent not found" },
+				{ status: 404 },
+			);
 		}
 
 		const originalPrice = existingIntent.amount;
@@ -130,21 +138,28 @@ export async function PUT(req: NextRequest) {
 
 		// 2. If a discount code is provided, validate it and recalculate the price
 		if (codeToValidate) {
-			const discountCode = mockDiscountCodes.find((dc) => dc.code === codeToValidate);
+			const discountCode = mockDiscountCodes.find(
+				(dc) => dc.code === codeToValidate,
+			);
 
 			if (!discountCode) {
-				return NextResponse.json({ error: 'Invalid discount code' }, { status: 400 });
+				return NextResponse.json(
+					{ error: "Invalid discount code" },
+					{ status: 400 },
+				);
 			}
 
 			let validationResult: ReturnType<typeof validateDiscountCode> | undefined;
 			if (metadata?.planId) {
 				validationResult = validateDiscountCode(discountCode, {
 					planId: metadata.planId,
-					planCategoryId: metadata?.pricingCategoryId as PricingCategoryValue | undefined,
+					planCategoryId: metadata?.pricingCategoryId as
+						| PricingCategoryValue
+						| undefined,
 				});
 			} else if (metadata?.productId) {
 				const productCategories = metadata.productCategories
-					?.split(',')
+					?.split(",")
 					.map((value) => value.trim())
 					.filter(Boolean) as ProductCategory[] | undefined;
 
@@ -156,14 +171,17 @@ export async function PUT(req: NextRequest) {
 				return NextResponse.json(
 					{
 						error:
-							'Cannot validate discount. Plan or product information is missing from the payment intent.',
+							"Cannot validate discount. Plan or product information is missing from the payment intent.",
 					},
-					{ status: 400 }
+					{ status: 400 },
 				);
 			}
 
 			if (!validationResult?.isValid) {
-				return NextResponse.json({ error: validationResult.errorMessage }, { status: 400 });
+				return NextResponse.json(
+					{ error: validationResult.errorMessage },
+					{ status: 400 },
+				);
 			}
 
 			// Recalculate price based on the original amount from the retrieved intent
@@ -183,15 +201,16 @@ export async function PUT(req: NextRequest) {
 		});
 
 		const response = NextResponse.json(intent);
-		response.cookies.set('intentId', intent.id as string);
+		response.cookies.set("intentId", intent.id as string);
 		return response;
 	} catch (error) {
 		console.log(error);
 		return NextResponse.json(
 			{
-				error: error instanceof Error ? error.message : 'An unknown error occurred',
+				error:
+					error instanceof Error ? error.message : "An unknown error occurred",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -200,35 +219,47 @@ export async function GET(req: NextRequest) {
 	try {
 		// Prefer intentId from query param, fallback to cookie
 		const { searchParams } = new URL(req.url);
-		let intentId = searchParams.get('intentId');
+		let intentId = searchParams.get("intentId");
 		if (!intentId) {
 			const cookieStore = await cookies();
-			intentId = (await cookieStore).get('intentId')?.value;
+			intentId = (await cookieStore).get("intentId")?.value;
 		}
 		if (!intentId) {
-			return NextResponse.json({ error: 'intentId is required' }, { status: 400 });
+			return NextResponse.json(
+				{ error: "intentId is required" },
+				{ status: 400 },
+			);
 		}
 		const intent = await retrievePaymentIntent(intentId);
-		if (!intent || intent.status === 'canceled') {
-			return NextResponse.json({ error: 'Payment intent not found or canceled' }, { status: 400 });
+		if (!intent || intent.status === "canceled") {
+			return NextResponse.json(
+				{ error: "Payment intent not found or canceled" },
+				{ status: 400 },
+			);
 		}
 		return NextResponse.json(intent);
 	} catch (error) {
-		console.error('Error retrieving payment intent:', error);
-		return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+		console.error("Error retrieving payment intent:", error);
+		return NextResponse.json(
+			{ error: "Internal server error" },
+			{ status: 500 },
+		);
 	}
 }
 
 export async function DELETE(req: NextRequest) {
 	try {
 		const { searchParams } = new URL(req.url);
-		let intentId = searchParams.get('intentId');
+		let intentId = searchParams.get("intentId");
 		if (!intentId) {
 			const cookieStore = await cookies();
-			intentId = (await cookieStore).get('intentId')?.value;
+			intentId = (await cookieStore).get("intentId")?.value;
 		}
 		if (!intentId) {
-			return NextResponse.json({ error: 'intentId is required' }, { status: 400 });
+			return NextResponse.json(
+				{ error: "intentId is required" },
+				{ status: 400 },
+			);
 		}
 		const intent = await deletePaymentIntent(intentId);
 		return NextResponse.json(intent);

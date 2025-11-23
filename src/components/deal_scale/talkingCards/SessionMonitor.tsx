@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type { Transcript } from '@/types/transcript';
-import { useCallback, useState } from 'react';
-import { SessionView } from './session';
-import { CallCompleteModal } from './session/CallCompleteModal';
+import type { Transcript } from "@/types/transcript";
+import { useCallback, useState } from "react";
+import { SessionView } from "./session";
+import { CallCompleteModal } from "./session/CallCompleteModal";
 
 /**
  * SessionMonitor Component
@@ -18,7 +18,7 @@ export default function SessionMonitor({
 	onSessionReset,
 	autoStart = false,
 	showCompletionModal = true,
-	variant = 'default',
+	variant = "default",
 }: {
 	transcript: Transcript;
 	onCallEnd?: () => void;
@@ -26,7 +26,7 @@ export default function SessionMonitor({
 	onSessionReset?: (resetFn: () => void) => void;
 	autoStart?: boolean;
 	showCompletionModal?: boolean;
-	variant?: 'default' | 'compact';
+	variant?: "default" | "compact";
 }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [sessionKey, setSessionKey] = useState(Date.now()); // Used to reset the session
@@ -50,7 +50,7 @@ export default function SessionMonitor({
 
 	const handleGetLeads = async () => {
 		// Placeholder, replace with actual logic if needed
-		console.log('Get leads from Session Monitor');
+		console.log("Get leads from Session Monitor");
 		return Promise.resolve();
 	};
 

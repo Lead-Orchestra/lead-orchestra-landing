@@ -1,18 +1,18 @@
-'use client';
-import { NewsletterEmailInput } from '@/components/contact/newsletter/NewsletterEmailInput';
-import TrustedByScroller from '@/components/contact/utils/TrustedByScroller';
-import { BlogPreview } from '@/components/home/BlogPreview';
-import ClientBento from '@/components/home/ClientBento';
-import Testimonials from '@/components/home/Testimonials';
-import Hero from '@/components/home/heros/Hero';
-import { Separator } from '@/components/ui/separator';
-import { useDataModule } from '@/stores/useDataModuleStore';
-import { usePersonaStore } from '@/stores/usePersonaStore';
-import type { BeehiivPost } from '@/types/behiiv';
-import { useMemo } from 'react';
+"use client";
+import { NewsletterEmailInput } from "@/components/contact/newsletter/NewsletterEmailInput";
+import TrustedByScroller from "@/components/contact/utils/TrustedByScroller";
+import { BlogPreview } from "@/components/home/BlogPreview";
+import ClientBento from "@/components/home/ClientBento";
+import Testimonials from "@/components/home/Testimonials";
+import Hero from "@/components/home/heros/Hero";
+import { Separator } from "@/components/ui/separator";
+import { useDataModule } from "@/stores/useDataModuleStore";
+import { usePersonaStore } from "@/stores/usePersonaStore";
+import type { BeehiivPost } from "@/types/behiiv";
+import { useMemo } from "react";
 
 export const offerImg =
-	'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=800&fit=crop&q=80';
+	"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=800&fit=crop&q=80";
 
 // ! Newsletter landing page for user signup, incentives, and confirmation
 // * Uses reusable components and follows Clean Code, DRY, and UX best practices
@@ -26,24 +26,24 @@ const PERSONA_NEWSLETTER_HERO: Record<
 	}
 > = {
 	developer: {
-		headline: 'Automate Your Scraping Workflows',
+		headline: "Automate Your Scraping Workflows",
 		subheadline:
-			'Join our newsletter for ready-to-use n8n lead gen workflows that connect Lead Orchestra MCP plugins to n8n for end-to-end automation. Get exclusive access to pre-built workflows for automated scraping, data normalization, and export to Database, S3, and APIs.',
+			"Join our newsletter for ready-to-use n8n lead gen workflows that connect Lead Orchestra MCP plugins to n8n for end-to-end automation. Get exclusive access to pre-built workflows for automated scraping, data normalization, and export to Database, S3, and APIs.",
 	},
 	agency: {
-		headline: 'Automate Your Lead Generation Pipeline',
+		headline: "Automate Your Lead Generation Pipeline",
 		subheadline:
-			'Join our newsletter for ready-to-use n8n lead gen workflows that connect Lead Orchestra scraping to your CRM, automate data processing, and scale your client delivery. Get exclusive access to multi-source scraping workflows and white-label export automation.',
+			"Join our newsletter for ready-to-use n8n lead gen workflows that connect Lead Orchestra scraping to your CRM, automate data processing, and scale your client delivery. Get exclusive access to multi-source scraping workflows and white-label export automation.",
 	},
 	startup: {
-		headline: 'Build Your MVP Faster',
+		headline: "Build Your MVP Faster",
 		subheadline:
-			'Join our newsletter for ready-to-use n8n lead gen workflows that help you automate lead scraping, data normalization, and export without building infrastructure from scratch. Get quick-start templates and integration guides for popular tools.',
+			"Join our newsletter for ready-to-use n8n lead gen workflows that help you automate lead scraping, data normalization, and export without building infrastructure from scratch. Get quick-start templates and integration guides for popular tools.",
 	},
 	enterprise: {
-		headline: 'Scale Your Data Operations',
+		headline: "Scale Your Data Operations",
 		subheadline:
-			'Join our newsletter for enterprise-grade n8n lead gen workflows that integrate Lead Orchestra with your existing stack. Get compliance automation templates, SSO integration guides, and custom MCP provider workflows.',
+			"Join our newsletter for enterprise-grade n8n lead gen workflows that integrate Lead Orchestra with your existing stack. Get compliance automation templates, SSO integration guides, and custom MCP provider workflows.",
 	},
 };
 
@@ -53,43 +53,62 @@ export default function NewsletterClient({ posts }: { posts: BeehiivPost[] }) {
 		status: testimonialsStatus,
 		testimonials,
 		error: testimonialsError,
-	} = useDataModule('service/slug_data/testimonials', ({ status, data, error }) => ({
-		status,
-		testimonials: data?.generalDealScaleTestimonials ?? [],
-		error,
-	}));
+	} = useDataModule(
+		"service/slug_data/testimonials",
+		({ status, data, error }) => ({
+			status,
+			testimonials: data?.generalDealScaleTestimonials ?? [],
+			error,
+		}),
+	);
 
 	// Get persona-specific hero content
 	const heroContent = useMemo(() => {
-		return PERSONA_NEWSLETTER_HERO[persona] || PERSONA_NEWSLETTER_HERO.developer;
+		return (
+			PERSONA_NEWSLETTER_HERO[persona] || PERSONA_NEWSLETTER_HERO.developer
+		);
 	}, [persona]);
 	const {
 		status: logosStatus,
 		companyLogos,
 		error: logosError,
-	} = useDataModule('service/slug_data/trustedCompanies', ({ status, data, error }) => ({
-		status,
-		companyLogos: data?.companyLogos ?? {},
-		error,
-	}));
+	} = useDataModule(
+		"service/slug_data/trustedCompanies",
+		({ status, data, error }) => ({
+			status,
+			companyLogos: data?.companyLogos ?? {},
+			error,
+		}),
+	);
 
 	const hasTestimonials = testimonials.length > 0;
 	const showTestimonialsLoading =
-		(testimonialsStatus === 'idle' || testimonialsStatus === 'loading') && !hasTestimonials;
-	const showTestimonialsError = testimonialsStatus === 'error' && !hasTestimonials;
-	const showTestimonialsReady = testimonialsStatus === 'ready' && hasTestimonials;
-	const showTestimonialsEmptyReady = testimonialsStatus === 'ready' && !hasTestimonials;
+		(testimonialsStatus === "idle" || testimonialsStatus === "loading") &&
+		!hasTestimonials;
+	const showTestimonialsError =
+		testimonialsStatus === "error" && !hasTestimonials;
+	const showTestimonialsReady =
+		testimonialsStatus === "ready" && hasTestimonials;
+	const showTestimonialsEmptyReady =
+		testimonialsStatus === "ready" && !hasTestimonials;
 	const hasLogos = Object.keys(companyLogos).length > 0;
-	const showLogosLoading = (logosStatus === 'idle' || logosStatus === 'loading') && !hasLogos;
-	const showLogosError = logosStatus === 'error' && !hasLogos;
-	const showLogosEmptyReady = logosStatus === 'ready' && !hasLogos;
+	const showLogosLoading =
+		(logosStatus === "idle" || logosStatus === "loading") && !hasLogos;
+	const showLogosError = logosStatus === "error" && !hasLogos;
+	const showLogosEmptyReady = logosStatus === "ready" && !hasLogos;
 
 	if (showTestimonialsError) {
-		console.error('[NewsletterClient] Failed to load testimonials', testimonialsError);
+		console.error(
+			"[NewsletterClient] Failed to load testimonials",
+			testimonialsError,
+		);
 	}
 
 	if (showLogosError) {
-		console.error('[NewsletterClient] Failed to load trusted companies', logosError);
+		console.error(
+			"[NewsletterClient] Failed to load trusted companies",
+			logosError,
+		);
 	}
 
 	return (
@@ -132,8 +151,10 @@ export default function NewsletterClient({ posts }: { posts: BeehiivPost[] }) {
 			) : showTestimonialsReady ? (
 				<Testimonials
 					testimonials={testimonials}
-					title={'What Our Clients Say'}
-					subtitle={'Hear from our clients about their experiences with our services'}
+					title={"What Our Clients Say"}
+					subtitle={
+						"Hear from our clients about their experiences with our services"
+					}
 				/>
 			) : showTestimonialsEmptyReady ? (
 				<div className="mx-auto my-12 max-w-5xl text-center text-muted-foreground">

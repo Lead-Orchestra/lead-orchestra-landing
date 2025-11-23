@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import Header from '@/components/common/Header';
-import { CallCompleteModal } from '@/components/deal_scale/talkingCards/session/CallCompleteModal';
-import { AnimatedList } from '@/components/ui/animatedList';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { exampleResults } from '@/data/skiptTraceExample';
-import { useState } from 'react';
+import Header from "@/components/common/Header";
+import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
+import { AnimatedList } from "@/components/ui/animatedList";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { exampleResults } from "@/data/skiptTraceExample";
+import { useState } from "react";
 
 const LeadEnrichmentDemo = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [address, setAddress] = useState('');
+	const [address, setAddress] = useState("");
 	const [submitted, setSubmitted] = useState(false);
 	const [loading, setLoading] = useState(false);
 
@@ -25,7 +25,7 @@ const LeadEnrichmentDemo = () => {
 	};
 
 	const handleReset = () => {
-		setAddress('');
+		setAddress("");
 		setSubmitted(false);
 		setLoading(false);
 	};
@@ -94,7 +94,10 @@ const LeadEnrichmentDemo = () => {
 					</div>
 				</div>
 			)}
-			<CallCompleteModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+			<CallCompleteModal
+				isOpen={isModalOpen}
+				onClose={() => setIsModalOpen(false)}
+			/>
 		</div>
 	);
 };

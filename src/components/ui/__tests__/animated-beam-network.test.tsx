@@ -1,9 +1,9 @@
-import '@testing-library/jest-dom/vitest';
-import { render, screen } from '@testing-library/react';
-import React from 'react';
-import { beforeAll, describe, expect, it } from 'vitest';
+import "@testing-library/jest-dom/vitest";
+import { render, screen } from "@testing-library/react";
+import React from "react";
+import { beforeAll, describe, expect, it } from "vitest";
 
-import { AnimatedBeamNetwork } from '../animated-beam-network';
+import { AnimatedBeamNetwork } from "../animated-beam-network";
 
 class MockResizeObserver {
 	// eslint-disable-next-line @typescript-eslint/class-methods-use-this
@@ -14,12 +14,13 @@ class MockResizeObserver {
 	unobserve(): void {}
 }
 
-describe('AnimatedBeamNetwork', () => {
+describe("AnimatedBeamNetwork", () => {
 	beforeAll(() => {
-		global.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+		global.ResizeObserver =
+			MockResizeObserver as unknown as typeof ResizeObserver;
 	});
 
-	it('renders provided title and description', () => {
+	it("renders provided title and description", () => {
 		render(
 			<AnimatedBeamNetwork
 				title="Test Integrations"
@@ -27,23 +28,25 @@ describe('AnimatedBeamNetwork', () => {
 				centerLabel="AI Core"
 				nodes={[
 					{
-						id: 'alpha',
-						label: 'Alpha',
+						id: "alpha",
+						label: "Alpha",
 						icon: <span data-testid="alpha-icon">A</span>,
 					},
 					{
-						id: 'beta',
-						label: 'Beta',
+						id: "beta",
+						label: "Beta",
 						icon: <span data-testid="beta-icon">B</span>,
 					},
 				]}
-			/>
+			/>,
 		);
 
-		expect(screen.getByRole('heading', { name: 'Test Integrations' })).toBeInTheDocument();
-		expect(screen.getByText('Custom network description')).toBeInTheDocument();
-		expect(screen.getByLabelText('Alpha')).toBeInTheDocument();
-		expect(screen.getByLabelText('Beta')).toBeInTheDocument();
-		expect(screen.getByText('AI Core')).toBeInTheDocument();
+		expect(
+			screen.getByRole("heading", { name: "Test Integrations" }),
+		).toBeInTheDocument();
+		expect(screen.getByText("Custom network description")).toBeInTheDocument();
+		expect(screen.getByLabelText("Alpha")).toBeInTheDocument();
+		expect(screen.getByLabelText("Beta")).toBeInTheDocument();
+		expect(screen.getByText("AI Core")).toBeInTheDocument();
 	});
 });

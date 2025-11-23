@@ -1,24 +1,26 @@
-'use client';
+"use client";
 
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import type { FAQProps } from '@/types/faq';
-import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
-import type React from 'react';
-import { useState } from 'react';
-import Header from '../common/Header';
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import type { FAQProps } from "@/types/faq";
+import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
+import Header from "../common/Header";
 
 const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 	const [showAll, setShowAll] = useState(false);
 	const DEFAULT_SHOW_COUNT = 5;
-	const visibleItems = showAll ? faqItems : faqItems.slice(0, DEFAULT_SHOW_COUNT);
+	const visibleItems = showAll
+		? faqItems
+		: faqItems.slice(0, DEFAULT_SHOW_COUNT);
 	const hasMore = faqItems.length > DEFAULT_SHOW_COUNT;
 
 	return (
@@ -40,7 +42,7 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 				<Accordion
 					type="single"
 					collapsible
-					defaultValue={faqItems.length > 0 ? 'item-0' : undefined}
+					defaultValue={faqItems.length > 0 ? "item-0" : undefined}
 					className="flex flex-col gap-3"
 				>
 					{visibleItems.map((item, index) => {
@@ -50,20 +52,20 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 							<AccordionItem
 								value={`item-${index}`}
 								key={`${item.question}-${index}`}
-								data-testid={isHero ? 'homepage-faq-hero' : undefined}
+								data-testid={isHero ? "homepage-faq-hero" : undefined}
 								className={cn(
-									'overflow-hidden border border-transparent transition duration-300 ease-out',
+									"overflow-hidden border border-transparent transition duration-300 ease-out",
 									isHero
-										? 'rounded-3xl border-cyan-400/60 bg-gradient-to-br from-cyan-500/10 via-blue-600/10 to-slate-100 shadow-cyan-500/20 shadow-xl dark:from-cyan-500/25 dark:via-blue-600/20 dark:to-slate-950 dark:shadow-cyan-500/30'
-										: 'rounded-xl border-border/40 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-lg'
+										? "rounded-3xl border-cyan-400/60 bg-gradient-to-br from-cyan-500/10 via-blue-600/10 to-slate-100 shadow-cyan-500/20 shadow-xl dark:from-cyan-500/25 dark:via-blue-600/20 dark:to-slate-950 dark:shadow-cyan-500/30"
+										: "rounded-xl border-border/40 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-lg",
 								)}
 							>
 								<AccordionTrigger
 									className={cn(
-										'px-6 py-4 text-left text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus dark:text-foreground',
+										"px-6 py-4 text-left text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus dark:text-foreground",
 										isHero
-											? 'flex flex-col gap-2 text-black sm:flex-row sm:items-center sm:justify-between dark:text-cyan-100'
-											: 'hover:text-primary'
+											? "flex flex-col gap-2 text-black sm:flex-row sm:items-center sm:justify-between dark:text-cyan-100"
+											: "hover:text-primary",
 									)}
 								>
 									{isHero ? (
@@ -74,7 +76,9 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 												</span>
 												Featured Insight · Investors
 											</span>
-											<span className="text-base sm:text-lg">{item.question}</span>
+											<span className="text-base sm:text-lg">
+												{item.question}
+											</span>
 										</>
 									) : (
 										item.question
@@ -82,8 +86,10 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 								</AccordionTrigger>
 								<AccordionContent
 									className={cn(
-										'px-6 pb-4 text-muted-foreground dark:text-muted-foreground',
-										isHero ? 'text-black/80 sm:text-base dark:text-cyan-50/95' : undefined
+										"px-6 pb-4 text-muted-foreground dark:text-muted-foreground",
+										isHero
+											? "text-black/80 sm:text-base dark:text-cyan-50/95"
+											: undefined,
 									)}
 								>
 									{item.answer}
@@ -110,8 +116,8 @@ const FAQ: React.FC<FAQProps> = ({ title, subtitle, faqItems }) => {
 					<p className="mb-4 text-muted-foreground">
 						Join the Founders Circle to shape Deal Scale.
 						<br />
-						Get <span className="font-semibold text-primary">5 AI credits</span>, priority
-						onboarding, and first dibs when we launch.
+						Get <span className="font-semibold text-primary">5 AI credits</span>
+						, priority onboarding, and first dibs when we launch.
 					</p>
 					<a
 						href="/contact"

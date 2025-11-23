@@ -1,1 +1,6 @@
-export type AuthView = 'signin' | 'signup' | 'reset' | 'verify-email' | 'verify-phone';
+export type AuthView =
+	| "signin"
+	| "signup"
+	| "reset"
+	| "verify-email"
+	| "verify-phone";

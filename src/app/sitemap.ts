@@ -1,51 +1,53 @@
-import { getAllProducts } from '@/data/products/index';
-import { getAllServices } from '@/data/service/services';
-import { companyLogos } from '@/data/service/slug_data/trustedCompanies';
-import { getLatestBeehiivPosts } from '@/lib/beehiiv/getPosts';
-import { getAllCaseStudies } from '@/lib/caseStudies/case-studies';
-import type { BeehiivPost } from '@/types/behiiv';
-import { getTestBaseUrl } from '@/utils/env';
-import { getSeoMetadataForPost } from '@/utils/seo/dynamic/blog';
-import { getSeoMetadataForCaseStudy } from '@/utils/seo/dynamic/case-studies';
-import { getSeoMetadataForService } from '@/utils/seo/dynamic/services';
-import { getSeoMetadataForProduct } from '@/utils/seo/product';
-import type { SeoMeta } from '@/utils/seo/seo';
-import { defaultSeo, staticSeoMeta } from '@/utils/seo/staticSeo';
-import type { MetadataRoute } from 'next';
+import { getAllProducts } from "@/data/products/index";
+import { getAllServices } from "@/data/service/services";
+import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
+import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
+import { getAllCaseStudies } from "@/lib/caseStudies/case-studies";
+import type { BeehiivPost } from "@/types/behiiv";
+import { getTestBaseUrl } from "@/utils/env";
+import { getSeoMetadataForPost } from "@/utils/seo/dynamic/blog";
+import { getSeoMetadataForCaseStudy } from "@/utils/seo/dynamic/case-studies";
+import { getSeoMetadataForService } from "@/utils/seo/dynamic/services";
+import { getSeoMetadataForProduct } from "@/utils/seo/product";
+import type { SeoMeta } from "@/utils/seo/seo";
+import { defaultSeo, staticSeoMeta } from "@/utils/seo/staticSeo";
+import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	// Resolve and normalize the canonical base URL
 	const normalize = (raw: string): string => {
-		let url = (raw || '').trim();
+		let url = (raw || "").trim();
 		// 1) Fix single-slash schemes at start: https:/example -> https://example
-		url = url.replace(/^(https?:):\/(?!\/)/i, '$1//');
+		url = url.replace(/^(https?:):\/(?!\/)/i, "$1//");
 		// 2) If missing protocol, assume https
 		if (!/^https?:\/\//i.test(url)) {
 			url = `https://${url}`;
 		}
 		// 3) Collapse duplicate protocols at start: https://https:// -> https://
-		url = url.replace(/^(https?:\/\/)(https?:\/\/)/i, '$1');
+		url = url.replace(/^(https?:\/\/)(https?:\/\/)/i, "$1");
 		// 4) Also handle mixed duplicate like https://https:/ -> https://
-		url = url.replace(/^(https?:\/\/)(https?:)\/(?!\/)/i, '$1');
+		url = url.replace(/^(https?:\/\/)(https?:)\/(?!\/)/i, "$1");
 		// 5) Ensure protocol is followed by exactly two slashes
-		url = url.replace(/^(https?:):\/(?!\/)/i, '$1://');
+		url = url.replace(/^(https?:):\/(?!\/)/i, "$1://");
 		// 6) Drop any trailing slashes for consistency
-		return url.replace(/\/+$/g, '');
+		return url.replace(/\/+$/g, "");
 	};
 	const baseUrl = normalize(defaultSeo.canonical || getTestBaseUrl());
 	// Static pages with SEO metadata for sitemap
 
-	const staticPaths = Array.from(new Set(['/', ...Object.keys(staticSeoMeta)]));
+	const staticPaths = Array.from(new Set(["/", ...Object.keys(staticSeoMeta)]));
 
 	const staticPages = staticPaths.map((path) => {
 		// Get SEO data for the path, fallback to empty object with SeoMeta type
-		const seo: Partial<SeoMeta> = path === '/' ? defaultSeo : staticSeoMeta[path] || {};
+		const seo: Partial<SeoMeta> =
+			path === "/" ? defaultSeo : staticSeoMeta[path] || {};
 
 		// Create a complete SeoMeta object with all required fields
 		const defaultValues: SeoMeta = {
 			title: seo.title || defaultSeo.title,
 			description: seo.description || defaultSeo.description,
-			canonical: seo.canonical || `${defaultSeo.canonical}${path === '/' ? '' : path}`,
+			canonical:
+				seo.canonical || `${defaultSeo.canonical}${path === "/" ? "" : path}`,
 			keywords: seo.keywords || defaultSeo.keywords,
 			image: seo.image || defaultSeo.image,
 			siteName: seo.siteName || defaultSeo.siteName,
@@ -53,12 +55,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			dateModified: seo.dateModified,
 			datePublished: seo.datePublished,
 			priority: seo.priority ?? 0.8,
-			changeFrequency: seo.changeFrequency || 'weekly',
+			changeFrequency: seo.changeFrequency || "weekly",
 		};
 
 		return {
 			url: defaultValues.canonical,
-			lastModified: defaultValues.dateModified ? new Date(defaultValues.dateModified) : new Date(),
+			lastModified: defaultValues.dateModified
+				? new Date(defaultValues.dateModified)
+				: new Date(),
 			publishedTime: defaultValues.datePublished
 				? new Date(defaultValues.datePublished)
 				: undefined,
@@ -78,12 +82,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		return {
 			url,
 			lastModified: new Date(),
-			changefreq: 'monthly' as const,
+			changefreq: "monthly" as const,
 			priority: 0.5,
 			canonical: url,
 			title: `${partner.name} | Deal Scale Partner`,
-			description: partner.description ?? `Explore Deal Scale's partnership with ${partner.name}.`,
-			type: 'website',
+			description:
+				partner.description ??
+				`Explore Deal Scale's partnership with ${partner.name}.`,
+			type: "website",
 		};
 	});
 
@@ -94,9 +100,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		posts.map(async (post) => {
 			const seo = await getSeoMetadataForPost(post.id);
 			return {
-				url: seo?.canonical || post.web_url || '',
+				url: seo?.canonical || post.web_url || "",
 				lastModified:
-					typeof post.published_at === 'string' || typeof post.published_at === 'number'
+					typeof post.published_at === "string" ||
+					typeof post.published_at === "number"
 						? new Date(post.published_at)
 						: new Date(),
 				canonical: seo?.canonical,
@@ -104,11 +111,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				description: seo?.description,
 				keywords: seo?.keywords,
 				image: seo?.image,
-				type: 'website',
-				changefreq: seo?.changeFrequency || 'weekly',
-				priority: typeof seo?.priority === 'number' ? seo.priority : 0.7,
+				type: "website",
+				changefreq: seo?.changeFrequency || "weekly",
+				priority: typeof seo?.priority === "number" ? seo.priority : 0.7,
 			};
-		})
+		}),
 	);
 
 	// Dynamic case studies with SEO
@@ -121,14 +128,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				lastModified: study.lastModified,
 				canonical: seo?.canonical,
 				title: seo?.title,
-				type: 'website',
+				type: "website",
 				description: seo?.description,
 				keywords: seo?.keywords,
 				image: seo?.image,
-				changefreq: seo?.changeFrequency || 'weekly',
-				priority: typeof seo?.priority === 'number' ? seo.priority : 0.7,
+				changefreq: seo?.changeFrequency || "weekly",
+				priority: typeof seo?.priority === "number" ? seo.priority : 0.7,
 			};
-		})
+		}),
 	);
 
 	// Dynamic products with SEO
@@ -144,18 +151,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				description: seo?.description,
 				keywords: seo?.keywords,
 				image: seo?.image,
-				type: 'website',
-				changefreq: seo?.changeFrequency || 'monthly',
-				priority: typeof seo?.priority === 'number' ? seo.priority : 0.6,
+				type: "website",
+				changefreq: seo?.changeFrequency || "monthly",
+				priority: typeof seo?.priority === "number" ? seo.priority : 0.6,
 			};
-		})
+		}),
 	);
 
 	// todo: Add services with SEO when getAllServices is available
 	const services = await getAllServices();
 	const serviceEntries = await Promise.all(
 		services.map(async (service) => {
-			const seo = await getSeoMetadataForService(service.slugDetails.slug, services);
+			const seo = await getSeoMetadataForService(
+				service.slugDetails.slug,
+				services,
+			);
 			return {
 				url: `${baseUrl}/features/${service.slugDetails.slug}`,
 				lastModified: service.slugDetails.lastModified,
@@ -164,11 +174,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 				description: seo?.description,
 				image: seo?.image,
 				keywords: seo?.keywords,
-				type: 'website',
-				changefreq: seo?.changeFrequency || 'weekly',
-				priority: typeof seo?.priority === 'number' ? seo.priority : 0.8,
+				type: "website",
+				changefreq: seo?.changeFrequency || "weekly",
+				priority: typeof seo?.priority === "number" ? seo.priority : 0.8,
 			};
-		})
+		}),
 	);
 
 	// Dynamic services
@@ -180,13 +190,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 	const externalEntries: MetadataRoute.Sitemap = [
 		{
-			url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ-A',
-			changeFrequency: 'daily',
+			url: "https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ-A",
+			changeFrequency: "daily",
 			priority: 0.4,
 		},
 	];
 
-	const allowedExternalUrls = new Set(externalEntries.map((entry) => entry.url));
+	const allowedExternalUrls = new Set(
+		externalEntries.map((entry) => entry.url),
+	);
 
 	const canonicalHost = (() => {
 		try {
@@ -211,31 +223,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		{
 			url: `${baseUrl}/rss.xml`,
 			lastModified: new Date(),
-			changeFrequency: 'hourly',
+			changeFrequency: "hourly",
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/rss/youtube.xml`,
 			lastModified: new Date(),
-			changeFrequency: 'hourly',
+			changeFrequency: "hourly",
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/rss/github.xml`,
 			lastModified: new Date(),
-			changeFrequency: 'hourly',
+			changeFrequency: "hourly",
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/rss/hybrid.xml`,
 			lastModified: new Date(),
-			changeFrequency: 'hourly',
+			changeFrequency: "hourly",
 			priority: 0.6,
 		},
 		{
 			url: `${baseUrl}/videos/sitemap.xml`,
 			lastModified: new Date(),
-			changeFrequency: 'daily',
+			changeFrequency: "daily",
 			priority: 0.6,
 		},
 	];
@@ -249,5 +261,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		...productEntries,
 		...serviceEntries,
 		...externalEntries,
-	].filter((entry) => isOnCanonicalHost(entry.url) || allowedExternalUrls.has(entry.url));
+	].filter(
+		(entry) =>
+			isOnCanonicalHost(entry.url) || allowedExternalUrls.has(entry.url),
+	);
 }

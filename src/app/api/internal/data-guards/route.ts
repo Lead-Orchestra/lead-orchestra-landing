@@ -1,7 +1,6 @@
-import { NextResponse } from 'next/server';
-import { z } from 'zod';
-
-const statusSchema = z.enum(['idle', 'loading', 'ready', 'error']);
+import { NextResponse } from "next/server";
+import { z } from "zod";
+const statusSchema = z.enum(["idle", "loading", "ready", "error"]);
 
 const guardPayloadSchema = z.object({
 	key: z.string().min(1),
@@ -28,12 +27,13 @@ function sanitizePayload(payload: unknown): GuardPayload | null {
 	} satisfies GuardPayload;
 }
 
+export const runtime = 'edge';
 export async function POST(request: Request) {
 	const incoming = await request.json().catch(() => undefined);
 	const payload = sanitizePayload(incoming);
 
 	if (!payload) {
-		return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+		return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
 	}
 
 	const webhookUrl = process.env.DATA_GUARD_WEBHOOK;
@@ -41,15 +41,15 @@ export async function POST(request: Request) {
 	if (webhookUrl) {
 		try {
 			await fetch(webhookUrl, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(payload),
 			});
 		} catch (error) {
-			console.error('[data-guards] Failed to forward event', error);
+			console.error("[data-guards] Failed to forward event", error);
 		}
 	} else {
-		console.info('[data-guards]', payload);
+		console.info("[data-guards]", payload);
 	}
 
 	return NextResponse.json({ received: true }, { status: 202 });

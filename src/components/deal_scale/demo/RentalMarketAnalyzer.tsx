@@ -1,36 +1,38 @@
-'use client';
+"use client";
 
-import marketAnalysisAnimation from '@/assets/animations/market_analysis.json';
-import Header from '@/components/common/Header';
-import { CallCompleteModal } from '@/components/deal_scale/talkingCards/session/CallCompleteModal';
-import ClientLottie from '@/components/ui/ClientLottie';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { properties as allProperties } from '@/data/mlsProperties';
-import type { Property } from '@/data/mlsProperties';
-import dynamic from 'next/dynamic';
-import { useEffect, useMemo, useState } from 'react';
+import marketAnalysisAnimation from "@/assets/animations/market_analysis.json";
+import Header from "@/components/common/Header";
+import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
+import ClientLottie from "@/components/ui/ClientLottie";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { properties as allProperties } from "@/data/mlsProperties";
+import type { Property } from "@/data/mlsProperties";
+import dynamic from "next/dynamic";
+import { useEffect, useMemo, useState } from "react";
 
 const RentalMarketAnalyzer = () => {
-	const [zipcode, setZipcode] = useState('');
+	const [zipcode, setZipcode] = useState("");
 	const [rentRange, setRentRange] = useState<[number, number]>([1500, 5000]);
 	const [bedrooms, setBedrooms] = useState<number>(1);
 	const [bathrooms, setBathrooms] = useState<number>(1);
-	const [demoStage, setDemoStage] = useState<'initial' | 'analyzing' | 'results' | 'video'>(
-		'initial'
+	const [demoStage, setDemoStage] = useState<
+		"initial" | "analyzing" | "results" | "video"
+	>("initial");
+	const [displayedProperties, setDisplayedProperties] = useState<Property[]>(
+		[],
 	);
-	const [displayedProperties, setDisplayedProperties] = useState<Property[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const MapComponent = useMemo(
 		() =>
-			dynamic(() => import('./Map'), {
+			dynamic(() => import("./Map"), {
 				ssr: false,
 				loading: () => <p>Loading map...</p>,
 			}),
-		[]
+		[],
 	);
 
 	const filteredProperties = useMemo(() => {
@@ -41,7 +43,7 @@ const RentalMarketAnalyzer = () => {
 					(property.rent ?? property.price) <= rentRange[1] &&
 					property.bedrooms >= bedrooms &&
 					property.bathrooms >= bathrooms &&
-					(zipcode === '' || property.zipcode === zipcode)
+					(zipcode === "" || property.zipcode === zipcode),
 			)
 			.map((p) => ({
 				...p,
@@ -50,28 +52,28 @@ const RentalMarketAnalyzer = () => {
 	}, [rentRange, bedrooms, bathrooms, zipcode]);
 
 	const handleAnalyze = () => {
-		setDemoStage('analyzing');
+		setDemoStage("analyzing");
 		setTimeout(() => {
 			setDisplayedProperties(filteredProperties);
-			setDemoStage('results');
+			setDemoStage("results");
 			setTimeout(() => {
-				setDemoStage('video');
+				setDemoStage("video");
 			}, 3000);
 		}, 1200);
 	};
 
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
-		setDemoStage('initial');
+		setDemoStage("initial");
 	};
 
 	const handleGetLeads = async () => {
-		console.log('Get rental leads clicked!');
+		console.log("Get rental leads clicked!");
 		return Promise.resolve();
 	};
 
 	useEffect(() => {
-		if (demoStage === 'video') {
+		if (demoStage === "video") {
 			const timer = setTimeout(() => {
 				setIsModalOpen(true);
 			}, 15000);
@@ -81,7 +83,7 @@ const RentalMarketAnalyzer = () => {
 
 	return (
 		<div className="overflow-y-auto p-4">
-			{demoStage === 'initial' && (
+			{demoStage === "initial" && (
 				<>
 					<Header
 						size="sm"
@@ -92,7 +94,7 @@ const RentalMarketAnalyzer = () => {
 						<div className="flex flex-col gap-4">
 							<div>
 								<Label htmlFor="zipcodes">
-									Zip Codes{' '}
+									Zip Codes{" "}
 									<span className="text-gray-500 text-xs">
 										(comma separated for multiple areas)
 									</span>
@@ -111,7 +113,8 @@ const RentalMarketAnalyzer = () => {
 							</div>
 							<div>
 								<Label htmlFor="address">
-									Address <span className="text-gray-500 text-xs">(optional)</span>
+									Address{" "}
+									<span className="text-gray-500 text-xs">(optional)</span>
 								</Label>
 								<Input
 									id="address"
@@ -137,14 +140,18 @@ const RentalMarketAnalyzer = () => {
 				</>
 			)}
 
-			{demoStage === 'analyzing' && (
+			{demoStage === "analyzing" && (
 				<div className="flex h-full flex-col items-center justify-center">
-					<ClientLottie animationData={marketAnalysisAnimation} loop={true} className="h-32 w-32" />
+					<ClientLottie
+						animationData={marketAnalysisAnimation}
+						loop={true}
+						className="h-32 w-32"
+					/>
 					<p className="mt-4 font-semibold text-lg">Analyzing Rental Market</p>
 				</div>
 			)}
 
-			{demoStage === 'results' && (
+			{demoStage === "results" && (
 				<div className="h-[300px]">
 					<MapComponent properties={displayedProperties} />
 					<div className="mt-4">
@@ -152,8 +159,10 @@ const RentalMarketAnalyzer = () => {
 						<ul className="divide-y divide-gray-200 dark:divide-gray-700">
 							{displayedProperties.slice(0, 3).map((property) => (
 								<li key={property.id} className="py-2">
-									<span className="font-semibold">{property.address}</span>, {property.zipcode} —{' '}
-									<span>${property.rent?.toLocaleString() ?? '-'}</span> / mo • {property.bedrooms}
+									<span className="font-semibold">{property.address}</span>,{" "}
+									{property.zipcode} —{" "}
+									<span>${property.rent?.toLocaleString() ?? "-"}</span> / mo •{" "}
+									{property.bedrooms}
 									bd/{property.bathrooms}ba
 								</li>
 							))}
@@ -165,7 +174,7 @@ const RentalMarketAnalyzer = () => {
 				</div>
 			)}
 
-			{demoStage === 'video' && (
+			{demoStage === "video" && (
 				<div className="flex h-full items-center justify-center">
 					<img
 						src="/demos/rental_analysis.gif"

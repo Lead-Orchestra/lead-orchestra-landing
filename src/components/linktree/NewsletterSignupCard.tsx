@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useHasMounted } from '@/hooks/useHasMounted';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail } from 'lucide-react';
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useHasMounted } from "@/hooks/useHasMounted";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Mail } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const formSchema = z.object({
-	email: z.string().email('Please enter a valid email address'),
+	email: z.string().email("Please enter a valid email address"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -27,7 +27,7 @@ export const NewsletterSignupCard = () => {
 	useEffect(() => {
 		if (!hasMounted) return;
 		const match = document.cookie.match(/userSubscribedNewsletter=([^;]+)/);
-		if (match && match[1] === 'true') {
+		if (match && match[1] === "true") {
 			setIsSubscribed(true);
 		}
 	}, [hasMounted]);
@@ -40,7 +40,7 @@ export const NewsletterSignupCard = () => {
 	} = useForm<FormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			email: '',
+			email: "",
 		},
 	});
 
@@ -48,26 +48,27 @@ export const NewsletterSignupCard = () => {
 		setIsSubmitting(true);
 		setError(null);
 		try {
-			const response = await fetch('/api/beehiiv/subscribe', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const response = await fetch("/api/beehiiv/subscribe", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ email: data.email }),
 			});
 			const result = await response.json();
 			if (!response.ok) {
-				setError(result.message || 'Subscription failed');
-				toast.error(result.message || 'Subscription failed');
+				setError(result.message || "Subscription failed");
+				toast.error(result.message || "Subscription failed");
 				return;
 			}
-			toast.success('Thank you for subscribing to our newsletter!');
+			toast.success("Thank you for subscribing to our newsletter!");
 			reset();
 			setIsSubscribed(true);
 			if (hasMounted) {
-				document.cookie = 'userSubscribedNewsletter=true; expires=Fri, 31 Dec 9999 23:59:59 GMT';
+				document.cookie =
+					"userSubscribedNewsletter=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
 			}
 		} catch (err) {
-			setError('An unexpected error occurred');
-			toast.error('An unexpected error occurred');
+			setError("An unexpected error occurred");
+			toast.error("An unexpected error occurred");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -86,13 +87,19 @@ export const NewsletterSignupCard = () => {
 						<div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
 							<Mail className="h-6 w-6 text-green-600" />
 						</div>
-						<p className="mb-2 font-medium text-green-600 text-lg">You're subscribed! 🎉</p>
-						<p className="text-muted-foreground text-sm">Thanks for joining our newsletter.</p>
+						<p className="mb-2 font-medium text-green-600 text-lg">
+							You're subscribed! 🎉
+						</p>
+						<p className="text-muted-foreground text-sm">
+							Thanks for joining our newsletter.
+						</p>
 					</div>
 				) : (
 					<div className="space-y-4">
 						<div className="text-center">
-							<h3 className="mb-2 font-semibold text-lg">Subscribe to our newsletter</h3>
+							<h3 className="mb-2 font-semibold text-lg">
+								Subscribe to our newsletter
+							</h3>
 							<p className="text-muted-foreground text-sm">
 								Get the latest updates and insights delivered to your inbox.
 							</p>
@@ -103,14 +110,14 @@ export const NewsletterSignupCard = () => {
 								<Input
 									type="email"
 									placeholder="Your email address"
-									{...register('email')}
+									{...register("email")}
 									className="flex-1"
 									disabled={isSubmitting}
 									aria-invalid={!!errors.email}
 								/>
 								<Button type="submit" disabled={isSubmitting} className="px-4">
 									{isSubmitting ? (
-										'...'
+										"..."
 									) : (
 										<>
 											Subscribe
@@ -120,16 +127,18 @@ export const NewsletterSignupCard = () => {
 								</Button>
 							</div>
 
-							{errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+							{errors.email && (
+								<p className="text-red-500 text-sm">{errors.email.message}</p>
+							)}
 
 							{error && <p className="text-red-500 text-sm">{error}</p>}
 
 							<p className="text-muted-foreground text-xs">
-								By subscribing you agree to our{' '}
+								By subscribing you agree to our{" "}
 								<Link href="/privacy" className="underline hover:text-primary">
 									Privacy Policy
-								</Link>{' '}
-								and{' '}
+								</Link>{" "}
+								and{" "}
 								<Link href="/tos" className="underline hover:text-primary">
 									Terms of Service
 								</Link>

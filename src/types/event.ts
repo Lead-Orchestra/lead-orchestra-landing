@@ -1,5 +1,5 @@
-export type EventAccessType = 'internal' | 'external';
-export type EventAttendanceType = 'in-person' | 'webinar' | 'hybrid';
+export type EventAccessType = "internal" | "external";
+export type EventAttendanceType = "in-person" | "webinar" | "hybrid";
 
 export interface Event {
 	id: string;

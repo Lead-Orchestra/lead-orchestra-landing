@@ -1,83 +1,83 @@
-import '@testing-library/jest-dom/vitest';
-import { render, screen } from '@testing-library/react';
-import type React from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import "@testing-library/jest-dom/vitest";
+import { render, screen } from "@testing-library/react";
+import type React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock('@/components/common/VideoModal', () => ({
+vi.mock("@/components/common/VideoModal", () => ({
 	__esModule: true,
 	default: () => null,
 }));
 
-vi.mock('next/image', () => ({
+vi.mock("next/image", () => ({
 	__esModule: true,
-	default: (props: React.ComponentPropsWithoutRef<'img'>) => (
+	default: (props: React.ComponentPropsWithoutRef<"img">) => (
 		// eslint-disable-next-line @next/next/no-img-element
-		<img alt={props.alt ?? ''} {...props} />
+		<img alt={props.alt ?? ""} {...props} />
 	),
 }));
 
-let EventCard: typeof import('../EventCard').default;
+let EventCard: typeof import("../EventCard").default;
 
 const baseEvent = {
-	id: 'evt-1',
-	title: 'DealScale Insider Summit',
-	date: '2025-01-01',
-	time: '09:00 - 17:00',
-	description: 'Gathering of internal stakeholders to review growth roadmap.',
-	thumbnailImage: 'https://example.com/event.jpg',
-	externalUrl: 'https://example.com/register',
-	category: 'conference',
-	location: 'Austin, TX',
+	id: "evt-1",
+	title: "DealScale Insider Summit",
+	date: "2025-01-01",
+	time: "09:00 - 17:00",
+	description: "Gathering of internal stakeholders to review growth roadmap.",
+	thumbnailImage: "https://example.com/event.jpg",
+	externalUrl: "https://example.com/register",
+	category: "conference",
+	location: "Austin, TX",
 	isFeatured: false,
-	slug: 'dealscale-insider-summit',
+	slug: "dealscale-insider-summit",
 } as const;
 
 type TestEvent = typeof baseEvent & {
-	accessType: 'internal' | 'external';
-	attendanceType: 'in-person' | 'webinar' | 'hybrid';
+	accessType: "internal" | "external";
+	attendanceType: "in-person" | "webinar" | "hybrid";
 	internalPath?: string;
 };
 
 function buildEvent(overrides: Partial<TestEvent> = {}): TestEvent {
 	return {
 		...baseEvent,
-		accessType: 'external',
-		attendanceType: 'in-person',
+		accessType: "external",
+		attendanceType: "in-person",
 		...overrides,
 	};
 }
 
 beforeEach(async () => {
-	({ default: EventCard } = await import('../EventCard'));
+	({ default: EventCard } = await import("../EventCard"));
 });
 
-describe('EventCard', () => {
-	it('labels external events with an External Event chip', () => {
-		const event = buildEvent({ accessType: 'external' });
+describe("EventCard", () => {
+	it("labels external events with an External Event chip", () => {
+		const event = buildEvent({ accessType: "external" });
 
 		render(<EventCard event={event as never} index={0} />);
 
-		expect(screen.getByText('External Event')).toBeInTheDocument();
+		expect(screen.getByText("External Event")).toBeInTheDocument();
 	});
 
-	it('labels internal programming with an Internal Event chip', () => {
+	it("labels internal programming with an Internal Event chip", () => {
 		const event = buildEvent({
-			accessType: 'internal',
-			internalPath: '/events/dealscale-insider-summit',
+			accessType: "internal",
+			internalPath: "/events/dealscale-insider-summit",
 		});
 
 		render(<EventCard event={event as never} index={0} />);
 
-		expect(screen.getByText('Internal Event')).toBeInTheDocument();
+		expect(screen.getByText("Internal Event")).toBeInTheDocument();
 	});
 
-	it('surfaces the attendance format indicator', () => {
+	it("surfaces the attendance format indicator", () => {
 		const event = buildEvent({
-			attendanceType: 'hybrid',
+			attendanceType: "hybrid",
 		});
 
 		render(<EventCard event={event as never} index={0} />);
 
-		expect(screen.getByText('Hybrid')).toBeInTheDocument();
+		expect(screen.getByText("Hybrid")).toBeInTheDocument();
 	});
 });

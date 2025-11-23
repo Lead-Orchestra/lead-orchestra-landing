@@ -1,19 +1,19 @@
-import { companyData } from '@/data/company';
-import type { NormalizedEvent } from '@/lib/events/eventSchemas';
-import { defaultSeo, staticSeoMeta } from '@/utils/seo/staticSeo';
+import { companyData } from "@/data/company";
+import type { NormalizedEvent } from "@/lib/events/eventSchemas";
+import { defaultSeo, staticSeoMeta } from "@/utils/seo/staticSeo";
 
-const SCHEMA_CONTEXT = 'https://schema.org';
-const ITEM_LIST_ORDER_ASC = 'https://schema.org/ItemListOrderAscending';
+const SCHEMA_CONTEXT = "https://schema.org";
+const ITEM_LIST_ORDER_ASC = "https://schema.org/ItemListOrderAscending";
 const EVENTS_CANONICAL_BASE = (
-	staticSeoMeta['/events']?.canonical || 'https://dealscale.io/events'
-).replace(/\/$/, '');
+	staticSeoMeta["/events"]?.canonical || "https://dealscale.io/events"
+).replace(/\/$/, "");
 
 export function buildEventUrl(slug: string): string {
 	return `${EVENTS_CANONICAL_BASE}/${slug}`;
 }
 
 function resolveRegistrationUrl(event: NormalizedEvent): string {
-	if (event.accessType === 'internal') {
+	if (event.accessType === "internal") {
 		return buildEventUrl(event.slug);
 	}
 
@@ -22,7 +22,7 @@ function resolveRegistrationUrl(event: NormalizedEvent): string {
 
 function parseTime(value: string): { start?: string; end?: string } {
 	const [start, end] = value
-		.split('-')
+		.split("-")
 		.map((segment) => segment.trim())
 		.filter(Boolean);
 	return {
@@ -31,7 +31,10 @@ function parseTime(value: string): { start?: string; end?: string } {
 	};
 }
 
-function combineDateAndTime(date: string, time: string | undefined): string | undefined {
+function combineDateAndTime(
+	date: string,
+	time: string | undefined,
+): string | undefined {
 	if (!time) {
 		const parsed = new Date(date);
 		return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString();
@@ -47,37 +50,37 @@ function combineDateAndTime(date: string, time: string | undefined): string | un
 function resolveLocation(event: NormalizedEvent) {
 	const registrationUrl = resolveRegistrationUrl(event);
 
-	if (event.attendanceType === 'webinar') {
+	if (event.attendanceType === "webinar") {
 		return {
-			attendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+			attendanceMode: "https://schema.org/OnlineEventAttendanceMode",
 			location: {
-				'@type': 'VirtualLocation',
+				"@type": "VirtualLocation",
 				url: registrationUrl,
 				name: event.title,
 			},
 		} as const;
 	}
 
-	const [city, region] = event.location.split(',').map((part) => part.trim());
+	const [city, region] = event.location.split(",").map((part) => part.trim());
 
 	const physicalLocation = {
-		'@type': 'Place',
+		"@type": "Place",
 		name: event.location,
 		address: {
-			'@type': 'PostalAddress',
+			"@type": "PostalAddress",
 			addressLocality: city,
 			addressRegion: region || undefined,
-			addressCountry: region && region.length === 2 ? 'US' : undefined,
+			addressCountry: region && region.length === 2 ? "US" : undefined,
 		},
 	} as const;
 
-	if (event.attendanceType === 'hybrid') {
+	if (event.attendanceType === "hybrid") {
 		return {
-			attendanceMode: 'https://schema.org/MixedEventAttendanceMode',
+			attendanceMode: "https://schema.org/MixedEventAttendanceMode",
 			location: [
 				physicalLocation,
 				{
-					'@type': 'VirtualLocation',
+					"@type": "VirtualLocation",
 					url: registrationUrl,
 					name: event.title,
 				},
@@ -86,7 +89,7 @@ function resolveLocation(event: NormalizedEvent) {
 	}
 
 	return {
-		attendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+		attendanceMode: "https://schema.org/OfflineEventAttendanceMode",
 		location: physicalLocation,
 	} as const;
 }
@@ -99,27 +102,27 @@ export function buildEventSchema(event: NormalizedEvent) {
 	const registrationUrl = resolveRegistrationUrl(event);
 
 	return {
-		'@context': SCHEMA_CONTEXT,
-		'@type': 'Event',
+		"@context": SCHEMA_CONTEXT,
+		"@type": "Event",
 		name: event.title,
 		description: event.description,
 		url: buildEventUrl(event.slug),
 		startDate,
 		endDate,
-		eventStatus: 'https://schema.org/EventScheduled',
+		eventStatus: "https://schema.org/EventScheduled",
 		eventAttendanceMode: attendanceMode,
 		location,
 		image: event.thumbnailImage ? [event.thumbnailImage] : undefined,
 		organizer: {
-			'@type': 'Organization',
+			"@type": "Organization",
 			name: companyData.companyName,
 			url: defaultSeo.canonical,
 		},
 		offers: {
-			'@type': 'Offer',
+			"@type": "Offer",
 			price: 0,
-			priceCurrency: 'USD',
-			availability: 'https://schema.org/InStock',
+			priceCurrency: "USD",
+			availability: "https://schema.org/InStock",
 			url: registrationUrl,
 		},
 	};
@@ -127,12 +130,12 @@ export function buildEventSchema(event: NormalizedEvent) {
 
 export function buildEventsItemListSchema(events: NormalizedEvent[]) {
 	return {
-		'@context': SCHEMA_CONTEXT,
-		'@type': 'ItemList',
-		name: 'DealScale Events',
+		"@context": SCHEMA_CONTEXT,
+		"@type": "ItemList",
+		name: "DealScale Events",
 		itemListOrder: ITEM_LIST_ORDER_ASC,
 		itemListElement: events.map((event, index) => ({
-			'@type': 'ListItem',
+			"@type": "ListItem",
 			position: index + 1,
 			url: buildEventUrl(event.slug),
 			name: event.title,

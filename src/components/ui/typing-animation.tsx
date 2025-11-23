@@ -1,9 +1,9 @@
-import { type MotionProps, motion, useInView } from 'motion/react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type MotionProps, motion, useInView } from "motion/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-type TypingPhase = 'typing' | 'pause' | 'deleting';
+type TypingPhase = "typing" | "pause" | "deleting";
 
 interface TypingAnimationProps extends MotionProps {
 	children?: string;
@@ -19,7 +19,7 @@ interface TypingAnimationProps extends MotionProps {
 	startOnView?: boolean;
 	showCursor?: boolean;
 	blinkCursor?: boolean;
-	cursorStyle?: 'line' | 'block' | 'underscore';
+	cursorStyle?: "line" | "block" | "underscore";
 }
 
 type TypingState = {
@@ -30,10 +30,10 @@ type TypingState = {
 };
 
 const INITIAL_STATE: TypingState = {
-	displayedText: '',
+	displayedText: "",
 	wordIndex: 0,
 	charIndex: 0,
-	phase: 'typing',
+	phase: "typing",
 };
 
 export function TypingAnimation({
@@ -46,11 +46,11 @@ export function TypingAnimation({
 	delay = 0,
 	pauseDelay = 1000,
 	loop = false,
-	as: Component = 'span',
+	as: Component = "span",
 	startOnView = true,
 	showCursor = true,
 	blinkCursor = true,
-	cursorStyle = 'line',
+	cursorStyle = "line",
 	...props
 }: TypingAnimationProps) {
 	const MotionComponent = motion.create(Component, {
@@ -66,7 +66,7 @@ export function TypingAnimation({
 	const isInView = useInView(elementRef as React.RefObject<Element>, {
 		amount: 0.1, // Lower threshold to detect when element is in view more easily
 		once: false, // Check continuously to stop animation when out of view
-		margin: '0px', // No margin for detection
+		margin: "0px", // No margin for detection
 	});
 
 	// Ensure component is mounted before checking viewport
@@ -93,25 +93,28 @@ export function TypingAnimation({
 		checkInView();
 
 		// Also check on scroll and resize as fallback
-		window.addEventListener('scroll', checkInView, { passive: true });
-		window.addEventListener('resize', checkInView, { passive: true });
+		window.addEventListener("scroll", checkInView, { passive: true });
+		window.addEventListener("resize", checkInView, { passive: true });
 
 		return () => {
-			window.removeEventListener('scroll', checkInView);
-			window.removeEventListener('resize', checkInView);
+			window.removeEventListener("scroll", checkInView);
+			window.removeEventListener("resize", checkInView);
 		};
 	}, [mounted, startOnView]);
 
-	const wordsToAnimate = useMemo(() => words || (children ? [children] : []), [words, children]);
+	const wordsToAnimate = useMemo(
+		() => words || (children ? [children] : []),
+		[words, children],
+	);
 
 	const graphemeMap = useMemo(
 		() => wordsToAnimate.map((word) => Array.from(word)),
-		[wordsToAnimate]
+		[wordsToAnimate],
 	);
 
 	const contentSignature = useMemo(
-		() => graphemeMap.map((graphemes) => graphemes.join('')).join('|'),
-		[graphemeMap]
+		() => graphemeMap.map((graphemes) => graphemes.join("")).join("|"),
+		[graphemeMap],
 	);
 
 	const contentSignatureRef = useRef(contentSignature);
@@ -121,7 +124,11 @@ export function TypingAnimation({
 	// Stop animation when out of view to prevent layout shifts
 	// Use useInView result, or fallback to manual check if useInView hasn't detected it yet
 	// If not mounted yet or startOnView is false, allow animation
-	const isActuallyInView = startOnView ? (mounted ? isInView || manuallyInView : true) : true;
+	const isActuallyInView = startOnView
+		? mounted
+			? isInView || manuallyInView
+			: true
+		: true;
 	const shouldAnimate = isActuallyInView;
 
 	useEffect(() => {
@@ -175,18 +182,18 @@ export function TypingAnimation({
 			!loop &&
 			wordIndex === graphemeMap.length - 1 &&
 			charIndex >= currentGraphemes.length &&
-			phase !== 'deleting';
+			phase !== "deleting";
 
 		if (isComplete) {
 			return;
 		}
 
 		const timeoutDelay =
-			delay > 0 && displayedText === ''
+			delay > 0 && displayedText === ""
 				? delay
-				: phase === 'typing'
+				: phase === "typing"
 					? typingSpeed
-					: phase === 'deleting'
+					: phase === "deleting"
 						? deletingSpeed
 						: pauseDelay;
 
@@ -195,12 +202,15 @@ export function TypingAnimation({
 				const activeGraphemes = graphemeMap[prev.wordIndex] ?? [];
 
 				switch (prev.phase) {
-					case 'typing': {
+					case "typing": {
 						if (prev.charIndex < activeGraphemes.length) {
 							const nextCharIndex = prev.charIndex + 1;
-							const nextText = activeGraphemes.slice(0, nextCharIndex).join('');
+							const nextText = activeGraphemes.slice(0, nextCharIndex).join("");
 
-							if (nextText === prev.displayedText && nextCharIndex === prev.charIndex) {
+							if (
+								nextText === prev.displayedText &&
+								nextCharIndex === prev.charIndex
+							) {
 								return prev;
 							}
 
@@ -217,7 +227,7 @@ export function TypingAnimation({
 							if (!isLastWord || loop) {
 								return {
 									...prev,
-									phase: 'pause',
+									phase: "pause",
 								};
 							}
 						}
@@ -225,16 +235,16 @@ export function TypingAnimation({
 						return prev;
 					}
 
-					case 'pause':
+					case "pause":
 						return {
 							...prev,
-							phase: 'deleting',
+							phase: "deleting",
 						};
 
-					case 'deleting': {
+					case "deleting": {
 						if (prev.charIndex > 0) {
 							const nextCharIndex = prev.charIndex - 1;
-							const nextText = activeGraphemes.slice(0, nextCharIndex).join('');
+							const nextText = activeGraphemes.slice(0, nextCharIndex).join("");
 
 							return {
 								...prev,
@@ -245,10 +255,10 @@ export function TypingAnimation({
 
 						const nextIndex = (prev.wordIndex + 1) % graphemeMap.length;
 						return {
-							displayedText: '',
+							displayedText: "",
 							charIndex: 0,
 							wordIndex: nextIndex,
-							phase: 'typing',
+							phase: "typing",
 						};
 					}
 				}
@@ -276,7 +286,7 @@ export function TypingAnimation({
 		!loop &&
 		wordIndex === graphemeMap.length - 1 &&
 		charIndex >= currentWordGraphemes.length &&
-		phase !== 'deleting';
+		phase !== "deleting";
 
 	const shouldShowCursor =
 		showCursor &&
@@ -285,24 +295,26 @@ export function TypingAnimation({
 
 	const getCursorChar = () => {
 		switch (cursorStyle) {
-			case 'block':
-				return '▌';
-			case 'underscore':
-				return '_';
+			case "block":
+				return "▌";
+			case "underscore":
+				return "_";
 			default:
-				return '|';
+				return "|";
 		}
 	};
 
 	return (
 		<MotionComponent
 			ref={elementRef}
-			className={cn('leading-[5rem] tracking-[-0.02em]', className)}
+			className={cn("leading-[5rem] tracking-[-0.02em]", className)}
 			{...props}
 		>
 			{displayedText}
 			{shouldShowCursor && (
-				<span className={cn('inline-block', blinkCursor && 'animate-blink-cursor')}>
+				<span
+					className={cn("inline-block", blinkCursor && "animate-blink-cursor")}
+				>
 					{getCursorChar()}
 				</span>
 			)}

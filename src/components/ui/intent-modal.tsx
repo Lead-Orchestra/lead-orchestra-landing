@@ -1,42 +1,47 @@
-'use client';
+"use client";
 
-import { X } from 'lucide-react';
-import * as React from 'react';
+import { X } from "lucide-react";
+import * as React from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-export type IntentModalSize = 'sm' | 'md' | 'lg';
-export type IntentModalVariant = 'inline' | 'drawer' | 'modal';
-export type IntentModalTone = 'default' | 'subtle' | 'elevated';
+export type IntentModalSize = "sm" | "md" | "lg";
+export type IntentModalVariant = "inline" | "drawer" | "modal";
+export type IntentModalTone = "default" | "subtle" | "elevated";
 export type IntentType =
-	| 'feedback'
-	| 'exit-intent'
-	| 'survey'
-	| 'newsletter'
-	| 'cookie-consent'
-	| 'custom';
-export type IntentAccent = 'primary' | 'emerald' | 'sky' | 'amber' | 'violet';
+	| "feedback"
+	| "exit-intent"
+	| "survey"
+	| "newsletter"
+	| "cookie-consent"
+	| "custom";
+export type IntentAccent = "primary" | "emerald" | "sky" | "amber" | "violet";
 
-const SIZE_CONFIG: Record<IntentModalSize, { width: string; padding: string; gap: string }> = {
-	sm: { width: 'max-w-sm', padding: 'p-4', gap: 'gap-3' },
-	md: { width: 'max-w-md', padding: 'p-5', gap: 'gap-4' },
-	lg: { width: 'max-w-xl', padding: 'p-6', gap: 'gap-5' },
+const SIZE_CONFIG: Record<
+	IntentModalSize,
+	{ width: string; padding: string; gap: string }
+> = {
+	sm: { width: "max-w-sm", padding: "p-4", gap: "gap-3" },
+	md: { width: "max-w-md", padding: "p-5", gap: "gap-4" },
+	lg: { width: "max-w-xl", padding: "p-6", gap: "gap-5" },
 };
 
 const TONE_CLASSES: Record<IntentModalTone, string> = {
-	default: 'border-white/10 bg-background/95 shadow-[0_20px_60px_-24px_rgba(15,23,42,0.45)]',
-	subtle: 'border-border/60 bg-background/90 shadow-[0_25px_45px_-30px_rgba(15,23,42,0.6)]',
+	default:
+		"border-white/10 bg-background/95 shadow-[0_20px_60px_-24px_rgba(15,23,42,0.45)]",
+	subtle:
+		"border-border/60 bg-background/90 shadow-[0_25px_45px_-30px_rgba(15,23,42,0.6)]",
 	elevated:
-		'border-primary/30 bg-gradient-to-br from-background/95 via-background/80 to-primary/10 shadow-[0_30px_80px_-20px_rgba(59,130,246,0.55)]',
+		"border-primary/30 bg-gradient-to-br from-background/95 via-background/80 to-primary/10 shadow-[0_30px_80px_-20px_rgba(59,130,246,0.55)]",
 };
 
 const INTENT_ICONS: Record<IntentType, string> = {
-	feedback: '💬',
-	'exit-intent': '👋',
-	survey: '📋',
-	newsletter: '📧',
-	'cookie-consent': '🍪',
-	custom: '✨',
+	feedback: "💬",
+	"exit-intent": "👋",
+	survey: "📋",
+	newsletter: "📧",
+	"cookie-consent": "🍪",
+	custom: "✨",
 };
 
 export interface IntentModalProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -147,16 +152,16 @@ export interface IntentModalProps extends React.HTMLAttributes<HTMLDivElement> {
  * ```
  */
 export function IntentModal({
-	size = 'md',
-	variant = 'modal',
+	size = "md",
+	variant = "modal",
 	open = false,
 	title,
-	intent = 'custom',
-	tone = 'default',
+	intent = "custom",
+	tone = "default",
 	description,
 	eyebrow,
 	showCloseButton = true,
-	closeLabel = 'Close modal',
+	closeLabel = "Close modal",
 	onClose,
 	className,
 	actions,
@@ -164,52 +169,54 @@ export function IntentModal({
 	showIntentIcon = true,
 	customIcon,
 	preventBodyScroll = true,
-	accent = 'primary',
+	accent = "primary",
 	...rest
 }: IntentModalProps) {
 	const descriptionId = React.useId();
 	const titleId = React.useId();
 
 	React.useEffect(() => {
-		if (preventBodyScroll && (variant === 'drawer' || variant === 'modal')) {
+		if (preventBodyScroll && (variant === "drawer" || variant === "modal")) {
 			if (open) {
-				document.body.style.setProperty('overflow', 'hidden');
+				document.body.style.setProperty("overflow", "hidden");
 			} else {
-				document.body.style.removeProperty('overflow');
+				document.body.style.removeProperty("overflow");
 			}
 			return () => {
-				document.body.style.removeProperty('overflow');
+				document.body.style.removeProperty("overflow");
 			};
 		}
 		return undefined;
 	}, [open, variant, preventBodyScroll]);
 
 	const { width, padding, gap } = SIZE_CONFIG[size];
-	const intentIcon = customIcon ?? (showIntentIcon ? INTENT_ICONS[intent] : null);
-	const hasCloseButton = showCloseButton && (variant === 'modal' || variant === 'drawer');
+	const intentIcon =
+		customIcon ?? (showIntentIcon ? INTENT_ICONS[intent] : null);
+	const hasCloseButton =
+		showCloseButton && (variant === "modal" || variant === "drawer");
 	const accentClasses: Record<IntentAccent, string> = {
-		primary: 'from-primary/50 to-primary/10 text-primary',
-		emerald: 'from-emerald-400/50 to-emerald-300/10 text-emerald-300',
-		sky: 'from-sky-400/50 to-sky-300/10 text-sky-300',
-		amber: 'from-amber-400/50 to-amber-300/10 text-amber-300',
-		violet: 'from-violet-400/50 to-violet-300/10 text-violet-300',
+		primary: "from-primary/50 to-primary/10 text-primary",
+		emerald: "from-emerald-400/50 to-emerald-300/10 text-emerald-300",
+		sky: "from-sky-400/50 to-sky-300/10 text-sky-300",
+		amber: "from-amber-400/50 to-amber-300/10 text-amber-300",
+		violet: "from-violet-400/50 to-violet-300/10 text-violet-300",
 	};
 
 	const containerContent = (
 		<div
 			className={cn(
-				'group relative flex w-full flex-col text-left backdrop-blur-md supports-[backdrop-filter]:backdrop-blur',
+				"group relative flex w-full flex-col text-left backdrop-blur-md supports-[backdrop-filter]:backdrop-blur",
 				width,
 				padding,
 				gap,
 				TONE_CLASSES[tone],
-				'rounded-2xl border transition-shadow duration-300 ease-out',
-				'before:-z-10 before:absolute before:inset-0 before:rounded-[18px] before:bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_65%)]',
-				variant === 'drawer' && 'sm:min-w-[24rem]',
-				className
+				"rounded-2xl border transition-shadow duration-300 ease-out",
+				"before:-z-10 before:absolute before:inset-0 before:rounded-[18px] before:bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_65%)]",
+				variant === "drawer" && "sm:min-w-[24rem]",
+				className,
 			)}
-			role={variant !== 'inline' ? 'dialog' : undefined}
-			aria-modal={variant !== 'inline' ? true : undefined}
+			role={variant !== "inline" ? "dialog" : undefined}
+			aria-modal={variant !== "inline" ? true : undefined}
 			aria-labelledby={title ? titleId : undefined}
 			aria-describedby={description ? descriptionId : undefined}
 			{...rest}
@@ -227,14 +234,19 @@ export function IntentModal({
 			{eyebrow && (
 				<span
 					className={cn(
-						'inline-flex items-center gap-2 font-semibold text-xs uppercase tracking-[0.28em]',
-						'text-muted-foreground/80'
+						"inline-flex items-center gap-2 font-semibold text-xs uppercase tracking-[0.28em]",
+						"text-muted-foreground/80",
 					)}
 				>
 					{eyebrow}
 				</span>
 			)}
-			<div className={cn('flex flex-col gap-3', hasCloseButton ? 'pr-8 sm:pr-10' : '')}>
+			<div
+				className={cn(
+					"flex flex-col gap-3",
+					hasCloseButton ? "pr-8 sm:pr-10" : "",
+				)}
+			>
 				{title && (
 					<h3
 						id={titleId}
@@ -244,8 +256,8 @@ export function IntentModal({
 							<span
 								aria-hidden="true"
 								className={cn(
-									'inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br text-base shadow-sm md:h-10 md:w-10',
-									accentClasses[accent]
+									"inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br text-base shadow-sm md:h-10 md:w-10",
+									accentClasses[accent],
 								)}
 							>
 								{intentIcon}
@@ -269,7 +281,7 @@ export function IntentModal({
 		</div>
 	);
 
-	if (variant === 'inline') {
+	if (variant === "inline") {
 		return containerContent;
 	}
 
@@ -279,12 +291,12 @@ export function IntentModal({
 
 	const overlayInteractiveProps = onClose
 		? ({
-				role: 'button',
+				role: "button",
 				tabIndex: 0,
-				'aria-label': 'Dismiss modal',
+				"aria-label": "Dismiss modal",
 				onClick: onClose,
 				onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => {
-					if (event.key === 'Enter' || event.key === ' ') {
+					if (event.key === "Enter" || event.key === " ") {
 						event.preventDefault();
 						onClose();
 					}
@@ -299,7 +311,7 @@ export function IntentModal({
 		/>
 	);
 
-	if (variant === 'modal') {
+	if (variant === "modal") {
 		return (
 			<>
 				{overlay}

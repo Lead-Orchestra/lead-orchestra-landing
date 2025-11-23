@@ -1,5 +1,5 @@
-import type { CaseStudy } from '@/types/case-study';
-import { motion } from 'framer-motion';
+import type { CaseStudy } from "@/types/case-study";
+import { motion } from "framer-motion";
 
 interface ProblemSolutionsProps {
 	caseStudy: CaseStudy;
@@ -20,7 +20,9 @@ const item = {
 	show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-export const ProblemSolutions: React.FC<ProblemSolutionsProps> = ({ caseStudy }) => {
+export const ProblemSolutions: React.FC<ProblemSolutionsProps> = ({
+	caseStudy,
+}) => {
 	return (
 		<motion.div
 			initial="hidden"
@@ -52,7 +54,10 @@ export const ProblemSolutions: React.FC<ProblemSolutionsProps> = ({ caseStudy })
 						))}
 					</div>
 				) : (
-					<motion.p variants={item} className="text-center text-base text-muted-foreground">
+					<motion.p
+						variants={item}
+						className="text-center text-base text-muted-foreground"
+					>
 						No business outcomes available.
 					</motion.p>
 				)}
@@ -67,7 +72,9 @@ export const ProblemSolutions: React.FC<ProblemSolutionsProps> = ({ caseStudy })
 							variants={item}
 							className="glass-card rounded-xl p-6 text-center transition-colors hover:bg-primary/10 sm:text-left"
 						>
-							<dt className="font-medium text-primary text-sm">{result.title}</dt>
+							<dt className="font-medium text-primary text-sm">
+								{result.title}
+							</dt>
 							<dd className="mt-2 font-bold text-3xl text-black text-card-foreground sm:text-4xl dark:text-white">
 								{result.value}
 							</dd>

@@ -1,11 +1,11 @@
-import type { ShippingTimeEstimate } from '@/types/products/shipping';
-import type { ABTestCopy } from '@/types/testing';
-import AbTestCopySection from './AbTestCopySection';
-import HighlightsSection from './HighlightsSection';
-import LicenseSection from './LicenseSection';
-import ShippingSection from './ShippingSection';
+import type { ShippingTimeEstimate } from "@/types/products/shipping";
+import type { ABTestCopy } from "@/types/testing";
+import AbTestCopySection from "./AbTestCopySection";
+import HighlightsSection from "./HighlightsSection";
+import LicenseSection from "./LicenseSection";
+import ShippingSection from "./ShippingSection";
 
-import type { LicenseType } from '@/types/products';
+import type { LicenseType } from "@/types/products";
 
 interface DetailsTabContentProps {
 	description: string;

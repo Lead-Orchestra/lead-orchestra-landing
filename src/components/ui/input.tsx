@@ -1,6 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 /** Matches background related CSS declarations (background, background-image, etc.). */
 const BACKGROUND_DECLARATION = /^background(?:-[a-z]+)?$/i;
@@ -10,13 +10,15 @@ const BACKGROUND_DECLARATION = /^background(?:-[a-z]+)?$/i;
  * might inject before hydration. Returns the sanitized style string or null
  * when no declarations remain.
  */
-export function stripBackgroundStyleDeclarations(styleValue: string): string | null {
+export function stripBackgroundStyleDeclarations(
+	styleValue: string,
+): string | null {
 	const declarations = styleValue
-		.split(';')
+		.split(";")
 		.map((declaration) => declaration.trim())
 		.filter(Boolean)
 		.filter((declaration) => {
-			const [property] = declaration.split(':');
+			const [property] = declaration.split(":");
 			if (!property) {
 				return false;
 			}
@@ -27,7 +29,7 @@ export function stripBackgroundStyleDeclarations(styleValue: string): string | n
 		return null;
 	}
 
-	return declarations.join('; ');
+	return declarations.join("; ");
 }
 
 function applyRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
@@ -35,7 +37,7 @@ function applyRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
 		return;
 	}
 
-	if (typeof ref === 'function') {
+	if (typeof ref === "function") {
 		ref(value);
 	} else {
 		(ref as React.MutableRefObject<T | null>).current = value;
@@ -43,14 +45,14 @@ function applyRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
 }
 
 function sanitizeNodeBackground(node: HTMLInputElement) {
-	const styleValue = node.getAttribute('style');
+	const styleValue = node.getAttribute("style");
 	if (!styleValue) {
 		return;
 	}
 
 	const sanitized = stripBackgroundStyleDeclarations(styleValue);
 	if (!sanitized) {
-		node.removeAttribute('style');
+		node.removeAttribute("style");
 		return;
 	}
 
@@ -58,10 +60,10 @@ function sanitizeNodeBackground(node: HTMLInputElement) {
 		return;
 	}
 
-	node.setAttribute('style', sanitized);
+	node.setAttribute("style", sanitized);
 }
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
+const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
 	({ className, type, ...props }, ref) => {
 		const localRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -77,16 +79,16 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
 				sanitizeNodeBackground(node);
 				applyRef(ref, node);
 			},
-			[ref]
+			[ref],
 		);
 
 		React.useEffect(() => {
-			if (typeof window === 'undefined') {
+			if (typeof window === "undefined") {
 				return;
 			}
 
 			const node = localRef.current;
-			if (!node || typeof MutationObserver === 'undefined') {
+			if (!node || typeof MutationObserver === "undefined") {
 				return;
 			}
 
@@ -97,7 +99,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
 				sanitizeNodeBackground(localRef.current);
 			});
 
-			observer.observe(node, { attributes: true, attributeFilter: ['style'] });
+			observer.observe(node, { attributes: true, attributeFilter: ["style"] });
 
 			return () => {
 				observer.disconnect();
@@ -108,19 +110,19 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
 			<input
 				type={type}
 				className={cn(
-					'text- flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base',
-					'black file:text ring-offset-background transition-colors file:border-0 file:bg-transparent file:font-medium file:text-foreground',
-					'-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring focus-visible:ring-2 focus-visible:ring-ring',
-					'-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:text-white/70',
-					className
+					"text- flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base",
+					"black file:text ring-offset-background transition-colors file:border-0 file:bg-transparent file:font-medium file:text-foreground",
+					"-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring focus-visible:ring-2 focus-visible:ring-ring",
+					"-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:text-white/70",
+					className,
 				)}
 				ref={handleRef}
 				{...props}
 				suppressHydrationWarning={true}
 			/>
 		);
-	}
+	},
 );
-Input.displayName = 'Input';
+Input.displayName = "Input";
 
 export { Input };

@@ -2,17 +2,17 @@
  * Types related to prospecting search endpoints
  */
 
-export type ProspectingSource = 'rentcast' | 'homeharvest';
+export type ProspectingSource = "rentcast" | "homeharvest";
 
 export type PropertyType =
-	| 'SINGLE_FAMILY'
-	| 'MULTI_FAMILY'
-	| 'CONDO'
-	| 'TOWNHOUSE'
-	| 'LAND'
-	| 'APARTMENT'
-	| 'MANUFACTURED'
-	| 'OTHER';
+	| "SINGLE_FAMILY"
+	| "MULTI_FAMILY"
+	| "CONDO"
+	| "TOWNHOUSE"
+	| "LAND"
+	| "APARTMENT"
+	| "MANUFACTURED"
+	| "OTHER";
 
 export interface ProspectingQuery {
 	source: ProspectingSource;

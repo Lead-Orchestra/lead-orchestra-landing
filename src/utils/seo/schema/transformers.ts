@@ -1,24 +1,27 @@
-import type { ProductType } from '@/types/products';
-import type { ServiceItemData } from '@/types/service/services';
-import { buildProductSchema, buildServiceSchema } from './builders';
-import { buildAbsoluteUrl } from './helpers';
-import type { OfferInput, ProductSchema, ServiceSchema } from './types';
+import type { ProductType } from "@/types/products";
+import type { ServiceItemData } from "@/types/service/services";
+import { buildProductSchema, buildServiceSchema } from "./builders";
+import { buildAbsoluteUrl } from "./helpers";
+import type { OfferInput, ProductSchema, ServiceSchema } from "./types";
 
-const DEFAULT_AREA_SERVED = ['United States'] as const;
-export const DEFAULT_PRICE_CURRENCY = 'USD';
-export const DEFAULT_AVAILABILITY = 'https://schema.org/InStock';
-const DEFAULT_CONTACT_PATH = '/contact';
+const DEFAULT_AREA_SERVED = ["United States"] as const;
+export const DEFAULT_PRICE_CURRENCY = "USD";
+export const DEFAULT_AVAILABILITY = "https://schema.org/InStock";
+const DEFAULT_CONTACT_PATH = "/contact";
 
-const resolveServiceOffer = (service: ServiceItemData): OfferInput | undefined => {
+const resolveServiceOffer = (
+	service: ServiceItemData,
+): OfferInput | undefined => {
 	const pricingOptions = service.slugDetails.pricing ?? [];
 	const primaryPlan = pricingOptions.find((plan) => {
 		const { monthly, oneTime, annual } = plan.price;
 
 		return (
-			(typeof monthly.amount === 'number' && monthly.amount > 0) ||
-			(typeof oneTime.amount === 'number' && oneTime.amount > 0) ||
-			(typeof oneTime.amount === 'string' && oneTime.amount.trim().length > 0) ||
-			(typeof annual.amount === 'number' && annual.amount > 0)
+			(typeof monthly.amount === "number" && monthly.amount > 0) ||
+			(typeof oneTime.amount === "number" && oneTime.amount > 0) ||
+			(typeof oneTime.amount === "string" &&
+				oneTime.amount.trim().length > 0) ||
+			(typeof annual.amount === "number" && annual.amount > 0)
 		);
 	});
 
@@ -27,11 +30,11 @@ const resolveServiceOffer = (service: ServiceItemData): OfferInput | undefined =
 	}
 
 	const pickPrice = (value: unknown): number | string | undefined => {
-		if (typeof value === 'number') {
+		if (typeof value === "number") {
 			return value;
 		}
 
-		if (typeof value === 'string' && value.trim().length > 0) {
+		if (typeof value === "string" && value.trim().length > 0) {
 			return value;
 		}
 
@@ -42,12 +45,15 @@ const resolveServiceOffer = (service: ServiceItemData): OfferInput | undefined =
 		pickPrice(primaryPlan.price.monthly.amount) ??
 		pickPrice(primaryPlan.price.oneTime.amount) ??
 		pickPrice(primaryPlan.price.annual.amount) ??
-		'Contact for pricing';
+		"Contact for pricing";
 
 	const primaryCta =
-		primaryPlan.cta.type === 'link' && primaryPlan.cta.href ? primaryPlan.cta.href : undefined;
+		primaryPlan.cta.type === "link" && primaryPlan.cta.href
+			? primaryPlan.cta.href
+			: undefined;
 
-	const fallbackCta = service.slugDetails.copyright.ctaLink?.trim() || DEFAULT_CONTACT_PATH;
+	const fallbackCta =
+		service.slugDetails.copyright.ctaLink?.trim() || DEFAULT_CONTACT_PATH;
 
 	return {
 		price,
@@ -87,5 +93,6 @@ export const buildProductJsonLd = (product: ProductType): ProductSchema => {
 	});
 };
 
-export const buildProductListJsonLd = (products: ProductType[]): ProductSchema[] =>
-	products.map((product) => buildProductJsonLd(product));
+export const buildProductListJsonLd = (
+	products: ProductType[],
+): ProductSchema[] => products.map((product) => buildProductJsonLd(product));

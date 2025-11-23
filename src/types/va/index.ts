@@ -10,7 +10,7 @@ export interface VAProfile {
 	location: string;
 	bio: string;
 	hourlyRate: number;
-	availability: 'Full-time' | 'Part-time' | 'On-demand';
+	availability: "Full-time" | "Part-time" | "On-demand";
 	languages: string[];
 	crmExperience: string[];
 	certifications?: string[];

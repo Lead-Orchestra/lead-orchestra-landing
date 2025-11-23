@@ -26,13 +26,13 @@ export type GetWorkflowResponse = {
 export const exampleGetWorkflowResponse: GetWorkflowResponse = {
 	workflows: [
 		{
-			id: '78559bb3-b920-461e-b010-7b2a2816d2a9',
-			name: 'First Workflow',
-			status: 'draft',
+			id: "78559bb3-b920-461e-b010-7b2a2816d2a9",
+			name: "First Workflow",
+			status: "draft",
 			version: 2,
-			createdAt: '2021-05-26T11:33:49.000Z',
-			updatedAt: '2021-05-26T11:33:49.000Z',
-			locationId: 'eBG6WapS3v4ZqwA45MTxtYJ',
+			createdAt: "2021-05-26T11:33:49.000Z",
+			updatedAt: "2021-05-26T11:33:49.000Z",
+			locationId: "eBG6WapS3v4ZqwA45MTxtYJ",
 		},
 	],
 };

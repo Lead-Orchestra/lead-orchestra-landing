@@ -1,12 +1,12 @@
 // In src/components/portfolio/PortfolioGrid.tsx
-'use client';
+"use client";
 
-import { useCategoryContext } from '@/contexts/CategoryContext'; // Updated import
-import type { Project } from '@/types/projects';
-import { useState } from 'react';
-import React, { Suspense } from 'react';
+import { useCategoryContext } from "@/contexts/CategoryContext"; // Updated import
+import type { Project } from "@/types/projects";
+import { useState } from "react";
+import React, { Suspense } from "react";
 const ProjectCard = React.lazy(() =>
-	import('./ProjectCard').then((mod) => ({ default: mod.ProjectCard }))
+	import("./ProjectCard").then((mod) => ({ default: mod.ProjectCard })),
 );
 
 const PortfolioGrid = ({ projects = [] }: { projects?: Project[] }) => {
@@ -14,7 +14,7 @@ const PortfolioGrid = ({ projects = [] }: { projects?: Project[] }) => {
 	const [hoveredId, setHoveredId] = useState<number | null>(null);
 
 	const filteredProjects =
-		activeCategory === 'all'
+		activeCategory === "all"
 			? projects
 			: projects.filter((project) => project.category === activeCategory);
 
@@ -22,7 +22,11 @@ const PortfolioGrid = ({ projects = [] }: { projects?: Project[] }) => {
 		<Suspense fallback={<div>Loading projects...</div>}>
 			<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 				{filteredProjects.map((project) => (
-					<ProjectCard key={project.id} project={project} setHoveredId={setHoveredId} />
+					<ProjectCard
+						key={project.id}
+						project={project}
+						setHoveredId={setHoveredId}
+					/>
 				))}
 			</div>
 		</Suspense>

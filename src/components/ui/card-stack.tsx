@@ -1,7 +1,7 @@
-'use client';
-import { AuroraText } from '@/components/magicui/aurora-text';
-import { motion } from 'motion/react';
-import { useEffect, useRef, useState } from 'react';
+"use client";
+import { AuroraText } from "@/components/magicui/aurora-text";
+import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
 const CARD_ROTATION_INTERVAL = 5000;
 
@@ -62,7 +62,7 @@ export const CardStack = ({
 
 	return (
 		<div
-			className={`group relative mx-auto w-full ${className ?? ''}`}
+			className={`group relative mx-auto w-full ${className ?? ""}`}
 			style={{ height: `${CARD_HEIGHT}px` }}
 			onMouseEnter={() => {
 				if (intervalRef.current) {
@@ -79,7 +79,7 @@ export const CardStack = ({
 						className="absolute flex w-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 shadow-[0_16px_60px_-45px_rgba(59,130,246,0.35)] backdrop-blur-md dark:border-white/[0.08] dark:bg-black dark:shadow-white/[0.05]"
 						data-testid="card-stack-item"
 						style={{
-							transformOrigin: 'top center',
+							transformOrigin: "top center",
 							height: `${CARD_HEIGHT}px`,
 						}}
 						animate={{

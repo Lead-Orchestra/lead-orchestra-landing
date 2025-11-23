@@ -1,8 +1,8 @@
-import { AnimatedTestimonials } from '@/components/ui/animated-testimonials';
-import { useDataModule } from '@/stores/useDataModuleStore';
-import type { TeamMember } from '@/types/about/team';
-import React from 'react';
-import Header from '../common/Header';
+import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
+import { useDataModule } from "@/stores/useDataModuleStore";
+import type { TeamMember } from "@/types/about/team";
+import React from "react";
+import Header from "../common/Header";
 
 interface AboutTeamProps {
 	team?: TeamMember[];
@@ -10,19 +10,20 @@ interface AboutTeamProps {
 
 export default function AboutTeam({ team }: AboutTeamProps) {
 	const { status, teamMembers, error } = useDataModule(
-		'about/team',
+		"about/team",
 		({ status: moduleStatus, data, error: moduleError }) => ({
 			status: moduleStatus,
 			teamMembers: data?.teamMembers ?? [],
 			error: moduleError,
-		})
+		}),
 	);
 
 	const hasProvidedTeam = Array.isArray(team) && team.length > 0;
 	const resolvedTeam = hasProvidedTeam ? team : teamMembers;
 	const hasResolvedTeam = resolvedTeam.length > 0;
-	const isLoadingFromStore = !hasProvidedTeam && (status === 'idle' || status === 'loading');
-	const isErroredFromStore = !hasProvidedTeam && status === 'error';
+	const isLoadingFromStore =
+		!hasProvidedTeam && (status === "idle" || status === "loading");
+	const isErroredFromStore = !hasProvidedTeam && status === "error";
 
 	if (isLoadingFromStore) {
 		return (
@@ -36,12 +37,14 @@ export default function AboutTeam({ team }: AboutTeamProps) {
 	}
 
 	if (isErroredFromStore) {
-		console.error('[AboutTeam] Failed to load team', error);
+		console.error("[AboutTeam] Failed to load team", error);
 		return (
 			<section>
 				<div className="mx-auto max-w-4xl text-center">
 					<Header title="Our Team" subtitle="" />
-					<div className="py-12 text-destructive">Unable to load team members right now.</div>
+					<div className="py-12 text-destructive">
+						Unable to load team members right now.
+					</div>
 				</div>
 			</section>
 		);
@@ -52,7 +55,9 @@ export default function AboutTeam({ team }: AboutTeamProps) {
 			<section>
 				<div className="mx-auto max-w-4xl text-center">
 					<Header title="Our Team" subtitle="" />
-					<div className="py-12 text-muted-foreground">Team information is coming soon.</div>
+					<div className="py-12 text-muted-foreground">
+						Team information is coming soon.
+					</div>
 				</div>
 			</section>
 		);

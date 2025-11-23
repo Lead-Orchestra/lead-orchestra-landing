@@ -1,5 +1,4 @@
-import { NextResponse } from 'next/server';
-
+import { NextResponse } from "next/server";
 // ---- Types (minimal, only what's needed for diagnostics) ----
 interface LinktreePreviewRow {
 	pageId: string | null;
@@ -12,23 +11,29 @@ interface LinktreePreviewRow {
 
 // ---- Type guards ----
 function isRichText(
-	p: NotionProperty | undefined
-): p is Extract<NotionProperty, { type: 'rich_text' }> {
-	return Boolean(p && p.type === 'rich_text');
+	p: NotionProperty | undefined,
+): p is Extract<NotionProperty, { type: "rich_text" }> {
+	return Boolean(p && p.type === "rich_text");
 }
-function isTitle(p: NotionProperty | undefined): p is Extract<NotionProperty, { type: 'title' }> {
-	return Boolean(p && p.type === 'title');
+function isTitle(
+	p: NotionProperty | undefined,
+): p is Extract<NotionProperty, { type: "title" }> {
+	return Boolean(p && p.type === "title");
 }
-function isUrl(p: NotionProperty | undefined): p is Extract<NotionProperty, { type: 'url' }> {
-	return Boolean(p && p.type === 'url');
+function isUrl(
+	p: NotionProperty | undefined,
+): p is Extract<NotionProperty, { type: "url" }> {
+	return Boolean(p && p.type === "url");
 }
 function isCheckbox(
-	p: NotionProperty | undefined
-): p is Extract<NotionProperty, { type: 'checkbox' }> {
-	return Boolean(p && p.type === 'checkbox');
+	p: NotionProperty | undefined,
+): p is Extract<NotionProperty, { type: "checkbox" }> {
+	return Boolean(p && p.type === "checkbox");
 }
-function isSelect(p: NotionProperty | undefined): p is Extract<NotionProperty, { type: 'select' }> {
-	return Boolean(p && p.type === 'select');
+function isSelect(
+	p: NotionProperty | undefined,
+): p is Extract<NotionProperty, { type: "select" }> {
+	return Boolean(p && p.type === "select");
 }
 
 type LinktreeItem = Record<string, unknown>;
@@ -37,11 +42,11 @@ type NotionTextSpan = { plain_text?: string };
 type NotionSelect = { name?: string };
 
 type NotionProperty =
-	| { type: 'rich_text'; rich_text?: NotionTextSpan[] }
-	| { type: 'title'; title?: NotionTextSpan[] }
-	| { type: 'url'; url?: string }
-	| { type: 'checkbox'; checkbox?: boolean }
-	| { type: 'select'; select?: NotionSelect }
+	| { type: "rich_text"; rich_text?: NotionTextSpan[] }
+	| { type: "title"; title?: NotionTextSpan[] }
+	| { type: "url"; url?: string }
+	| { type: "checkbox"; checkbox?: boolean }
+	| { type: "select"; select?: NotionSelect }
 	| { type: string };
 
 interface NotionPage {
@@ -78,11 +83,12 @@ function parseDevRedirects(): Record<string, string> {
 	if (raw) {
 		try {
 			const obj = JSON.parse(raw) as Record<string, string>;
-			for (const [k, v] of Object.entries(obj)) out[k.toLowerCase()] = String(v);
+			for (const [k, v] of Object.entries(obj))
+				out[k.toLowerCase()] = String(v);
 			return out;
 		} catch {
-			for (const pair of raw.split(',')) {
-				const [k, v] = pair.split('=');
+			for (const pair of raw.split(",")) {
+				const [k, v] = pair.split("=");
 				if (k && v) out[k.trim().toLowerCase()] = v.trim();
 			}
 			if (Object.keys(out).length) return out;
@@ -91,13 +97,16 @@ function parseDevRedirects(): Record<string, string> {
 	return out;
 }
 
+export const runtime = 'edge';
 export async function GET(req: Request) {
 	const url = new URL(req.url);
 	const q = url.searchParams;
-	const slug = (q.get('slug') || '').toLowerCase().replace(/^\//, '');
-	const echoTo = q.get('to') || undefined;
-	const limitParam = q.get('limit');
-	const limit = limitParam ? Math.max(1, Math.min(500, Number(limitParam) || 0)) : undefined;
+	const slug = (q.get("slug") || "").toLowerCase().replace(/^\//, "");
+	const echoTo = q.get("to") || undefined;
+	const limitParam = q.get("limit");
+	const limit = limitParam
+		? Math.max(1, Math.min(500, Number(limitParam) || 0))
+		: undefined;
 	const requestHeaders = Object.fromEntries(new Headers(req.headers).entries());
 
 	const devRedirects = parseDevRedirects();
@@ -115,11 +124,13 @@ export async function GET(req: Request) {
 	let notionAllRows: DebugRow[] | undefined;
 	try {
 		const res = await fetch(`${url.origin}/api/linktree`, {
-			cache: 'no-store',
+			cache: "no-store",
 		});
 		if (res.ok) {
 			const data = (await res.json()) as unknown;
-			const items: LinktreeItem[] = Array.isArray((data as Record<string, unknown>)?.items)
+			const items: LinktreeItem[] = Array.isArray(
+				(data as Record<string, unknown>)?.items,
+			)
 				? ((data as Record<string, unknown>).items as LinktreeItem[])
 				: Array.isArray(data)
 					? (data as LinktreeItem[])
@@ -128,13 +139,16 @@ export async function GET(req: Request) {
 			linktreeHeaders = Object.fromEntries(res.headers.entries());
 			linktreePreview = items.slice(0, 5).map(
 				(it: LinktreeItem): LinktreePreviewRow => ({
-					pageId: (it.pageId as string | undefined) ?? (it.id as string | undefined) ?? null,
+					pageId:
+						(it.pageId as string | undefined) ??
+						(it.id as string | undefined) ??
+						null,
 					slug: (it.slug as string | undefined) ?? null,
 					destination: (it.destination as string | undefined) ?? null,
 					title: (it.title as string | undefined) ?? null,
 					highlighted: Boolean(it.highlighted),
 					category: (it.category as string | undefined) ?? null,
-				})
+				}),
 			);
 			linktreeItems = limit ? items.slice(0, limit) : items;
 		} else {
@@ -144,45 +158,52 @@ export async function GET(req: Request) {
 		linktreeSample = { ok: false, error: (e as Error).message };
 	}
 
-	const sampleResolution = slug ? { slug, devHit: devRedirects[slug] ?? null } : undefined;
+	const sampleResolution = slug
+		? { slug, devHit: devRedirects[slug] ?? null }
+		: undefined;
 
 	// Notion diagnostics: show rows that are Link Tree Enabled but have missing slug or invalid destination
 	try {
 		const NOTION_KEY = process.env.NOTION_KEY;
 		const NOTION_DB = process.env.NOTION_REDIRECTS_ID;
 		if (NOTION_KEY && NOTION_DB) {
-			const res = await fetch(`https://api.notion.com/v1/databases/${NOTION_DB}/query`, {
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${NOTION_KEY}`,
-					'Notion-Version': '2022-06-28',
-					'Content-Type': 'application/json',
+			const res = await fetch(
+				`https://api.notion.com/v1/databases/${NOTION_DB}/query`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${NOTION_KEY}`,
+						"Notion-Version": "2022-06-28",
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ page_size: 100 }),
 				},
-				body: JSON.stringify({ page_size: 100 }),
-			});
+			);
 			if (res.ok) {
 				const data = (await res.json()) as NotionQueryResponse;
 				const sanitize = (s: string | undefined): string =>
-					(s ?? '')
-						.replace(/\uFEFF/g, '')
-						.replace(/\u00A0/g, ' ')
+					(s ?? "")
+						.replace(/\uFEFF/g, "")
+						.replace(/\u00A0/g, " ")
 						.trim();
-				const readTxt = (prop: NotionProperty | undefined): string | undefined => {
+				const readTxt = (
+					prop: NotionProperty | undefined,
+				): string | undefined => {
 					try {
 						if (!prop) return undefined;
 						if (isRichText(prop)) {
 							const arr = (prop.rich_text ?? []) as NotionTextSpan[];
 							const joined = arr
-								.map((t) => t.plain_text ?? '')
-								.join('')
+								.map((t) => t.plain_text ?? "")
+								.join("")
 								.trim();
 							return joined || undefined;
 						}
 						if (isTitle(prop)) {
 							const arr = (prop.title ?? []) as NotionTextSpan[];
 							const joined = arr
-								.map((t) => t.plain_text ?? '')
-								.join('')
+								.map((t) => t.plain_text ?? "")
+								.join("")
 								.trim();
 							return joined || undefined;
 						}
@@ -195,7 +216,10 @@ export async function GET(req: Request) {
 				const isValidAbsoluteHttpUrl = (s: string): boolean => {
 					try {
 						const u = new URL(s);
-						return (u.protocol === 'http:' || u.protocol === 'https:') && Boolean(u.hostname);
+						return (
+							(u.protocol === "http:" || u.protocol === "https:") &&
+							Boolean(u.hostname)
+						);
 					} catch {
 						return false;
 					}
@@ -203,26 +227,39 @@ export async function GET(req: Request) {
 				const invalids: DebugRow[] = [];
 				const allRows: DebugRow[] = [];
 				for (const page of (data.results ?? []) as NotionPage[]) {
-					const props = page.properties ?? ({} as Record<string, NotionProperty>);
-					const lte = props?.['Link Tree Enabled'] as NotionProperty | undefined;
+					const props =
+						page.properties ?? ({} as Record<string, NotionProperty>);
+					const lte = props?.["Link Tree Enabled"] as
+						| NotionProperty
+						| undefined;
 					let enabled = false;
 					if (isCheckbox(lte)) enabled = Boolean(lte.checkbox);
 					else if (isSelect(lte)) {
-						const name = (lte.select?.name ?? '').toString().toLowerCase();
-						enabled = name === 'true' || name === 'yes' || name === 'enabled';
+						const name = (lte.select?.name ?? "").toString().toLowerCase();
+						enabled = name === "true" || name === "yes" || name === "enabled";
 					}
 					const typeProp = props.Type as NotionProperty | undefined;
-					if (!enabled && isSelect(typeProp) && typeProp.select?.name === 'LinkTree')
+					if (
+						!enabled &&
+						isSelect(typeProp) &&
+						typeProp.select?.name === "LinkTree"
+					)
 						enabled = true;
 					const slugTxt = readTxt(props.Slug as NotionProperty | undefined);
 					const titleTxt = readTxt(props.Title as NotionProperty | undefined);
-					const destTxtRaw = readTxt(props.Destination as NotionProperty | undefined);
+					const destTxtRaw = readTxt(
+						props.Destination as NotionProperty | undefined,
+					);
 					const destTxt = sanitize(destTxtRaw);
 					const reasons: string[] = [];
-					if (!slugTxt && !(titleTxt || '').startsWith('/')) reasons.push('missing slug');
-					if (!destTxt) reasons.push('missing destination');
-					else if (/^https?:/i.test(destTxt) && !isValidAbsoluteHttpUrl(destTxt))
-						reasons.push('invalid absolute destination');
+					if (!slugTxt && !(titleTxt || "").startsWith("/"))
+						reasons.push("missing slug");
+					if (!destTxt) reasons.push("missing destination");
+					else if (
+						/^https?:/i.test(destTxt) &&
+						!isValidAbsoluteHttpUrl(destTxt)
+					)
+						reasons.push("invalid absolute destination");
 					const row: DebugRow = {
 						pageId: page.id,
 						title: titleTxt ?? null,

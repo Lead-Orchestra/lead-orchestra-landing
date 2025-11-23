@@ -1,6 +1,6 @@
-import { createPaymentIntent } from '@/lib/externalRequests/stripe';
-import { NextResponse } from 'next/server';
-
+import { createPaymentIntent } from "@/lib/externalRequests/stripe";
+import { NextResponse } from "next/server";
+export const runtime = 'edge';
 export async function POST(request: Request) {
 	try {
 		const { contactCount, isFreeTier } = await request.json();
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 		if (isFree) {
 			return NextResponse.json({
 				isFree: true,
-				message: 'Free tier campaign',
+				message: "Free tier campaign",
 			});
 		}
 
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 			description: `Lead Orchestra Lookalike Audience Generation - ${contactCount} contacts`,
 			metadata: {
 				contactCount: contactCount.toString(),
-				campaignType: 'lookalike-audience',
+				campaignType: "lookalike-audience",
 			},
 		});
 
@@ -36,7 +36,10 @@ export async function POST(request: Request) {
 			amount: paymentIntent.amount,
 		});
 	} catch (error) {
-		console.error('Checkout initialization error:', error);
-		return NextResponse.json({ error: 'Failed to initialize checkout' }, { status: 500 });
+		console.error("Checkout initialization error:", error);
+		return NextResponse.json(
+			{ error: "Failed to initialize checkout" },
+			{ status: 500 },
+		);
 	}
 }

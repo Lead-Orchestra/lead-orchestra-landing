@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Header from '@/components/common/Header';
+import Header from "@/components/common/Header";
 import {
 	BentoCard as MagicBentoCard,
 	BentoGrid as MagicBentoGrid,
-} from '@/components/ui/bento-grid';
-import type { BentoFeature } from '@/types/bento/features';
-import type React from 'react';
+} from "@/components/ui/bento-grid";
+import type { BentoFeature } from "@/types/bento/features";
+import type React from "react";
 
 interface BentoPageProps {
 	title: string;
@@ -18,7 +18,7 @@ const BentoPage: React.FC<BentoPageProps> = ({ title, subtitle, features }) => {
 	return (
 		<div
 			className="transform-gpu py-12 text-black will-change-opacity will-change-transform dark:text-white"
-			style={{ overflowClipMargin: '24px' }}
+			style={{ overflowClipMargin: "24px" }}
 		>
 			<div className="mx-auto max-w-7xl transform-gpu px-4 will-change-opacity will-change-transform sm:px-6">
 				<Header title={title} subtitle={subtitle} className="mb-12" />
@@ -29,14 +29,14 @@ const BentoPage: React.FC<BentoPageProps> = ({ title, subtitle, features }) => {
 							<MagicBentoCard
 								key={feature.title}
 								name={feature.title}
-								description={feature.description ?? ''}
+								description={feature.description ?? ""}
 								Icon={() => <>{feature.icon}</>}
 								href="#"
 								cta="Learn more"
-								className={`group relative transform-gpu overflow-hidden bg-background-dark/80 text-foreground shadow-[0_16px_45px_-30px_rgba(14,165,233,0.35)] transition-all duration-300 will-change-opacity will-change-transform dark:bg-background-dark/90 ${feature.className ?? ''}`}
+								className={`group relative transform-gpu overflow-hidden bg-background-dark/80 text-foreground shadow-[0_16px_45px_-30px_rgba(14,165,233,0.35)] transition-all duration-300 will-change-opacity will-change-transform dark:bg-background-dark/90 ${feature.className ?? ""}`}
 								background={
 									<div
-										className={`pointer-events-none absolute inset-0 flex transform-gpu items-center justify-center opacity-50 blur-sm transition-all duration-300 will-change-opacity will-change-transform ${isMiddleCard ? 'group-hover:opacity-70 group-hover:blur-xl' : 'group-hover:opacity-70 group-hover:blur-sm'}`}
+										className={`pointer-events-none absolute inset-0 flex transform-gpu items-center justify-center opacity-50 blur-sm transition-all duration-300 will-change-opacity will-change-transform ${isMiddleCard ? "group-hover:opacity-70 group-hover:blur-xl" : "group-hover:opacity-70 group-hover:blur-sm"}`}
 									>
 										{feature.background}
 									</div>

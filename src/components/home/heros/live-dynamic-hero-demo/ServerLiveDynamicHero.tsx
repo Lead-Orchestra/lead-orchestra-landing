@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import type { ComponentType } from 'react';
+import { useEffect, useRef, useState } from "react";
+import type { ComponentType } from "react";
 
 /**
  * Server-safe wrapper for LiveDynamicHero.
@@ -14,16 +14,16 @@ export default function ServerLiveDynamicHero() {
 
 	useEffect(() => {
 		// Only run on client
-		if (typeof window === 'undefined') return;
+		if (typeof window === "undefined") return;
 
 		// Dynamically import the client wrapper component
-		import('./ClientLiveDynamicHero')
+		import("./ClientLiveDynamicHero")
 			.then((mod) => {
 				componentRef.current = mod.default;
 				setIsLoaded(true);
 			})
 			.catch((error) => {
-				console.error('[ServerLiveDynamicHero] Failed to load:', error);
+				console.error("[ServerLiveDynamicHero] Failed to load:", error);
 			});
 	}, []);
 

@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
 import {
 	type HeroVideoPreviewHandle,
 	resolveHeroThumbnailSrc,
 	useHeroVideoConfig,
-} from '@external/dynamic-hero';
-import { motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
+} from "@external/dynamic-hero";
+import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import PersonaCTA from '@/components/cta/PersonaCTA';
-import type { BadgeMetrics } from '@/components/home/ReactivateCampaignBadges';
-import { ReactivateCampaignInput } from '@/components/home/ReactivateCampaignInput';
-import { useHeroTrialCheckout } from '@/components/home/heros/useHeroTrialCheckout';
-import { AvatarCircles } from '@/components/ui/avatar-circles';
-import { InteractiveGridPattern } from '@/components/ui/interactive-grid-pattern';
-import { Particles } from '@/components/ui/particles';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { useTheme } from 'next-themes';
+import PersonaCTA from "@/components/cta/PersonaCTA";
+import type { BadgeMetrics } from "@/components/home/ReactivateCampaignBadges";
+import { ReactivateCampaignInput } from "@/components/home/ReactivateCampaignInput";
+import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
+import { AvatarCircles } from "@/components/ui/avatar-circles";
+import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
+import { Particles } from "@/components/ui/particles";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useTheme } from "next-themes";
 
 import {
 	LIVE_COPY,
@@ -28,28 +28,34 @@ import {
 	LIVE_SOCIAL_PROOF,
 	LIVE_VIDEO,
 	PERSONA_LABEL,
-} from './_config';
+} from "./_config";
 
-const HERO_POSTER_FALLBACK = resolveHeroThumbnailSrc(LIVE_VIDEO, LIVE_VIDEO.poster);
+const HERO_POSTER_FALLBACK = resolveHeroThumbnailSrc(
+	LIVE_VIDEO,
+	LIVE_VIDEO.poster,
+);
 
 const HeroAuroraDynamic = dynamic(
-	() => import('@external/dynamic-hero').then((mod) => mod.HeroAurora),
-	{ ssr: false, loading: () => null }
+	() => import("@external/dynamic-hero").then((mod) => mod.HeroAurora),
+	{ ssr: false, loading: () => null },
 );
 
 const HeroVideoPreviewDynamic = dynamic(
-	() => import('@external/dynamic-hero').then((mod) => mod.HeroVideoPreview),
+	() => import("@external/dynamic-hero").then((mod) => mod.HeroVideoPreview),
 	{
 		ssr: false,
 		loading: () => (
-			<HeroVideoPreviewSkeleton posterSrc={HERO_POSTER_FALLBACK} alt="Product demo preview" />
+			<HeroVideoPreviewSkeleton
+				posterSrc={HERO_POSTER_FALLBACK}
+				alt="Product demo preview"
+			/>
 		),
-	}
+	},
 );
 
 const PricingCheckoutDialog = dynamic(
-	() => import('@/components/home/pricing/PricingCheckoutDialog'),
-	{ ssr: false, loading: () => null }
+	() => import("@/components/home/pricing/PricingCheckoutDialog"),
+	{ ssr: false, loading: () => null },
 );
 
 function HeroVideoPreviewSkeleton({
@@ -80,22 +86,23 @@ function HeroVideoPreviewSkeleton({
 export default function HeroSideBySide(): JSX.Element {
 	const videoSectionRef = useRef<HTMLDivElement | null>(null);
 	const videoPreviewRef = useRef<HeroVideoPreviewHandle>(null);
-	const { isTrialLoading, checkoutState, startTrial, closeCheckout } = useHeroTrialCheckout();
+	const { isTrialLoading, checkoutState, startTrial, closeCheckout } =
+		useHeroTrialCheckout();
 	const { resolvedTheme } = useTheme();
 	const isMobile = useIsMobile();
-	const [particleColor, setParticleColor] = useState('#ffffff');
+	const [particleColor, setParticleColor] = useState("#ffffff");
 	const [particleSize, setParticleSize] = useState(2);
 	const [particleQuantity, setParticleQuantity] = useState(isMobile ? 60 : 120);
 
 	// Update particle color and properties based on theme
 	useEffect(() => {
-		if (resolvedTheme === 'dark') {
-			setParticleColor('#ffffff');
+		if (resolvedTheme === "dark") {
+			setParticleColor("#ffffff");
 			setParticleSize(2);
 			setParticleQuantity(isMobile ? 60 : 120);
 		} else {
 			// Light mode: use subtle gray instead of black, smaller size, fewer particles
-			setParticleColor('#94a3b8'); // slate-400 - much more subtle
+			setParticleColor("#94a3b8"); // slate-400 - much more subtle
 			setParticleSize(1.2);
 			setParticleQuantity(isMobile ? 30 : 60);
 		}
@@ -105,15 +112,18 @@ export default function HeroSideBySide(): JSX.Element {
 
 	const handlePreviewDemo = useCallback(() => {
 		const node = videoSectionRef.current;
-		if (node && typeof node.scrollIntoView === 'function') {
-			node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		if (node && typeof node.scrollIntoView === "function") {
+			node.scrollIntoView({ behavior: "smooth", block: "center" });
 		}
 
 		const playVideo = () => {
 			videoPreviewRef.current?.play();
 		};
 
-		if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+		if (
+			typeof window !== "undefined" &&
+			typeof window.requestAnimationFrame === "function"
+		) {
 			window.requestAnimationFrame(playVideo);
 		} else {
 			playVideo();
@@ -121,12 +131,16 @@ export default function HeroSideBySide(): JSX.Element {
 	}, []);
 
 	// Extract problem and solution from LIVE_COPY
-	const problem = LIVE_COPY?.values?.problem ?? 'buying stale lead lists from Apollo and ZoomInfo';
-	const solution = LIVE_COPY?.values?.solution ?? 'scraping your own fresh leads from any website';
+	const problem =
+		LIVE_COPY?.values?.problem ??
+		"buying stale lead lists from Apollo and ZoomInfo";
+	const solution =
+		LIVE_COPY?.values?.solution ??
+		"scraping your own fresh leads from any website";
 	const description =
-		typeof LIVE_COPY?.subtitle === 'string'
+		typeof LIVE_COPY?.subtitle === "string"
 			? LIVE_COPY.subtitle
-			: 'Stop buying stale lead lists. Scrape your own fresh leads. Fresh leads, not rented lists.';
+			: "Stop buying stale lead lists. Scrape your own fresh leads. Fresh leads, not rented lists.";
 
 	// Single combined statement
 	const combinedStatement = `Stop ${problem}. Start ${solution}`;
@@ -190,7 +204,7 @@ export default function HeroSideBySide(): JSX.Element {
 						<div className="mt-4 w-full max-w-4xl">
 							<ReactivateCampaignInput
 								onActivationComplete={(metrics: BadgeMetrics) => {
-									console.log('Activation complete with metrics:', metrics);
+									console.log("Activation complete with metrics:", metrics);
 								}}
 							/>
 						</div>
@@ -220,7 +234,7 @@ export default function HeroSideBySide(): JSX.Element {
 							/>
 							<p className="text-muted-foreground text-sm">
 								{LIVE_SOCIAL_PROOF.caption ??
-									'Trusted by developers, agencies, and data teams worldwide'}
+									"Trusted by developers, agencies, and data teams worldwide"}
 							</p>
 						</div>
 					</div>

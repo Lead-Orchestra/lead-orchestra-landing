@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 type Avatar = {
 	imageUrl: string;
@@ -10,7 +10,7 @@ type Avatar = {
 	name?: string;
 };
 
-type TooltipInteraction = 'tooltip' | 'none';
+type TooltipInteraction = "tooltip" | "none";
 
 interface AvatarCirclesProps {
 	className?: string;
@@ -39,7 +39,7 @@ export const AvatarCircles = ({
 	numPeople,
 	className,
 	avatarUrls,
-	interaction = 'none',
+	interaction = "none",
 	tooltipRenderer,
 }: AvatarCirclesProps) => {
 	const renderAvatar = (avatar: Avatar, index: number) => {
@@ -55,13 +55,17 @@ export const AvatarCircles = ({
 		);
 
 		const label =
-			interaction === 'tooltip'
-				? (tooltipRenderer?.(avatar, index) ?? buildFallbackLabel(avatar, index))
+			interaction === "tooltip"
+				? (tooltipRenderer?.(avatar, index) ??
+					buildFallbackLabel(avatar, index))
 				: null;
 
 		const wrapped = (
 			<div
-				className={cn('group relative inline-flex', interaction === 'tooltip' && 'cursor-pointer')}
+				className={cn(
+					"group relative inline-flex",
+					interaction === "tooltip" && "cursor-pointer",
+				)}
 			>
 				{image}
 				{label ? (
@@ -94,7 +98,7 @@ export const AvatarCircles = ({
 	};
 
 	return (
-		<div className={cn('-space-x-3 flex', className)}>
+		<div className={cn("-space-x-3 flex", className)}>
 			{avatarUrls.map(renderAvatar)}
 			{numPeople && numPeople > avatarUrls.length ? (
 				<div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-background/70 bg-primary/15 font-semibold text-primary text-xs uppercase tracking-widest">

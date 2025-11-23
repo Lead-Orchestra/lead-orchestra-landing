@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import Header from '@/components/common/Header';
-import SessionMonitor from '@/components/deal_scale/talkingCards/SessionMonitor';
-import demoTranscript from '@/data/transcripts';
+import Header from "@/components/common/Header";
+import SessionMonitor from "@/components/deal_scale/talkingCards/SessionMonitor";
+import demoTranscript from "@/data/transcripts";
 
 // This component is extracted from HeroSessionMonitor to be a standalone demo.
 

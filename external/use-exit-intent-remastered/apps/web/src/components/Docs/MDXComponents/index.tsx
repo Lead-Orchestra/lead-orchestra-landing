@@ -1,5 +1,9 @@
-import type { MDXComponents } from 'mdx/types.js';
 import type { ComponentPropsWithoutRef, HTMLAttributes, ReactNode } from 'react';
+
+// MDXComponents type definition
+type MDXComponents = {
+	[key: string]: React.ComponentType<Record<string, unknown>> | undefined;
+};
 
 import { Description, Title } from 'components/Layout';
 import { CodeBox } from './CodeBox/index.js';

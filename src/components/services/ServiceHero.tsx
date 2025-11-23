@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import SplinePlaceHolder from '@/components/ui/SplinePlaceHolder';
-import { Button } from '@/components/ui/button';
-import { default_cal_slug } from '@/data/constants/booking';
-import { useCal } from '@/hooks/use-calendly';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { highlightKeyPhrases } from '@/utils/handle-highlight';
-import { ArrowRight } from 'lucide-react';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import type React from 'react';
+import SplinePlaceHolder from "@/components/ui/SplinePlaceHolder";
+import { Button } from "@/components/ui/button";
+import { default_cal_slug } from "@/data/constants/booking";
+import { useCal } from "@/hooks/use-calendly";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { highlightKeyPhrases } from "@/utils/handle-highlight";
+import { ArrowRight } from "lucide-react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import type React from "react";
 
-const SplineModel = dynamic(() => import('@/components/ui/spline-model'), {
+const SplineModel = dynamic(() => import("@/components/ui/spline-model"), {
 	ssr: false,
 	loading: () => <SplinePlaceHolder />,
 });
@@ -33,12 +33,12 @@ const ServiceHero: React.FC<ServiceHeroProps> = ({
 	splineUrl,
 	defaultZoom,
 	description,
-	keyServiceLeft = 'AI Driven',
-	keyServiceRight = 'Future Proof MVPs',
+	keyServiceLeft = "AI Driven",
+	keyServiceRight = "Future Proof MVPs",
 	calSlug = default_cal_slug,
 }) => {
 	useCal();
-	const isMobile = useMediaQuery('(max-width: 768px)');
+	const isMobile = useMediaQuery("(max-width: 768px)");
 
 	const adjustedZoom = isMobile ? (defaultZoom || 0) * 0.7 : defaultZoom;
 
@@ -49,13 +49,13 @@ const ServiceHero: React.FC<ServiceHeroProps> = ({
 
 			<div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col items-center gap-6 pt-6 lg:flex-row lg:gap-10 xl:gap-16">
 				<div
-					className={`w-full ${isMobile ? 'order-first' : 'lg:order-last lg:w-1/2'} flex h-[300px] items-center justify-center sm:h-[350px] lg:h-[500px] xl:h-[600px] 2xl:h-[700px]`}
+					className={`w-full ${isMobile ? "order-first" : "lg:order-last lg:w-1/2"} flex h-[300px] items-center justify-center sm:h-[350px] lg:h-[500px] xl:h-[600px] 2xl:h-[700px]`}
 				>
 					<SplineModel sceneUrl={splineUrl} />
 				</div>
 
 				<div
-					className={`flex flex-col items-center justify-center ${isMobile ? 'w-full' : 'lg:w-1/2 lg:items-start lg:pr-8'}`}
+					className={`flex flex-col items-center justify-center ${isMobile ? "w-full" : "lg:w-1/2 lg:items-start lg:pr-8"}`}
 				>
 					<div className="neo-blur mb-6 inline-flex w-fit items-center justify-center rounded-full border border-primary/20 bg-background-dark px-4 py-1.5 backdrop-blur-md">
 						<span className="mr-2 font-medium text-primary text-sm lg:text-base">
@@ -68,13 +68,13 @@ const ServiceHero: React.FC<ServiceHeroProps> = ({
 					</div>
 
 					<h1
-						className={`mb-4 animate-fade-in text-center font-bold text-3xl text-glow sm:mb-6 sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl ${isMobile ? '' : 'lg:text-left'}`}
+						className={`mb-4 animate-fade-in text-center font-bold text-3xl text-glow sm:mb-6 sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl ${isMobile ? "" : "lg:text-left"}`}
 					>
 						{title}
 					</h1>
 
 					<p
-						className={`mb-6 text-center text-base text-black sm:mb-10 sm:text-lg lg:text-xl dark:text-white/70 ${isMobile ? '' : 'lg:text-left'}`}
+						className={`mb-6 text-center text-base text-black sm:mb-10 sm:text-lg lg:text-xl dark:text-white/70 ${isMobile ? "" : "lg:text-left"}`}
 					>
 						{highlightKeyPhrases(description || subtitle)}
 					</p>
@@ -85,7 +85,8 @@ const ServiceHero: React.FC<ServiceHeroProps> = ({
 							data-cal-config='{"theme":"dark"}'
 							className="glow h-12 bg-gradient-to-r from-primary to-focus px-6 text-base text-black transition-opacity hover:opacity-90 lg:h-14 lg:px-8 lg:text-lg dark:text-white"
 						>
-							Talk to Sales <ArrowRight className="ml-2 h-4 w-4 lg:h-5 lg:w-5" />
+							Talk to Sales{" "}
+							<ArrowRight className="ml-2 h-4 w-4 lg:h-5 lg:w-5" />
 						</Button>
 						<Link href="/contact">
 							<Button

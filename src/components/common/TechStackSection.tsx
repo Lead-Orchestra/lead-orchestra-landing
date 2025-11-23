@@ -1,19 +1,28 @@
-'use client';
+"use client";
 
-import { SectionHeading } from '@/components/ui/section-heading';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import type { TechStack } from '@/types/service/services';
-import { motion } from 'framer-motion';
-import * as LucideIcons from 'lucide-react';
-import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { SectionHeading } from "@/components/ui/section-heading";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import type { TechStack } from "@/types/service/services";
+import { motion } from "framer-motion";
+import * as LucideIcons from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 // ! Only render Lucide icons if they're valid React components, not utility functions
-function getLucideIconComponent(iconName?: string, size = 20, className = 'text-primary') {
+function getLucideIconComponent(
+	iconName?: string,
+	size = 20,
+	className = "text-primary",
+) {
 	if (iconName) {
 		// eslint-disable-next-line no-console
-		console.log('TechStackSection icon mapping:', {
+		console.log("TechStackSection icon mapping:", {
 			iconName,
 			mapped: LucideIcons[iconName as keyof typeof LucideIcons],
 			type: typeof LucideIcons[iconName as keyof typeof LucideIcons],
@@ -22,7 +31,10 @@ function getLucideIconComponent(iconName?: string, size = 20, className = 'text-
 	}
 	if (!iconName) return null;
 	const maybeIcon = LucideIcons[iconName as keyof typeof LucideIcons];
-	if ((typeof maybeIcon === 'function' || typeof maybeIcon === 'object') && maybeIcon !== null) {
+	if (
+		(typeof maybeIcon === "function" || typeof maybeIcon === "object") &&
+		maybeIcon !== null
+	) {
 		const Icon = maybeIcon as React.ElementType;
 		return <Icon size={size} className={className} />;
 	}
@@ -37,7 +49,11 @@ interface TechStackSectionProps {
 	stacks: TechStack[];
 }
 
-export const TechStackSection = ({ title, description, stacks }: TechStackSectionProps) => {
+export const TechStackSection = ({
+	title,
+	description,
+	stacks,
+}: TechStackSectionProps) => {
 	const fadeIn = {
 		hidden: { opacity: 0, y: 20 },
 		visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -52,21 +68,21 @@ export const TechStackSection = ({ title, description, stacks }: TechStackSectio
 			let startX: number;
 			let scrollLeft: number;
 
-			tabsList.addEventListener('mousedown', (e) => {
+			tabsList.addEventListener("mousedown", (e) => {
 				isDown = true;
 				startX = e.pageX - tabsList.offsetLeft;
 				scrollLeft = tabsList.scrollLeft;
 			});
 
-			tabsList.addEventListener('mouseleave', () => {
+			tabsList.addEventListener("mouseleave", () => {
 				isDown = false;
 			});
 
-			tabsList.addEventListener('mouseup', () => {
+			tabsList.addEventListener("mouseup", () => {
 				isDown = false;
 			});
 
-			tabsList.addEventListener('mousemove', (e) => {
+			tabsList.addEventListener("mousemove", (e) => {
 				if (!isDown) return;
 				e.preventDefault();
 				const x = e.pageX - tabsList.offsetLeft;
@@ -81,9 +97,9 @@ export const TechStackSection = ({ title, description, stacks }: TechStackSectio
 	}
 
 	const getGridColumns = (itemCount: number) => {
-		if (itemCount <= 2) return 'grid-cols-2';
-		if (itemCount <= 4) return 'grid-cols-2 md:grid-cols-4';
-		return 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5';
+		if (itemCount <= 2) return "grid-cols-2";
+		if (itemCount <= 4) return "grid-cols-2 md:grid-cols-4";
+		return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5";
 	};
 
 	return (
@@ -103,15 +119,21 @@ export const TechStackSection = ({ title, description, stacks }: TechStackSectio
 					/>
 				</motion.div>
 
-				<Tabs defaultValue={stacks[0].category.toLowerCase()} className="w-full">
-					<div ref={tabsListRef} className="scrollbar-hide mb-8 overflow-x-auto">
+				<Tabs
+					defaultValue={stacks[0].category.toLowerCase()}
+					className="w-full"
+				>
+					<div
+						ref={tabsListRef}
+						className="scrollbar-hide mb-8 overflow-x-auto"
+					>
 						<div className="flex justify-start md:justify-center">
 							<TabsList className="inline-flex whitespace-nowrap bg-background-dark/60 pl-4 backdrop-blur-md md:pl-0">
 								{stacks.map((stack, index) => (
 									<TabsTrigger
 										key={stack.category}
 										value={stack.category.toLowerCase()}
-										className={`px-4 py-2 ${index === 0 ? 'ml-0' : ''}`}
+										className={`px-4 py-2 ${index === 0 ? "ml-0" : ""}`}
 									>
 										{stack.category}
 									</TabsTrigger>
@@ -121,9 +143,15 @@ export const TechStackSection = ({ title, description, stacks }: TechStackSectio
 					</div>
 
 					{stacks.map((stack) => (
-						<TabsContent key={stack.category} value={stack.category.toLowerCase()} className="mt-0">
+						<TabsContent
+							key={stack.category}
+							value={stack.category.toLowerCase()}
+							className="mt-0"
+						>
 							<div className="rounded-xl bg-background-dark/30 p-4 shadow-lg backdrop-blur-md sm:p-8">
-								<div className={`grid ${getGridColumns(stack.libraries.length)} gap-4`}>
+								<div
+									className={`grid ${getGridColumns(stack.libraries.length)} gap-4`}
+								>
 									{stack.libraries.map((lib) => (
 										<TooltipProvider key={lib.name}>
 											<Tooltip>

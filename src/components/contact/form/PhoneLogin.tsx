@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useAuthModal } from '@/components/auth/use-auth-store';
-import { Button } from '@/components/ui/button';
+import { useAuthModal } from "@/components/auth/use-auth-store";
+import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -9,7 +9,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
 	type PhoneLoginFormValues,
 	type PhoneOtpFormValues,
@@ -17,14 +17,14 @@ import {
 	phoneLoginSchema,
 	phoneOtpFormFields,
 	phoneOtpSchema,
-} from '@/data/contact/authFormFields';
-import { fetchUserDisplayName } from '@/lib/auth/user-display-name';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
-import { createFieldProps, renderFormField } from './formFieldHelpers';
+} from "@/data/contact/authFormFields";
+import { fetchUserDisplayName } from "@/lib/auth/user-display-name";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { createFieldProps, renderFormField } from "./formFieldHelpers";
 
 /**
  * PhoneLoginForm component for phone number authentication with OTP.
@@ -33,41 +33,41 @@ import { createFieldProps, renderFormField } from './formFieldHelpers';
 export function PhoneLoginForm({ callbackUrl }: { callbackUrl?: string }) {
 	const { onSuccess, close } = useAuthModal();
 	const [isLoading, setIsLoading] = useState(false);
-	const [step, setStep] = useState<'phone' | 'otp'>('phone');
-	const [phoneNumber, setPhoneNumber] = useState('');
+	const [step, setStep] = useState<"phone" | "otp">("phone");
+	const [phoneNumber, setPhoneNumber] = useState("");
 
 	const phoneForm = useForm<PhoneLoginFormValues>({
 		resolver: zodResolver(phoneLoginSchema),
 		defaultValues: {
-			phone_number: '',
+			phone_number: "",
 		},
 	});
 
 	const otpForm = useForm<PhoneOtpFormValues>({
 		resolver: zodResolver(phoneOtpSchema),
 		defaultValues: {
-			phone_number: '',
-			otp_code: '',
+			phone_number: "",
+			otp_code: "",
 		},
 	});
 
 	async function onSendOtp(values: PhoneLoginFormValues) {
 		setIsLoading(true);
 		try {
-			const res = await fetch('/api/auth/phone/send-otp', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const res = await fetch("/api/auth/phone/send-otp", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(values),
 			});
 
 			if (!res.ok) {
 				const errorData = await res.json();
-				const errorMessage = errorData.message || 'Failed to send OTP.';
+				const errorMessage = errorData.message || "Failed to send OTP.";
 
 				// Handle phone number specific errors
-				if (errorMessage.includes('phone') || errorMessage.includes('Phone')) {
-					phoneForm.setError('phone_number', {
-						type: 'server',
+				if (errorMessage.includes("phone") || errorMessage.includes("Phone")) {
+					phoneForm.setError("phone_number", {
+						type: "server",
 						message: errorMessage,
 					});
 				} else {
@@ -78,13 +78,16 @@ export function PhoneLoginForm({ callbackUrl }: { callbackUrl?: string }) {
 			}
 
 			setPhoneNumber(values.phone_number);
-			otpForm.setValue('phone_number', values.phone_number);
-			setStep('otp');
-			toast.success('OTP sent to your phone!');
+			otpForm.setValue("phone_number", values.phone_number);
+			setStep("otp");
+			toast.success("OTP sent to your phone!");
 		} catch (error: unknown) {
-			const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+			const errorMessage =
+				error instanceof Error
+					? error.message
+					: "An unexpected error occurred.";
 			toast.error(errorMessage);
-			console.error('Send OTP error:', error);
+			console.error("Send OTP error:", error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -93,20 +96,23 @@ export function PhoneLoginForm({ callbackUrl }: { callbackUrl?: string }) {
 	async function onVerifyOtp(values: PhoneOtpFormValues) {
 		setIsLoading(true);
 		try {
-			const res = await fetch('/api/auth/phone/verify-otp', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const res = await fetch("/api/auth/phone/verify-otp", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(values),
 			});
 
 			if (!res.ok) {
 				const errorData = await res.json();
-				const errorMessage = errorData.message || 'Invalid OTP code.';
+				const errorMessage = errorData.message || "Invalid OTP code.";
 
 				// Handle OTP-specific errors
-				if (errorMessage.includes('Invalid OTP') || errorMessage.includes('OTP')) {
-					otpForm.setError('otp_code', {
-						type: 'server',
+				if (
+					errorMessage.includes("Invalid OTP") ||
+					errorMessage.includes("OTP")
+				) {
+					otpForm.setError("otp_code", {
+						type: "server",
 						message: errorMessage,
 					});
 				} else {
@@ -119,7 +125,7 @@ export function PhoneLoginForm({ callbackUrl }: { callbackUrl?: string }) {
 			const data = await res.json();
 
 			// Use NextAuth to create session with the auth data
-			const result = await signIn('credentials', {
+			const result = await signIn("credentials", {
 				email: `phone:${values.phone_number}`, // Special identifier for phone auth
 				password: JSON.stringify(data.authData), // Pass the entire auth response
 				redirect: false,
@@ -128,7 +134,9 @@ export function PhoneLoginForm({ callbackUrl }: { callbackUrl?: string }) {
 
 			if (result?.ok) {
 				const fullName = await fetchUserDisplayName();
-				toast.success(fullName ? `Welcome ${fullName}!` : 'Phone login successful!');
+				toast.success(
+					fullName ? `Welcome ${fullName}!` : "Phone login successful!",
+				);
 				if (callbackUrl) {
 					window.location.href = callbackUrl;
 					return;
@@ -138,32 +146,42 @@ export function PhoneLoginForm({ callbackUrl }: { callbackUrl?: string }) {
 				}
 				close();
 			} else {
-				throw new Error(result?.error || 'Sign-in failed after OTP verification.');
+				throw new Error(
+					result?.error || "Sign-in failed after OTP verification.",
+				);
 			}
 		} catch (error: unknown) {
-			const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+			const errorMessage =
+				error instanceof Error
+					? error.message
+					: "An unexpected error occurred.";
 			toast.error(errorMessage);
-			console.error('Verify OTP error:', error);
+			console.error("Verify OTP error:", error);
 		} finally {
 			setIsLoading(false);
 		}
 	}
 
 	function goBackToPhone() {
-		setStep('phone');
-		setPhoneNumber('');
+		setStep("phone");
+		setPhoneNumber("");
 		otpForm.reset();
 	}
 
-	if (step === 'otp') {
+	if (step === "otp") {
 		return (
 			<div className="space-y-4">
 				<div className="text-center">
 					<h3 className="font-medium">Enter OTP Code</h3>
-					<p className="text-muted-foreground text-sm">We sent a code to {phoneNumber}</p>
+					<p className="text-muted-foreground text-sm">
+						We sent a code to {phoneNumber}
+					</p>
 				</div>
 				<Form {...otpForm}>
-					<form onSubmit={otpForm.handleSubmit(onVerifyOtp)} className="space-y-4">
+					<form
+						onSubmit={otpForm.handleSubmit(onVerifyOtp)}
+						className="space-y-4"
+					>
 						{phoneOtpFormFields.map((fieldConfig) => (
 							<FormField
 								key={fieldConfig.name}
@@ -182,7 +200,7 @@ export function PhoneLoginForm({ callbackUrl }: { callbackUrl?: string }) {
 						))}
 						<div className="grid gap-2">
 							<Button type="submit" className="w-full" disabled={isLoading}>
-								{isLoading ? 'Verifying...' : 'Verify OTP'}
+								{isLoading ? "Verifying..." : "Verify OTP"}
 							</Button>
 							<Button
 								type="button"
@@ -211,14 +229,16 @@ export function PhoneLoginForm({ callbackUrl }: { callbackUrl?: string }) {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{fieldConfig.label}</FormLabel>
-								<FormControl>{renderFormField(createFieldProps(fieldConfig, field))}</FormControl>
+								<FormControl>
+									{renderFormField(createFieldProps(fieldConfig, field))}
+								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 				))}
 				<Button type="submit" className="w-full" disabled={isLoading}>
-					{isLoading ? 'Sending OTP...' : 'Send OTP'}
+					{isLoading ? "Sending OTP..." : "Send OTP"}
 				</Button>
 			</form>
 		</Form>

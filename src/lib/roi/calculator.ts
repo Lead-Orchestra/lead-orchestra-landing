@@ -1,4 +1,4 @@
-import type { ROIEstimator, RoiEstimatorTier } from '@/types/service/plans';
+import type { ROIEstimator, RoiEstimatorTier } from "@/types/service/plans";
 import type {
 	ComputeTierResultOptions,
 	RoiCostBreakdown,
@@ -6,35 +6,40 @@ import type {
 	RoiTierConfig,
 	RoiTierKey,
 	RoiTierResult,
-} from './types';
+} from "./types";
 
-const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+const clamp = (value: number, min: number, max: number) =>
+	Math.min(Math.max(value, min), max);
 
 const BASE_REVENUE_LIFT = { low: 0.15, high: 0.3 };
 const BASE_SETUP_PERCENT = { low: 0.05, high: 0.1 };
 const BASE_EFFICIENCY = 0.5;
 
 const defaultSelfHostedTier: RoiEstimatorTier = {
-	label: 'Self-Hosted',
-	kind: 'selfHosted',
+	label: "Self-Hosted",
+	kind: "selfHosted",
 	revenueLift: BASE_REVENUE_LIFT,
 	setupPercentRange: BASE_SETUP_PERCENT,
 	efficiency: BASE_EFFICIENCY,
 	showSetupByDefault: true,
 };
 
-export const resolveTierConfigs = (estimator: ROIEstimator): RoiTierConfig[] => {
-	const entries = Object.entries(estimator.tiers ?? {}) as Array<[RoiTierKey, RoiEstimatorTier]>;
+export const resolveTierConfigs = (
+	estimator: ROIEstimator,
+): RoiTierConfig[] => {
+	const entries = Object.entries(estimator.tiers ?? {}) as Array<
+		[RoiTierKey, RoiEstimatorTier]
+	>;
 
 	if (!entries.length) {
-		const key: RoiTierKey = 'selfHosted';
+		const key: RoiTierKey = "selfHosted";
 		return [
 			{
 				key,
 				tier: defaultSelfHostedTier,
 				showSetupDefault: estimator.tiers?.[key]?.showSetupByDefault ?? true,
-				group: 'selfHosted',
-				groupLabel: 'Self-Hosted',
+				group: "selfHosted",
+				groupLabel: "Self-Hosted",
 				isGroupDefault: true,
 			},
 		];
@@ -47,7 +52,7 @@ export const resolveTierConfigs = (estimator: ROIEstimator): RoiTierConfig[] => 
 		return {
 			key,
 			tier,
-			showSetupDefault: tier.showSetupByDefault ?? tier.kind === 'selfHosted',
+			showSetupDefault: tier.showSetupByDefault ?? tier.kind === "selfHosted",
 			group,
 			groupLabel,
 			isGroupDefault: tier.defaultForGroup ?? false,
@@ -55,7 +60,10 @@ export const resolveTierConfigs = (estimator: ROIEstimator): RoiTierConfig[] => 
 	});
 };
 
-const getActiveTier = (tiers: RoiTierConfig[], tierKey?: RoiTierKey): RoiTierConfig => {
+const getActiveTier = (
+	tiers: RoiTierConfig[],
+	tierKey?: RoiTierKey,
+): RoiTierConfig => {
 	const fallback = tiers[0];
 	if (!tierKey) {
 		return fallback;
@@ -63,17 +71,18 @@ const getActiveTier = (tiers: RoiTierConfig[], tierKey?: RoiTierKey): RoiTierCon
 	return tiers.find((entry) => entry.key === tierKey) ?? fallback;
 };
 
-const resolveRevenueLift = (tier: RoiEstimatorTier) => tier.revenueLift ?? BASE_REVENUE_LIFT;
+const resolveRevenueLift = (tier: RoiEstimatorTier) =>
+	tier.revenueLift ?? BASE_REVENUE_LIFT;
 
 const resolveEfficiency = (tier: RoiEstimatorTier) =>
-	tier.efficiency ?? (tier.kind === 'selfHosted' ? BASE_EFFICIENCY : 0.4);
+	tier.efficiency ?? (tier.kind === "selfHosted" ? BASE_EFFICIENCY : 0.4);
 
 const computeSetupRange = (
 	tier: RoiEstimatorTier,
-	annualRevenueHigh: number
+	annualRevenueHigh: number,
 ): { low: number; high: number } | null => {
 	if (tier.costs?.setup !== undefined) {
-		if (typeof tier.costs.setup === 'number') {
+		if (typeof tier.costs.setup === "number") {
 			return { low: tier.costs.setup, high: tier.costs.setup };
 		}
 		const { low, high } = tier.costs.setup;
@@ -81,7 +90,8 @@ const computeSetupRange = (
 	}
 
 	const percentRange =
-		tier.setupPercentRange ?? (tier.kind === 'selfHosted' ? BASE_SETUP_PERCENT : undefined);
+		tier.setupPercentRange ??
+		(tier.kind === "selfHosted" ? BASE_SETUP_PERCENT : undefined);
 
 	if (!percentRange) {
 		return null;
@@ -95,10 +105,11 @@ const computeSetupRange = (
 
 const computeCostBreakdown = (
 	tier: RoiEstimatorTier,
-	annualRevenueHigh: number
+	annualRevenueHigh: number,
 ): RoiCostBreakdown => {
 	const monthlyCost = tier.costs?.monthly;
-	const annualCost = tier.costs?.annual ?? (monthlyCost ? monthlyCost * 12 : undefined);
+	const annualCost =
+		tier.costs?.annual ?? (monthlyCost ? monthlyCost * 12 : undefined);
 	const oneTimeCost = tier.costs?.oneTime;
 	const setupRange = computeSetupRange(tier, annualRevenueHigh);
 
@@ -110,13 +121,18 @@ const computeCostBreakdown = (
 	};
 };
 
-export const computeTierResult = (options: ComputeTierResultOptions): RoiTierResult => {
+export const computeTierResult = (
+	options: ComputeTierResultOptions,
+): RoiTierResult => {
 	const { estimator, inputs } = options;
 	const tiers = resolveTierConfigs(estimator);
 	const activeTier = getActiveTier(tiers, options.tierKey);
 	const tier = activeTier.tier;
 
-	const factor = estimator.industryFactors[inputs.industry] ?? estimator.industryFactors.Other ?? 1;
+	const factor =
+		estimator.industryFactors[inputs.industry] ??
+		estimator.industryFactors.Other ??
+		1;
 
 	const averageDeal = clamp(inputs.averageDealAmount, 1000, 250000);
 	const monthlyDeals = clamp(inputs.monthlyDealsClosed, 1, 200);
@@ -145,13 +161,18 @@ export const computeTierResult = (options: ComputeTierResultOptions): RoiTierRes
 	const annualPlanCost = costBreakdown.annualCost ?? 0;
 	const annualPlanCostAsMonthly = annualPlanCost / 12;
 
-	const totalMonthlyCost = monthlyPlanCost + annualPlanCostAsMonthly + monthlyOperatingCost;
+	const totalMonthlyCost =
+		monthlyPlanCost + annualPlanCostAsMonthly + monthlyOperatingCost;
 
 	const gainLow = grossGainLow - totalMonthlyCost;
 	const gainHigh = grossGainHigh - totalMonthlyCost;
 
 	const totalYearOneCost =
-		setupHigh + oneTimeCost + annualPlanCost + monthlyPlanCost * 12 + monthlyOperatingCost * 12;
+		setupHigh +
+		oneTimeCost +
+		annualPlanCost +
+		monthlyPlanCost * 12 +
+		monthlyOperatingCost * 12;
 	const year1Profit = grossGainHigh * 12 * efficiency - totalYearOneCost;
 	const year5Profit = year1Profit * 5 * 0.55;
 	const year10Profit = year1Profit * 10 * 0.55 * 1.1;
@@ -196,15 +217,22 @@ export const getDefaultTierKey = (estimator: ROIEstimator) => {
 	}
 	const tiers = resolveTierConfigs(estimator);
 	const defaultEntry = tiers.find((entry) => entry.tier.default);
-	return defaultEntry?.key ?? tiers[0]?.key ?? 'selfHosted';
+	return defaultEntry?.key ?? tiers[0]?.key ?? "selfHosted";
 };
 
-export const coerceInputs = (estimator: ROIEstimator, partial?: Partial<RoiInputs>): RoiInputs => ({
-	averageDealAmount: partial?.averageDealAmount ?? estimator.exampleInput.averageDealAmount,
-	monthlyDealsClosed: partial?.monthlyDealsClosed ?? estimator.exampleInput.monthlyDealsClosed,
+export const coerceInputs = (
+	estimator: ROIEstimator,
+	partial?: Partial<RoiInputs>,
+): RoiInputs => ({
+	averageDealAmount:
+		partial?.averageDealAmount ?? estimator.exampleInput.averageDealAmount,
+	monthlyDealsClosed:
+		partial?.monthlyDealsClosed ?? estimator.exampleInput.monthlyDealsClosed,
 	averageTimePerDealHours:
-		partial?.averageTimePerDealHours ?? estimator.exampleInput.averageTimePerDealHours,
+		partial?.averageTimePerDealHours ??
+		estimator.exampleInput.averageTimePerDealHours,
 	industry: partial?.industry ?? estimator.exampleInput.industry,
 	monthlyOperatingCost:
-		partial?.monthlyOperatingCost ?? estimator.exampleInput.monthlyOperatingCost,
+		partial?.monthlyOperatingCost ??
+		estimator.exampleInput.monthlyOperatingCost,
 });

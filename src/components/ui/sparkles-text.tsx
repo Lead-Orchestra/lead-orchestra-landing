@@ -1,7 +1,12 @@
-import { motion } from 'motion/react';
-import { type CSSProperties, type ReactElement, useEffect, useState } from 'react';
+import { motion } from "motion/react";
+import {
+	type CSSProperties,
+	type ReactElement,
+	useEffect,
+	useState,
+} from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface Sparkle {
 	id: string;
@@ -88,7 +93,7 @@ interface SparklesTextProps {
 
 export const SparklesText: React.FC<SparklesTextProps> = ({
 	children,
-	colors = { first: '#9E7AFF', second: '#FE8BBB' },
+	colors = { first: "#9E7AFF", second: "#FE8BBB" },
 	className,
 	sparklesCount = 10,
 	...props
@@ -120,7 +125,7 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
 					}
 
 					return { ...star, lifespan: star.lifespan - 0.1 };
-				})
+				}),
 			);
 		};
 
@@ -132,12 +137,12 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
 
 	return (
 		<div
-			className={cn('font-bold text-6xl', className)}
+			className={cn("font-bold text-6xl", className)}
 			{...props}
 			style={
 				{
-					'--sparkles-first-color': `${colors.first}`,
-					'--sparkles-second-color': `${colors.second}`,
+					"--sparkles-first-color": `${colors.first}`,
+					"--sparkles-second-color": `${colors.second}`,
 				} as CSSProperties
 			}
 		>

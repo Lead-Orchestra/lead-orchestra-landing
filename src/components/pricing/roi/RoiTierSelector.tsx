@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
 	Select,
@@ -6,11 +6,11 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import type { RoiTierConfig } from '@/lib/roi/types';
-import { cn } from '@/lib/utils';
-import { useMemo } from 'react';
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import type { RoiTierConfig } from "@/lib/roi/types";
+import { cn } from "@/lib/utils";
+import { useMemo } from "react";
 
 interface RoiTierSelectorProps {
 	tiers: RoiTierConfig[];
@@ -46,7 +46,8 @@ export const RoiTierSelector = ({
 			const nextItem = { key, label: tier.label };
 
 			if (existing) {
-				const defaultKey = isGroupDefault || !existing.defaultKey ? key : existing.defaultKey;
+				const defaultKey =
+					isGroupDefault || !existing.defaultKey ? key : existing.defaultKey;
 				existing.items.push(nextItem);
 				existing.defaultKey = defaultKey;
 			} else {
@@ -61,12 +62,16 @@ export const RoiTierSelector = ({
 
 		return Array.from(map.values()).map((group) => ({
 			...group,
-			defaultKey: group.defaultKey ?? group.items[0]?.key ?? '',
+			defaultKey: group.defaultKey ?? group.items[0]?.key ?? "",
 		}));
 	}, [tiers]);
 
 	const activeGroup = useMemo(() => {
-		return groups.find((group) => group.items.some((item) => item.key === activeTier)) ?? groups[0];
+		return (
+			groups.find((group) =>
+				group.items.some((item) => item.key === activeTier),
+			) ?? groups[0]
+		);
 	}, [groups, activeTier]);
 
 	const handleGroupSelect = (groupKey: string) => {
@@ -93,10 +98,10 @@ export const RoiTierSelector = ({
 							type="button"
 							onClick={() => handleGroupSelect(group.key)}
 							className={cn(
-								'rounded-full border px-4 py-2 font-semibold text-sm transition',
+								"rounded-full border px-4 py-2 font-semibold text-sm transition",
 								isActive
-									? 'border-primary/60 bg-primary/10 text-primary'
-									: 'border-border/60 bg-muted/20 text-muted-foreground hover:border-border'
+									? "border-primary/60 bg-primary/10 text-primary"
+									: "border-border/60 bg-muted/20 text-muted-foreground hover:border-border",
 							)}
 						>
 							{group.label}
@@ -106,7 +111,10 @@ export const RoiTierSelector = ({
 			</div>
 			{activeGroup && activeGroup.items.length > 1 ? (
 				<div className="w-full max-w-sm">
-					<Select value={activeTier} onValueChange={(value) => onTierChange(value)}>
+					<Select
+						value={activeTier}
+						onValueChange={(value) => onTierChange(value)}
+					>
 						<SelectTrigger className="h-11 w-full rounded-lg border border-border/60 bg-background/60">
 							<SelectValue placeholder="Choose tier" />
 						</SelectTrigger>
@@ -129,7 +137,9 @@ export const RoiTierSelector = ({
 							onCheckedChange={onToggleSetup}
 							disabled={!canToggleSetup}
 						/>
-						<span className={cn('font-semibold', !canToggleSetup && 'opacity-60')}>
+						<span
+							className={cn("font-semibold", !canToggleSetup && "opacity-60")}
+						>
 							Setup Investment
 						</span>
 					</div>

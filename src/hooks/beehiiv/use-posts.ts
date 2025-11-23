@@ -1,10 +1,10 @@
-import type { AggregateStats, BeehiivPost } from '@/types/behiiv';
-import { useEffect, useState } from 'react';
+import type { AggregateStats, BeehiivPost } from "@/types/behiiv";
+import { useEffect, useState } from "react";
 
 // * Utility: get base API URL for posts
 function getPostsBaseUrl(): string {
 	const PUB_ID = process.env.NEXT_PUBLIC_BEEHIIV_NEWSLETTER_ID_V2;
-	if (!PUB_ID) throw new Error('Beehiiv publication ID is not set');
+	if (!PUB_ID) throw new Error("Beehiiv publication ID is not set");
 	return `https://api.beehiiv.com/v2/publications/${PUB_ID}/posts`;
 }
 
@@ -23,11 +23,11 @@ export function usePosts(initialPosts?: BeehiivPost[]) {
 					Authorization: `Bearer ${process.env.BEEHIIV_API_KEY}`,
 				},
 			});
-			if (!response.ok) throw new Error('Failed to fetch posts');
+			if (!response.ok) throw new Error("Failed to fetch posts");
 			const data = await response.json();
 			setPosts(data.data || []);
 		} catch (err) {
-			setError(err instanceof Error ? err.message : 'Unknown error');
+			setError(err instanceof Error ? err.message : "Unknown error");
 		} finally {
 			setLoading(false);
 		}
@@ -43,11 +43,11 @@ export function usePosts(initialPosts?: BeehiivPost[]) {
 					Authorization: `Bearer ${process.env.BEEHIIV_API_KEY}`,
 				},
 			});
-			if (!response.ok) throw new Error('Failed to fetch post');
+			if (!response.ok) throw new Error("Failed to fetch post");
 			const data = await response.json();
 			return data.data || null;
 		} catch (err) {
-			setError(err instanceof Error ? err.message : 'Unknown error');
+			setError(err instanceof Error ? err.message : "Unknown error");
 			return null;
 		} finally {
 			setLoading(false);
@@ -64,11 +64,11 @@ export function usePosts(initialPosts?: BeehiivPost[]) {
 					Authorization: `Bearer ${process.env.BEEHIIV_API_KEY}`,
 				},
 			});
-			if (!response.ok) throw new Error('Failed to fetch aggregate stats');
+			if (!response.ok) throw new Error("Failed to fetch aggregate stats");
 			const data = await response.json();
 			return data.data || null;
 		} catch (err) {
-			setError(err instanceof Error ? err.message : 'Unknown error');
+			setError(err instanceof Error ? err.message : "Unknown error");
 			return null;
 		} finally {
 			setLoading(false);
@@ -77,29 +77,29 @@ export function usePosts(initialPosts?: BeehiivPost[]) {
 
 	// ! Create post (expected to fail unless beta enabled)
 	const createPost = async (
-		newPost: Partial<BeehiivPost> & { post_template_id: string }
+		newPost: Partial<BeehiivPost> & { post_template_id: string },
 	): Promise<BeehiivPost | null> => {
 		setLoading(true);
 		try {
 			const url = getPostsBaseUrl();
 			const response = await fetch(url, {
-				method: 'POST',
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 					Authorization: `Bearer ${process.env.BEEHIIV_API_KEY}`,
 				},
 				body: JSON.stringify(newPost),
 			});
 			const data = await response.json();
 			if (!response.ok) {
-				setError(data?.error || 'Failed to create post');
+				setError(data?.error || "Failed to create post");
 				// ! Most users will see an error here (beta)
 				return null;
 			}
 			setPosts((prev) => [...prev, data.data]);
 			return data.data;
 		} catch (err) {
-			setError(err instanceof Error ? err.message : 'Unknown error');
+			setError(err instanceof Error ? err.message : "Unknown error");
 			return null;
 		} finally {
 			setLoading(false);
@@ -109,28 +109,30 @@ export function usePosts(initialPosts?: BeehiivPost[]) {
 	// todo: Update post (not documented in Beehiiv public API, placeholder)
 	const updatePost = async (
 		id: string,
-		updates: Partial<BeehiivPost>
+		updates: Partial<BeehiivPost>,
 	): Promise<BeehiivPost | null> => {
 		setLoading(true);
 		try {
 			const url = `${getPostsBaseUrl()}/${id}`;
 			const response = await fetch(url, {
-				method: 'PATCH',
+				method: "PATCH",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 					Authorization: `Bearer ${process.env.BEEHIIV_API_KEY}`,
 				},
 				body: JSON.stringify(updates),
 			});
 			const data = await response.json();
 			if (!response.ok) {
-				setError(data?.error || 'Failed to update post');
+				setError(data?.error || "Failed to update post");
 				return null;
 			}
-			setPosts((prev) => prev.map((post) => (post.id === id ? data.data : post)));
+			setPosts((prev) =>
+				prev.map((post) => (post.id === id ? data.data : post)),
+			);
 			return data.data;
 		} catch (err) {
-			setError(err instanceof Error ? err.message : 'Unknown error');
+			setError(err instanceof Error ? err.message : "Unknown error");
 			return null;
 		} finally {
 			setLoading(false);
@@ -143,7 +145,7 @@ export function usePosts(initialPosts?: BeehiivPost[]) {
 		try {
 			const url = `${getPostsBaseUrl()}/${id}`;
 			const response = await fetch(url, {
-				method: 'DELETE',
+				method: "DELETE",
 				headers: {
 					Authorization: `Bearer ${process.env.BEEHIIV_API_KEY}`,
 				},
@@ -152,10 +154,10 @@ export function usePosts(initialPosts?: BeehiivPost[]) {
 				setPosts((prev) => prev.filter((post) => post.id !== id));
 				return true;
 			}
-			setError('Failed to delete post');
+			setError("Failed to delete post");
 			return false;
 		} catch (err) {
-			setError(err instanceof Error ? err.message : 'Unknown error');
+			setError(err instanceof Error ? err.message : "Unknown error");
 			return false;
 		} finally {
 			setLoading(false);

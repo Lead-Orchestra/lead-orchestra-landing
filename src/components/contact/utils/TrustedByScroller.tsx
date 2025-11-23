@@ -1,22 +1,33 @@
-'use client';
-import Header from '@/components/common/Header';
-import { useDeferredLoad } from '@/components/providers/useDeferredLoad';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useGpuOptimizations } from '@/hooks/useGpuOptimizations';
-import type { CompanyLogoDictType, CompanyPartner } from '@/types/service/trusted-companies';
-import { motion, useAnimation } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
-import type React from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+"use client";
+import Header from "@/components/common/Header";
+import { useDeferredLoad } from "@/components/providers/useDeferredLoad";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
+import type {
+	CompanyLogoDictType,
+	CompanyPartner,
+} from "@/types/service/trusted-companies";
+import { motion, useAnimation } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import type React from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 // ! Removed CompanyRenderer import, rendering images directly below.
 
 interface TrustedByMarqueeProps {
 	items: CompanyLogoDictType;
-	variant?: 'default' | 'secondary';
+	variant?: "default" | "secondary";
 }
 
-const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({ items, variant = 'default' }) => {
+const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({
+	items,
+	variant = "default",
+}) => {
 	const shouldAnimate = useDeferredLoad({
 		requireInteraction: false,
 		timeout: 2000,
@@ -33,9 +44,9 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({ items, variant = 'd
 					key: `${companyName}-${repeatIndex}`,
 					companyName,
 					company,
-				}))
+				})),
 			).flat(),
-		[entries]
+		[entries],
 	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -54,9 +65,9 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({ items, variant = 'd
 					x: [-visibleWidth, 0],
 					transition: {
 						duration,
-						ease: 'linear',
+						ease: "linear",
 						repeat: Number.POSITIVE_INFINITY,
-						repeatType: 'loop',
+						repeatType: "loop",
 					},
 				});
 			};
@@ -80,7 +91,8 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({ items, variant = 'd
 	// * Render company logos with optional link wrapping
 	const renderLogoTrigger = (companyName: string, company: CompanyPartner) => {
 		const baseProps = {
-			className: 'flex h-full w-full items-center justify-center focus:outline-none',
+			className:
+				"flex h-full w-full items-center justify-center focus:outline-none",
 		};
 
 		if (company.link) {
@@ -113,29 +125,42 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({ items, variant = 'd
 		);
 	};
 
-	const renderLogoWithTooltip = (companyName: string, company: CompanyPartner) => (
+	const renderLogoWithTooltip = (
+		companyName: string,
+		company: CompanyPartner,
+	) => (
 		<Tooltip>
-			<TooltipTrigger asChild>{renderLogoTrigger(companyName, company)}</TooltipTrigger>
-			<TooltipContent side="top" sideOffset={12} className="max-w-xs text-left text-sm">
+			<TooltipTrigger asChild>
+				{renderLogoTrigger(companyName, company)}
+			</TooltipTrigger>
+			<TooltipContent
+				side="top"
+				sideOffset={12}
+				className="max-w-xs text-left text-sm"
+			>
 				<div className="font-semibold text-foreground">{companyName}</div>
-				{company.description && <p className="mt-1 text-muted-foreground">{company.description}</p>}
+				{company.description && (
+					<p className="mt-1 text-muted-foreground">{company.description}</p>
+				)}
 			</TooltipContent>
 		</Tooltip>
 	);
 
 	const enableGpu = useGpuOptimizations();
-	const gpuShellClass = enableGpu ? 'transform-gpu will-change-transform will-change-opacity' : '';
+	const gpuShellClass = enableGpu
+		? "transform-gpu will-change-transform will-change-opacity"
+		: "";
 	const gpuDepthClass = enableGpu
-		? 'transform-gpu will-change-transform will-change-opacity translate-z-0'
-		: '';
+		? "transform-gpu will-change-transform will-change-opacity translate-z-0"
+		: "";
 
 	return (
 		<TooltipProvider delayDuration={150}>
 			<div
 				className={`my-5 flex w-full flex-col ${gpuShellClass}`}
-				style={{ overflowClipMargin: '24px' }}
+				style={{ overflowClipMargin: "24px" }}
 			>
-				{variant === 'default' && (
+				{variant === "default" && (
 					<div className="mb-4 text-center">
 						<Header
 							title="Trusted by Lead Orchestra"
@@ -145,9 +170,9 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({ items, variant = 'd
 				)}
 				<div
 					className={`relative w-full overflow-hidden rounded-xl p-4 text-center ${gpuShellClass} ${
-						variant === 'secondary'
-							? 'mb-2 border-2 border-primary/30 bg-background-dark/30 shadow-lg shadow-primary/10/20'
-							: 'border border-white/10 bg-background-dark/50'
+						variant === "secondary"
+							? "mb-2 border-2 border-primary/30 bg-background-dark/30 shadow-lg shadow-primary/10/20"
+							: "border border-white/10 bg-background-dark/50"
 					} backdrop-blur-sm`}
 				>
 					{shouldAnimate ? (
@@ -160,7 +185,7 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({ items, variant = 'd
 							<motion.div
 								ref={contentRef}
 								className="flex items-center gap-8 whitespace-nowrap"
-								style={{ width: 'max-content' }}
+								style={{ width: "max-content" }}
 								animate={controls}
 							>
 								{repeatedEntries.map(({ key, companyName, company }) => (
@@ -168,7 +193,7 @@ const TrustedByMarquee: React.FC<TrustedByMarqueeProps> = ({ items, variant = 'd
 										key={key}
 										className="my-5 flex h-16 w-24 shrink-0 items-center justify-center"
 										whileHover={{ scale: 1.05 }}
-										transition={{ type: 'spring', stiffness: 300 }}
+										transition={{ type: "spring", stiffness: 300 }}
 									>
 										{renderLogoWithTooltip(companyName, company)}
 									</motion.div>
@@ -205,7 +230,11 @@ interface LogoImageProps {
 	description?: string;
 }
 
-const LogoImage: React.FC<LogoImageProps> = ({ companyName, logoUrl, description }) => {
+const LogoImage: React.FC<LogoImageProps> = ({
+	companyName,
+	logoUrl,
+	description,
+}) => {
 	const [imgError, setImgError] = useState(false);
 
 	if (!logoUrl || imgError) {
@@ -222,7 +251,9 @@ const LogoImage: React.FC<LogoImageProps> = ({ companyName, logoUrl, description
 	return (
 		<Image
 			src={logoUrl}
-			alt={description ? `${companyName} - ${description}` : `${companyName} logo`}
+			alt={
+				description ? `${companyName} - ${description}` : `${companyName} logo`
+			}
 			width={56}
 			height={56}
 			sizes="56px"

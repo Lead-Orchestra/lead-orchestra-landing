@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import ExitIntentBoundary from '@/components/exit-intent/ExitIntentBoundary';
-import CatalogPricing from '@/components/pricing/CatalogPricing';
-import { exitIntentEnabled } from '@/lib/config/exitIntent';
-import { usePersonaStore } from '@/stores/usePersonaStore';
-import type { PricingCatalog } from '@/types/service/plans';
-import { useSearchParams } from 'next/navigation';
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
+import CatalogPricing from "@/components/pricing/CatalogPricing";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
+import { usePersonaStore } from "@/stores/usePersonaStore";
+import type { PricingCatalog } from "@/types/service/plans";
+import { useSearchParams } from "next/navigation";
 
 /**
  * Props for PricingClient, supporting callbackUrl for post-auth/payment redirects.
@@ -17,17 +17,17 @@ interface PricingProps {
 }
 
 const PricingClient: React.FC<PricingProps> = ({
-	title = 'Success-Based Pricing',
-	subtitle = 'Invest in automation outcomes with pilot pricing locked for two years.',
+	title = "Success-Based Pricing",
+	subtitle = "Invest in automation outcomes with pilot pricing locked for two years.",
 	catalog,
 }: PricingProps) => {
 	const searchParams = useSearchParams();
-	const callbackUrl = searchParams?.get('callbackUrl') || undefined;
+	const callbackUrl = searchParams?.get("callbackUrl") || undefined;
 	const persona = usePersonaStore((state) => state.persona);
 
 	// Show open source preview for developers, free trial for agencies
-	const showFreePreview = persona === 'developer' || persona === 'agency';
-	const showOpenSource = persona === 'developer';
+	const showFreePreview = persona === "developer" || persona === "agency";
+	const showOpenSource = persona === "developer";
 
 	const shouldRenderExitIntent = exitIntentEnabled();
 	const content = (

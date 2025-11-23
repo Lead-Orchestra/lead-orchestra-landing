@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { AnimatePresence, motion, useMotionTemplate } from 'motion/react';
-import type React from 'react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion, useMotionTemplate } from "motion/react";
+import type React from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 interface Position {
 	/** The x coordinate of the lens */
@@ -40,14 +40,14 @@ export function Lens({
 	position = { x: 0, y: 0 },
 	defaultPosition,
 	duration = 0.1,
-	lensColor = 'black',
-	ariaLabel = 'Zoom Area',
+	lensColor = "black",
+	ariaLabel = "Zoom Area",
 }: LensProps) {
 	if (zoomFactor < 1) {
-		throw new Error('zoomFactor must be greater than 1');
+		throw new Error("zoomFactor must be greater than 1");
 	}
 	if (lensSize < 0) {
-		throw new Error('lensSize must be greater than 0');
+		throw new Error("lensSize must be greater than 0");
 	}
 
 	const [isHovering, setIsHovering] = useState(false);
@@ -69,7 +69,7 @@ export function Lens({
 	}, []);
 
 	const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-		if (e.key === 'Escape') setIsHovering(false);
+		if (e.key === "Escape") setIsHovering(false);
 	}, []);
 
 	const maskImage = useMotionTemplate`radial-gradient(circle ${
@@ -122,7 +122,9 @@ export function Lens({
 			{isStatic || defaultPosition ? (
 				LensContent
 			) : (
-				<AnimatePresence mode="popLayout">{isHovering && LensContent}</AnimatePresence>
+				<AnimatePresence mode="popLayout">
+					{isHovering && LensContent}
+				</AnimatePresence>
 			)}
 		</div>
 	);

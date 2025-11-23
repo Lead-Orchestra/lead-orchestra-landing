@@ -1,19 +1,22 @@
-'use client';
+"use client";
 
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { cn } from '@/lib/utils';
-import type { FlowChartProps } from '@/types/service/howItWorks';
-import { motion } from 'framer-motion';
-import type * as React from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { cn } from "@/lib/utils";
+import type { FlowChartProps } from "@/types/service/howItWorks";
+import { motion } from "framer-motion";
+import type * as React from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export const FlowChart: React.FC<FlowChartProps> = ({ nodes }) => {
-	const isMobile = useMediaQuery('(max-width: 768px)');
+	const isMobile = useMediaQuery("(max-width: 768px)");
 
 	return (
 		<div className="w-full overflow-x-auto py-8">
 			<div
-				className={cn('relative min-h-[500px] w-full', isMobile && 'flex flex-col items-center')}
+				className={cn(
+					"relative min-h-[500px] w-full",
+					isMobile && "flex flex-col items-center",
+				)}
 			>
 				{nodes.map((node, index) => (
 					<motion.div
@@ -23,18 +26,18 @@ export const FlowChart: React.FC<FlowChartProps> = ({ nodes }) => {
 						transition={{
 							duration: 0.5,
 							delay: index * 0.1,
-							ease: 'easeOut',
+							ease: "easeOut",
 						}}
 						whileHover={{ scale: 1.03 }}
 						className={cn(
-							'w-full max-w-[280px] rounded-lg border border-border/50 bg-background p-4 shadow-sm',
-							!isMobile && 'absolute',
-							isMobile && 'mb-8',
+							"w-full max-w-[280px] rounded-lg border border-border/50 bg-background p-4 shadow-sm",
+							!isMobile && "absolute",
+							isMobile && "mb-8",
 							node.className,
-							!isMobile && index === 0 && 'top-0 left-[5%] md:left-[10%]',
-							!isMobile && index === 1 && 'top-[25%] left-[25%] md:left-[30%]',
-							!isMobile && index === 2 && 'top-[50%] left-[45%] md:left-[50%]',
-							!isMobile && index === 3 && 'top-[75%] left-[65%] md:left-[70%]'
+							!isMobile && index === 0 && "top-0 left-[5%] md:left-[10%]",
+							!isMobile && index === 1 && "top-[25%] left-[25%] md:left-[30%]",
+							!isMobile && index === 2 && "top-[50%] left-[45%] md:left-[50%]",
+							!isMobile && index === 3 && "top-[75%] left-[65%] md:left-[70%]",
 						)}
 					>
 						<div className="mb-3 flex items-center gap-3">
@@ -43,7 +46,7 @@ export const FlowChart: React.FC<FlowChartProps> = ({ nodes }) => {
 								animate={{ scale: 1 }}
 								transition={{
 									delay: index * 0.1 + 0.2,
-									type: 'spring',
+									type: "spring",
 								}}
 								className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-bold text-black dark:text-white"
 							>

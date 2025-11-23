@@ -1,6 +1,6 @@
-import { ChevronRight } from 'lucide-react';
-import Link from 'next/link'; // * Use Next.js Link for navigation
-import { v4 as uuidv4 } from 'uuid';
+import { ChevronRight } from "lucide-react";
+import Link from "next/link"; // * Use Next.js Link for navigation
+import { v4 as uuidv4 } from "uuid";
 
 interface BreadcrumbItem {
 	label: string;
@@ -18,11 +18,15 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
 				{items.map((item, index) => (
 					<li key={uuidv4()}>
 						<div className="flex items-center">
-							{index > 0 && <ChevronRight className="mr-4 h-5 w-5 text-muted" />}
+							{index > 0 && (
+								<ChevronRight className="mr-4 h-5 w-5 text-muted" />
+							)}
 							{/* * Use Next.js Link for client-side navigation */}
 							{index === items.length - 1 ? (
 								<span
-									className={'cursor-default font-medium text-muted-foreground text-sm'}
+									className={
+										"cursor-default font-medium text-muted-foreground text-sm"
+									}
 									aria-current="page"
 								>
 									{item.label}

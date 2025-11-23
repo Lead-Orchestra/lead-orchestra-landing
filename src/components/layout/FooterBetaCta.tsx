@@ -1,30 +1,32 @@
-'use client';
+"use client";
 
 import {
 	FOUNDERS_CIRCLE_DEADLINE,
 	FOUNDERS_CIRCLE_DEADLINE_ISO,
-} from '@/constants/foundersCircleDeadline';
-import { useCountdown } from '@/hooks/useCountdown';
-import { useHasMounted } from '@/hooks/useHasMounted';
-import { cn } from '@/lib/utils';
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from '../ui/button';
+} from "@/constants/foundersCircleDeadline";
+import { useCountdown } from "@/hooks/useCountdown";
+import { useHasMounted } from "@/hooks/useHasMounted";
+import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 /**
  * FooterBetaCta renders the footer CTA with the Founders Circle countdown.
  */
-export function FooterBetaCta({ className = '' }: { className?: string }) {
+export function FooterBetaCta({ className = "" }: { className?: string }) {
 	const hasMounted = useHasMounted();
 	const countdown = useCountdown({ targetTimestamp: FOUNDERS_CIRCLE_DEADLINE });
 	const isClosed = hasMounted ? countdown.isExpired : false;
-	const countdownLabel = hasMounted ? `Closes in ${countdown.formatted}` : 'Closes soon';
+	const countdownLabel = hasMounted
+		? `Closes in ${countdown.formatted}`
+		: "Closes soon";
 
 	return (
 		<div
 			className={cn(
-				'flex w-full flex-col items-center gap-2 text-center sm:gap-3 md:items-center md:text-center lg:items-start lg:text-left',
-				className
+				"flex w-full flex-col items-center gap-2 text-center sm:gap-3 md:items-center md:text-center lg:items-start lg:text-left",
+				className,
 			)}
 		>
 			<div
@@ -48,7 +50,8 @@ export function FooterBetaCta({ className = '' }: { className?: string }) {
 				)}
 			</div>
 			<p className="text-muted-foreground text-xs md:mx-auto md:max-w-xs md:text-sm dark:text-white/60">
-				Get started free with open-source scraping. View on GitHub or request enterprise access.
+				Get started free with open-source scraping. View on GitHub or request
+				enterprise access.
 			</p>
 			<div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:gap-3 md:w-full md:flex-row md:justify-center md:gap-3 lg:w-auto lg:justify-start">
 				<Link

@@ -1,9 +1,9 @@
 /**
  * Agent configuration modeled after the agents dashboard schema.
  */
-export type AgentType = 'phone' | 'direct mail' | 'social';
+export type AgentType = "phone" | "direct mail" | "social";
 
-export type AgentBillingCycle = 'monthly' | 'one-time';
+export type AgentBillingCycle = "monthly" | "one-time";
 
 export interface AgentConfig {
 	/** Unique identifier assigned when the agent is persisted. */

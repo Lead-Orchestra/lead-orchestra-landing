@@ -8,8 +8,8 @@ import type {
 	NotionSelectProperty,
 	NotionTitleProperty,
 	NotionUrlProperty,
-} from './notionTypes';
-import { inferKind } from './notionTypes';
+} from "./notionTypes";
+import { inferKind } from "./notionTypes";
 
 export type MappedLinkTree = {
 	pageId?: string;
@@ -27,7 +27,7 @@ export type MappedLinkTree = {
 	files?: Array<{
 		name: string;
 		url: string;
-		kind?: 'image' | 'video' | 'other';
+		kind?: "image" | "video" | "other";
 		ext?: string;
 		expiry?: string;
 	}>;
@@ -44,31 +44,33 @@ export type MappedLinkTree = {
 
 export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 	const props = page.properties ?? {};
-	const rawSlug = (props.Slug as NotionRichTextProperty | undefined)?.rich_text?.[0]?.plain_text;
-	const slug = rawSlug?.startsWith('/') ? rawSlug.substring(1) : rawSlug;
+	const rawSlug = (props.Slug as NotionRichTextProperty | undefined)
+		?.rich_text?.[0]?.plain_text;
+	const slug = rawSlug?.startsWith("/") ? rawSlug.substring(1) : rawSlug;
 	// Destination can be URL or rich_text — prefer URL first
 	let destination =
 		(props.Destination as NotionUrlProperty | undefined)?.url ??
-		(props.Destination as NotionRichTextProperty | undefined)?.rich_text?.[0]?.plain_text;
+		(props.Destination as NotionRichTextProperty | undefined)?.rich_text?.[0]
+			?.plain_text;
 	if (destination) {
 		const d = destination
-			.replace(/\uFEFF/g, '')
-			.replace(/\u00A0/g, ' ')
+			.replace(/\uFEFF/g, "")
+			.replace(/\u00A0/g, " ")
 			.trim();
-		destination = d.toLowerCase() === 'none' ? undefined : d;
+		destination = d.toLowerCase() === "none" ? undefined : d;
 	}
-	const titleRich = (props.Title as NotionRichTextProperty | undefined)?.rich_text?.[0]
-		?.plain_text as string | undefined;
+	const titleRich = (props.Title as NotionRichTextProperty | undefined)
+		?.rich_text?.[0]?.plain_text as string | undefined;
 	const titleFromTitle =
 		titleRich ??
 		((props.Title as NotionTitleProperty | undefined)?.title?.[0]?.plain_text as
 			| string
 			| undefined);
 	const title = titleFromTitle || slug;
-	const description = (props.Description as NotionRichTextProperty | undefined)?.rich_text?.[0]
-		?.plain_text as string | undefined;
-	const details = (props.Details as NotionRichTextProperty | undefined)?.rich_text?.[0]
-		?.plain_text as string | undefined;
+	const description = (props.Description as NotionRichTextProperty | undefined)
+		?.rich_text?.[0]?.plain_text as string | undefined;
+	const details = (props.Details as NotionRichTextProperty | undefined)
+		?.rich_text?.[0]?.plain_text as string | undefined;
 	const iconEmoji = page.icon?.emoji as string | undefined;
 
 	// Thumbnail (for icon only) and Image (for preview)
@@ -78,11 +80,18 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 		| NotionRichTextProperty
 		| NotionFilesProperty
 		| undefined;
-	if (thumbProp?.type === 'url') thumbnailUrl = thumbProp.url ?? undefined;
-	if (!thumbnailUrl && thumbProp?.type === 'rich_text')
+	if (thumbProp?.type === "url") thumbnailUrl = thumbProp.url ?? undefined;
+	if (!thumbnailUrl && thumbProp?.type === "rich_text")
 		thumbnailUrl = thumbProp.rich_text?.[0]?.plain_text ?? undefined;
-	if (!thumbnailUrl && thumbProp?.type === 'files' && Array.isArray(thumbProp.files)) {
-		const tf = thumbProp.files[0] as NotionFilesFile | NotionFilesExternal | undefined;
+	if (
+		!thumbnailUrl &&
+		thumbProp?.type === "files" &&
+		Array.isArray(thumbProp.files)
+	) {
+		const tf = thumbProp.files[0] as
+			| NotionFilesFile
+			| NotionFilesExternal
+			| undefined;
 		thumbnailUrl =
 			(tf && (tf as NotionFilesFile).file?.url) ||
 			(tf && (tf as NotionFilesExternal).external?.url) ||
@@ -96,55 +105,66 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 		| NotionRichTextProperty
 		| NotionFilesProperty
 		| undefined;
-	if (imgProp?.type === 'url') imageUrl = imgProp.url ?? undefined;
-	if (!imageUrl && imgProp?.type === 'rich_text')
+	if (imgProp?.type === "url") imageUrl = imgProp.url ?? undefined;
+	if (!imageUrl && imgProp?.type === "rich_text")
 		imageUrl = imgProp.rich_text?.[0]?.plain_text ?? undefined;
-	if (!imageUrl && imgProp?.type === 'files' && Array.isArray(imgProp.files)) {
-		const first = imgProp.files[0] as NotionFilesFile | NotionFilesExternal | undefined;
+	if (!imageUrl && imgProp?.type === "files" && Array.isArray(imgProp.files)) {
+		const first = imgProp.files[0] as
+			| NotionFilesFile
+			| NotionFilesExternal
+			| undefined;
 		imageUrl =
 			(first && (first as NotionFilesFile).file?.url) ||
 			(first && (first as NotionFilesExternal).external?.url) ||
 			undefined;
 	}
-	if (!imageUrl && page.cover?.external?.url) imageUrl = page.cover.external.url ?? undefined;
+	if (!imageUrl && page.cover?.external?.url)
+		imageUrl = page.cover.external.url ?? undefined;
 
 	// Link Tree Enabled can be checkbox or select
-	const lte = props['Link Tree Enabled'] as
+	const lte = props["Link Tree Enabled"] as
 		| NotionCheckboxProperty
 		| NotionSelectProperty
 		| undefined;
 	let linkTreeEnabled = false;
-	if (lte?.type === 'checkbox') linkTreeEnabled = Boolean(lte.checkbox);
-	else if (lte?.type === 'select') {
-		const name = (lte.select?.name ?? '').toString().toLowerCase();
-		linkTreeEnabled = name === 'true' || name === 'yes' || name === 'enabled';
+	if (lte?.type === "checkbox") linkTreeEnabled = Boolean(lte.checkbox);
+	else if (lte?.type === "select") {
+		const name = (lte.select?.name ?? "").toString().toLowerCase();
+		linkTreeEnabled = name === "true" || name === "yes" || name === "enabled";
 	}
 
 	// Optional metadata
-	const category = (props.Category as NotionSelectProperty | undefined)?.select?.name ?? undefined;
+	const category =
+		(props.Category as NotionSelectProperty | undefined)?.select?.name ??
+		undefined;
 	const pinned = Boolean(
 		(props.Pinned as NotionCheckboxProperty | undefined)?.checkbox ||
-			((props.Pinned as NotionSelectProperty | undefined)?.select?.name ?? '')
+			((props.Pinned as NotionSelectProperty | undefined)?.select?.name ?? "")
 				.toString()
-				.toLowerCase() === 'true'
+				.toLowerCase() === "true",
 	);
 	// Highlighted (Select Yes/No or Checkbox)
 	let highlighted = false;
 	const hlSel = props.Highlighted as NotionSelectProperty | undefined;
-	if (hlSel?.type === 'select') {
-		const name = (hlSel.select?.name ?? '').toString().toLowerCase();
-		highlighted = name === 'yes' || name === 'true' || name === 'enabled';
+	if (hlSel?.type === "select") {
+		const name = (hlSel.select?.name ?? "").toString().toLowerCase();
+		highlighted = name === "yes" || name === "true" || name === "enabled";
 	}
 	const hlCb = props.Highlighted as NotionCheckboxProperty | undefined;
-	if (hlCb?.type === 'checkbox') highlighted = highlighted || Boolean(hlCb.checkbox);
-	let videoUrl = (props.Video as NotionUrlProperty | undefined)?.url ?? undefined;
+	if (hlCb?.type === "checkbox")
+		highlighted = highlighted || Boolean(hlCb.checkbox);
+	let videoUrl =
+		(props.Video as NotionUrlProperty | undefined)?.url ?? undefined;
 
 	// Redirect behavior: Select field 'Redirect To Download First File'
 	let redirectToFirstFile = false;
-	const rtd = props['Redirect To Download First File'] as NotionSelectProperty | undefined;
-	if (rtd?.type === 'select') {
-		const name = (rtd.select?.name ?? '').toString().toLowerCase();
-		redirectToFirstFile = name === 'true' || name === 'yes' || name === 'enabled';
+	const rtd = props["Redirect To Download First File"] as
+		| NotionSelectProperty
+		| undefined;
+	if (rtd?.type === "select") {
+		const name = (rtd.select?.name ?? "").toString().toLowerCase();
+		redirectToFirstFile =
+			name === "true" || name === "yes" || name === "enabled";
 	}
 
 	// Files list (support Media/Files/Image/File/video as Files & media)
@@ -152,7 +172,7 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 		| Array<{
 				name: string;
 				url: string;
-				kind?: 'image' | 'video' | 'other';
+				kind?: "image" | "video" | "other";
 				ext?: string;
 				expiry?: string;
 		  }>
@@ -167,16 +187,16 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 	type FileOut = {
 		name: string;
 		url: string;
-		kind?: 'image' | 'video' | 'other';
+		kind?: "image" | "video" | "other";
 		ext?: string;
 		expiry?: string;
 	};
 	const collected: FileOut[] = [];
 
 	const mapNotionFile = (f: NotionFilesFile | NotionFilesExternal) => {
-		if ((f as NotionFilesFile).type === 'file') {
+		if ((f as NotionFilesFile).type === "file") {
 			const file = f as NotionFilesFile;
-			const url = file.file?.url ?? '';
+			const url = file.file?.url ?? "";
 			const meta = inferKind(file.name || url);
 			return {
 				name: file.name ?? url,
@@ -186,9 +206,9 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 				expiry: file.file?.expiry_time,
 			};
 		}
-		if ((f as NotionFilesExternal).type === 'external') {
+		if ((f as NotionFilesExternal).type === "external") {
 			const extf = f as NotionFilesExternal;
-			const url = extf.external?.url ?? '';
+			const url = extf.external?.url ?? "";
 			const meta = inferKind(extf.name || url);
 			return { name: extf.name ?? url, url, kind: meta.kind, ext: meta.ext };
 		}
@@ -196,9 +216,11 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 	};
 
 	const collectFrom = (prop?: NotionFilesProperty) => {
-		if (prop?.type === 'files' && Array.isArray(prop.files)) {
+		if (prop?.type === "files" && Array.isArray(prop.files)) {
 			for (const f of prop.files) {
-				const mapped = mapNotionFile(f as NotionFilesFile | NotionFilesExternal);
+				const mapped = mapNotionFile(
+					f as NotionFilesFile | NotionFilesExternal,
+				);
 				if (mapped) collected.push(mapped);
 			}
 		}
@@ -210,7 +232,7 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 	// Fallback: scan any property of type 'files' (covers columns named 'File', 'Attachment', etc.)
 	for (const val of Object.values(props)) {
 		const maybe = val as NotionFilesProperty | undefined;
-		if (maybe?.type === 'files') collectFrom(maybe);
+		if (maybe?.type === "files") collectFrom(maybe);
 	}
 
 	if (collected.length) {
@@ -232,12 +254,16 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 		let firstFileUrl: string | undefined;
 		const pickFirstFrom = (prop?: NotionFilesProperty) => {
 			if (firstFileUrl) return;
-			if (prop?.type === 'files' && Array.isArray(prop.files)) {
-				const f = prop.files[0] as NotionFilesFile | NotionFilesExternal | undefined;
-				if (f && (f as NotionFilesFile).type === 'file')
+			if (prop?.type === "files" && Array.isArray(prop.files)) {
+				const f = prop.files[0] as
+					| NotionFilesFile
+					| NotionFilesExternal
+					| undefined;
+				if (f && (f as NotionFilesFile).type === "file")
 					firstFileUrl = (f as NotionFilesFile).file?.url ?? firstFileUrl;
-				else if (f && (f as NotionFilesExternal).type === 'external')
-					firstFileUrl = (f as NotionFilesExternal).external?.url ?? firstFileUrl;
+				else if (f && (f as NotionFilesExternal).type === "external")
+					firstFileUrl =
+						(f as NotionFilesExternal).external?.url ?? firstFileUrl;
 			}
 		};
 		// Priority: File -> Files -> any collected file fallback
@@ -249,18 +275,22 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 
 	if (!imageUrl && files && files.length) {
 		const firstImage =
-			files.find((f) => f.kind === 'image') ||
-			files.find((f) => (f.ext ?? '').match(/^(jpg|jpeg|png|gif|webp|avif|svg)$/i));
+			files.find((f) => f.kind === "image") ||
+			files.find((f) =>
+				(f.ext ?? "").match(/^(jpg|jpeg|png|gif|webp|avif|svg)$/i),
+			);
 		if (firstImage) imageUrl = firstImage.url;
 	}
 	if (!videoUrl && files && files.length) {
 		// Prefer inline-playable formats first
-		const playable = files.find((f) => (f.ext ?? '').match(/^(mp4|webm|ogg|ogv|mov|m4v)$/i));
+		const playable = files.find((f) =>
+			(f.ext ?? "").match(/^(mp4|webm|ogg|ogv|mov|m4v)$/i),
+		);
 		if (playable) {
 			videoUrl = playable.url;
 		} else {
 			// Fallback: pick any video, then try Cloudinary fetch transcode if configured
-			const anyVideo = files.find((f) => f.kind === 'video');
+			const anyVideo = files.find((f) => f.kind === "video");
 			if (anyVideo?.url) {
 				const cloud = process.env.CLOUDINARY_CLOUD_NAME;
 				if (cloud) {
@@ -280,12 +310,12 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 	// Extract UTM parameters from Notion properties
 	const getSelectValue = (prop: unknown): string | undefined => {
 		const sel = prop as NotionSelectProperty | undefined;
-		return sel?.type === 'select' ? sel.select?.name : undefined;
+		return sel?.type === "select" ? sel.select?.name : undefined;
 	};
 
 	// Handle "UTM Campaign (Relation)" property name - use it if available, otherwise fallback to "UTM Campaign"
-	const utmCampaignRelation = getSelectValue(props['UTM Campaign (Relation)']);
-	const utmCampaignRegular = getSelectValue(props['UTM Campaign']);
+	const utmCampaignRelation = getSelectValue(props["UTM Campaign (Relation)"]);
+	const utmCampaignRegular = getSelectValue(props["UTM Campaign"]);
 	const utm_campaign = utmCampaignRelation || utmCampaignRegular;
 
 	return {
@@ -305,11 +335,11 @@ export function mapNotionPageToLinkTree(page: NotionPage): MappedLinkTree {
 		linkTreeEnabled,
 		highlighted,
 		// UTM parameters from Notion
-		utm_source: getSelectValue(props['UTM Source']),
-		utm_medium: getSelectValue(props['UTM Medium']),
+		utm_source: getSelectValue(props["UTM Source"]),
+		utm_medium: getSelectValue(props["UTM Medium"]),
 		utm_campaign,
-		utm_content: getSelectValue(props['UTM Content']),
-		utm_term: getSelectValue(props['UTM Term']),
-		utm_offer: getSelectValue(props['UTM Offer']),
+		utm_content: getSelectValue(props["UTM Content"]),
+		utm_term: getSelectValue(props["UTM Term"]),
+		utm_offer: getSelectValue(props["UTM Offer"]),
 	};
 }

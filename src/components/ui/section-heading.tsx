@@ -1,13 +1,13 @@
-import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
-import React from 'react';
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import React from "react";
 
 interface SectionHeadingProps {
 	title: string;
 	description?: string;
 	centered?: boolean;
 	className?: string;
-	size?: 'xs' | 'small' | 'default' | 'large';
+	size?: "xs" | "small" | "default" | "large";
 }
 
 export function SectionHeading({
@@ -15,27 +15,33 @@ export function SectionHeading({
 	description,
 	centered = false,
 	className,
-	size = 'default',
+	size = "default",
 }: SectionHeadingProps) {
 	const titleSizes = {
-		xs: 'text-2xl md:text-3xl',
-		small: 'text-3xl md:text-4xl',
-		default: 'text-4xl md:text-5xl',
-		large: 'text-5xl md:text-6xl',
+		xs: "text-2xl md:text-3xl",
+		small: "text-3xl md:text-4xl",
+		default: "text-4xl md:text-5xl",
+		large: "text-5xl md:text-6xl",
 	};
 
 	const descriptionSizes = {
-		xs: 'text-xs',
-		small: 'text-sm',
-		default: 'text-base',
-		large: 'text-lg',
+		xs: "text-xs",
+		small: "text-sm",
+		default: "text-base",
+		large: "text-lg",
 	};
 
 	return (
-		<div className={cn('mx-auto mb-10 max-w-4xl', centered && 'text-center', className)}>
+		<div
+			className={cn(
+				"mx-auto mb-10 max-w-4xl",
+				centered && "text-center",
+				className,
+			)}
+		>
 			<motion.h2
 				className={cn(
-					'mb-2 break-words font-bold text-3xl text-primary leading-tight sm:text-4xl md:text-5xl'
+					"mb-2 break-words font-bold text-3xl text-primary leading-tight sm:text-4xl md:text-5xl",
 				)}
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}

@@ -1,61 +1,61 @@
-'use client';
+"use client";
 
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
-import { NumberTicker } from '@/components/magicui/number-ticker';
-import { ThreeDMarquee } from '@/components/ui/3d-marquee';
+import { NumberTicker } from "@/components/magicui/number-ticker";
+import { ThreeDMarquee } from "@/components/ui/3d-marquee";
 import {
 	AnimatedBeamNetwork,
 	type AnimatedBeamNetworkNode,
-} from '@/components/ui/animated-beam-network';
-import { Badge } from '@/components/ui/badge';
-import { useGpuOptimizations } from '@/hooks/useGpuOptimizations';
-import { cn } from '@/lib/utils';
-import { Sparkles } from 'lucide-react';
-import Image from 'next/image';
+} from "@/components/ui/animated-beam-network";
+import { Badge } from "@/components/ui/badge";
+import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
+import { cn } from "@/lib/utils";
+import { Sparkles } from "lucide-react";
+import Image from "next/image";
 
 const ROTATION_INTERVAL_MS = 4000;
 
 const HERO_MESSAGES = [
-	'Export scraped data to CRM, CSV/JSON, Database, S3, or any system.',
-	'Integrate with MCP protocol, APIs, webhooks, and workflow engines like Kestra, Make, Zapier, and n8n.',
-	'Connect to CRMs, data warehouses, and automation platforms.',
-	'Open-source scraping that plugs into anything—no vendor lock-in.',
+	"Export scraped data to CRM, CSV/JSON, Database, S3, or any system.",
+	"Integrate with MCP protocol, APIs, webhooks, and workflow engines like Kestra, Make, Zapier, and n8n.",
+	"Connect to CRMs, data warehouses, and automation platforms.",
+	"Open-source scraping that plugs into anything—no vendor lock-in.",
 ];
 
 const BASE_LOGOS = [
 	{
-		src: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/HubSpot_Logo.svg',
-		alt: 'HubSpot logo',
+		src: "https://upload.wikimedia.org/wikipedia/commons/3/3f/HubSpot_Logo.svg",
+		alt: "HubSpot logo",
 	},
 	{
-		src: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Zoho-logo.png',
-		alt: 'Zoho logo',
+		src: "https://upload.wikimedia.org/wikipedia/commons/9/96/Zoho-logo.png",
+		alt: "Zoho logo",
 	},
 	{
-		src: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Zapier_logo.svg',
-		alt: 'Zapier logo',
+		src: "https://upload.wikimedia.org/wikipedia/commons/f/fd/Zapier_logo.svg",
+		alt: "Zapier logo",
 	},
 	{
-		src: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg',
-		alt: 'Salesforce logo',
+		src: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg",
+		alt: "Salesforce logo",
 	},
 	{
-		src: 'https://images.seeklogo.com/logo-png/46/1/make-logo-png_seeklogo-464017.png',
-		alt: 'Make (formerly Integromat) logo',
+		src: "https://images.seeklogo.com/logo-png/46/1/make-logo-png_seeklogo-464017.png",
+		alt: "Make (formerly Integromat) logo",
 	},
 	{
-		src: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/N8n_logo.png',
-		alt: 'n8n logo',
+		src: "https://upload.wikimedia.org/wikipedia/commons/d/d9/N8n_logo.png",
+		alt: "n8n logo",
 	},
 	{
-		src: 'https://kestra.io/cdn-cgi/image/f=webp,q=80/docs/tutorial/logos/logo-light-version.png',
-		alt: 'Kestra logo',
+		src: "https://kestra.io/cdn-cgi/image/f=webp,q=80/docs/tutorial/logos/logo-light-version.png",
+		alt: "Kestra logo",
 	},
 	{
-		src: 'https://upload.wikimedia.org/wikipedia/commons/5/5d/Pipedrive_Logo.svg',
-		alt: 'Pipedrive logo',
+		src: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Pipedrive_Logo.svg",
+		alt: "Pipedrive logo",
 	},
 ];
 
@@ -63,8 +63,8 @@ const HERO_IMAGES = [...BASE_LOGOS, ...BASE_LOGOS.slice().reverse()];
 
 const BEAM_NETWORK_NODES: AnimatedBeamNetworkNode[] = [
 	{
-		id: 'hubspot',
-		label: 'HubSpot',
+		id: "hubspot",
+		label: "HubSpot",
 		icon: (
 			<img
 				src="https://upload.wikimedia.org/wikipedia/commons/3/3f/HubSpot_Logo.svg"
@@ -75,8 +75,8 @@ const BEAM_NETWORK_NODES: AnimatedBeamNetworkNode[] = [
 		),
 	},
 	{
-		id: 'zapier',
-		label: 'Zapier',
+		id: "zapier",
+		label: "Zapier",
 		icon: (
 			<img
 				src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Zapier_logo.svg"
@@ -87,8 +87,8 @@ const BEAM_NETWORK_NODES: AnimatedBeamNetworkNode[] = [
 		),
 	},
 	{
-		id: 'make',
-		label: 'Make',
+		id: "make",
+		label: "Make",
 		icon: (
 			<img
 				src="https://images.seeklogo.com/logo-png/46/1/make-logo-png_seeklogo-464017.png"
@@ -99,8 +99,8 @@ const BEAM_NETWORK_NODES: AnimatedBeamNetworkNode[] = [
 		),
 	},
 	{
-		id: 'n8n',
-		label: 'n8n',
+		id: "n8n",
+		label: "n8n",
 		icon: (
 			<img
 				src="https://upload.wikimedia.org/wikipedia/commons/d/d9/N8n_logo.png"
@@ -111,8 +111,8 @@ const BEAM_NETWORK_NODES: AnimatedBeamNetworkNode[] = [
 		),
 	},
 	{
-		id: 'kestra',
-		label: 'Kestra',
+		id: "kestra",
+		label: "Kestra",
 		icon: (
 			<img
 				src="https://kestra.io/cdn-cgi/image/f=webp,q=80/docs/tutorial/logos/logo-light-version.png"
@@ -123,8 +123,8 @@ const BEAM_NETWORK_NODES: AnimatedBeamNetworkNode[] = [
 		),
 	},
 	{
-		id: 'salesforce',
-		label: 'Salesforce',
+		id: "salesforce",
+		label: "Salesforce",
 		icon: (
 			<img
 				src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg"
@@ -138,25 +138,25 @@ const BEAM_NETWORK_NODES: AnimatedBeamNetworkNode[] = [
 
 const HERO_METRICS = [
 	{
-		id: 'sources',
+		id: "sources",
 		value: 10,
-		suffix: '+',
+		suffix: "+",
 		decimalPlaces: 0,
-		label: 'Built-in scraping sources',
+		label: "Built-in scraping sources",
 	},
 	{
-		id: 'plugins',
+		id: "plugins",
 		value: 20,
-		suffix: '+',
+		suffix: "+",
 		decimalPlaces: 0,
-		label: 'Community MCP plugins',
+		label: "Community MCP plugins",
 	},
 	{
-		id: 'uptime',
+		id: "uptime",
 		value: 99.9,
-		suffix: '%',
+		suffix: "%",
 		decimalPlaces: 1,
-		label: 'Scraping reliability',
+		label: "Scraping reliability",
 	},
 ];
 
@@ -167,11 +167,11 @@ export function ConnectAnythingHero(): JSX.Element {
 	const [activeMessageIndex, setActiveMessageIndex] = useState(0);
 	const enableGpu = useGpuOptimizations();
 	const gpuContainerClass = enableGpu
-		? 'transform-gpu will-change-transform will-change-opacity'
-		: '';
+		? "transform-gpu will-change-transform will-change-opacity"
+		: "";
 	const gpuDepthClass = enableGpu
-		? 'transform-gpu will-change-transform will-change-opacity translate-z-0'
-		: '';
+		? "transform-gpu will-change-transform will-change-opacity translate-z-0"
+		: "";
 
 	useEffect(() => {
 		const intervalId = window.setInterval(() => {
@@ -184,16 +184,16 @@ export function ConnectAnythingHero(): JSX.Element {
 	return (
 		<section
 			className={cn(
-				'relative flex w-full flex-col items-center justify-center overflow-hidden',
-				'min-h-[720px] bg-transparent py-24 pb-28 sm:min-h-[760px] sm:py-28 sm:pb-32 md:min-h-[calc(100vh-120px)] lg:py-32 lg:pb-36',
-				gpuContainerClass
+				"relative flex w-full flex-col items-center justify-center overflow-hidden",
+				"min-h-[720px] bg-transparent py-24 pb-28 sm:min-h-[760px] sm:py-28 sm:pb-32 md:min-h-[calc(100vh-120px)] lg:py-32 lg:pb-36",
+				gpuContainerClass,
 			)}
-			style={{ overflowClipMargin: '24px' }}
+			style={{ overflowClipMargin: "24px" }}
 		>
 			<div
 				className={cn(
-					'pointer-events-none absolute inset-x-0 top-0 z-0 h-32 bg-gradient-to-b from-slate-950/85 via-slate-950/40 to-transparent',
-					gpuDepthClass
+					"pointer-events-none absolute inset-x-0 top-0 z-0 h-32 bg-gradient-to-b from-slate-950/85 via-slate-950/40 to-transparent",
+					gpuDepthClass,
 				)}
 			/>
 			<AnimatedBeamNetwork
@@ -211,13 +211,13 @@ export function ConnectAnythingHero(): JSX.Element {
 						className="h-12 w-12 object-contain md:h-14 md:w-14"
 					/>
 				}
-				className={cn('-z-20 absolute inset-0 h-full w-full', gpuDepthClass)}
+				className={cn("-z-20 absolute inset-0 h-full w-full", gpuDepthClass)}
 			/>
 			<div className="relative z-20 flex w-full max-w-5xl flex-col items-center px-6 text-center">
 				<motion.div
 					initial={{ opacity: 0, y: -18 }}
 					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.5, ease: 'easeOut' }}
+					transition={{ duration: 0.5, ease: "easeOut" }}
 					className="mb-8"
 				>
 					<Badge
@@ -237,16 +237,18 @@ export function ConnectAnythingHero(): JSX.Element {
 					className="mb-6 max-w-4xl text-balance text-center font-black text-4xl leading-tight tracking-tight sm:text-5xl sm:leading-[1.1] md:text-6xl md:leading-[1.08] lg:text-7xl lg:leading-[1.06]"
 				>
 					<div className="space-y-1 sm:space-y-2">
-						<span className="block w-full text-black dark:text-white">Export to Any System</span>
+						<span className="block w-full text-black dark:text-white">
+							Export to Any System
+						</span>
 					</div>
 				</motion.h1>
 				<AnimatePresence mode="wait">
 					<motion.div
 						key={activeMessageIndex}
-						initial={{ opacity: 0, y: 16, clipPath: 'inset(0 0 100% 0)' }}
-						animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
-						exit={{ opacity: 0, y: -12, clipPath: 'inset(0 0 100% 0)' }}
-						transition={{ duration: 0.6, ease: 'easeInOut' }}
+						initial={{ opacity: 0, y: 16, clipPath: "inset(0 0 100% 0)" }}
+						animate={{ opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" }}
+						exit={{ opacity: 0, y: -12, clipPath: "inset(0 0 100% 0)" }}
+						transition={{ duration: 0.6, ease: "easeInOut" }}
 						className="min-h-[3.5rem] max-w-2xl text-center"
 					>
 						<span className="font-semibold text-black text-lg tracking-tight md:text-xl dark:text-white">
@@ -257,12 +259,12 @@ export function ConnectAnythingHero(): JSX.Element {
 				<motion.p
 					initial={{ opacity: 0, y: 10 }}
 					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.45, ease: 'easeOut', delay: 0.1 }}
+					transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
 					className="mt-5 max-w-3xl text-slate-900 text-sm drop-shadow-[0_6px_14px_rgba(15,23,42,0.2)] md:text-base dark:text-slate-100/85"
 				>
-					Lead Orchestra exports scraped data to CRM, CSV/JSON, Database, S3, or any system.
-					Integrate with MCP protocol, APIs, webhooks, and workflow engines like Kestra, Make,
-					Zapier, and n8n.
+					Lead Orchestra exports scraped data to CRM, CSV/JSON, Database, S3, or
+					any system. Integrate with MCP protocol, APIs, webhooks, and workflow
+					engines like Kestra, Make, Zapier, and n8n.
 				</motion.p>
 				<motion.ul
 					initial="hidden"
@@ -296,7 +298,9 @@ export function ConnectAnythingHero(): JSX.Element {
 									</span>
 								) : null}
 							</div>
-							<p className="mt-1 text-slate-600 text-sm dark:text-slate-200/90">{metric.label}</p>
+							<p className="mt-1 text-slate-600 text-sm dark:text-slate-200/90">
+								{metric.label}
+							</p>
 						</motion.li>
 					))}
 				</motion.ul>

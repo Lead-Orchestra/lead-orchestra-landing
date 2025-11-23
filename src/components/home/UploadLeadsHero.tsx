@@ -1,52 +1,52 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { AtSign, Bookmark, Hash, Play, Upload } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { motion } from "framer-motion";
+import { AtSign, Bookmark, Hash, Play, Upload } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useGpuOptimizations } from '@/hooks/useGpuOptimizations';
-import { cn } from '@/lib/utils';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
+import { cn } from "@/lib/utils";
 
 const BADGE_ROTATION_INTERVAL_MS = 3000;
 
 const ACTION_BADGES = [
 	{
-		id: 'scrape',
-		label: 'Scrape Sources',
+		id: "scrape",
+		label: "Scrape Sources",
 		icon: Upload,
 		color:
-			'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-100 dark:border-blue-700',
+			"bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-100 dark:border-blue-700",
 	},
 	{
-		id: 'normalize',
-		label: 'Normalize Data',
+		id: "normalize",
+		label: "Normalize Data",
 		icon: Hash,
 		color:
-			'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900 dark:text-purple-100 dark:border-purple-700',
+			"bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900 dark:text-purple-100 dark:border-purple-700",
 	},
 	{
-		id: 'export',
-		label: 'Export CSV/JSON',
+		id: "export",
+		label: "Export CSV/JSON",
 		icon: Bookmark,
 		color:
-			'bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-100 dark:border-green-700',
+			"bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-100 dark:border-green-700",
 	},
 	{
-		id: 'integrate',
-		label: 'Integrate MCP',
+		id: "integrate",
+		label: "Integrate MCP",
 		icon: AtSign,
 		color:
-			'bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900 dark:text-orange-100 dark:border-orange-700',
+			"bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900 dark:text-orange-100 dark:border-orange-700",
 	},
 	{
-		id: 'enrich',
-		label: 'Export & Integrate',
+		id: "enrich",
+		label: "Export & Integrate",
 		icon: Play,
 		color:
-			'bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900 dark:text-pink-100 dark:border-pink-700',
+			"bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900 dark:text-pink-100 dark:border-pink-700",
 	},
 ];
 
@@ -55,11 +55,11 @@ const ACTION_BADGES = [
  */
 export function UploadLeadsHero(): JSX.Element {
 	const [activeBadgeIndex, setActiveBadgeIndex] = useState(0);
-	const [inputValue, setInputValue] = useState('');
+	const [inputValue, setInputValue] = useState("");
 	const enableGpu = useGpuOptimizations();
 	const gpuContainerClass = enableGpu
-		? 'transform-gpu will-change-transform will-change-opacity'
-		: '';
+		? "transform-gpu will-change-transform will-change-opacity"
+		: "";
 
 	useEffect(() => {
 		const intervalId = window.setInterval(() => {
@@ -71,22 +71,22 @@ export function UploadLeadsHero(): JSX.Element {
 
 	const handleAction = () => {
 		// Handle upload/action logic here
-		console.log('Action triggered with value:', inputValue);
+		console.log("Action triggered with value:", inputValue);
 	};
 
 	return (
 		<section
 			className={cn(
-				'relative flex w-full flex-col items-center justify-center overflow-hidden',
-				'min-h-[400px] bg-gradient-to-br from-slate-50 via-white to-slate-100 py-16 sm:min-h-[450px] sm:py-20 md:min-h-[500px] lg:py-24 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950',
-				gpuContainerClass
+				"relative flex w-full flex-col items-center justify-center overflow-hidden",
+				"min-h-[400px] bg-gradient-to-br from-slate-50 via-white to-slate-100 py-16 sm:min-h-[450px] sm:py-20 md:min-h-[500px] lg:py-24 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950",
+				gpuContainerClass,
 			)}
 		>
 			<div className="relative z-20 flex w-full max-w-4xl flex-col items-center px-6">
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.6, ease: 'easeOut' }}
+					transition={{ duration: 0.6, ease: "easeOut" }}
 					className="w-full"
 				>
 					{/* Search/Upload Bar Container */}
@@ -98,7 +98,7 @@ export function UploadLeadsHero(): JSX.Element {
 							value={inputValue}
 							onChange={(e) => setInputValue(e.target.value)}
 							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
+								if (e.key === "Enter") {
 									handleAction();
 								}
 							}}
@@ -133,13 +133,13 @@ export function UploadLeadsHero(): JSX.Element {
 									}}
 									transition={{
 										duration: 0.4,
-										ease: 'easeInOut',
+										ease: "easeInOut",
 									}}
 									className={cn(
-										'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-medium text-xs transition-all',
+										"inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-medium text-xs transition-all",
 										badge.color,
 										isActive &&
-											'shadow-lg ring-2 ring-sky-500 ring-offset-2 ring-offset-white dark:ring-sky-500 dark:ring-offset-slate-900'
+											"shadow-lg ring-2 ring-sky-500 ring-offset-2 ring-offset-white dark:ring-sky-500 dark:ring-offset-slate-900",
 									)}
 								>
 									<Icon className="h-3.5 w-3.5" />
@@ -154,11 +154,11 @@ export function UploadLeadsHero(): JSX.Element {
 				<motion.p
 					initial={{ opacity: 0, y: 10 }}
 					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
+					transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
 					className="mt-8 max-w-2xl text-center text-slate-600 text-sm md:text-base dark:text-slate-300"
 				>
-					Paste a URL → scrape all the leads → clean them → export to CSV/JSON. Fresh leads, not
-					rented lists.
+					Paste a URL → scrape all the leads → clean them → export to CSV/JSON.
+					Fresh leads, not rented lists.
 				</motion.p>
 			</div>
 		</section>

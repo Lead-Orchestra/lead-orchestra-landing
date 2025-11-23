@@ -1,11 +1,11 @@
-import type { BeehiivPost } from '@/types/behiiv';
+import type { BeehiivPost } from "@/types/behiiv";
 
-import { getLatestBeehiivPosts } from '@/lib/beehiiv/getPosts';
-import { getTestBaseUrl } from '@/utils/env';
+import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
+import { getTestBaseUrl } from "@/utils/env";
 
-import { getTestimonialReviewData } from '@/utils/seo/schema';
-import { resolveBeehiivDate } from '@/utils/seo/seo';
-import type { SeoMeta } from '@/utils/seo/seo';
+import { getTestimonialReviewData } from "@/utils/seo/schema";
+import { resolveBeehiivDate } from "@/utils/seo/seo";
+import type { SeoMeta } from "@/utils/seo/seo";
 
 function toIsoDate(value: unknown): string | undefined {
 	if (value === null || value === undefined) {
@@ -17,12 +17,12 @@ function toIsoDate(value: unknown): string | undefined {
 		return Number.isFinite(time) ? new Date(time).toISOString() : undefined;
 	}
 
-	if (typeof value === 'number') {
+	if (typeof value === "number") {
 		const ms = value < 1e12 ? value * 1000 : value;
 		return Number.isFinite(ms) ? new Date(ms).toISOString() : undefined;
 	}
 
-	if (typeof value === 'string') {
+	if (typeof value === "string") {
 		const trimmed = value.trim();
 		if (!trimmed) return undefined;
 
@@ -50,25 +50,25 @@ export async function getSeoMetadataForPost(id: string): Promise<SeoMeta> {
 
 	if (!post) {
 		return {
-			title: 'Article Not Found',
-			description: 'The requested article could not be found',
+			title: "Article Not Found",
+			description: "The requested article could not be found",
 			canonical: fallbackCanonical,
 			keywords: [],
-			image: '',
-			type: 'article',
+			image: "",
+			type: "article",
 			priority: 0.7, // * fallback
-			changeFrequency: 'weekly', // * fallback
+			changeFrequency: "weekly", // * fallback
 		};
 	}
 
 	// Description: use meta_default_description, preview_text, or a safe fallback
-	let description = post.meta_default_description || post.preview_text || '';
+	let description = post.meta_default_description || post.preview_text || "";
 	if (
 		!description &&
 		post.content &&
-		typeof post.content === 'object' &&
-		'free' in post.content &&
-		typeof post.content.free.web === 'string'
+		typeof post.content === "object" &&
+		"free" in post.content &&
+		typeof post.content.free.web === "string"
 	) {
 		description = post.content.free.web.slice(0, 160);
 	}
@@ -94,12 +94,12 @@ export async function getSeoMetadataForPost(id: string): Promise<SeoMeta> {
 		description,
 		canonical: pageUrl,
 		keywords,
-		image: images[0] || '',
-		type: 'article',
+		image: images[0] || "",
+		type: "article",
 		datePublished,
 		dateModified,
 		priority: 0.7, // * or customize per post
-		changeFrequency: 'weekly', // * or customize per post
+		changeFrequency: "weekly", // * or customize per post
 		ratingValue: aggregateRating?.ratingValue,
 		reviewCount: aggregateRating?.reviewCount,
 	};

@@ -1,4 +1,4 @@
-import type { ServiceHowItWorks, TechStack } from './service/services';
+import type { ServiceHowItWorks, TechStack } from "./service/services";
 
 export interface BusinessOutcome {
 	title: string;

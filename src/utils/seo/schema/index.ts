@@ -1,4 +1,4 @@
-export { SchemaInjector } from './SchemaInjector';
+export { SchemaInjector } from "./SchemaInjector";
 export {
 	buildBlogSchema,
 	buildCaseStudyCreativeWorkSchema,
@@ -10,8 +10,8 @@ export {
 	buildSoftwareApplicationSchema,
 	buildKnowledgeGraphSchema,
 	buildDatasetSchema,
-} from './builders';
-export { buildActivityFeedSchema } from './activityFeed';
+} from "./builders";
+export { buildActivityFeedSchema } from "./activityFeed";
 export {
 	buildAbsoluteUrl,
 	buildContactPoints,
@@ -20,13 +20,13 @@ export {
 	ORGANIZATION_ID,
 	SCHEMA_CONTEXT,
 	WEBSITE_ID,
-} from './helpers';
+} from "./helpers";
 export {
 	getTestimonialReviewData,
 	testimonialAggregateRating,
 	testimonialReviewSchemas,
-} from './reviewData';
-export { buildManifestoSchema } from './manifesto';
+} from "./reviewData";
+export { buildManifestoSchema } from "./manifesto";
 export {
 	organizationSchema,
 	productSchema,
@@ -37,13 +37,13 @@ export {
 	validateServiceSchema,
 	validateWebSiteSchema,
 	websiteSchema,
-} from './validation';
+} from "./validation";
 export {
 	buildProductJsonLd,
 	buildProductListJsonLd,
 	buildServiceJsonLd,
-} from './transformers';
-export { buildPricingJsonLd } from './pricing';
+} from "./transformers";
+export { buildPricingJsonLd } from "./pricing";
 export type {
 	OfferInput,
 	OfferSchema,
@@ -69,7 +69,7 @@ export type {
 	DataFeedItemSchema,
 	PropertyValueSchema,
 	ThingSchema,
-} from './types';
+} from "./types";
 export {
 	getServerSideJsonLd,
 	type SchemaNode,
@@ -77,4 +77,4 @@ export {
 	type ServerSideJsonLdResult,
 	type ServerSideJsonLdError,
 	type ServerSideJsonLdSuccess,
-} from './server';
+} from "./server";

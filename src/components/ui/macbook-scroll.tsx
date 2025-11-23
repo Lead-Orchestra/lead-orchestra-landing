@@ -1,5 +1,5 @@
-'use client';
-import { cn } from '@/lib/utils';
+"use client";
+import { cn } from "@/lib/utils";
 import {
 	IconBrightnessDown,
 	IconBrightnessUp,
@@ -15,18 +15,23 @@ import {
 	IconVolume,
 	IconVolume2,
 	IconVolume3,
-} from '@tabler/icons-react';
-import { IconSearch } from '@tabler/icons-react';
-import { IconWorld } from '@tabler/icons-react';
-import { IconCommand } from '@tabler/icons-react';
-import { IconCaretLeftFilled } from '@tabler/icons-react';
-import { IconCaretDownFilled } from '@tabler/icons-react';
-import { type MotionValue, motion, useScroll, useTransform } from 'motion/react';
-import Image from 'next/image';
-import type React from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+} from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
+import { IconWorld } from "@tabler/icons-react";
+import { IconCommand } from "@tabler/icons-react";
+import { IconCaretLeftFilled } from "@tabler/icons-react";
+import { IconCaretDownFilled } from "@tabler/icons-react";
+import {
+	type MotionValue,
+	motion,
+	useScroll,
+	useTransform,
+} from "motion/react";
+import Image from "next/image";
+import type React from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-type MacbookScrollVariant = 'immersive' | 'embedded';
+type MacbookScrollVariant = "immersive" | "embedded";
 
 export const MacbookScroll = ({
 	src,
@@ -34,7 +39,7 @@ export const MacbookScroll = ({
 	title,
 	alt,
 	badge,
-	variant = 'immersive',
+	variant = "immersive",
 	className,
 }: {
 	src?: string;
@@ -48,40 +53,43 @@ export const MacbookScroll = ({
 	const ref = useRef<HTMLDivElement>(null);
 	const { scrollYProgress } = useScroll({
 		target: ref,
-		offset: ['start start', 'end start'],
+		offset: ["start start", "end start"],
 	});
 
 	const [viewportWidth, setViewportWidth] = useState<number | null>(null);
 
 	useEffect(() => {
-		if (typeof window === 'undefined') return;
+		if (typeof window === "undefined") return;
 		const update = () => setViewportWidth(window.innerWidth);
 		update();
-		window.addEventListener('resize', update);
-		return () => window.removeEventListener('resize', update);
+		window.addEventListener("resize", update);
+		return () => window.removeEventListener("resize", update);
 	}, []);
 
 	const isMobile = useMemo(
 		() => (viewportWidth === null ? false : viewportWidth < 640),
-		[viewportWidth]
+		[viewportWidth],
 	);
 	const isTablet = useMemo(
-		() => (viewportWidth === null ? false : viewportWidth >= 640 && viewportWidth < 1024),
-		[viewportWidth]
+		() =>
+			viewportWidth === null
+				? false
+				: viewportWidth >= 640 && viewportWidth < 1024,
+		[viewportWidth],
 	);
 
-	const isEmbedded = variant === 'embedded';
+	const isEmbedded = variant === "embedded";
 	const containerClassName = cn(
-		'flex shrink-0 transform flex-col items-center justify-start [perspective:800px]',
+		"flex shrink-0 transform flex-col items-center justify-start [perspective:800px]",
 		isEmbedded
 			? cn(
-					'min-h-[18rem] w-full py-8',
-					isMobile && 'scale-[0.9] py-6',
-					!isMobile && isTablet && 'scale-[0.96] py-8',
-					!isMobile && !isTablet && 'scale-100 py-10'
+					"min-h-[18rem] w-full py-8",
+					isMobile && "scale-[0.9] py-6",
+					!isMobile && isTablet && "scale-[0.96] py-8",
+					!isMobile && !isTablet && "scale-100 py-10",
 				)
-			: 'min-h-[200vh] scale-[0.35] py-0 sm:scale-50 md:scale-100 md:py-80',
-		className
+			: "min-h-[200vh] scale-[0.35] py-0 sm:scale-50 md:scale-100 md:py-80",
+		className,
 	);
 
 	const scaleX = useTransform(
@@ -91,7 +99,7 @@ export const MacbookScroll = ({
 			? isMobile
 				? [1, 1]
 				: [1, 1.06]
-			: [1.2, viewportWidth !== null && viewportWidth < 1024 ? 1 : 1.5]
+			: [1.2, viewportWidth !== null && viewportWidth < 1024 ? 1 : 1.5],
 	);
 	const scaleY = useTransform(
 		scrollYProgress,
@@ -100,22 +108,30 @@ export const MacbookScroll = ({
 			? isMobile
 				? [1, 1]
 				: [1, 1.04]
-			: [0.6, viewportWidth !== null && viewportWidth < 1024 ? 1 : 1.5]
+			: [0.6, viewportWidth !== null && viewportWidth < 1024 ? 1 : 1.5],
 	);
 	const translate = useTransform(
 		scrollYProgress,
 		[0, 1],
-		[0, isEmbedded ? (isMobile ? 48 : 80) : 1500]
+		[0, isEmbedded ? (isMobile ? 48 : 80) : 1500],
 	);
 	const rotate = useTransform(
 		scrollYProgress,
 		[0.1, 0.12, 0.3],
-		isEmbedded ? (isMobile ? [-6, -6, -2] : [-10, -10, -4]) : [-28, -28, 0]
+		isEmbedded ? (isMobile ? [-6, -6, -2] : [-10, -10, -4]) : [-28, -28, 0],
 	);
-	const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, isEmbedded ? 6 : 100]);
-	const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, isEmbedded ? 1 : 0]);
+	const textTransform = useTransform(
+		scrollYProgress,
+		[0, 0.3],
+		[0, isEmbedded ? 6 : 100],
+	);
+	const textOpacity = useTransform(
+		scrollYProgress,
+		[0, 0.2],
+		[1, isEmbedded ? 1 : 0],
+	);
 
-	const imageAlt = alt ?? (typeof title === 'string' ? title : undefined);
+	const imageAlt = alt ?? (typeof title === "string" ? title : undefined);
 
 	return (
 		<div ref={ref} className={containerClassName}>
@@ -193,15 +209,15 @@ export const Lid = ({
 		<div className="relative [perspective:800px]">
 			<div
 				style={{
-					transform: 'perspective(800px) rotateX(-25deg) translateZ(0px)',
-					transformOrigin: 'bottom',
-					transformStyle: 'preserve-3d',
+					transform: "perspective(800px) rotateX(-25deg) translateZ(0px)",
+					transformOrigin: "bottom",
+					transformStyle: "preserve-3d",
 				}}
 				className="relative h-[12rem] w-[32rem] rounded-2xl bg-[#010101] p-2"
 			>
 				<div
 					style={{
-						boxShadow: '0px 2px 0px 2px #171717 inset',
+						boxShadow: "0px 2px 0px 2px #171717 inset",
 					}}
 					className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#010101]"
 				>
@@ -216,8 +232,8 @@ export const Lid = ({
 					scaleY: scaleY,
 					rotateX: rotate,
 					translateY: translate,
-					transformStyle: 'preserve-3d',
-					transformOrigin: 'top',
+					transformStyle: "preserve-3d",
+					transformOrigin: "top",
 				}}
 				className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
 			>
@@ -225,12 +241,12 @@ export const Lid = ({
 				{src ? (
 					<Image
 						src={src}
-						alt={alt ?? 'Interactive Macbook demo media'}
+						alt={alt ?? "Interactive Macbook demo media"}
 						fill
 						className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
 						sizes="(min-width: 1280px) 620px, (min-width: 1024px) 520px, 100vw"
 						priority={priority}
-						loading={priority ? 'eager' : 'lazy'}
+						loading={priority ? "eager" : "lazy"}
 					/>
 				) : (
 					<div className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#272729]">
@@ -247,7 +263,7 @@ export const Trackpad = () => {
 		<div
 			className="mx-auto my-1 h-32 w-[40%] rounded-xl"
 			style={{
-				boxShadow: '0px 0px 1px 1px #00000020 inset',
+				boxShadow: "0px 0px 1px 1px #00000020 inset",
 			}}
 		></div>
 	);
@@ -559,7 +575,10 @@ export const Keypad = () => {
 						<span className="block">option</span>
 					</div>
 				</KBtn>
-				<KBtn className="w-8" childrenClassName="h-full justify-between py-[4px]">
+				<KBtn
+					className="w-8"
+					childrenClassName="h-full justify-between py-[4px]"
+				>
 					<div className="flex w-full justify-end pr-1">
 						<IconCommand className="h-[6px] w-[6px]" />
 					</div>
@@ -568,7 +587,10 @@ export const Keypad = () => {
 					</div>
 				</KBtn>
 				<KBtn className="w-[8.2rem]"></KBtn>
-				<KBtn className="w-8" childrenClassName="h-full justify-between py-[4px]">
+				<KBtn
+					className="w-8"
+					childrenClassName="h-full justify-between py-[4px]"
+				>
 					<div className="flex w-full justify-start pl-1">
 						<IconCommand className="h-[6px] w-[6px]" />
 					</div>
@@ -619,24 +641,25 @@ export const KBtn = ({
 	return (
 		<div
 			className={cn(
-				'rounded-[4px] p-[0.5px] [transform:translateZ(0)] [will-change:transform]',
-				backlit && 'bg-white/[0.2] shadow-white shadow-xl'
+				"rounded-[4px] p-[0.5px] [transform:translateZ(0)] [will-change:transform]",
+				backlit && "bg-white/[0.2] shadow-white shadow-xl",
 			)}
 		>
 			<div
 				className={cn(
-					'flex h-6 w-6 items-center justify-center rounded-[3.5px] bg-[#0A090D]',
-					className
+					"flex h-6 w-6 items-center justify-center rounded-[3.5px] bg-[#0A090D]",
+					className,
 				)}
 				style={{
-					boxShadow: '0px -0.5px 2px 0 #0D0D0F inset, -0.5px 0px 2px 0 #0D0D0F inset',
+					boxShadow:
+						"0px -0.5px 2px 0 #0D0D0F inset, -0.5px 0px 2px 0 #0D0D0F inset",
 				}}
 			>
 				<div
 					className={cn(
-						'flex w-full flex-col items-center justify-center text-[5px] text-neutral-200',
+						"flex w-full flex-col items-center justify-center text-[5px] text-neutral-200",
 						childrenClassName,
-						backlit && 'text-white'
+						backlit && "text-white",
 					)}
 				>
 					{children}
@@ -651,8 +674,9 @@ export const SpeakerGrid = () => {
 		<div
 			className="mt-2 flex h-40 gap-[2px] px-[0.5px]"
 			style={{
-				backgroundImage: 'radial-gradient(circle, #08080A 0.5px, transparent 0.5px)',
-				backgroundSize: '3px 3px',
+				backgroundImage:
+					"radial-gradient(circle, #08080A 0.5px, transparent 0.5px)",
+				backgroundSize: "3px 3px",
 			}}
 		></div>
 	);
@@ -668,13 +692,26 @@ export const OptionKey = ({ className }: { className: string }) => {
 			viewBox="0 0 32 32"
 			className={className}
 		>
-			<rect stroke="currentColor" strokeWidth={2} x="18" y="5" width="10" height="2" />
+			<rect
+				stroke="currentColor"
+				strokeWidth={2}
+				x="18"
+				y="5"
+				width="10"
+				height="2"
+			/>
 			<polygon
 				stroke="currentColor"
 				strokeWidth={2}
 				points="10.6,5 4,5 4,7 9.4,7 18.4,27 28,27 28,25 19.6,25 "
 			/>
-			<rect id="_Transparent_Rectangle_" className="st0" width="32" height="32" stroke="none" />
+			<rect
+				id="_Transparent_Rectangle_"
+				className="st0"
+				width="32"
+				height="32"
+				stroke="none"
+			/>
 		</svg>
 	);
 };

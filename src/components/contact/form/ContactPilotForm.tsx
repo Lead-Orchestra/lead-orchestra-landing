@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Priority Pilot Contact Form
 // This component renders a contact form bound to `priorityPilotFormSchema` & `priorityPilotFormFields`.
@@ -7,30 +7,34 @@
 // Multiselect fields use MultiSelectDropdown.
 // todo Integrate real submission endpoint once available.
 
-import { loadStripe } from '@stripe/stripe-js';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { loadStripe } from "@stripe/stripe-js";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
 const stripePromise = loadStripe(stripeKey);
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Elements } from '@stripe/react-stripe-js';
-import { FileIcon, Loader2 } from 'lucide-react';
-import Image from 'next/image';
-import { type ControllerRenderProps, FormProvider, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Elements } from "@stripe/react-stripe-js";
+import { FileIcon, Loader2 } from "lucide-react";
+import Image from "next/image";
+import {
+	type ControllerRenderProps,
+	FormProvider,
+	useForm,
+} from "react-hook-form";
+import { toast } from "sonner";
 
 import {
 	type PriorityPilotFormValues,
 	priorityPilotFormFields,
 	priorityPilotFormSchema,
-} from '@/data/contact/pilotFormFields';
-import type { FieldConfig, RenderFieldProps } from '@/types/contact/formFields';
+} from "@/data/contact/pilotFormFields";
+import type { FieldConfig, RenderFieldProps } from "@/types/contact/formFields";
 
-import Header from '@/components/common/Header';
-import MultiSelectDropdown from '@/components/ui/MultiSelectDropdown';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import Header from "@/components/common/Header";
+import MultiSelectDropdown from "@/components/ui/MultiSelectDropdown";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Form,
 	FormControl,
@@ -38,35 +42,40 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import ContactPilotPaymentForm from './ContactPilotPaymentForm';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import ContactPilotPaymentForm from "./ContactPilotPaymentForm";
 
-import { createFieldProps, renderFormField } from '@/components/contact/form/formFieldHelpers';
-import { mapPilotTesterApplication } from './testerApplicationMappers';
+import {
+	createFieldProps,
+	renderFormField,
+} from "@/components/contact/form/formFieldHelpers";
+import { mapPilotTesterApplication } from "./testerApplicationMappers";
 
 export default function ContactPilotForm({
 	prefill,
 }: {
 	prefill?: Partial<PriorityPilotFormValues>;
 }) {
-	const [formStep, setFormStep] = useState<'form' | 'payment'>('form');
+	const [formStep, setFormStep] = useState<"form" | "payment">("form");
 	const [clientSecret, setClientSecret] = useState<string | null>(null);
-	const [formData, setFormData] = useState<PriorityPilotFormValues | null>(null);
+	const [formData, setFormData] = useState<PriorityPilotFormValues | null>(
+		null,
+	);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	// Base defaults derived from field config values
 	const baseDefaults = useMemo(() => {
 		return Object.fromEntries(
-			priorityPilotFormFields.map((f) => [f.name, f.value])
+			priorityPilotFormFields.map((f) => [f.name, f.value]),
 		) as Partial<PriorityPilotFormValues>;
 	}, []);
 
@@ -78,7 +87,7 @@ export default function ContactPilotForm({
 				...(seed ?? {}),
 			};
 			for (const field of priorityPilotFormFields) {
-				if (field.type === 'multiselect') {
+				if (field.type === "multiselect") {
 					const name = field.name as keyof PriorityPilotFormValues;
 					const val = merged[name] as unknown;
 					if (Array.isArray(val) && val.length === 0) {
@@ -88,7 +97,7 @@ export default function ContactPilotForm({
 			}
 			return merged as PriorityPilotFormValues;
 		},
-		[baseDefaults]
+		[baseDefaults],
 	);
 
 	const form = useForm<PriorityPilotFormValues>({
@@ -105,7 +114,7 @@ export default function ContactPilotForm({
 
 	// Step 1: Collect user info, then fetch clientSecret and go to payment
 	const onSubmit = async (data: PriorityPilotFormValues) => {
-		console.log('[ContactPilotForm] onSubmit called', data);
+		console.log("[ContactPilotForm] onSubmit called", data);
 		setIsSubmitting(true);
 		try {
 			const pilotExtras = data as unknown as {
@@ -118,66 +127,73 @@ export default function ContactPilotForm({
 				featureVotes: pilotExtras.featureVotes,
 				termsAccepted: pilotExtras.termsAccepted,
 			});
-			const testerResponse = await fetch('/api/testers/apply', {
-				method: 'POST',
+			const testerResponse = await fetch("/api/testers/apply", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(testerPayload),
 			});
 
 			if (!testerResponse.ok) {
-				let testerMessage = 'Failed to submit your pilot application.';
+				let testerMessage = "Failed to submit your pilot application.";
 				try {
 					const responseBody = await testerResponse.json();
 					testerMessage = responseBody?.error ?? testerMessage;
 				} catch (error) {
-					console.error('[ContactPilotForm] Failed to parse tester error', error);
+					console.error(
+						"[ContactPilotForm] Failed to parse tester error",
+						error,
+					);
 				}
 				toast.error(testerMessage);
 				return;
 			}
 
-			console.log('[ContactPilotForm] Fetching /api/stripe', {
+			console.log("[ContactPilotForm] Fetching /api/stripe", {
 				price: 5000,
-				description: 'Priority Pilot Program Deposit',
+				description: "Priority Pilot Program Deposit",
 				metadata: {
 					email: data.email,
 					name: `${data.firstName} ${data.lastName}`,
 				},
 			});
-			const res = await fetch('/api/stripe', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const res = await fetch("/api/stripe", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					price: 5000, // Price in cents for $50.00
-					description: 'Priority Pilot Program Deposit',
+					description: "Priority Pilot Program Deposit",
 					metadata: {
 						email: data.email,
 						name: `${data.firstName} ${data.lastName}`,
 					},
 				}),
 			});
-			console.log('[ContactPilotForm] Fetch complete', res.status);
+			console.log("[ContactPilotForm] Fetch complete", res.status);
 			const payment = await res.json();
-			console.log('[ContactPilotForm] Payment JSON', payment);
+			console.log("[ContactPilotForm] Payment JSON", payment);
 			if (!res.ok || !payment?.clientSecret) {
-				throw new Error(payment?.error || 'Failed to create payment intent.');
+				throw new Error(payment?.error || "Failed to create payment intent.");
 			}
-			console.log('[ContactPilotForm] Setting clientSecret', payment.clientSecret);
+			console.log(
+				"[ContactPilotForm] Setting clientSecret",
+				payment.clientSecret,
+			);
 			setClientSecret(payment.clientSecret);
-			console.log('[ContactPilotForm] Setting formData', data);
+			console.log("[ContactPilotForm] Setting formData", data);
 			setFormData(data);
-			console.log('[ContactPilotForm] Setting formStep to payment');
-			setFormStep('payment');
-			console.log('[ContactPilotForm] Payment step triggered', {
+			console.log("[ContactPilotForm] Setting formStep to payment");
+			setFormStep("payment");
+			console.log("[ContactPilotForm] Payment step triggered", {
 				clientSecret: payment.clientSecret,
-				formStep: 'payment',
+				formStep: "payment",
 				formData: data,
 			});
 		} catch (err) {
-			console.error('[ContactPilotForm] Error in onSubmit', err);
-			const message = err instanceof Error ? err.message : 'An unknown error occurred.';
+			console.error("[ContactPilotForm] Error in onSubmit", err);
+			const message =
+				err instanceof Error ? err.message : "An unknown error occurred.";
 			toast.error(message);
 		} finally {
 			setIsSubmitting(false);
@@ -185,9 +201,11 @@ export default function ContactPilotForm({
 	};
 
 	// Step 2: Render payment form after clientSecret is fetched
-	if (formStep === 'payment' && clientSecret && formData) {
+	if (formStep === "payment" && clientSecret && formData) {
 		if (!stripePromise) {
-			console.error('Stripe.js has not loaded. Make sure you have included the Stripe script.');
+			console.error(
+				"Stripe.js has not loaded. Make sure you have included the Stripe script.",
+			);
 			return (
 				<div className="text-center text-red-500">
 					Payment services are currently unavailable. Please refresh the page.
@@ -203,19 +221,22 @@ export default function ContactPilotForm({
 					onSuccess={async () => {
 						try {
 							// * Add contact to SendGrid with pilot_member segment
-							const sendgridResponse = await fetch('/api/contact', {
-								method: 'POST',
-								headers: { 'Content-Type': 'application/json' },
+							const sendgridResponse = await fetch("/api/contact", {
+								method: "POST",
+								headers: { "Content-Type": "application/json" },
 								body: JSON.stringify({ ...formData, pilot_member: true }),
 							});
 
 							if (!sendgridResponse.ok) {
-								console.error('Failed to add contact to SendGrid', await sendgridResponse.json());
+								console.error(
+									"Failed to add contact to SendGrid",
+									await sendgridResponse.json(),
+								);
 							}
 
-							const beehiivResponse = await fetch('/api/beehiiv/subscribe', {
-								method: 'POST',
-								headers: { 'Content-Type': 'application/json' },
+							const beehiivResponse = await fetch("/api/beehiiv/subscribe", {
+								method: "POST",
+								headers: { "Content-Type": "application/json" },
 								body: JSON.stringify({
 									email: formData.email,
 									send_welcome_email: true,
@@ -223,22 +244,29 @@ export default function ContactPilotForm({
 							});
 
 							if (beehiivResponse.ok) {
-								toast.success("Payment successful! You've also been subscribed to our newsletter.");
+								toast.success(
+									"Payment successful! You've also been subscribed to our newsletter.",
+								);
 							} else {
 								const errorData = await beehiivResponse.json();
-								if (errorData.message && /is already subscribed/i.test(errorData.message)) {
-									toast.info('Payment successful! You are already subscribed.');
+								if (
+									errorData.message &&
+									/is already subscribed/i.test(errorData.message)
+								) {
+									toast.info("Payment successful! You are already subscribed.");
 								} else {
 									toast.warning(
-										"Payment successful, but we couldn't subscribe you to the newsletter."
+										"Payment successful, but we couldn't subscribe you to the newsletter.",
 									);
 								}
 							}
 						} catch (err) {
-							console.error('Beehiiv subscription failed:', err);
-							toast.warning("Payment successful, but we couldn't subscribe you to the newsletter.");
+							console.error("Beehiiv subscription failed:", err);
+							toast.warning(
+								"Payment successful, but we couldn't subscribe you to the newsletter.",
+							);
 						} finally {
-							setFormStep('form');
+							setFormStep("form");
 							setClientSecret(null);
 							setFormData(null);
 						}
@@ -263,7 +291,7 @@ export default function ContactPilotForm({
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit((data) => {
-							console.log('[ContactPilotForm] handleSubmit called', data);
+							console.log("[ContactPilotForm] handleSubmit called", data);
 							onSubmit(data);
 						})}
 						className="space-y-4"
@@ -275,20 +303,22 @@ export default function ContactPilotForm({
 								name={fieldConfig.name as keyof PriorityPilotFormValues}
 								render={({ field: formField }) => (
 									<FormItem className="space-y-1">
-										{fieldConfig.type !== 'checkbox' && (
+										{fieldConfig.type !== "checkbox" && (
 											<FormLabel className="text-black dark:text-white/70">
 												{fieldConfig.label}
 											</FormLabel>
 										)}
 										<FormControl>
-											{renderFormField(createFieldProps(fieldConfig, formField))}
+											{renderFormField(
+												createFieldProps(fieldConfig, formField),
+											)}
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 						))}
-						{process.env.STAGING_ENVIRONMENT === 'DEV' && (
+						{process.env.STAGING_ENVIRONMENT === "DEV" && (
 							<pre className="mb-2 max-h-40 overflow-auto rounded bg-white/80 p-2 text-red-600 text-xs">
 								{JSON.stringify(form.formState.errors, null, 2)}
 							</pre>
@@ -303,7 +333,7 @@ export default function ContactPilotForm({
 									<Loader2 className="h-4 w-4 animate-spin" /> Proceeding...
 								</span>
 							) : (
-								'Pay Deposit $50'
+								"Pay Deposit $50"
 							)}
 						</Button>
 					</form>

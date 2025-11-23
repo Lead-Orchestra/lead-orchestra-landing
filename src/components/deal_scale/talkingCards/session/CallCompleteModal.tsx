@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from '@/components/ui/dialog';
-import { useNavigationRouter } from '@/hooks/useNavigationRouter';
-import { cn } from '@/lib/utils';
-import { Loader2, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+} from "@/components/ui/dialog";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
+import { cn } from "@/lib/utils";
+import { Loader2, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface CallCompleteModalProps {
 	/** Whether the modal is open */
@@ -25,20 +25,20 @@ interface CallCompleteModalProps {
 	description?: string;
 	/** Optional loading state from parent */
 	isLoading?: boolean;
-	variant?: 'complete' | 'transfer';
+	variant?: "complete" | "transfer";
 }
 
 export const CallCompleteModal = ({
 	isOpen,
 	onClose: originalOnClose,
-	title = 'Ready to start Scaling Your Deals?',
-	description = 'Request Founders Circle or Pilot access to unlock early onboarding perks and personalized workflows.',
+	title = "Ready to start Scaling Your Deals?",
+	description = "Request Founders Circle or Pilot access to unlock early onboarding perks and personalized workflows.",
 	isLoading: externalLoading = false,
-	variant = 'complete',
+	variant = "complete",
 }: CallCompleteModalProps) => {
 	const router = useNavigationRouter();
 	const handleClose = () => {
-		const audioElements = document.getElementsByTagName('audio');
+		const audioElements = document.getElementsByTagName("audio");
 		for (const audio of audioElements) {
 			audio.pause();
 			audio.currentTime = 0;
@@ -52,11 +52,11 @@ export const CallCompleteModal = ({
 		try {
 			setIsLoading(true);
 			setError(null);
-			await router.push('/contact');
+			await router.push("/contact");
 			handleClose();
 		} catch (err) {
-			console.error('Failed to get leads:', err);
-			setError('Failed to load leads. Please try again.');
+			console.error("Failed to get leads:", err);
+			setError("Failed to load leads. Please try again.");
 		} finally {
 			setIsLoading(false);
 		}
@@ -66,11 +66,11 @@ export const CallCompleteModal = ({
 		try {
 			setIsLoading(true);
 			setError(null);
-			await router.push('/contact-pilot');
+			await router.push("/contact-pilot");
 			handleClose();
 		} catch (err) {
-			console.error('Failed to get leads:', err);
-			setError('Failed to load leads. Please try again.');
+			console.error("Failed to get leads:", err);
+			setError("Failed to load leads. Please try again.");
 		} finally {
 			setIsLoading(false);
 		}
@@ -80,13 +80,13 @@ export const CallCompleteModal = ({
 
 	const content = {
 		complete: {
-			title: 'Ready to start Scaling Your Deals?',
+			title: "Ready to start Scaling Your Deals?",
 			description:
-				'Request Founders Circle or Pilot access to unlock early onboarding perks and personalized workflows.',
+				"Request Founders Circle or Pilot access to unlock early onboarding perks and personalized workflows.",
 		},
 		transfer: {
-			title: 'Transferring you now...',
-			description: 'Please wait while we connect you to a specialist.',
+			title: "Transferring you now...",
+			description: "Please wait while we connect you to a specialist.",
 		},
 	};
 
@@ -107,11 +107,16 @@ export const CallCompleteModal = ({
 					<DialogTitle className="text-center font-bold text-2xl tracking-tight">
 						{modalTitle}
 					</DialogTitle>
-					<DialogDescription className="text-center">{modalDescription}</DialogDescription>
+					<DialogDescription className="text-center">
+						{modalDescription}
+					</DialogDescription>
 				</DialogHeader>
 
 				{error && (
-					<div className="rounded-md bg-red-50 p-3 text-red-600 text-sm" role="alert">
+					<div
+						className="rounded-md bg-red-50 p-3 text-red-600 text-sm"
+						role="alert"
+					>
 						{error}
 					</div>
 				)}
@@ -122,11 +127,11 @@ export const CallCompleteModal = ({
 						disabled={isProcessing}
 						size="lg"
 						className={cn(
-							'w-full py-6 font-semibold text-lg',
-							'bg-gradient-to-r from-primary to-primary/90',
-							'hover:from-primary/90 hover:to-primary/80',
-							'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-							'transition-all duration-200'
+							"w-full py-6 font-semibold text-lg",
+							"bg-gradient-to-r from-primary to-primary/90",
+							"hover:from-primary/90 hover:to-primary/80",
+							"focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+							"transition-all duration-200",
 						)}
 					>
 						{isProcessing ? (
@@ -135,7 +140,7 @@ export const CallCompleteModal = ({
 								Processing...
 							</>
 						) : (
-							'Get 5 Ai Calling Credits'
+							"Get 5 Ai Calling Credits"
 						)}
 					</Button>
 					<Button
@@ -143,14 +148,14 @@ export const CallCompleteModal = ({
 						disabled={isProcessing}
 						size="lg"
 						className={cn(
-							'w-full rounded-xl py-6 font-bold text-lg shadow-lg',
-							'bg-gradient-to-r from-primary via-blue-500 to-primary/80',
-							'text-primary-foreground',
-							'hover:from-primary/90 hover:via-blue-400 hover:to-primary/70',
-							'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-							'ring-2 ring-primary/40',
-							'transition-all duration-150',
-							'border-2 border-primary'
+							"w-full rounded-xl py-6 font-bold text-lg shadow-lg",
+							"bg-gradient-to-r from-primary via-blue-500 to-primary/80",
+							"text-primary-foreground",
+							"hover:from-primary/90 hover:via-blue-400 hover:to-primary/70",
+							"focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+							"ring-2 ring-primary/40",
+							"transition-all duration-150",
+							"border-2 border-primary",
 						)}
 					>
 						{isProcessing ? (
@@ -160,7 +165,7 @@ export const CallCompleteModal = ({
 							</>
 						) : (
 							<span className="tracking-tight drop-shadow-sm">
-								Get{' '}
+								Get{" "}
 								<span className="rounded bg-background px-2 py-1 font-extrabold text-primary shadow">
 									15 Ai Calling Credits
 								</span>

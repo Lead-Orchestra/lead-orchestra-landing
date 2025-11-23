@@ -1,16 +1,21 @@
-export type Speaker = 'ai' | 'lead';
+export type Speaker = "ai" | "lead";
 export type LineStatus =
-	| 'idle'
-	| 'connecting'
-	| 'connected'
-	| 'transferring'
-	| 'ended'
-	| 'pending'
-	| 'speaking'
-	| 'scheduling'
-	| 'complete'
-	| 'transcript_ended';
-export type AnimationType = 'fadeIn' | 'fadeOut' | 'highlight' | 'pulse' | 'none';
+	| "idle"
+	| "connecting"
+	| "connected"
+	| "transferring"
+	| "ended"
+	| "pending"
+	| "speaking"
+	| "scheduling"
+	| "complete"
+	| "transcript_ended";
+export type AnimationType =
+	| "fadeIn"
+	| "fadeOut"
+	| "highlight"
+	| "pulse"
+	| "none";
 
 export interface TranscriptLine {
 	id: string;
@@ -25,7 +30,7 @@ export interface TranscriptLine {
 		duration: number; // ms
 	}[];
 	metadata?: {
-		emotion?: 'happy' | 'neutral' | 'concerned' | 'excited' | 'interested';
+		emotion?: "happy" | "neutral" | "concerned" | "excited" | "interested";
 		emphasis?: boolean;
 		// Add other metadata as needed
 	};

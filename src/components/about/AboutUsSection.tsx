@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import type React from 'react';
+import Image from "next/image";
+import Link from "next/link";
+import type React from "react";
 
 /**
  * AboutUsSection: Responsive and accessible About Us section for homepage.
@@ -33,9 +33,10 @@ export const AboutUsSection: React.FC = () => (
 					About <span className="text-primary">Lead Orchestra</span>
 				</h2>
 				<p className="mb-6 max-w-lg text-base text-muted-foreground dark:text-gray-300">
-					Lead Orchestra is the open-source engine that powers your lead pipeline. Scrape Anything.
-					Export Everywhere. Paste a URL → scrape all the leads → clean them → export instantly.
-					Fresh leads, not rented lists. Built for developers, agencies, and data teams.
+					Lead Orchestra is the open-source engine that powers your lead
+					pipeline. Scrape Anything. Export Everywhere. Paste a URL → scrape all
+					the leads → clean them → export instantly. Fresh leads, not rented
+					lists. Built for developers, agencies, and data teams.
 				</p>
 				<div className="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:items-start">
 					<Link

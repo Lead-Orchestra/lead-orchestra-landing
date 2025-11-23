@@ -1,43 +1,47 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import type { AnalyticsConfig, AnalyticsField, AnalyticsIssue } from '@/lib/analytics/config';
+import type {
+	AnalyticsConfig,
+	AnalyticsField,
+	AnalyticsIssue,
+} from "@/lib/analytics/config";
 
-import { Analytics } from '@/components/analytics/Analytics';
-import { useAnalyticsConsent } from '@/contexts/analytics-consent-context';
-import { useDeferredLoad } from './useDeferredLoad';
+import { Analytics } from "@/components/analytics/Analytics";
+import { useAnalyticsConsent } from "@/contexts/analytics-consent-context";
+import { useDeferredLoad } from "./useDeferredLoad";
 
 const ANALYTICS_FIELDS: AnalyticsField[] = [
-	'clarityId',
-	'gaId',
-	'gtmId',
-	'zohoCode',
-	'facebookPixelId',
-	'plausibleDomain',
-	'plausibleEndpoint',
+	"clarityId",
+	"gaId",
+	"gtmId",
+	"zohoCode",
+	"facebookPixelId",
+	"plausibleDomain",
+	"plausibleEndpoint",
 ];
 
-const DEFAULT_PLAUSIBLE_ENDPOINT = 'https://plausible.io/api/event';
+const DEFAULT_PLAUSIBLE_ENDPOINT = "https://plausible.io/api/event";
 
 const DEFAULT_RETRY_DELAY_MS = 2000;
 const DEFAULT_MAX_RETRIES = 3;
 
 const warnLog = (message: string, data?: unknown) => {
-	console.warn('DeferredThirdParties', message, data);
+	console.warn("DeferredThirdParties", message, data);
 };
 
 const MicrosoftClarityScript = ({ projectId }: { projectId?: string }) => {
 	useEffect(() => {
-		if (!projectId || typeof window === 'undefined') {
+		if (!projectId || typeof window === "undefined") {
 			return;
 		}
 
-		if (document.getElementById('clarity-script')) {
+		if (document.getElementById("clarity-script")) {
 			return;
 		}
 
-		const script = document.createElement('script');
-		script.id = 'clarity-script';
-		script.type = 'text/javascript';
+		const script = document.createElement("script");
+		script.id = "clarity-script";
+		script.type = "text/javascript";
 		script.innerHTML = `
                         (function(c,l,a,r,i,t,y){
                                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -48,7 +52,7 @@ const MicrosoftClarityScript = ({ projectId }: { projectId?: string }) => {
 		document.head.appendChild(script);
 
 		return () => {
-			document.getElementById('clarity-script')?.remove();
+			document.getElementById("clarity-script")?.remove();
 		};
 	}, [projectId]);
 
@@ -63,7 +67,7 @@ const PlausibleScript = ({
 	endpoint?: string;
 }) => {
 	useEffect(() => {
-		if (!domain || typeof window === 'undefined') {
+		if (!domain || typeof window === "undefined") {
 			return;
 		}
 
@@ -71,7 +75,7 @@ const PlausibleScript = ({
 
 		const load = async () => {
 			try {
-				const { init } = await import('@plausible-analytics/tracker');
+				const { init } = await import("@plausible-analytics/tracker");
 				if (!isMounted) {
 					return;
 				}
@@ -82,7 +86,7 @@ const PlausibleScript = ({
 					captureOnLocalhost: false,
 				});
 			} catch (error) {
-				warnLog('Failed to initialize Plausible Analytics.', error);
+				warnLog("Failed to initialize Plausible Analytics.", error);
 			}
 		};
 
@@ -98,7 +102,7 @@ const PlausibleScript = ({
 
 const FacebookPixelScript = ({ pixelId }: { pixelId?: string }) => {
 	useEffect(() => {
-		if (!pixelId || typeof window === 'undefined') {
+		if (!pixelId || typeof window === "undefined") {
 			return;
 		}
 
@@ -111,7 +115,7 @@ const FacebookPixelScript = ({ pixelId }: { pixelId?: string }) => {
 
 		const load = async () => {
 			try {
-				const ReactPixel = await import('react-facebook-pixel');
+				const ReactPixel = await import("react-facebook-pixel");
 				if (!isMounted) {
 					return;
 				}
@@ -119,7 +123,7 @@ const FacebookPixelScript = ({ pixelId }: { pixelId?: string }) => {
 				// Track initial page view
 				ReactPixel.default.pageView();
 			} catch (error) {
-				warnLog('Failed to initialize Facebook Pixel.', error);
+				warnLog("Failed to initialize Facebook Pixel.", error);
 			}
 		};
 
@@ -135,30 +139,30 @@ const FacebookPixelScript = ({ pixelId }: { pixelId?: string }) => {
 
 function useZohoLoader(enabled: boolean, zohoCode?: string) {
 	useEffect(() => {
-		if (!enabled || !zohoCode || typeof window === 'undefined') {
+		if (!enabled || !zohoCode || typeof window === "undefined") {
 			return;
 		}
 
-		if (document.getElementById('zsiqscript')) {
+		if (document.getElementById("zsiqscript")) {
 			return;
 		}
 
 		window.$zoho = window.$zoho || {};
 		window.$zoho.salesiq = window.$zoho.salesiq || {
-			widgetcode: '',
+			widgetcode: "",
 			values: {},
 			ready: () => undefined,
 		};
 
-		const script = document.createElement('script');
-		script.id = 'zsiqscript';
+		const script = document.createElement("script");
+		script.id = "zsiqscript";
 		script.src = `https://salesiq.zohopublic.com/widget?wc=${zohoCode}`;
 		script.async = true;
 		script.defer = true;
 		document.body.appendChild(script);
 
 		return () => {
-			document.getElementById('zsiqscript')?.remove();
+			document.getElementById("zsiqscript")?.remove();
 		};
 	}, [enabled, zohoCode]);
 }
@@ -230,9 +234,11 @@ export function DeferredThirdParties({
 	const shouldLoad = useDeferredLoad({
 		enabled: hasConsented,
 		requireInteraction: true,
-		timeout: typeof maxWaitMs === 'number' ? maxWaitMs : 0,
+		timeout: typeof maxWaitMs === "number" ? maxWaitMs : 0,
 	});
-	const [providerData, setProviderData] = useState<ProviderResponse | null>(null);
+	const [providerData, setProviderData] = useState<ProviderResponse | null>(
+		null,
+	);
 	const [config, setConfig] = useState<AnalyticsConfig>(mergedInitialConfig);
 	const [attempt, setAttempt] = useState(0);
 	const retryTimerRef = useRef<number | null>(null);
@@ -244,7 +250,7 @@ export function DeferredThirdParties({
 
 	const needsServerConfig = useMemo(
 		() => ANALYTICS_FIELDS.some((field) => !config[field]),
-		[config]
+		[config],
 	);
 
 	useEffect(() => {
@@ -266,7 +272,7 @@ export function DeferredThirdParties({
 	}, [hasConsented, needsServerConfig, shouldLoad]);
 
 	const scheduleRetry = useCallback(() => {
-		if (typeof window === 'undefined') {
+		if (typeof window === "undefined") {
 			return;
 		}
 
@@ -302,8 +308,8 @@ export function DeferredThirdParties({
 
 		const fetchProviders = async () => {
 			try {
-				const response = await fetch('/api/init-providers', {
-					cache: 'no-store',
+				const response = await fetch("/api/init-providers", {
+					cache: "no-store",
 					signal: controller.signal,
 				});
 				const payload = await response.json();
@@ -330,7 +336,7 @@ export function DeferredThirdParties({
 				}
 
 				if (!errorLoggedRef.current) {
-					warnLog('Failed to load provider configuration.', error);
+					warnLog("Failed to load provider configuration.", error);
 					errorLoggedRef.current = true;
 				}
 				if (attempt < maxRetries) {
@@ -357,7 +363,8 @@ export function DeferredThirdParties({
 
 	const clarityId = providerData?.clarityId ?? config.clarityId;
 	const zohoCode = providerData?.zohoCode ?? config.zohoCode;
-	const resolvedFacebookPixelId = providerData?.facebookPixelId ?? config.facebookPixelId;
+	const resolvedFacebookPixelId =
+		providerData?.facebookPixelId ?? config.facebookPixelId;
 	const plausibleConfig = useMemo(
 		() => ({
 			domain: providerData?.plausibleDomain ?? config.plausibleDomain,
@@ -368,14 +375,14 @@ export function DeferredThirdParties({
 			config.plausibleEndpoint,
 			providerData?.plausibleDomain,
 			providerData?.plausibleEndpoint,
-		]
+		],
 	);
-	const analyticsConfig = useMemo<Pick<AnalyticsConfig, 'gaId' | 'gtmId'>>(
+	const analyticsConfig = useMemo<Pick<AnalyticsConfig, "gaId" | "gtmId">>(
 		() => ({
 			gaId: providerData?.gaId ?? config.gaId,
 			gtmId: providerData?.gtmId ?? config.gtmId,
 		}),
-		[config.gaId, config.gtmId, providerData?.gaId, providerData?.gtmId]
+		[config.gaId, config.gtmId, providerData?.gaId, providerData?.gtmId],
 	);
 
 	const shouldRender =
@@ -386,7 +393,7 @@ export function DeferredThirdParties({
 				clarityId ||
 				zohoCode ||
 				resolvedFacebookPixelId ||
-				plausibleConfig.domain
+				plausibleConfig.domain,
 		);
 
 	useZohoLoader(shouldRender, zohoCode);
@@ -400,7 +407,10 @@ export function DeferredThirdParties({
 			<Analytics config={analyticsConfig} />
 			<MicrosoftClarityScript projectId={clarityId} />
 			<FacebookPixelScript pixelId={resolvedFacebookPixelId} />
-			<PlausibleScript domain={plausibleConfig.domain} endpoint={plausibleConfig.endpoint} />
+			<PlausibleScript
+				domain={plausibleConfig.domain}
+				endpoint={plausibleConfig.endpoint}
+			/>
 		</>
 	);
 }

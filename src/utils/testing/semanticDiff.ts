@@ -1,6 +1,6 @@
-import type { ABTest } from '@/types/testing';
+import type { ABTest } from "@/types/testing";
 
-export type SemanticChangeLevel = 'none' | 'minor' | 'moderate' | 'major';
+export type SemanticChangeLevel = "none" | "minor" | "moderate" | "major";
 
 export interface SemanticDiffEntry {
 	variantName: string;
@@ -14,7 +14,7 @@ export interface SemanticDiffEntry {
 const tokenize = (value: string) =>
 	value
 		.toLowerCase()
-		.replace(/[^a-z0-9\s]/g, ' ')
+		.replace(/[^a-z0-9\s]/g, " ")
 		.split(/\s+/)
 		.filter(Boolean);
 
@@ -35,41 +35,44 @@ const jaccardSimilarity = (a: string, b: string): number => {
 };
 
 const classify = (similarity: number): SemanticChangeLevel => {
-	if (similarity >= 0.9) return 'none';
-	if (similarity >= 0.75) return 'minor';
-	if (similarity >= 0.5) return 'moderate';
-	return 'major';
+	if (similarity >= 0.9) return "none";
+	if (similarity >= 0.75) return "minor";
+	if (similarity >= 0.5) return "moderate";
+	return "major";
 };
 
-const comparableFields: Array<keyof ABTest['variants'][number]['copy']> = [
-	'cta',
-	'pain_point',
-	'solution',
-	'hope',
-	'fear',
-	'whatsInItForMe',
+const comparableFields: Array<keyof ABTest["variants"][number]["copy"]> = [
+	"cta",
+	"pain_point",
+	"solution",
+	"hope",
+	"fear",
+	"whatsInItForMe",
 ];
 
 const normalizeValue = (value: unknown): string => {
 	if (Array.isArray(value)) {
-		return value.map((item) => normalizeValue(item)).join(' ');
+		return value.map((item) => normalizeValue(item)).join(" ");
 	}
-	if (typeof value === 'object' && value !== null) {
+	if (typeof value === "object" && value !== null) {
 		return JSON.stringify(value);
 	}
-	if (typeof value === 'string') {
+	if (typeof value === "string") {
 		return value;
 	}
-	if (typeof value === 'number' || typeof value === 'boolean') {
+	if (typeof value === "number" || typeof value === "boolean") {
 		return String(value);
 	}
-	return '';
+	return "";
 };
 
-const getVariantName = (variant: ABTest['variants'][number], index: number) =>
+const getVariantName = (variant: ABTest["variants"][number], index: number) =>
 	variant.name ?? `Variant #${index + 1}`;
 
-export const diffAbTests = (previous: ABTest, next: ABTest): SemanticDiffEntry[] => {
+export const diffAbTests = (
+	previous: ABTest,
+	next: ABTest,
+): SemanticDiffEntry[] => {
 	const results: SemanticDiffEntry[] = [];
 
 	const maxVariants = Math.max(previous.variants.length, next.variants.length);
@@ -78,7 +81,8 @@ export const diffAbTests = (previous: ABTest, next: ABTest): SemanticDiffEntry[]
 		const prevVariant = previous.variants[index];
 		const nextVariant = next.variants[index];
 
-		if (!prevVariant || !nextVariant || !prevVariant.copy || !nextVariant.copy) continue;
+		if (!prevVariant || !nextVariant || !prevVariant.copy || !nextVariant.copy)
+			continue;
 
 		for (const field of comparableFields) {
 			const beforeValue = normalizeValue(prevVariant.copy?.[field]);

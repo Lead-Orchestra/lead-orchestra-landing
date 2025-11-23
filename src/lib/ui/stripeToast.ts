@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 
 type ToastHandlers = {
 	success: (message: string) => void;

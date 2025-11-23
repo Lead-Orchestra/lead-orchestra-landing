@@ -1,10 +1,16 @@
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+export type Json =
+	| string
+	| number
+	| boolean
+	| null
+	| { [key: string]: Json | undefined }
+	| Json[];
 
 export type Database = {
 	// Allows to automatically instantiate createClient with right options
 	// instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
 	__InternalSupabase: {
-		PostgrestVersion: '12.2.12 (cd3cf9e)';
+		PostgrestVersion: "12.2.12 (cd3cf9e)";
 	};
 	public: {
 		Tables: {
@@ -20,7 +26,7 @@ export type Database = {
 					is_recurring: boolean | null;
 					metadata: Json | null;
 					notes: string | null;
-					payment_method: Database['public']['Enums']['payment_method'];
+					payment_method: Database["public"]["Enums"]["payment_method"];
 					reference_id: string | null;
 					schedule_id: string | null;
 					status: string;
@@ -37,7 +43,7 @@ export type Database = {
 					is_recurring?: boolean | null;
 					metadata?: Json | null;
 					notes?: string | null;
-					payment_method: Database['public']['Enums']['payment_method'];
+					payment_method: Database["public"]["Enums"]["payment_method"];
 					reference_id?: string | null;
 					schedule_id?: string | null;
 					status?: string;
@@ -54,7 +60,7 @@ export type Database = {
 					is_recurring?: boolean | null;
 					metadata?: Json | null;
 					notes?: string | null;
-					payment_method?: Database['public']['Enums']['payment_method'];
+					payment_method?: Database["public"]["Enums"]["payment_method"];
 					reference_id?: string | null;
 					schedule_id?: string | null;
 					status?: string;
@@ -62,11 +68,11 @@ export type Database = {
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'affiliate_payouts_affiliate_id_fkey';
-						columns: ['affiliate_id'];
+						foreignKeyName: "affiliate_payouts_affiliate_id_fkey";
+						columns: ["affiliate_id"];
 						isOneToOne: false;
-						referencedRelation: 'affiliate_profiles';
-						referencedColumns: ['id'];
+						referencedRelation: "affiliate_profiles";
+						referencedColumns: ["id"];
 					},
 				];
 			};
@@ -83,15 +89,17 @@ export type Database = {
 					lifetime_earnings: number | null;
 					metadata: Json | null;
 					minimum_payout: number | null;
-					network_size: Database['public']['Enums']['network_size'];
+					network_size: Database["public"]["Enums"]["network_size"];
 					next_payout_date: string | null;
-					payout_schedule: Database['public']['Enums']['payout_schedule'] | null;
+					payout_schedule:
+						| Database["public"]["Enums"]["payout_schedule"]
+						| null;
 					pending_payout: number | null;
-					real_estate_experience: Database['public']['Enums']['real_estate_experience'];
+					real_estate_experience: Database["public"]["Enums"]["real_estate_experience"];
 					social_handle: string;
-					status: Database['public']['Enums']['affiliate_status'] | null;
+					status: Database["public"]["Enums"]["affiliate_status"] | null;
 					tax_info: Json | null;
-					tier: Database['public']['Enums']['commission_tier'] | null;
+					tier: Database["public"]["Enums"]["commission_tier"] | null;
 					total_commissions: number | null;
 					total_referrals: number | null;
 					updated_at: string | null;
@@ -110,15 +118,17 @@ export type Database = {
 					lifetime_earnings?: number | null;
 					metadata?: Json | null;
 					minimum_payout?: number | null;
-					network_size: Database['public']['Enums']['network_size'];
+					network_size: Database["public"]["Enums"]["network_size"];
 					next_payout_date?: string | null;
-					payout_schedule?: Database['public']['Enums']['payout_schedule'] | null;
+					payout_schedule?:
+						| Database["public"]["Enums"]["payout_schedule"]
+						| null;
 					pending_payout?: number | null;
-					real_estate_experience: Database['public']['Enums']['real_estate_experience'];
+					real_estate_experience: Database["public"]["Enums"]["real_estate_experience"];
 					social_handle: string;
-					status?: Database['public']['Enums']['affiliate_status'] | null;
+					status?: Database["public"]["Enums"]["affiliate_status"] | null;
 					tax_info?: Json | null;
-					tier?: Database['public']['Enums']['commission_tier'] | null;
+					tier?: Database["public"]["Enums"]["commission_tier"] | null;
 					total_commissions?: number | null;
 					total_referrals?: number | null;
 					updated_at?: string | null;
@@ -137,15 +147,17 @@ export type Database = {
 					lifetime_earnings?: number | null;
 					metadata?: Json | null;
 					minimum_payout?: number | null;
-					network_size?: Database['public']['Enums']['network_size'];
+					network_size?: Database["public"]["Enums"]["network_size"];
 					next_payout_date?: string | null;
-					payout_schedule?: Database['public']['Enums']['payout_schedule'] | null;
+					payout_schedule?:
+						| Database["public"]["Enums"]["payout_schedule"]
+						| null;
 					pending_payout?: number | null;
-					real_estate_experience?: Database['public']['Enums']['real_estate_experience'];
+					real_estate_experience?: Database["public"]["Enums"]["real_estate_experience"];
 					social_handle?: string;
-					status?: Database['public']['Enums']['affiliate_status'] | null;
+					status?: Database["public"]["Enums"]["affiliate_status"] | null;
 					tax_info?: Json | null;
-					tier?: Database['public']['Enums']['commission_tier'] | null;
+					tier?: Database["public"]["Enums"]["commission_tier"] | null;
 					total_commissions?: number | null;
 					total_referrals?: number | null;
 					updated_at?: string | null;
@@ -208,11 +220,11 @@ export type Database = {
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'affiliate_referrals_affiliate_id_fkey';
-						columns: ['affiliate_id'];
+						foreignKeyName: "affiliate_referrals_affiliate_id_fkey";
+						columns: ["affiliate_id"];
 						isOneToOne: false;
-						referencedRelation: 'affiliate_profiles';
-						referencedColumns: ['id'];
+						referencedRelation: "affiliate_profiles";
+						referencedColumns: ["id"];
 					},
 				];
 			};
@@ -222,15 +234,15 @@ export type Database = {
 					balance_after: number | null;
 					balance_before: number | null;
 					created_at: string | null;
-					credit_type: Database['public']['Enums']['credit_type'];
+					credit_type: Database["public"]["Enums"]["credit_type"];
 					description: string | null;
 					id: string;
 					metadata: Json | null;
 					performed_by: string | null;
 					processed_at: string | null;
-					reason: Database['public']['Enums']['credit_adjustment_reason'];
+					reason: Database["public"]["Enums"]["credit_adjustment_reason"];
 					reference_id: string | null;
-					status: Database['public']['Enums']['transaction_status'] | null;
+					status: Database["public"]["Enums"]["transaction_status"] | null;
 					user_id: string;
 				};
 				Insert: {
@@ -238,15 +250,15 @@ export type Database = {
 					balance_after?: number | null;
 					balance_before?: number | null;
 					created_at?: string | null;
-					credit_type: Database['public']['Enums']['credit_type'];
+					credit_type: Database["public"]["Enums"]["credit_type"];
 					description?: string | null;
 					id?: string;
 					metadata?: Json | null;
 					performed_by?: string | null;
 					processed_at?: string | null;
-					reason: Database['public']['Enums']['credit_adjustment_reason'];
+					reason: Database["public"]["Enums"]["credit_adjustment_reason"];
 					reference_id?: string | null;
-					status?: Database['public']['Enums']['transaction_status'] | null;
+					status?: Database["public"]["Enums"]["transaction_status"] | null;
 					user_id: string;
 				};
 				Update: {
@@ -254,15 +266,15 @@ export type Database = {
 					balance_after?: number | null;
 					balance_before?: number | null;
 					created_at?: string | null;
-					credit_type?: Database['public']['Enums']['credit_type'];
+					credit_type?: Database["public"]["Enums"]["credit_type"];
 					description?: string | null;
 					id?: string;
 					metadata?: Json | null;
 					performed_by?: string | null;
 					processed_at?: string | null;
-					reason?: Database['public']['Enums']['credit_adjustment_reason'];
+					reason?: Database["public"]["Enums"]["credit_adjustment_reason"];
 					reference_id?: string | null;
-					status?: Database['public']['Enums']['transaction_status'] | null;
+					status?: Database["public"]["Enums"]["transaction_status"] | null;
 					user_id?: string;
 				};
 				Relationships: [];
@@ -366,11 +378,11 @@ export type Database = {
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'cart_items_cart_id_fkey';
-						columns: ['cart_id'];
+						foreignKeyName: "cart_items_cart_id_fkey";
+						columns: ["cart_id"];
 						isOneToOne: false;
-						referencedRelation: 'carts';
-						referencedColumns: ['id'];
+						referencedRelation: "carts";
+						referencedColumns: ["id"];
 					},
 				];
 			};
@@ -381,7 +393,7 @@ export type Database = {
 					created_at: string | null;
 					id: string;
 					metadata: Json | null;
-					status: Database['public']['Enums']['cart_status'] | null;
+					status: Database["public"]["Enums"]["cart_status"] | null;
 					updated_at: string | null;
 					user_id: string;
 				};
@@ -391,7 +403,7 @@ export type Database = {
 					created_at?: string | null;
 					id?: string;
 					metadata?: Json | null;
-					status?: Database['public']['Enums']['cart_status'] | null;
+					status?: Database["public"]["Enums"]["cart_status"] | null;
 					updated_at?: string | null;
 					user_id: string;
 				};
@@ -401,7 +413,7 @@ export type Database = {
 					created_at?: string | null;
 					id?: string;
 					metadata?: Json | null;
-					status?: Database['public']['Enums']['cart_status'] | null;
+					status?: Database["public"]["Enums"]["cart_status"] | null;
 					updated_at?: string | null;
 					user_id?: string;
 				};
@@ -564,7 +576,7 @@ export type Database = {
 					metadata: Json | null;
 					payment_id: string | null;
 					subscription_id: string | null;
-					transaction_type: Database['public']['Enums']['credit_transaction_type'];
+					transaction_type: Database["public"]["Enums"]["credit_transaction_type"];
 				};
 				Insert: {
 					amount: number;
@@ -578,7 +590,7 @@ export type Database = {
 					metadata?: Json | null;
 					payment_id?: string | null;
 					subscription_id?: string | null;
-					transaction_type: Database['public']['Enums']['credit_transaction_type'];
+					transaction_type: Database["public"]["Enums"]["credit_transaction_type"];
 				};
 				Update: {
 					amount?: number;
@@ -592,29 +604,29 @@ export type Database = {
 					metadata?: Json | null;
 					payment_id?: string | null;
 					subscription_id?: string | null;
-					transaction_type?: Database['public']['Enums']['credit_transaction_type'];
+					transaction_type?: Database["public"]["Enums"]["credit_transaction_type"];
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'credit_transactions_balance_id_fkey';
-						columns: ['balance_id'];
+						foreignKeyName: "credit_transactions_balance_id_fkey";
+						columns: ["balance_id"];
 						isOneToOne: false;
-						referencedRelation: 'credit_balances';
-						referencedColumns: ['id'];
+						referencedRelation: "credit_balances";
+						referencedColumns: ["id"];
 					},
 					{
-						foreignKeyName: 'credit_transactions_payment_id_fkey';
-						columns: ['payment_id'];
+						foreignKeyName: "credit_transactions_payment_id_fkey";
+						columns: ["payment_id"];
 						isOneToOne: false;
-						referencedRelation: 'payment_transactions';
-						referencedColumns: ['id'];
+						referencedRelation: "payment_transactions";
+						referencedColumns: ["id"];
 					},
 					{
-						foreignKeyName: 'credit_transactions_subscription_id_fkey';
-						columns: ['subscription_id'];
+						foreignKeyName: "credit_transactions_subscription_id_fkey";
+						columns: ["subscription_id"];
 						isOneToOne: false;
-						referencedRelation: 'stripe_subscriptions';
-						referencedColumns: ['id'];
+						referencedRelation: "stripe_subscriptions";
+						referencedColumns: ["id"];
 					},
 				];
 			};
@@ -625,7 +637,7 @@ export type Database = {
 					feature_id: string;
 					id: string;
 					metadata: Json | null;
-					source: Database['public']['Enums']['vote_source'] | null;
+					source: Database["public"]["Enums"]["vote_source"] | null;
 					tester_type: string | null;
 					updated_at: string | null;
 					user_id: string;
@@ -637,7 +649,7 @@ export type Database = {
 					feature_id: string;
 					id?: string;
 					metadata?: Json | null;
-					source?: Database['public']['Enums']['vote_source'] | null;
+					source?: Database["public"]["Enums"]["vote_source"] | null;
 					tester_type?: string | null;
 					updated_at?: string | null;
 					user_id: string;
@@ -649,7 +661,7 @@ export type Database = {
 					feature_id?: string;
 					id?: string;
 					metadata?: Json | null;
-					source?: Database['public']['Enums']['vote_source'] | null;
+					source?: Database["public"]["Enums"]["vote_source"] | null;
 					tester_type?: string | null;
 					updated_at?: string | null;
 					user_id?: string;
@@ -657,11 +669,11 @@ export type Database = {
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'feature_votes_feature_id_fkey';
-						columns: ['feature_id'];
+						foreignKeyName: "feature_votes_feature_id_fkey";
+						columns: ["feature_id"];
 						isOneToOne: false;
-						referencedRelation: 'features';
-						referencedColumns: ['id'];
+						referencedRelation: "features";
+						referencedColumns: ["id"];
 					},
 				];
 			};
@@ -674,7 +686,7 @@ export type Database = {
 					metadata: Json | null;
 					priority_score: number | null;
 					slug: string;
-					status: Database['public']['Enums']['feature_status'] | null;
+					status: Database["public"]["Enums"]["feature_status"] | null;
 					tags: string[] | null;
 					target_release: string | null;
 					title: string;
@@ -690,7 +702,7 @@ export type Database = {
 					metadata?: Json | null;
 					priority_score?: number | null;
 					slug: string;
-					status?: Database['public']['Enums']['feature_status'] | null;
+					status?: Database["public"]["Enums"]["feature_status"] | null;
 					tags?: string[] | null;
 					target_release?: string | null;
 					title: string;
@@ -706,7 +718,7 @@ export type Database = {
 					metadata?: Json | null;
 					priority_score?: number | null;
 					slug?: string;
-					status?: Database['public']['Enums']['feature_status'] | null;
+					status?: Database["public"]["Enums"]["feature_status"] | null;
 					tags?: string[] | null;
 					target_release?: string | null;
 					title?: string;
@@ -809,7 +821,7 @@ export type Database = {
 					payment_method_details: Json | null;
 					payment_method_type: string | null;
 					receipt_url: string | null;
-					status: Database['public']['Enums']['payment_status'];
+					status: Database["public"]["Enums"]["payment_status"];
 					stripe_charge_id: string | null;
 					stripe_payment_intent_id: string | null;
 					transaction_metadata: Json | null;
@@ -829,7 +841,7 @@ export type Database = {
 					payment_method_details?: Json | null;
 					payment_method_type?: string | null;
 					receipt_url?: string | null;
-					status?: Database['public']['Enums']['payment_status'];
+					status?: Database["public"]["Enums"]["payment_status"];
 					stripe_charge_id?: string | null;
 					stripe_payment_intent_id?: string | null;
 					transaction_metadata?: Json | null;
@@ -849,7 +861,7 @@ export type Database = {
 					payment_method_details?: Json | null;
 					payment_method_type?: string | null;
 					receipt_url?: string | null;
-					status?: Database['public']['Enums']['payment_status'];
+					status?: Database["public"]["Enums"]["payment_status"];
 					stripe_charge_id?: string | null;
 					stripe_payment_intent_id?: string | null;
 					transaction_metadata?: Json | null;
@@ -857,11 +869,11 @@ export type Database = {
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'payment_transactions_customer_id_fkey';
-						columns: ['customer_id'];
+						foreignKeyName: "payment_transactions_customer_id_fkey";
+						columns: ["customer_id"];
 						isOneToOne: false;
-						referencedRelation: 'stripe_customers';
-						referencedColumns: ['id'];
+						referencedRelation: "stripe_customers";
+						referencedColumns: ["id"];
 					},
 				];
 			};
@@ -1026,11 +1038,11 @@ export type Database = {
 					interval_count: number;
 					livemode: boolean;
 					monthly_credits: number;
-					status: Database['public']['Enums']['subscription_status'];
+					status: Database["public"]["Enums"]["subscription_status"];
 					stripe_price_id: string;
 					stripe_subscription_id: string;
 					subscription_metadata: Json | null;
-					tier: Database['public']['Enums']['subscription_tier'];
+					tier: Database["public"]["Enums"]["subscription_tier"];
 					trial_end: string | null;
 					trial_start: string | null;
 					updated_at: string;
@@ -1051,11 +1063,11 @@ export type Database = {
 					interval_count?: number;
 					livemode?: boolean;
 					monthly_credits?: number;
-					status: Database['public']['Enums']['subscription_status'];
+					status: Database["public"]["Enums"]["subscription_status"];
 					stripe_price_id: string;
 					stripe_subscription_id: string;
 					subscription_metadata?: Json | null;
-					tier?: Database['public']['Enums']['subscription_tier'];
+					tier?: Database["public"]["Enums"]["subscription_tier"];
 					trial_end?: string | null;
 					trial_start?: string | null;
 					updated_at?: string;
@@ -1076,22 +1088,22 @@ export type Database = {
 					interval_count?: number;
 					livemode?: boolean;
 					monthly_credits?: number;
-					status?: Database['public']['Enums']['subscription_status'];
+					status?: Database["public"]["Enums"]["subscription_status"];
 					stripe_price_id?: string;
 					stripe_subscription_id?: string;
 					subscription_metadata?: Json | null;
-					tier?: Database['public']['Enums']['subscription_tier'];
+					tier?: Database["public"]["Enums"]["subscription_tier"];
 					trial_end?: string | null;
 					trial_start?: string | null;
 					updated_at?: string;
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'stripe_subscriptions_customer_id_fkey';
-						columns: ['customer_id'];
+						foreignKeyName: "stripe_subscriptions_customer_id_fkey";
+						columns: ["customer_id"];
 						isOneToOne: false;
-						referencedRelation: 'stripe_customers';
-						referencedColumns: ['id'];
+						referencedRelation: "stripe_customers";
+						referencedColumns: ["id"];
 					},
 				];
 			};
@@ -1143,11 +1155,13 @@ export type Database = {
 					created_at: string | null;
 					current_crm: string | null;
 					deal_documents: string[] | null;
-					deals_closed_last_year: Database['public']['Enums']['deals_closed'] | null;
-					employee_count: Database['public']['Enums']['employee_count'] | null;
+					deals_closed_last_year:
+						| Database["public"]["Enums"]["deals_closed"]
+						| null;
+					employee_count: Database["public"]["Enums"]["employee_count"] | null;
 					feature_votes: string[] | null;
 					feedback_commitment: boolean | null;
-					icp_type: Database['public']['Enums']['icp_type'] | null;
+					icp_type: Database["public"]["Enums"]["icp_type"] | null;
 					id: string;
 					interested_features: string[] | null;
 					metadata: Json | null;
@@ -1156,11 +1170,11 @@ export type Database = {
 					payment_agreement: boolean | null;
 					primary_deal_sources: string[] | null;
 					started_at: string | null;
-					status: Database['public']['Enums']['tester_status'] | null;
+					status: Database["public"]["Enums"]["tester_status"] | null;
 					success_metrics: string | null;
 					team_size_acquisitions: string | null;
 					terms_accepted: boolean | null;
-					tester_type: Database['public']['Enums']['tester_type'];
+					tester_type: Database["public"]["Enums"]["tester_type"];
 					updated_at: string | null;
 					user_id: string;
 					wanted_features: string[] | null;
@@ -1173,11 +1187,13 @@ export type Database = {
 					created_at?: string | null;
 					current_crm?: string | null;
 					deal_documents?: string[] | null;
-					deals_closed_last_year?: Database['public']['Enums']['deals_closed'] | null;
-					employee_count?: Database['public']['Enums']['employee_count'] | null;
+					deals_closed_last_year?:
+						| Database["public"]["Enums"]["deals_closed"]
+						| null;
+					employee_count?: Database["public"]["Enums"]["employee_count"] | null;
 					feature_votes?: string[] | null;
 					feedback_commitment?: boolean | null;
-					icp_type?: Database['public']['Enums']['icp_type'] | null;
+					icp_type?: Database["public"]["Enums"]["icp_type"] | null;
 					id?: string;
 					interested_features?: string[] | null;
 					metadata?: Json | null;
@@ -1186,11 +1202,11 @@ export type Database = {
 					payment_agreement?: boolean | null;
 					primary_deal_sources?: string[] | null;
 					started_at?: string | null;
-					status?: Database['public']['Enums']['tester_status'] | null;
+					status?: Database["public"]["Enums"]["tester_status"] | null;
 					success_metrics?: string | null;
 					team_size_acquisitions?: string | null;
 					terms_accepted?: boolean | null;
-					tester_type: Database['public']['Enums']['tester_type'];
+					tester_type: Database["public"]["Enums"]["tester_type"];
 					updated_at?: string | null;
 					user_id: string;
 					wanted_features?: string[] | null;
@@ -1203,11 +1219,13 @@ export type Database = {
 					created_at?: string | null;
 					current_crm?: string | null;
 					deal_documents?: string[] | null;
-					deals_closed_last_year?: Database['public']['Enums']['deals_closed'] | null;
-					employee_count?: Database['public']['Enums']['employee_count'] | null;
+					deals_closed_last_year?:
+						| Database["public"]["Enums"]["deals_closed"]
+						| null;
+					employee_count?: Database["public"]["Enums"]["employee_count"] | null;
 					feature_votes?: string[] | null;
 					feedback_commitment?: boolean | null;
-					icp_type?: Database['public']['Enums']['icp_type'] | null;
+					icp_type?: Database["public"]["Enums"]["icp_type"] | null;
 					id?: string;
 					interested_features?: string[] | null;
 					metadata?: Json | null;
@@ -1216,11 +1234,11 @@ export type Database = {
 					payment_agreement?: boolean | null;
 					primary_deal_sources?: string[] | null;
 					started_at?: string | null;
-					status?: Database['public']['Enums']['tester_status'] | null;
+					status?: Database["public"]["Enums"]["tester_status"] | null;
 					success_metrics?: string | null;
 					team_size_acquisitions?: string | null;
 					terms_accepted?: boolean | null;
-					tester_type?: Database['public']['Enums']['tester_type'];
+					tester_type?: Database["public"]["Enums"]["tester_type"];
 					updated_at?: string | null;
 					user_id?: string;
 					wanted_features?: string[] | null;
@@ -1251,25 +1269,25 @@ export type Database = {
 				};
 				Relationships: [
 					{
-						foreignKeyName: 'user_api_key_permissions_api_key_id_fkey';
-						columns: ['api_key_id'];
+						foreignKeyName: "user_api_key_permissions_api_key_id_fkey";
+						columns: ["api_key_id"];
 						isOneToOne: false;
-						referencedRelation: 'api_keys_with_permissions';
-						referencedColumns: ['api_key_id'];
+						referencedRelation: "api_keys_with_permissions";
+						referencedColumns: ["api_key_id"];
 					},
 					{
-						foreignKeyName: 'user_api_key_permissions_api_key_id_fkey';
-						columns: ['api_key_id'];
+						foreignKeyName: "user_api_key_permissions_api_key_id_fkey";
+						columns: ["api_key_id"];
 						isOneToOne: false;
-						referencedRelation: 'user_api_keys';
-						referencedColumns: ['id'];
+						referencedRelation: "user_api_keys";
+						referencedColumns: ["id"];
 					},
 					{
-						foreignKeyName: 'user_api_key_permissions_permission_id_fkey';
-						columns: ['permission_id'];
+						foreignKeyName: "user_api_key_permissions_permission_id_fkey";
+						columns: ["permission_id"];
 						isOneToOne: false;
-						referencedRelation: 'permissions';
-						referencedColumns: ['id'];
+						referencedRelation: "permissions";
+						referencedColumns: ["id"];
 					},
 				];
 			};
@@ -1392,7 +1410,7 @@ export type Database = {
 					phone_verified: boolean;
 					preferences_set: boolean;
 					progress_percentage: number;
-					status: Database['public']['Enums']['profile_setup_status'];
+					status: Database["public"]["Enums"]["profile_setup_status"];
 					updated_at: string;
 					user_id: string;
 				};
@@ -1406,7 +1424,7 @@ export type Database = {
 					phone_verified?: boolean;
 					preferences_set?: boolean;
 					progress_percentage?: number;
-					status?: Database['public']['Enums']['profile_setup_status'];
+					status?: Database["public"]["Enums"]["profile_setup_status"];
 					updated_at?: string;
 					user_id: string;
 				};
@@ -1420,7 +1438,7 @@ export type Database = {
 					phone_verified?: boolean;
 					preferences_set?: boolean;
 					progress_percentage?: number;
-					status?: Database['public']['Enums']['profile_setup_status'];
+					status?: Database["public"]["Enums"]["profile_setup_status"];
 					updated_at?: string;
 					user_id?: string;
 				};
@@ -1536,7 +1554,7 @@ export type Database = {
 					location_country: string | null;
 					platform: string | null;
 					refresh_token: string;
-					status: Database['public']['Enums']['session_status'];
+					status: Database["public"]["Enums"]["session_status"];
 					updated_at: string;
 					user_agent: string | null;
 					user_id: string;
@@ -1554,7 +1572,7 @@ export type Database = {
 					location_country?: string | null;
 					platform?: string | null;
 					refresh_token: string;
-					status?: Database['public']['Enums']['session_status'];
+					status?: Database["public"]["Enums"]["session_status"];
 					updated_at?: string;
 					user_agent?: string | null;
 					user_id: string;
@@ -1572,7 +1590,7 @@ export type Database = {
 					location_country?: string | null;
 					platform?: string | null;
 					refresh_token?: string;
-					status?: Database['public']['Enums']['session_status'];
+					status?: Database["public"]["Enums"]["session_status"];
 					updated_at?: string;
 					user_agent?: string | null;
 					user_id?: string;
@@ -1663,72 +1681,98 @@ export type Database = {
 			};
 		};
 		Enums: {
-			account_type: 'checking' | 'savings';
-			affiliate_status: 'pending' | 'approved' | 'active' | 'suspended' | 'rejected';
-			cart_status: 'open' | 'completed' | 'abandoned';
-			commission_tier: 'standard' | 'bronze' | 'silver' | 'gold' | 'platinum';
+			account_type: "checking" | "savings";
+			affiliate_status:
+				| "pending"
+				| "approved"
+				| "active"
+				| "suspended"
+				| "rejected";
+			cart_status: "open" | "completed" | "abandoned";
+			commission_tier: "standard" | "bronze" | "silver" | "gold" | "platinum";
 			credit_adjustment_reason:
-				| 'purchase'
-				| 'beta_allocation'
-				| 'pilot_allocation'
-				| 'admin_grant'
-				| 'referral_bonus'
-				| 'usage'
-				| 'refund'
-				| 'correction';
+				| "purchase"
+				| "beta_allocation"
+				| "pilot_allocation"
+				| "admin_grant"
+				| "referral_bonus"
+				| "usage"
+				| "refund"
+				| "correction";
 			credit_transaction_type:
-				| 'PURCHASE'
-				| 'SUBSCRIPTION'
-				| 'BONUS'
-				| 'REFUND'
-				| 'USAGE'
-				| 'EXPIRY';
-			credit_type: 'prospecting' | 'enrichment' | 'api_calls' | 'premium_features' | 'admin';
-			deals_closed: '0_5' | '6_10' | '11_20' | '21_50' | '51_plus';
-			employee_count: '1' | '2_5' | '6_10' | '11_25' | '26_50' | '51_plus';
+				| "PURCHASE"
+				| "SUBSCRIPTION"
+				| "BONUS"
+				| "REFUND"
+				| "USAGE"
+				| "EXPIRY";
+			credit_type:
+				| "prospecting"
+				| "enrichment"
+				| "api_calls"
+				| "premium_features"
+				| "admin";
+			deals_closed: "0_5" | "6_10" | "11_20" | "21_50" | "51_plus";
+			employee_count: "1" | "2_5" | "6_10" | "11_25" | "26_50" | "51_plus";
 			feature_status:
-				| 'planned'
-				| 'under_review'
-				| 'in_development'
-				| 'testing'
-				| 'released'
-				| 'cancelled';
+				| "planned"
+				| "under_review"
+				| "in_development"
+				| "testing"
+				| "released"
+				| "cancelled";
 			icp_type:
-				| 'growth_focused_wholesaler'
-				| 'systematizing_flipper_investor'
-				| 'savvy_cre_dealmaker'
-				| 'scaling_real_estate_agent';
-			network_size: 'under_1000' | '1001_10000' | '10001_50000' | '50001_100000' | 'over_100000';
-			oauth_provider: 'LINKEDIN' | 'FACEBOOK' | 'GOOGLE' | 'GITHUB' | 'TWITTER';
+				| "growth_focused_wholesaler"
+				| "systematizing_flipper_investor"
+				| "savvy_cre_dealmaker"
+				| "scaling_real_estate_agent";
+			network_size:
+				| "under_1000"
+				| "1001_10000"
+				| "10001_50000"
+				| "50001_100000"
+				| "over_100000";
+			oauth_provider: "LINKEDIN" | "FACEBOOK" | "GOOGLE" | "GITHUB" | "TWITTER";
 			pain_point:
-				| 'inconsistent_deal_flow'
-				| 'too_much_time_prospecting'
-				| 'leads_go_cold'
-				| 'low_conversion_rate'
-				| 'difficulty_scaling'
-				| 'high_lead_generation_costs'
-				| 'missing_off_market_deals';
-			payment_method: 'bank_transfer' | 'paypal' | 'stripe' | 'check';
-			payment_status: 'PENDING' | 'SUCCEEDED' | 'FAILED' | 'CANCELED' | 'REFUNDED';
-			payout_schedule: 'weekly' | 'biweekly' | 'monthly' | 'quarterly';
-			profile_setup_status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
-			real_estate_experience: 'yes' | 'no' | 'learning';
-			session_status: 'ACTIVE' | 'EXPIRED' | 'REVOKED' | 'LOGGED_OUT';
+				| "inconsistent_deal_flow"
+				| "too_much_time_prospecting"
+				| "leads_go_cold"
+				| "low_conversion_rate"
+				| "difficulty_scaling"
+				| "high_lead_generation_costs"
+				| "missing_off_market_deals";
+			payment_method: "bank_transfer" | "paypal" | "stripe" | "check";
+			payment_status:
+				| "PENDING"
+				| "SUCCEEDED"
+				| "FAILED"
+				| "CANCELED"
+				| "REFUNDED";
+			payout_schedule: "weekly" | "biweekly" | "monthly" | "quarterly";
+			profile_setup_status: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
+			real_estate_experience: "yes" | "no" | "learning";
+			session_status: "ACTIVE" | "EXPIRED" | "REVOKED" | "LOGGED_OUT";
 			subscription_status:
-				| 'INCOMPLETE'
-				| 'INCOMPLETE_EXPIRED'
-				| 'TRIALING'
-				| 'ACTIVE'
-				| 'PAST_DUE'
-				| 'CANCELED'
-				| 'UNPAID'
-				| 'PAUSED';
-			subscription_tier: 'STARTER' | 'PROFESSIONAL' | 'ENTERPRISE';
-			tester_status: 'applied' | 'approved' | 'active' | 'paused' | 'completed' | 'rejected';
-			tester_type: 'beta' | 'pilot';
-			token_status: 'ACTIVE' | 'REFRESH_REQUIRED' | 'EXPIRED' | 'REVOKED';
-			transaction_status: 'pending' | 'completed' | 'failed' | 'cancelled';
-			vote_source: 'beta_program' | 'pilot_program' | 'public' | 'admin';
+				| "INCOMPLETE"
+				| "INCOMPLETE_EXPIRED"
+				| "TRIALING"
+				| "ACTIVE"
+				| "PAST_DUE"
+				| "CANCELED"
+				| "UNPAID"
+				| "PAUSED";
+			subscription_tier: "STARTER" | "PROFESSIONAL" | "ENTERPRISE";
+			tester_status:
+				| "applied"
+				| "approved"
+				| "active"
+				| "paused"
+				| "completed"
+				| "rejected";
+			tester_type: "beta" | "pilot";
+			token_status: "ACTIVE" | "REFRESH_REQUIRED" | "EXPIRED" | "REVOKED";
+			transaction_status: "pending" | "completed" | "failed" | "cancelled";
+			vote_source: "beta_program" | "pilot_program" | "public" | "admin";
 		};
 		CompositeTypes: {
 			[_ in never]: never;
@@ -1736,31 +1780,36 @@ export type Database = {
 	};
 };
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>;
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>];
+type DefaultSchema = DatabaseWithoutInternals[Extract<
+	keyof Database,
+	"public"
+>];
 
 export type Tables<
 	DefaultSchemaTableNameOrOptions extends
-		| keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+		| keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
 		| { schema: keyof DatabaseWithoutInternals },
 	TableName extends DefaultSchemaTableNameOrOptions extends {
 		schema: keyof DatabaseWithoutInternals;
 	}
-		? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-				DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+		? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+				DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
 		: never = never,
 > = DefaultSchemaTableNameOrOptions extends {
 	schema: keyof DatabaseWithoutInternals;
 }
-	? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-			DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+	? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+			DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
 			Row: infer R;
 		}
 		? R
 		: never
-	: DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-		? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+	: DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+				DefaultSchema["Views"])
+		? (DefaultSchema["Tables"] &
+				DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
 				Row: infer R;
 			}
 			? R
@@ -1769,23 +1818,23 @@ export type Tables<
 
 export type TablesInsert<
 	DefaultSchemaTableNameOrOptions extends
-		| keyof DefaultSchema['Tables']
+		| keyof DefaultSchema["Tables"]
 		| { schema: keyof DatabaseWithoutInternals },
 	TableName extends DefaultSchemaTableNameOrOptions extends {
 		schema: keyof DatabaseWithoutInternals;
 	}
-		? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+		? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
 		: never = never,
 > = DefaultSchemaTableNameOrOptions extends {
 	schema: keyof DatabaseWithoutInternals;
 }
-	? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+	? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
 			Insert: infer I;
 		}
 		? I
 		: never
-	: DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-		? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+	: DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+		? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
 				Insert: infer I;
 			}
 			? I
@@ -1794,23 +1843,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
 	DefaultSchemaTableNameOrOptions extends
-		| keyof DefaultSchema['Tables']
+		| keyof DefaultSchema["Tables"]
 		| { schema: keyof DatabaseWithoutInternals },
 	TableName extends DefaultSchemaTableNameOrOptions extends {
 		schema: keyof DatabaseWithoutInternals;
 	}
-		? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+		? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
 		: never = never,
 > = DefaultSchemaTableNameOrOptions extends {
 	schema: keyof DatabaseWithoutInternals;
 }
-	? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+	? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
 			Update: infer U;
 		}
 		? U
 		: never
-	: DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-		? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+	: DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+		? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
 				Update: infer U;
 			}
 			? U
@@ -1819,106 +1868,144 @@ export type TablesUpdate<
 
 export type Enums<
 	DefaultSchemaEnumNameOrOptions extends
-		| keyof DefaultSchema['Enums']
+		| keyof DefaultSchema["Enums"]
 		| { schema: keyof DatabaseWithoutInternals },
 	EnumName extends DefaultSchemaEnumNameOrOptions extends {
 		schema: keyof DatabaseWithoutInternals;
 	}
-		? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+		? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
 		: never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
 	schema: keyof DatabaseWithoutInternals;
 }
-	? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-	: DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-		? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+	? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+	: DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+		? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
 		: never;
 
 export type CompositeTypes<
 	PublicCompositeTypeNameOrOptions extends
-		| keyof DefaultSchema['CompositeTypes']
+		| keyof DefaultSchema["CompositeTypes"]
 		| { schema: keyof DatabaseWithoutInternals },
 	CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
 		schema: keyof DatabaseWithoutInternals;
 	}
-		? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+		? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
 		: never = never,
 > = PublicCompositeTypeNameOrOptions extends {
 	schema: keyof DatabaseWithoutInternals;
 }
-	? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-	: PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-		? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+	? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+	: PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+		? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
 		: never;
 
 export const Constants = {
 	public: {
 		Enums: {
-			account_type: ['checking', 'savings'],
-			affiliate_status: ['pending', 'approved', 'active', 'suspended', 'rejected'],
-			cart_status: ['open', 'completed', 'abandoned'],
-			commission_tier: ['standard', 'bronze', 'silver', 'gold', 'platinum'],
-			credit_adjustment_reason: [
-				'purchase',
-				'beta_allocation',
-				'pilot_allocation',
-				'admin_grant',
-				'referral_bonus',
-				'usage',
-				'refund',
-				'correction',
+			account_type: ["checking", "savings"],
+			affiliate_status: [
+				"pending",
+				"approved",
+				"active",
+				"suspended",
+				"rejected",
 			],
-			credit_transaction_type: ['PURCHASE', 'SUBSCRIPTION', 'BONUS', 'REFUND', 'USAGE', 'EXPIRY'],
-			credit_type: ['prospecting', 'enrichment', 'api_calls', 'premium_features', 'admin'],
-			deals_closed: ['0_5', '6_10', '11_20', '21_50', '51_plus'],
-			employee_count: ['1', '2_5', '6_10', '11_25', '26_50', '51_plus'],
+			cart_status: ["open", "completed", "abandoned"],
+			commission_tier: ["standard", "bronze", "silver", "gold", "platinum"],
+			credit_adjustment_reason: [
+				"purchase",
+				"beta_allocation",
+				"pilot_allocation",
+				"admin_grant",
+				"referral_bonus",
+				"usage",
+				"refund",
+				"correction",
+			],
+			credit_transaction_type: [
+				"PURCHASE",
+				"SUBSCRIPTION",
+				"BONUS",
+				"REFUND",
+				"USAGE",
+				"EXPIRY",
+			],
+			credit_type: [
+				"prospecting",
+				"enrichment",
+				"api_calls",
+				"premium_features",
+				"admin",
+			],
+			deals_closed: ["0_5", "6_10", "11_20", "21_50", "51_plus"],
+			employee_count: ["1", "2_5", "6_10", "11_25", "26_50", "51_plus"],
 			feature_status: [
-				'planned',
-				'under_review',
-				'in_development',
-				'testing',
-				'released',
-				'cancelled',
+				"planned",
+				"under_review",
+				"in_development",
+				"testing",
+				"released",
+				"cancelled",
 			],
 			icp_type: [
-				'growth_focused_wholesaler',
-				'systematizing_flipper_investor',
-				'savvy_cre_dealmaker',
-				'scaling_real_estate_agent',
+				"growth_focused_wholesaler",
+				"systematizing_flipper_investor",
+				"savvy_cre_dealmaker",
+				"scaling_real_estate_agent",
 			],
-			network_size: ['under_1000', '1001_10000', '10001_50000', '50001_100000', 'over_100000'],
-			oauth_provider: ['LINKEDIN', 'FACEBOOK', 'GOOGLE', 'GITHUB', 'TWITTER'],
+			network_size: [
+				"under_1000",
+				"1001_10000",
+				"10001_50000",
+				"50001_100000",
+				"over_100000",
+			],
+			oauth_provider: ["LINKEDIN", "FACEBOOK", "GOOGLE", "GITHUB", "TWITTER"],
 			pain_point: [
-				'inconsistent_deal_flow',
-				'too_much_time_prospecting',
-				'leads_go_cold',
-				'low_conversion_rate',
-				'difficulty_scaling',
-				'high_lead_generation_costs',
-				'missing_off_market_deals',
+				"inconsistent_deal_flow",
+				"too_much_time_prospecting",
+				"leads_go_cold",
+				"low_conversion_rate",
+				"difficulty_scaling",
+				"high_lead_generation_costs",
+				"missing_off_market_deals",
 			],
-			payment_method: ['bank_transfer', 'paypal', 'stripe', 'check'],
-			payment_status: ['PENDING', 'SUCCEEDED', 'FAILED', 'CANCELED', 'REFUNDED'],
-			payout_schedule: ['weekly', 'biweekly', 'monthly', 'quarterly'],
-			profile_setup_status: ['NOT_STARTED', 'IN_PROGRESS', 'COMPLETED'],
-			real_estate_experience: ['yes', 'no', 'learning'],
-			session_status: ['ACTIVE', 'EXPIRED', 'REVOKED', 'LOGGED_OUT'],
+			payment_method: ["bank_transfer", "paypal", "stripe", "check"],
+			payment_status: [
+				"PENDING",
+				"SUCCEEDED",
+				"FAILED",
+				"CANCELED",
+				"REFUNDED",
+			],
+			payout_schedule: ["weekly", "biweekly", "monthly", "quarterly"],
+			profile_setup_status: ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"],
+			real_estate_experience: ["yes", "no", "learning"],
+			session_status: ["ACTIVE", "EXPIRED", "REVOKED", "LOGGED_OUT"],
 			subscription_status: [
-				'INCOMPLETE',
-				'INCOMPLETE_EXPIRED',
-				'TRIALING',
-				'ACTIVE',
-				'PAST_DUE',
-				'CANCELED',
-				'UNPAID',
-				'PAUSED',
+				"INCOMPLETE",
+				"INCOMPLETE_EXPIRED",
+				"TRIALING",
+				"ACTIVE",
+				"PAST_DUE",
+				"CANCELED",
+				"UNPAID",
+				"PAUSED",
 			],
-			subscription_tier: ['STARTER', 'PROFESSIONAL', 'ENTERPRISE'],
-			tester_status: ['applied', 'approved', 'active', 'paused', 'completed', 'rejected'],
-			tester_type: ['beta', 'pilot'],
-			token_status: ['ACTIVE', 'REFRESH_REQUIRED', 'EXPIRED', 'REVOKED'],
-			transaction_status: ['pending', 'completed', 'failed', 'cancelled'],
-			vote_source: ['beta_program', 'pilot_program', 'public', 'admin'],
+			subscription_tier: ["STARTER", "PROFESSIONAL", "ENTERPRISE"],
+			tester_status: [
+				"applied",
+				"approved",
+				"active",
+				"paused",
+				"completed",
+				"rejected",
+			],
+			tester_type: ["beta", "pilot"],
+			token_status: ["ACTIVE", "REFRESH_REQUIRED", "EXPIRED", "REVOKED"],
+			transaction_status: ["pending", "completed", "failed", "cancelled"],
+			vote_source: ["beta_program", "pilot_program", "public", "admin"],
 		},
 	},
 } as const;

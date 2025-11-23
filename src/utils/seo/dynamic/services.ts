@@ -1,7 +1,7 @@
-import type { ServiceItemData } from '@/types/service/services';
-import { getTestBaseUrl } from '@/utils/env';
-import { getTestimonialReviewData } from '@/utils/seo/schema';
-import type { SeoMeta } from '@/utils/seo/seo';
+import type { ServiceItemData } from "@/types/service/services";
+import { getTestBaseUrl } from "@/utils/env";
+import { getTestimonialReviewData } from "@/utils/seo/schema";
+import type { SeoMeta } from "@/utils/seo/seo";
 
 /**
  * Fetches SEO metadata for a service by slug.
@@ -9,7 +9,10 @@ import type { SeoMeta } from '@/utils/seo/seo';
  * @param services All services data (flat array)
  * @returns Metadata object for Next.js
  */
-export function getSeoMetadataForService(slug: string, services: ServiceItemData[]): SeoMeta {
+export function getSeoMetadataForService(
+	slug: string,
+	services: ServiceItemData[],
+): SeoMeta {
 	const baseUrl = getTestBaseUrl();
 	const pageUrl = `${baseUrl}/features/${slug}`;
 	const service = services.find((s) => s.slugDetails.slug === slug);
@@ -17,14 +20,14 @@ export function getSeoMetadataForService(slug: string, services: ServiceItemData
 
 	if (!service) {
 		return {
-			title: 'Service Not Found',
-			description: 'The requested service could not be found',
+			title: "Service Not Found",
+			description: "The requested service could not be found",
 			canonical: pageUrl,
 			keywords: [],
-			image: '',
-			type: 'article',
+			image: "",
+			type: "article",
 			priority: 0.8, // * fallback
-			changeFrequency: 'weekly', // * fallback
+			changeFrequency: "weekly", // * fallback
 		};
 	}
 
@@ -33,19 +36,24 @@ export function getSeoMetadataForService(slug: string, services: ServiceItemData
 	const { integrations, datePublished, lastModified } = service.slugDetails;
 
 	// Use the first tech stack image or fallback to default image
-	const ogImage = integrations?.[0]?.libraries?.[0]?.customSvg || '/banners/Feature.png';
+	const ogImage =
+		integrations?.[0]?.libraries?.[0]?.customSvg || "/banners/Feature.png";
 	return {
 		title: `${title || service.title} | Service | Lead Orchestra`,
-		description: description || service.description || 'Service details.',
+		description: description || service.description || "Service details.",
 		canonical: pageUrl,
 		keywords: service.categories || [],
 		alternates: [pageUrl],
 		image: ogImage,
-		type: 'article',
-		datePublished: datePublished ? new Date(datePublished).toISOString() : undefined,
-		dateModified: lastModified ? new Date(lastModified).toISOString() : undefined,
+		type: "article",
+		datePublished: datePublished
+			? new Date(datePublished).toISOString()
+			: undefined,
+		dateModified: lastModified
+			? new Date(lastModified).toISOString()
+			: undefined,
 		priority: 0.8, // * or customize per service
-		changeFrequency: 'weekly', // * or customize per service
+		changeFrequency: "weekly", // * or customize per service
 		ratingValue: aggregateRating?.ratingValue,
 		reviewCount: aggregateRating?.reviewCount,
 	};

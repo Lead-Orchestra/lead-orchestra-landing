@@ -1,15 +1,16 @@
-'use client';
+"use client";
 
-import type { RoiTierResult } from '@/lib/roi/types';
-import { cn } from '@/lib/utils';
+import type { RoiTierResult } from "@/lib/roi/types";
+import { cn } from "@/lib/utils";
 
-const currency = new Intl.NumberFormat('en-US', {
-	style: 'currency',
-	currency: 'USD',
+const currency = new Intl.NumberFormat("en-US", {
+	style: "currency",
+	currency: "USD",
 	maximumFractionDigits: 0,
 });
 
-const formatHours = (hours: number) => `${Math.round(hours).toLocaleString()} hrs`;
+const formatHours = (hours: number) =>
+	`${Math.round(hours).toLocaleString()} hrs`;
 const formatWorkdays = (hours: number) => `${(hours / 8).toFixed(1)} workdays`;
 
 interface RoiMetricsGridProps {
@@ -17,11 +18,18 @@ interface RoiMetricsGridProps {
 	showSetupInvestment: boolean;
 }
 
-export const RoiMetricsGrid = ({ result, showSetupInvestment }: RoiMetricsGridProps) => {
+export const RoiMetricsGrid = ({
+	result,
+	showSetupInvestment,
+}: RoiMetricsGridProps) => {
 	const setupRange = result.costs.setupRange;
-	const hasSetup = Boolean(showSetupInvestment && setupRange && setupRange.high > 0);
+	const hasSetup = Boolean(
+		showSetupInvestment && setupRange && setupRange.high > 0,
+	);
 	const hasCosts = Boolean(
-		result.costs.monthlyCost || result.costs.annualCost || result.costs.oneTimeCost
+		result.costs.monthlyCost ||
+			result.costs.annualCost ||
+			result.costs.oneTimeCost,
 	);
 
 	return (
@@ -36,8 +44,9 @@ export const RoiMetricsGrid = ({ result, showSetupInvestment }: RoiMetricsGridPr
 					{currency.format(result.gainHigh)}
 				</p>
 				<p className="text-muted-foreground text-sm">
-					After plan fees & operating costs • Gross potential {currency.format(result.grossGainLow)}
-					–{currency.format(result.grossGainHigh)}
+					After plan fees & operating costs • Gross potential{" "}
+					{currency.format(result.grossGainLow)}–
+					{currency.format(result.grossGainHigh)}
 				</p>
 			</div>
 			<div className="flex flex-col gap-3 rounded-2xl border border-sky-400/40 bg-sky-500/10 p-6 text-center shadow-sm sm:text-left">
@@ -50,7 +59,10 @@ export const RoiMetricsGrid = ({ result, showSetupInvestment }: RoiMetricsGridPr
 				<div className="space-y-1 text-sky-100/80 text-sm">
 					<p>≈ {formatWorkdays(result.timeSavedMonthly)} each month</p>
 					<p>{formatHours(result.timeSavedAnnual)} annually saved</p>
-					<p>{Math.round(result.automationReductionPercent)}% manual follow-up removed</p>
+					<p>
+						{Math.round(result.automationReductionPercent)}% manual follow-up
+						removed
+					</p>
 				</div>
 			</div>
 			{hasSetup ? (
@@ -64,7 +76,8 @@ export const RoiMetricsGrid = ({ result, showSetupInvestment }: RoiMetricsGridPr
 						{currency.format(setupRange!.high)}
 					</p>
 					<p className="text-emerald-100/90 text-sm">
-						Payback in {result.paybackMonths.toFixed(1)} months at projected gains
+						Payback in {result.paybackMonths.toFixed(1)} months at projected
+						gains
 					</p>
 				</div>
 			) : null}
@@ -75,26 +88,31 @@ export const RoiMetricsGrid = ({ result, showSetupInvestment }: RoiMetricsGridPr
 					</p>
 					<ul className="space-y-1 text-muted-foreground text-sm">
 						<li>
-							<strong>Net monthly benefit:</strong> {currency.format(result.monthlyNetBenefit)}
+							<strong>Net monthly benefit:</strong>{" "}
+							{currency.format(result.monthlyNetBenefit)}
 						</li>
 						{result.monthlyOperatingCost ? (
 							<li>
-								<strong>Your monthly cost:</strong> {currency.format(result.monthlyOperatingCost)}
+								<strong>Your monthly cost:</strong>{" "}
+								{currency.format(result.monthlyOperatingCost)}
 							</li>
 						) : null}
 						{result.costs.monthlyCost ? (
 							<li>
-								<strong>Plan monthly fee:</strong> {currency.format(result.costs.monthlyCost)}
+								<strong>Plan monthly fee:</strong>{" "}
+								{currency.format(result.costs.monthlyCost)}
 							</li>
 						) : null}
 						{result.costs.annualCost ? (
 							<li>
-								<strong>Plan annual fee:</strong> {currency.format(result.costs.annualCost)}
+								<strong>Plan annual fee:</strong>{" "}
+								{currency.format(result.costs.annualCost)}
 							</li>
 						) : null}
 						{result.costs.oneTimeCost ? (
 							<li>
-								<strong>One-time:</strong> {currency.format(result.costs.oneTimeCost)}
+								<strong>One-time:</strong>{" "}
+								{currency.format(result.costs.oneTimeCost)}
 							</li>
 						) : null}
 						{!hasSetup && setupRange ? (

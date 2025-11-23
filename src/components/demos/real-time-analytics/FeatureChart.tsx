@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import { memo, useMemo } from 'react';
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+import { memo, useMemo } from "react";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
-import type { ChartConfig } from '@/components/ui/chart';
+import type { ChartConfig } from "@/components/ui/chart";
 import {
 	ChartContainer,
 	ChartLegend,
 	ChartLegendContent,
 	ChartTooltip,
 	ChartTooltipContent,
-} from '@/components/ui/chart';
-import type { RealTimeFeature } from './feature-config';
+} from "@/components/ui/chart";
+import type { RealTimeFeature } from "./feature-config";
 
 type FeatureChartProps = {
-	chart: NonNullable<RealTimeFeature['chart']>;
+	chart: NonNullable<RealTimeFeature["chart"]>;
 };
 
 const palette = {
-	current: 'hsl(217 91% 60%)',
-	previous: 'hsl(142 72% 45%)',
-	target: 'hsl(38 92% 55%)',
+	current: "hsl(217 91% 60%)",
+	previous: "hsl(142 72% 45%)",
+	target: "hsl(38 92% 55%)",
 } as const;
 
 const formatMetric = (value: number): string => {
@@ -51,7 +51,9 @@ function FeatureChartComponent({ chart }: FeatureChartProps): JSX.Element {
 			};
 		}
 
-		const hasTargetSeries = chart.data.some((point) => point.target !== undefined);
+		const hasTargetSeries = chart.data.some(
+			(point) => point.target !== undefined,
+		);
 
 		if (chart.targetLabel && hasTargetSeries) {
 			config.target = {
@@ -73,7 +75,10 @@ function FeatureChartComponent({ chart }: FeatureChartProps): JSX.Element {
 			style={{ minHeight: 260 }}
 			data-testid="realtime-analytics-chart"
 		>
-			<LineChart data={chart.data} margin={{ top: 10, right: 24, bottom: 10, left: 0 }}>
+			<LineChart
+				data={chart.data}
+				margin={{ top: 10, right: 24, bottom: 10, left: 0 }}
+			>
 				<CartesianGrid vertical={false} strokeDasharray="6 6" />
 				<XAxis
 					dataKey="period"
@@ -91,12 +96,19 @@ function FeatureChartComponent({ chart }: FeatureChartProps): JSX.Element {
 					tickFormatter={formatMetric}
 				/>
 				<ChartTooltip
-					cursor={{ strokeDasharray: '4 4' }}
+					cursor={{ strokeDasharray: "4 4" }}
 					content={
-						<ChartTooltipContent indicator="line" hideIndicator labelFormatter={(value) => value} />
+						<ChartTooltipContent
+							indicator="line"
+							hideIndicator
+							labelFormatter={(value) => value}
+						/>
 					}
 				/>
-				<ChartLegend verticalAlign="top" content={<ChartLegendContent className="pt-2" />} />
+				<ChartLegend
+					verticalAlign="top"
+					content={<ChartLegendContent className="pt-2" />}
+				/>
 				<Line
 					type="monotone"
 					dataKey="current"

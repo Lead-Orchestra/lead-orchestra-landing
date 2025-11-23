@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@/components/ui/accordion';
+} from "@/components/ui/accordion";
 import {
 	FEATURED_FAQ_BY_PERSONA,
 	PERSONA_ADVANCED_FAQ,
@@ -13,10 +13,10 @@ import {
 	PERSONA_NEXT_STEP_FAQ,
 	PERSONA_OPTIONS,
 	type PersonaKey,
-} from '@/data/faq/personaFaq';
-import { cn } from '@/lib/utils';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+} from "@/data/faq/personaFaq";
+import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 interface DynamicFaqSectionProps {
 	title?: string;
@@ -24,7 +24,7 @@ interface DynamicFaqSectionProps {
 	className?: string;
 }
 
-const DEFAULT_PERSONA: PersonaKey = 'developer';
+const DEFAULT_PERSONA: PersonaKey = "developer";
 
 const toPersonaKey = (value: string | null): PersonaKey => {
 	if (!value) {
@@ -33,19 +33,25 @@ const toPersonaKey = (value: string | null): PersonaKey => {
 
 	const normalized = value.toLowerCase().trim();
 
-	return PERSONA_OPTIONS.find(({ key }) => key === normalized)?.key ?? DEFAULT_PERSONA;
+	return (
+		PERSONA_OPTIONS.find(({ key }) => key === normalized)?.key ??
+		DEFAULT_PERSONA
+	);
 };
 
-const getPersonaFromSearch = (params: ReturnType<typeof useSearchParams>): PersonaKey =>
-	toPersonaKey(params?.get('persona') ?? null);
+const getPersonaFromSearch = (
+	params: ReturnType<typeof useSearchParams>,
+): PersonaKey => toPersonaKey(params?.get("persona") ?? null);
 
 export const DynamicFaqSection = ({
-	title = 'Frequently Asked Questions',
+	title = "Frequently Asked Questions",
 	subtitle,
 	className,
 }: DynamicFaqSectionProps) => {
 	const searchParams = useSearchParams();
-	const [persona, setPersona] = useState<PersonaKey>(() => getPersonaFromSearch(searchParams));
+	const [persona, setPersona] = useState<PersonaKey>(() =>
+		getPersonaFromSearch(searchParams),
+	);
 
 	useEffect(() => {
 		const nextPersona = getPersonaFromSearch(searchParams);
@@ -60,28 +66,36 @@ export const DynamicFaqSection = ({
 				...item,
 				answer: item.answers[persona],
 			})),
-		[persona]
+		[persona],
 	);
 
 	const featuredFaq = useMemo(() => {
 		const featuredId = FEATURED_FAQ_BY_PERSONA[persona];
-		return PERSONA_FAQ_ITEMS.find((item) => item.id === featuredId) ?? PERSONA_FAQ_ITEMS[0];
+		return (
+			PERSONA_FAQ_ITEMS.find((item) => item.id === featuredId) ??
+			PERSONA_FAQ_ITEMS[0]
+		);
 	}, [persona]);
 
 	const personaNextStep = PERSONA_NEXT_STEP_FAQ[persona];
-	const personaLabel = PERSONA_OPTIONS.find((option) => option.key === persona)?.label ?? persona;
+	const personaLabel =
+		PERSONA_OPTIONS.find((option) => option.key === persona)?.label ?? persona;
 
 	return (
 		<section
 			className={cn(
-				'mx-auto flex max-w-5xl flex-col gap-6 rounded-3xl bg-slate-950/30 px-6 py-10 shadow-inner shadow-slate-900/40 backdrop-blur',
-				className
+				"mx-auto flex max-w-5xl flex-col gap-6 rounded-3xl bg-slate-950/30 px-6 py-10 shadow-inner shadow-slate-900/40 backdrop-blur",
+				className,
 			)}
 		>
 			<header className="text-center">
-				<h2 className="font-semibold text-3xl leading-tight tracking-tight sm:text-4xl">{title}</h2>
+				<h2 className="font-semibold text-3xl leading-tight tracking-tight sm:text-4xl">
+					{title}
+				</h2>
 				{subtitle ? (
-					<p className="mt-2 text-muted-foreground text-sm sm:text-base">{subtitle}</p>
+					<p className="mt-2 text-muted-foreground text-sm sm:text-base">
+						{subtitle}
+					</p>
 				) : null}
 			</header>
 
@@ -92,10 +106,10 @@ export const DynamicFaqSection = ({
 						type="button"
 						onClick={() => setPersona(key)}
 						className={cn(
-							'rounded-full px-4 py-1.5 font-medium text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+							"rounded-full px-4 py-1.5 font-medium text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
 							persona === key
-								? 'bg-primary text-primary-foreground shadow-inner shadow-primary/35'
-								: 'text-muted-foreground hover:bg-primary/10'
+								? "bg-primary text-primary-foreground shadow-inner shadow-primary/35"
+								: "text-muted-foreground hover:bg-primary/10",
 						)}
 					>
 						{label}
@@ -132,7 +146,11 @@ export const DynamicFaqSection = ({
 				</AccordionItem>
 			</Accordion>
 
-			<Accordion type="single" collapsible className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
+			<Accordion
+				type="single"
+				collapsible
+				className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2"
+			>
 				{faqs.map((faq) => (
 					<AccordionItem
 						key={faq.id}
@@ -165,7 +183,9 @@ export const DynamicFaqSection = ({
 								</span>
 								Advanced Playbook · {personaLabel}
 							</span>
-							<span className="text-base sm:text-lg">{personaAdvancedFaq.question}</span>
+							<span className="text-base sm:text-lg">
+								{personaAdvancedFaq.question}
+							</span>
 						</AccordionTrigger>
 						<AccordionContent className="px-6 pb-6 text-base text-fuchsia-50/90 leading-relaxed">
 							{personaAdvancedFaq.answer}

@@ -1,33 +1,36 @@
-'use client';
-import AffiliateSuccess from '@/components/affiliate/AffiliateSuccess';
-import AuthGuard from '@/components/auth/AuthGuard';
-import AffiliateForm from '@/components/contact/form/AffiliateForm';
-import { ContactInfo } from '@/components/contact/form/ContactInfo';
-import { ContactSteps } from '@/components/contact/form/ContactSteps';
-import { Newsletter } from '@/components/contact/newsletter/Newsletter';
-import { ScheduleMeeting } from '@/components/contact/schedule/ScheduleMeeting';
-import TrustedByMarquee from '@/components/contact/utils/TrustedByScroller';
-import ExitIntentBoundary from '@/components/exit-intent/ExitIntentBoundary';
-import Testimonials from '@/components/home/Testimonials';
-import { type AffiliateFormValues, affiliateFormFields } from '@/data/contact/affiliate';
-import { discountCodes } from '@/data/discount';
+"use client";
+import AffiliateSuccess from "@/components/affiliate/AffiliateSuccess";
+import AuthGuard from "@/components/auth/AuthGuard";
+import AffiliateForm from "@/components/contact/form/AffiliateForm";
+import { ContactInfo } from "@/components/contact/form/ContactInfo";
+import { ContactSteps } from "@/components/contact/form/ContactSteps";
+import { Newsletter } from "@/components/contact/newsletter/Newsletter";
+import { ScheduleMeeting } from "@/components/contact/schedule/ScheduleMeeting";
+import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
+import Testimonials from "@/components/home/Testimonials";
+import {
+	type AffiliateFormValues,
+	affiliateFormFields,
+} from "@/data/contact/affiliate";
+import { discountCodes } from "@/data/discount";
 import {
 	affiliateProgramSteps,
 	pilotProgramSteps,
-} from '@/data/service/slug_data/consultationSteps';
-import { generalDealScaleTestimonials } from '@/data/service/slug_data/testimonials';
-import { companyLogos } from '@/data/service/slug_data/trustedCompanies';
-import { exitIntentEnabled } from '@/lib/config/exitIntent';
-import type { DiscountCode } from '@/types/discount/discountCode';
-import { mapSeoMetaToMetadata } from '@/utils/seo/mapSeoMetaToMetadata';
-import { getStaticSeo } from '@/utils/seo/staticSeo';
-import type { Metadata } from 'next';
-import { useSearchParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+} from "@/data/service/slug_data/consultationSteps";
+import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
+import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
+import type { DiscountCode } from "@/types/discount/discountCode";
+import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
+import { getStaticSeo } from "@/utils/seo/staticSeo";
+import type { Metadata } from "next";
+import { useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 // * Centralized SEO for /affiliate using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
-	const seo = getStaticSeo('/affiliate');
+	const seo = getStaticSeo("/affiliate");
 	return mapSeoMetaToMetadata(seo);
 }
 
@@ -42,18 +45,18 @@ const AffiliateApplication = () => {
 			const raw = searchParams.get(field.name);
 			if (raw == null) continue;
 			switch (field.type) {
-				case 'multiselect': {
+				case "multiselect": {
 					(result[name] as unknown) = raw
-						.split(',')
+						.split(",")
 						.map((s) => s.trim())
 						.filter((s) => s.length > 0);
 					break;
 				}
-				case 'checkbox': {
+				case "checkbox": {
 					(result[name] as unknown) = /^(true|1|yes|on)$/i.test(raw);
 					break;
 				}
-				case 'file': {
+				case "file": {
 					// Not supported via URL
 					break;
 				}
@@ -65,7 +68,7 @@ const AffiliateApplication = () => {
 		return result;
 	}, [searchParams]);
 	const [success, setSuccess] = useState(false);
-	const [affiliateId, setAffiliateId] = useState<string>('');
+	const [affiliateId, setAffiliateId] = useState<string>("");
 	const [discountCode, setDiscountCode] = useState<DiscountCode | null>(null);
 
 	// Handler to be passed to AffiliateForm
@@ -75,23 +78,23 @@ const AffiliateApplication = () => {
 		const codeId = uuidv4();
 		// Extract handle from @handle or from a URL
 		let handle = social.trim();
-		if (handle.startsWith('@')) {
+		if (handle.startsWith("@")) {
 			handle = handle.slice(1);
-		} else if (handle.startsWith('http')) {
+		} else if (handle.startsWith("http")) {
 			try {
 				const url = new URL(handle);
-				const path = url.pathname.split('/').filter(Boolean);
+				const path = url.pathname.split("/").filter(Boolean);
 				if (path.length > 0) handle = path[path.length - 1];
 			} catch {
 				// fallback to original
 			}
 		}
-		handle = handle.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+		handle = handle.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
 		const shortId = `${handle}-${codeId.slice(0, 6).toUpperCase()}`;
 		const discountCode: DiscountCode = {
 			id: shortId,
 			code: shortId,
-			expires: new Date('2025-12-31T23:59:59Z'),
+			expires: new Date("2025-12-31T23:59:59Z"),
 			affiliateId: shortId,
 			created: new Date(),
 			maxUses: 100,
@@ -114,7 +117,7 @@ const AffiliateApplication = () => {
 					<div className="lg:col-span-7">
 						{success && discountCode ? (
 							<AffiliateSuccess
-								affiliateId={affiliateId || 'AFFILIATE-12345'}
+								affiliateId={affiliateId || "AFFILIATE-12345"}
 								discountCode={discountCode}
 							/>
 						) : (
@@ -130,8 +133,10 @@ const AffiliateApplication = () => {
 				<ContactInfo />
 				<Testimonials
 					testimonials={generalDealScaleTestimonials}
-					title={'What Our Affiliates Say'}
-					subtitle={'Hear from affiliates and partners about their experience with Deal Scale'}
+					title={"What Our Affiliates Say"}
+					subtitle={
+						"Hear from affiliates and partners about their experience with Deal Scale"
+					}
 				/>
 				<Newsletter />
 			</div>

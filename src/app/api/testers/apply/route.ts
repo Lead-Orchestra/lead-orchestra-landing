@@ -1,9 +1,13 @@
-import { authOptions } from '@/lib/authOptions';
-import { getServerSession } from 'next-auth';
-import { type NextRequest, NextResponse } from 'next/server';
-import type { TesterApplicationRequest, TesterType } from '../../../../types/testers';
+import { authOptions } from "@/lib/authOptions";
+import { getServerSession } from "next-auth";
+import { type NextRequest, NextResponse } from "next/server";
+import type {
+	TesterApplicationRequest,
+	TesterType,
+} from "../../../../types/testers";
 
-const DEALSCALE_API_BASE = process.env.DEALSCALE_API_BASE || 'https://api.dealscale.io';
+const DEALSCALE_API_BASE =
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 /**
  * Apply for beta or pilot tester program.
@@ -23,11 +27,11 @@ export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(authOptions);
 		if (!session?.user || !session?.dsTokens?.access_token) {
-			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
 		const { searchParams } = new URL(req.url);
-		const oauthToken = searchParams.get('oauth_token');
+		const oauthToken = searchParams.get("oauth_token");
 
 		const body: TesterApplicationRequest = await req.json();
 
@@ -44,56 +48,62 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json(
 				{
 					error:
-						'Missing required fields: tester_type, company, icp_type, employee_count, deals_closed_last_year, pain_points, and terms_accepted are required',
+						"Missing required fields: tester_type, company, icp_type, employee_count, deals_closed_last_year, pain_points, and terms_accepted are required",
 				},
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		// Validate tester_type
-		const allowedTesterTypes: TesterType[] = ['beta', 'pilot'];
+		const allowedTesterTypes: TesterType[] = ["beta", "pilot"];
 		if (!allowedTesterTypes.includes(body.tester_type)) {
 			return NextResponse.json(
 				{
-					error: `Invalid tester_type. Must be one of: ${allowedTesterTypes.join(', ')}`,
+					error: `Invalid tester_type. Must be one of: ${allowedTesterTypes.join(", ")}`,
 				},
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
 		// Build query string
 		const queryParams = new URLSearchParams();
 		if (oauthToken) {
-			queryParams.append('oauth_token', oauthToken);
+			queryParams.append("oauth_token", oauthToken);
 		}
 		const queryString = queryParams.toString();
 
 		// Call DealScale backend API to apply for tester program
 		const applyResponse = await fetch(
-			`${DEALSCALE_API_BASE}/api/v1/testers/apply${queryString ? `?${queryString}` : ''}`,
+			`${DEALSCALE_API_BASE}/api/v1/testers/apply${queryString ? `?${queryString}` : ""}`,
 			{
-				method: 'POST',
+				method: "POST",
 				headers: {
 					Authorization: `Bearer ${session.dsTokens.access_token}`,
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(body),
-			}
+			},
 		);
 
 		if (!applyResponse.ok) {
 			console.error(
-				'Failed to apply for tester program:',
+				"Failed to apply for tester program:",
 				applyResponse.status,
-				await applyResponse.text()
+				await applyResponse.text(),
 			);
-			return NextResponse.json({ error: 'Failed to apply for tester program' }, { status: 500 });
+			return NextResponse.json(
+				{ error: "Failed to apply for tester program" },
+				{ status: 500 },
+			);
 		}
 
 		const data = await applyResponse.json();
 		return NextResponse.json(data);
 	} catch (error) {
-		console.error('Tester application error:', error);
-		return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+		console.error("Tester application error:", error);
+		return NextResponse.json(
+			{ error: "Internal server error" },
+			{ status: 500 },
+		);
 	}
 }

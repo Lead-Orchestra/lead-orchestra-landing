@@ -1,15 +1,17 @@
-'use client';
+"use client";
 
-import CheckoutForm, { type PlanType } from '@/components/checkout/CheckoutForm';
-import { Button } from '@/components/ui/button';
-import type { Plan } from '@/types/service/plans';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { X } from 'lucide-react';
-import { useEffect, useMemo } from 'react';
+import CheckoutForm, {
+	type PlanType,
+} from "@/components/checkout/CheckoutForm";
+import { Button } from "@/components/ui/button";
+import type { Plan } from "@/types/service/plans";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { X } from "lucide-react";
+import { useEffect, useMemo } from "react";
 
-type CheckoutContext = 'standard' | 'trial';
-type CheckoutMode = 'payment' | 'setup';
+type CheckoutContext = "standard" | "trial";
+type CheckoutMode = "payment" | "setup";
 
 type PricingCheckoutDialogProps = {
 	clientSecret: string;
@@ -25,8 +27,8 @@ type PricingCheckoutDialogProps = {
 const stripePromise = (() => {
 	const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
-	if (!publishableKey || !publishableKey.startsWith('pk_')) {
-		console.warn('Stripe publishable key is missing or invalid.');
+	if (!publishableKey || !publishableKey.startsWith("pk_")) {
+		console.warn("Stripe publishable key is missing or invalid.");
 		return null;
 	}
 
@@ -46,7 +48,7 @@ export default function PricingCheckoutDialog({
 	useEffect(() => {
 		const { body } = document;
 		const previousOverflow = body.style.overflow;
-		body.style.overflow = 'hidden';
+		body.style.overflow = "hidden";
 
 		return () => {
 			body.style.overflow = previousOverflow;
@@ -57,11 +59,11 @@ export default function PricingCheckoutDialog({
 		() => ({
 			clientSecret,
 			appearance: {
-				theme: 'night' as const,
-				variables: { colorPrimary: '#6366f1' },
+				theme: "night" as const,
+				variables: { colorPrimary: "#6366f1" },
 			},
 		}),
-		[clientSecret]
+		[clientSecret],
 	);
 
 	if (!stripePromise) {

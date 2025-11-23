@@ -1,7 +1,7 @@
-import type { DataModuleKey } from '@/data/__generated__/manifest';
-import type { DataModuleStatus } from '@/stores/useDataModuleStore';
+import type { DataModuleKey } from "@/data/__generated__/manifest";
+import type { DataModuleStatus } from "@/stores/useDataModuleStore";
 
-const DEFAULT_ENDPOINT = '/api/internal/data-guards';
+const DEFAULT_ENDPOINT = "/api/internal/data-guards";
 
 const resolveEndpoint = () => {
 	const envValue = process.env.NEXT_PUBLIC_DATA_GUARD_ENDPOINT?.trim();
@@ -20,7 +20,7 @@ export interface DataModuleGuardEvent {
 }
 
 export function reportDataModuleGuard(event: DataModuleGuardEvent): void {
-	if (typeof window === 'undefined') {
+	if (typeof window === "undefined") {
 		return;
 	}
 
@@ -33,7 +33,10 @@ export function reportDataModuleGuard(event: DataModuleGuardEvent): void {
 	const body = JSON.stringify(payload);
 
 	try {
-		if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+		if (
+			typeof navigator !== "undefined" &&
+			typeof navigator.sendBeacon === "function"
+		) {
 			const beaconSent = navigator.sendBeacon(endpoint, body);
 			if (beaconSent) {
 				return;
@@ -44,9 +47,9 @@ export function reportDataModuleGuard(event: DataModuleGuardEvent): void {
 	}
 
 	void fetch(endpoint, {
-		method: 'POST',
+		method: "POST",
 		body,
-		headers: { 'Content-Type': 'application/json' },
+		headers: { "Content-Type": "application/json" },
 		keepalive: true,
 	}).catch(() => {
 		// Metrics transport failures should not surface to users.

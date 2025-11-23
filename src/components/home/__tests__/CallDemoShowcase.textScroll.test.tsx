@@ -1,48 +1,56 @@
-import { render } from '@testing-library/react';
-import React from 'react';
-import { act } from 'react';
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { usePersonaStore } from '../../../stores/usePersonaStore';
+import { render } from "@testing-library/react";
+import React from "react";
+import { act } from "react";
+import {
+	afterEach,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+import { usePersonaStore } from "../../../stores/usePersonaStore";
 
 const pixelatedMocks = vi.hoisted(() => ({
 	mockComponent: vi.fn(() => <div data-testid="pixelated-card" />),
 }));
 
-vi.mock('next/dynamic', () => ({
+vi.mock("next/dynamic", () => ({
 	__esModule: true,
 	default: () => React.memo(pixelatedMocks.mockComponent),
 }));
 
-vi.mock('../../ui/pixelated-voice-clone-card', () => ({
+vi.mock("../../ui/pixelated-voice-clone-card", () => ({
 	__esModule: true,
 	PixelatedVoiceCloneCard: React.memo(pixelatedMocks.mockComponent),
 }));
 
-vi.mock('../../deal_scale/talkingCards/SessionMonitor', () => ({
+vi.mock("../../deal_scale/talkingCards/SessionMonitor", () => ({
 	__esModule: true,
 	default: () => <div data-testid="session-monitor" />,
 }));
 
-vi.mock('../../ui/typing-animation', () => ({
+vi.mock("../../ui/typing-animation", () => ({
 	__esModule: true,
 	TypingAnimation: () => <div data-testid="typing-animation" />,
 }));
 
-vi.mock('../../ui/animatedList', () => ({
+vi.mock("../../ui/animatedList", () => ({
 	__esModule: true,
 	AnimatedList: ({ children }: { children: React.ReactNode }) => (
 		<div data-testid="animated-list">{children}</div>
 	),
 }));
 
-vi.mock('../../ui/iphone', () => ({
+vi.mock("../../ui/iphone", () => ({
 	__esModule: true,
 	Iphone: ({ children }: { children: React.ReactNode }) => (
 		<div data-testid="iphone">{children}</div>
 	),
 }));
 
-vi.mock('../../ui/layout-grid', () => ({
+vi.mock("../../ui/layout-grid", () => ({
 	__esModule: true,
 	LayoutGrid: ({
 		cards,
@@ -57,10 +65,10 @@ vi.mock('../../ui/layout-grid', () => ({
 	),
 }));
 
-let CallDemoShowcaseModule: typeof import('../CallDemoShowcase');
+let CallDemoShowcaseModule: typeof import("../CallDemoShowcase");
 
 beforeAll(async () => {
-	CallDemoShowcaseModule = await import('../CallDemoShowcase');
+	CallDemoShowcaseModule = await import("../CallDemoShowcase");
 
 	class MockIntersectionObserver {
 		observe() {}
@@ -72,7 +80,7 @@ beforeAll(async () => {
 	global.IntersectionObserver = MockIntersectionObserver;
 });
 
-describe('CallDemoShowcase text scroll behavior', () => {
+describe("CallDemoShowcase text scroll behavior", () => {
 	let mockScrollTo: ReturnType<typeof vi.fn>;
 	let windowScrollToSpy: ReturnType<typeof vi.spyOn>;
 
@@ -82,7 +90,7 @@ describe('CallDemoShowcase text scroll behavior', () => {
 			utils = render(<CallDemoShowcaseModule.CallDemoShowcase />);
 		});
 		if (!utils) {
-			throw new Error('Failed to render CallDemoShowcase');
+			throw new Error("Failed to render CallDemoShowcase");
 		}
 		return utils;
 	};
@@ -90,10 +98,14 @@ describe('CallDemoShowcase text scroll behavior', () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
 
-		usePersonaStore.getState().setPersonaAndGoal('investor', 'Automate deal flow conversations');
+		usePersonaStore
+			.getState()
+			.setPersonaAndGoal("investor", "Automate deal flow conversations");
 
 		mockScrollTo = vi.fn();
-		windowScrollToSpy = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+		windowScrollToSpy = vi
+			.spyOn(window, "scrollTo")
+			.mockImplementation(() => {});
 	});
 
 	afterEach(() => {
@@ -106,27 +118,27 @@ describe('CallDemoShowcase text scroll behavior', () => {
 
 	const setupScrollContainer = (
 		scrollContainer: HTMLDivElement,
-		options?: { containerTop?: number; shouldReturnMessage?: boolean }
+		options?: { containerTop?: number; shouldReturnMessage?: boolean },
 	) => {
 		const { containerTop = 100, shouldReturnMessage = true } = options ?? {};
 
-		Object.defineProperty(scrollContainer, 'clientHeight', {
+		Object.defineProperty(scrollContainer, "clientHeight", {
 			writable: true,
 			value: 420,
 		});
-		Object.defineProperty(scrollContainer, 'scrollTop', {
+		Object.defineProperty(scrollContainer, "scrollTop", {
 			writable: true,
 			value: 0,
 		});
-		Object.defineProperty(scrollContainer, 'scrollHeight', {
+		Object.defineProperty(scrollContainer, "scrollHeight", {
 			writable: true,
 			value: 1200,
 		});
-		Object.defineProperty(scrollContainer, 'scrollTo', {
+		Object.defineProperty(scrollContainer, "scrollTo", {
 			writable: true,
 			value: mockScrollTo,
 		});
-		Object.defineProperty(scrollContainer, 'getBoundingClientRect', {
+		Object.defineProperty(scrollContainer, "getBoundingClientRect", {
 			writable: true,
 			value: () => ({
 				top: containerTop,
@@ -141,7 +153,7 @@ describe('CallDemoShowcase text scroll behavior', () => {
 			}),
 		});
 
-		const querySpy = vi.spyOn(scrollContainer, 'querySelector');
+		const querySpy = vi.spyOn(scrollContainer, "querySelector");
 
 		if (shouldReturnMessage) {
 			const mockMessage = {
@@ -166,14 +178,16 @@ describe('CallDemoShowcase text scroll behavior', () => {
 		return { querySpy };
 	};
 
-	it('scrolls container without triggering page scroll', async () => {
+	it("scrolls container without triggering page scroll", async () => {
 		const utils = await renderShowcase();
 
 		await act(async () => {
 			vi.advanceTimersByTime(0);
 		});
 
-		const scrollContainer = utils.getByTestId('text-demo-scroll-container') as HTMLDivElement;
+		const scrollContainer = utils.getByTestId(
+			"text-demo-scroll-container",
+		) as HTMLDivElement;
 
 		setupScrollContainer(scrollContainer);
 
@@ -189,7 +203,7 @@ describe('CallDemoShowcase text scroll behavior', () => {
 		expect(windowScrollToSpy).not.toHaveBeenCalled();
 	});
 
-	it('does not call scrollIntoView on message elements', async () => {
+	it("does not call scrollIntoView on message elements", async () => {
 		const mockScrollIntoView = vi.fn();
 
 		const utils = await renderShowcase();
@@ -198,7 +212,9 @@ describe('CallDemoShowcase text scroll behavior', () => {
 			vi.advanceTimersByTime(0);
 		});
 
-		const scrollContainer = utils.getByTestId('text-demo-scroll-container') as HTMLDivElement;
+		const scrollContainer = utils.getByTestId(
+			"text-demo-scroll-container",
+		) as HTMLDivElement;
 
 		const { querySpy } = setupScrollContainer(scrollContainer);
 
@@ -231,14 +247,16 @@ describe('CallDemoShowcase text scroll behavior', () => {
 		expect(mockScrollIntoView).not.toHaveBeenCalled();
 	});
 
-	it('skips auto-scroll when container is off-screen', async () => {
+	it("skips auto-scroll when container is off-screen", async () => {
 		const utils = await renderShowcase();
 
 		await act(async () => {
 			vi.advanceTimersByTime(0);
 		});
 
-		const scrollContainer = utils.getByTestId('text-demo-scroll-container') as HTMLDivElement;
+		const scrollContainer = utils.getByTestId(
+			"text-demo-scroll-container",
+		) as HTMLDivElement;
 
 		setupScrollContainer(scrollContainer, {
 			containerTop: window.innerHeight + 200,

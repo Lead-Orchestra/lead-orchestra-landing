@@ -10,10 +10,10 @@ export function generateSalesConversation(abTestCopy: {
 	additionalInfo?: string;
 }): string {
 	if (!abTestCopy || !abTestCopy.pain_point || !abTestCopy.solution) {
-		return 'Sales copy is missing essential information (pain point or solution).';
+		return "Sales copy is missing essential information (pain point or solution).";
 	}
 
-	let conversation = '';
+	let conversation = "";
 
 	// 1. Personalized & Empathetic Opening - Hook with the Pain Point
 	if (abTestCopy.target_audience) {
@@ -29,17 +29,17 @@ export function generateSalesConversation(abTestCopy: {
 		if (abTestCopy.subtitle) {
 			conversation += ` In fact, ${abTestCopy.subtitle.toLowerCase()}\n\n`;
 		} else {
-			conversation += '.\n\n';
+			conversation += ".\n\n";
 		}
 	} else if (abTestCopy.subtitle) {
 		conversation += `${abTestCopy.subtitle}\n\n`;
 	} else {
-		conversation += '\n\n';
+		conversation += "\n\n";
 	}
 
 	// 3. Clearly Articulate "What's In It For Me?" - The Transformation
 	if (abTestCopy.whatsInItForMe) {
-		conversation += `So, what does this actually mean for you? Imagine ${abTestCopy.whatsInItForMe.toLowerCase().startsWith('imagine ') ? abTestCopy.whatsInItForMe.substring(8) : abTestCopy.whatsInItForMe}\n\n`;
+		conversation += `So, what does this actually mean for you? Imagine ${abTestCopy.whatsInItForMe.toLowerCase().startsWith("imagine ") ? abTestCopy.whatsInItForMe.substring(8) : abTestCopy.whatsInItForMe}\n\n`;
 	} else {
 		// If no WIIFM, use the solution to imply the benefit related to the pain point
 		conversation += `Think about how much easier things could be once ${abTestCopy.pain_point} is no longer a concern, thanks to ${abTestCopy.solution}.\n\n`;
@@ -54,7 +54,7 @@ export function generateSalesConversation(abTestCopy: {
 		if (abTestCopy.solution) {
 			conversation += `\nThanks to ${abTestCopy.solution}.`;
 		}
-		conversation += '\n\n';
+		conversation += "\n\n";
 	}
 
 	// 5. Strong, Clear Call to Action (CTA) - Guide the Next Step
@@ -67,7 +67,7 @@ export function generateSalesConversation(abTestCopy: {
 	// 6. Offer Additional Value/Reassurance
 	if (abTestCopy.additionalInfo) {
 		const info = abTestCopy.additionalInfo.trim();
-		conversation += `And just so you know, ${info.toLowerCase().startsWith('it also') || info.toLowerCase().startsWith('it is') ? '' : 'it also '}${info}.`;
+		conversation += `And just so you know, ${info.toLowerCase().startsWith("it also") || info.toLowerCase().startsWith("it is") ? "" : "it also "}${info}.`;
 	}
 
 	return conversation.trim();

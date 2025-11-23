@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useAuthModal } from '@/components/auth/use-auth-store';
-import { NewsletterEmailInput } from '@/components/contact/newsletter/NewsletterEmailInput';
-import { StickyBanner } from '@/components/ui/StickyBanner';
-import { Button } from '@/components/ui/button';
+import { useAuthModal } from "@/components/auth/use-auth-store";
+import { NewsletterEmailInput } from "@/components/contact/newsletter/NewsletterEmailInput";
+import { StickyBanner } from "@/components/ui/StickyBanner";
+import { Button } from "@/components/ui/button";
 import {
 	NavigationMenu,
 	NavigationMenuContent,
@@ -11,47 +11,50 @@ import {
 	NavigationMenuLink,
 	NavigationMenuList,
 	NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu';
-import { PixelatedCanvas } from '@/components/ui/pixelated-canvas';
-import { navItems } from '@/data/layout/nav';
-import { useHasMounted } from '@/hooks/useHasMounted';
-import { cn } from '@/lib/utils';
-import { ChevronDown, Menu, X } from 'lucide-react';
-import { signOut, useSession } from 'next-auth/react';
-import { useTheme } from 'next-themes';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { ThemeToggle } from '../theme/theme-toggle';
-import { BetaStickyBanner } from './BetaStickyBanner';
+} from "@/components/ui/navigation-menu";
+import { PixelatedCanvas } from "@/components/ui/pixelated-canvas";
+import { navItems } from "@/data/layout/nav";
+import { useHasMounted } from "@/hooks/useHasMounted";
+import { cn } from "@/lib/utils";
+import { ChevronDown, Menu, X } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { ThemeToggle } from "../theme/theme-toggle";
+import { BetaStickyBanner } from "./BetaStickyBanner";
 
-const NavLink = ({ item, onClick, className = '' }) => {
+const NavLink = ({ item, onClick, className = "" }) => {
 	const pathname = usePathname();
 	const isActive = pathname === item.href;
 	const lowerTitle = item.title.toLowerCase();
 	const isHighlighted =
-		lowerTitle.includes('beta') || lowerTitle.includes('pilot') || lowerTitle.includes('contact');
+		lowerTitle.includes("beta") ||
+		lowerTitle.includes("pilot") ||
+		lowerTitle.includes("contact");
 
 	return (
 		<Link
 			href={item.href}
 			className={cn(
 				// * Base nav link
-				'rounded-md px-3 py-2 font-medium text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary',
+				"rounded-md px-3 py-2 font-medium text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary",
 				// ! Light mode: improved hover for non-highlighted
-				!className && 'text-black hover:bg-gray-100 hover:text-black',
+				!className && "text-black hover:bg-gray-100 hover:text-black",
 				// * Active state
-				isActive && !className && 'bg-gray-100 font-semibold text-black',
+				isActive && !className && "bg-gray-100 font-semibold text-black",
 				// * Highlighted/CTA (Contact/Schedule)
 				isHighlighted &&
-					'ml-4 rounded-md border-2 border-primary/60 bg-gradient-to-r from-primary to-focus px-4 py-2 font-semibold text-white shadow-none transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary',
+					"ml-4 rounded-md border-2 border-primary/60 bg-gradient-to-r from-primary to-focus px-4 py-2 font-semibold text-white shadow-none transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary",
 				// ! Dark mode stays as before
-				'dark:text-white dark:focus-visible:outline-primary dark:hover:bg-primary/10',
-				isActive && !className && 'dark:bg-white/10 dark:text-white',
-				isHighlighted && 'shadow-none dark:border-primary/80 dark:text-white dark:shadow-none',
-				className
+				"dark:text-white dark:focus-visible:outline-primary dark:hover:bg-primary/10",
+				isActive && !className && "dark:bg-white/10 dark:text-white",
+				isHighlighted &&
+					"shadow-none dark:border-primary/80 dark:text-white dark:shadow-none",
+				className,
 			)}
 			onClick={onClick}
 		>
@@ -62,19 +65,20 @@ const NavLink = ({ item, onClick, className = '' }) => {
 
 const MegaMenuLink = ({ href, title, icon, className }) => {
 	const isHighlighted =
-		title.toLowerCase().includes('contact') || title.toLowerCase().includes('schedule');
+		title.toLowerCase().includes("contact") ||
+		title.toLowerCase().includes("schedule");
 	return (
 		<Link
 			href={href}
 			className={cn(
 				// Base style
-				'group flex items-center rounded px-3 py-2 font-medium text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary',
+				"group flex items-center rounded px-3 py-2 font-medium text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary",
 				// Light & Dark mode text
-				'text-foreground hover:bg-accent hover:text-accent-foreground',
+				"text-foreground hover:bg-accent hover:text-accent-foreground",
 				// Highlighted/CTA
 				isHighlighted &&
-					'rounded-md border-2 border-primary/60 bg-gradient-to-r from-primary to-focus px-4 py-2 font-bold text-white shadow-md transition-opacity hover:opacity-90 dark:border-primary/80 dark:text-white dark:shadow-lg',
-				className
+					"rounded-md border-2 border-primary/60 bg-gradient-to-r from-primary to-focus px-4 py-2 font-bold text-white shadow-md transition-opacity hover:opacity-90 dark:border-primary/80 dark:text-white dark:shadow-lg",
+				className,
 			)}
 		>
 			{icon && <span className="mr-2">{icon}</span>}
@@ -86,7 +90,9 @@ const MegaMenuLink = ({ href, title, icon, className }) => {
 const DesktopNav = () => {
 	return (
 		<NavigationMenu className="hidden lg:flex">
-			<NavigationMenuList className={cn('flex space-x-1 transition-all duration-300')}>
+			<NavigationMenuList
+				className={cn("flex space-x-1 transition-all duration-300")}
+			>
 				{navItems.map((item) => (
 					<NavigationMenuItem key={item.title}>
 						{item.children ? (
@@ -97,7 +103,10 @@ const DesktopNav = () => {
 								<NavigationMenuContent>
 									<div className="grid w-[400px] gap-3 bg-popover p-4 text-popover-foreground md:w-[600px] md:grid-cols-2 dark:border dark:border-primary/60 dark:shadow-2xl">
 										{item.children.map((child) =>
-											child.image || child.ctaTitle || child.ctaSubtitle || child.ctaButton ? (
+											child.image ||
+											child.ctaTitle ||
+											child.ctaSubtitle ||
+											child.ctaButton ? (
 												// * Render CTA Card if any CTA fields are present
 												<div
 													key={child.title}
@@ -136,10 +145,12 @@ const DesktopNav = () => {
 													key={child.title}
 													href={child.href}
 													title={child.title}
-													icon={child.icon && <child.icon className="h-4 w-4" />}
+													icon={
+														child.icon && <child.icon className="h-4 w-4" />
+													}
 													className=""
 												/>
-											)
+											),
 										)}
 									</div>
 								</NavigationMenuContent>
@@ -191,8 +202,8 @@ const MobileNav = ({
 		setMounted(true);
 		// Check both resolvedTheme and HTML class as fallback
 		const checkDarkMode = () => {
-			const htmlHasDark = document.documentElement.classList.contains('dark');
-			const themeIsDark = resolvedTheme === 'dark';
+			const htmlHasDark = document.documentElement.classList.contains("dark");
+			const themeIsDark = resolvedTheme === "dark";
 			setIsDark(themeIsDark || htmlHasDark);
 		};
 
@@ -202,7 +213,7 @@ const MobileNav = ({
 		const observer = new MutationObserver(checkDarkMode);
 		observer.observe(document.documentElement, {
 			attributes: true,
-			attributeFilter: ['class'],
+			attributeFilter: ["class"],
 		});
 
 		return () => observer.disconnect();
@@ -218,14 +229,16 @@ const MobileNav = ({
 	return (
 		<div
 			className={cn(
-				'fixed inset-0 z-[9999] flex h-screen min-h-screen flex-col backdrop-blur-xl transition-all duration-300',
-				'bg-white/95 dark:bg-slate-950/98',
-				isOpen ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0'
+				"fixed inset-0 z-[9999] flex h-screen min-h-screen flex-col backdrop-blur-xl transition-all duration-300",
+				"bg-white/95 dark:bg-slate-950/98",
+				isOpen
+					? "visible opacity-100"
+					: "pointer-events-none invisible opacity-0",
 			)}
 			style={{
-				height: '100vh',
-				minHeight: '100vh',
-				backgroundColor: isDark ? 'rgb(2, 6, 23)' : 'rgba(255, 255, 255, 0.95)',
+				height: "100vh",
+				minHeight: "100vh",
+				backgroundColor: isDark ? "rgb(2, 6, 23)" : "rgba(255, 255, 255, 0.95)",
 			}}
 		>
 			<div className="-z-10 absolute inset-0 overflow-hidden">
@@ -310,26 +323,31 @@ const MobileNav = ({
 										type="button"
 										className="flex w-full items-center justify-between rounded-md px-4 py-3 text-center text-slate-900 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
 									>
-										<span className="flex-grow font-medium text-base">{item.title}</span>
+										<span className="flex-grow font-medium text-base">
+											{item.title}
+										</span>
 										<ChevronDown
 											className={cn(
-												'ml-2 h-4 w-4 text-slate-700 transition-transform duration-200 dark:text-white/80',
-												openSubmenus[item.title] && 'rotate-180 transform'
+												"ml-2 h-4 w-4 text-slate-700 transition-transform duration-200 dark:text-white/80",
+												openSubmenus[item.title] && "rotate-180 transform",
 											)}
 										/>
 									</button>
 									<div
 										className={cn(
-											'transition-all duration-300',
+											"transition-all duration-300",
 											openSubmenus[item.title]
-												? 'mt-1 mb-2 max-h-[calc(100vh-20rem)] overflow-y-auto opacity-100'
-												: 'max-h-0 overflow-hidden opacity-0'
+												? "mt-1 mb-2 max-h-[calc(100vh-20rem)] overflow-y-auto opacity-100"
+												: "max-h-0 overflow-hidden opacity-0",
 										)}
 									>
 										<ul className="space-y-2 py-2 pb-4">
 											{item.children.map((child) => (
 												<li key={child.title} className="flex justify-center">
-													{child.image || child.ctaTitle || child.ctaSubtitle || child.ctaButton ? (
+													{child.image ||
+													child.ctaTitle ||
+													child.ctaSubtitle ||
+													child.ctaButton ? (
 														<div className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-4 text-slate-900 shadow-sm dark:border-border dark:bg-card dark:text-card-foreground">
 															{child.image && (
 																<div className="relative mb-3 h-24 w-full overflow-hidden rounded-md">
@@ -357,7 +375,9 @@ const MobileNav = ({
 														<MegaMenuLink
 															href={child.href}
 															title={child.title}
-															icon={child.icon && <child.icon className="h-4 w-4" />}
+															icon={
+																child.icon && <child.icon className="h-4 w-4" />
+															}
 															className=""
 														/>
 													)}
@@ -469,7 +489,7 @@ export default function Navbar() {
 
 	// Track scroll direction and control navbar/banner visibility
 	useEffect(() => {
-		if (typeof window === 'undefined') return;
+		if (typeof window === "undefined") return;
 
 		let isMounted = true;
 		let ticking = false;
@@ -493,7 +513,8 @@ export default function Navbar() {
 
 				// Only update if scrolled enough to avoid jitter
 				// Use slightly higher threshold on mobile for smoother experience
-				const threshold = window.innerWidth < 640 ? scrollThreshold * 1.5 : scrollThreshold;
+				const threshold =
+					window.innerWidth < 640 ? scrollThreshold * 1.5 : scrollThreshold;
 				if (scrollDifference < threshold) {
 					ticking = false;
 					return;
@@ -524,11 +545,11 @@ export default function Navbar() {
 			});
 		};
 
-		window.addEventListener('scroll', handleScroll, { passive: true });
+		window.addEventListener("scroll", handleScroll, { passive: true });
 
 		return () => {
 			isMounted = false;
-			window.removeEventListener('scroll', handleScroll);
+			window.removeEventListener("scroll", handleScroll);
 		};
 	}, []);
 
@@ -538,21 +559,21 @@ export default function Navbar() {
 	useEffect(() => {
 		if (!hasMounted) return;
 		if (mobileMenuOpen) {
-			document.body.style.overflow = 'hidden';
+			document.body.style.overflow = "hidden";
 			// Keep navbar visible when mobile menu is open
 			// Also reset scroll position tracking to prevent banner from appearing
 			// when menu closes if user was scrolling
 			setShowNavbar(true);
 			setShowBanner(false);
 			// Reset scroll tracking when menu opens to prevent issues when it closes
-			if (typeof window !== 'undefined') {
+			if (typeof window !== "undefined") {
 				lastScrollY.current = window.scrollY;
 			}
 		} else {
-			document.body.style.overflow = 'auto';
+			document.body.style.overflow = "auto";
 		}
 		return () => {
-			document.body.style.overflow = 'auto';
+			document.body.style.overflow = "auto";
 		};
 	}, [mobileMenuOpen, hasMounted]);
 
@@ -561,26 +582,26 @@ export default function Navbar() {
 		setBannerMounted(true);
 	}, []);
 
-	const isAuthenticated = status === 'authenticated';
+	const isAuthenticated = status === "authenticated";
 
 	const handleSignOut = () => {
-		void signOut({ callbackUrl: '/' });
+		void signOut({ callbackUrl: "/" });
 	};
 
 	const handleSignIn = () => {
-		openAuthModal('signin');
+		openAuthModal("signin");
 	};
 
 	const handleSignUp = () => {
-		openAuthModal('signup');
+		openAuthModal("signup");
 	};
 
 	return (
 		<>
 			<nav
 				className={cn(
-					'fixed top-0 right-0 left-0 z-[60] border-border/40 border-b bg-background/95 px-4 py-3 backdrop-blur-sm transition-transform duration-300 ease-in-out sm:px-6 sm:py-4 lg:px-8',
-					showNavbar ? 'translate-y-0' : '-translate-y-full'
+					"fixed top-0 right-0 left-0 z-[60] border-border/40 border-b bg-background/95 px-4 py-3 backdrop-blur-sm transition-transform duration-300 ease-in-out sm:px-6 sm:py-4 lg:px-8",
+					showNavbar ? "translate-y-0" : "-translate-y-full",
 				)}
 				aria-label="Main navigation"
 			>
@@ -612,7 +633,7 @@ export default function Navbar() {
 								Sign out
 							</Button>
 						)}
-						{!isAuthenticated && status !== 'loading' && (
+						{!isAuthenticated && status !== "loading" && (
 							<Button variant="default" size="sm" onClick={handleSignIn}>
 								Sign in
 							</Button>
@@ -625,7 +646,7 @@ export default function Navbar() {
 						type="button"
 						aria-expanded={mobileMenuOpen}
 						aria-controls="mobile-menu"
-						aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+						aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
 					>
 						{mobileMenuOpen ? <X className="w-6" /> : <Menu className="w-6" />}
 					</button>
@@ -634,7 +655,7 @@ export default function Navbar() {
 						isOpen={mobileMenuOpen}
 						onClose={() => setMobileMenuOpen(false)}
 						isAuthenticated={isAuthenticated}
-						isAuthLoading={status === 'loading'}
+						isAuthLoading={status === "loading"}
 						onSignOut={handleSignOut}
 						onSignIn={handleSignIn}
 						onSignUp={handleSignUp}
@@ -644,26 +665,26 @@ export default function Navbar() {
 			{/* StickyBanner appears when scrolling down, navbar appears when scrolling up */}
 			{/* Render banner via portal to body to prevent clipping by parent containers */}
 			{bannerMounted &&
-				typeof window !== 'undefined' &&
+				typeof window !== "undefined" &&
 				createPortal(
 					<StickyBanner
 						open={showBanner}
 						onClose={() => setShowBanner(false)}
 						variant="default"
 						className={cn(
-							'fixed right-0 left-0 z-[55] border-t-0 px-2 py-2 text-sm transition-transform duration-300 ease-in-out sm:px-4 sm:py-2 lg:px-4 lg:py-3 lg:text-base',
-							showBanner ? 'top-0 translate-y-0' : '-translate-y-full'
+							"fixed right-0 left-0 z-[55] border-t-0 px-2 py-2 text-sm transition-transform duration-300 ease-in-out sm:px-4 sm:py-2 lg:px-4 lg:py-3 lg:text-base",
+							showBanner ? "top-0 translate-y-0" : "-translate-y-full",
 						)}
 						style={{
-							overflow: 'visible',
-							minHeight: 'auto',
-							height: 'auto',
-							maxHeight: 'none',
+							overflow: "visible",
+							minHeight: "auto",
+							height: "auto",
+							maxHeight: "none",
 						}}
 					>
 						<BetaStickyBanner />
 					</StickyBanner>,
-					document.body
+					document.body,
 				)}
 		</>
 	);

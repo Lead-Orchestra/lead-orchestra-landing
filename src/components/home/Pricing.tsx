@@ -1,30 +1,33 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { useWaitCursor } from '@/hooks/useWaitCursor';
-import { startStripeToast } from '@/lib/ui/stripeToast';
-import type { Plan, PlanType } from '@/types/service/plans';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import toast from 'react-hot-toast';
-import Header from '../common/Header';
-import { PlanTypeToggle } from './pricing/PlanTypeToggle';
-import PricingCard from './pricing/PricingCard';
+import { Button } from "@/components/ui/button";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { startStripeToast } from "@/lib/ui/stripeToast";
+import type { Plan, PlanType } from "@/types/service/plans";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
+import Header from "../common/Header";
+import { PlanTypeToggle } from "./pricing/PlanTypeToggle";
+import PricingCard from "./pricing/PricingCard";
 import {
 	PLAN_TYPES,
 	computeAnnualDiscountSummary,
 	hasDisplayablePricing,
-} from './pricing/pricingUtils';
+} from "./pricing/pricingUtils";
 
-const PricingCheckoutDialog = dynamic(() => import('./pricing/PricingCheckoutDialog'), {
-	ssr: false,
-	loading: () => (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-			<div className="h-12 w-12 animate-spin rounded-full border-2 border-white/40 border-t-transparent" />
-		</div>
-	),
-});
+const PricingCheckoutDialog = dynamic(
+	() => import("./pricing/PricingCheckoutDialog"),
+	{
+		ssr: false,
+		loading: () => (
+			<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+				<div className="h-12 w-12 animate-spin rounded-full border-2 border-white/40 border-t-transparent" />
+			</div>
+		),
+	},
+);
 
 interface PricingProps {
 	title: string;
@@ -37,23 +40,30 @@ interface CheckoutState {
 	clientSecret: string;
 	plan: Plan;
 	planType: PlanType;
-	mode: 'payment' | 'setup';
-	context: 'standard' | 'trial';
+	mode: "payment" | "setup";
+	context: "standard" | "trial";
 	postTrialAmount?: number;
 }
 
-const Pricing: React.FC<PricingProps> = ({ title, subtitle, plans, callbackUrl }) => {
-	const [planType, setPlanType] = useState<PlanType>('monthly');
+const Pricing: React.FC<PricingProps> = ({
+	title,
+	subtitle,
+	plans,
+	callbackUrl,
+}) => {
+	const [planType, setPlanType] = useState<PlanType>("monthly");
 	const [loading, setLoading] = useState<string | null>(null);
-	const [checkoutState, setCheckoutState] = useState<CheckoutState | null>(null);
+	const [checkoutState, setCheckoutState] = useState<CheckoutState | null>(
+		null,
+	);
 	useWaitCursor(Boolean(loading));
 
 	const availableTypes = useMemo(() => {
 		const types = PLAN_TYPES.filter((type) =>
-			plans.some((plan) => hasDisplayablePricing(plan.price[type]))
+			plans.some((plan) => hasDisplayablePricing(plan.price[type])),
 		);
 
-		return types.length > 0 ? types : (['monthly'] as PlanType[]);
+		return types.length > 0 ? types : (["monthly"] as PlanType[]);
 	}, [plans]);
 
 	useEffect(() => {
@@ -64,43 +74,49 @@ const Pricing: React.FC<PricingProps> = ({ title, subtitle, plans, callbackUrl }
 
 	const filteredPlans = useMemo(
 		() => plans.filter((plan) => hasDisplayablePricing(plan.price[planType])),
-		[plans, planType]
+		[plans, planType],
 	);
 
-	const annualDiscountSummary = useMemo(() => computeAnnualDiscountSummary(plans), [plans]);
+	const annualDiscountSummary = useMemo(
+		() => computeAnnualDiscountSummary(plans),
+		[plans],
+	);
 
 	const handleCheckout = useCallback(
 		async (plan: Plan, planCallbackUrl?: string) => {
 			const priceDetails = plan.price[planType];
 
 			if (!hasDisplayablePricing(priceDetails)) {
-				toast.error('This plan is not available for the selected billing option.');
+				toast.error(
+					"This plan is not available for the selected billing option.",
+				);
 				return;
 			}
 
 			if (!priceDetails) {
-				toast.error('Pricing details unavailable. Please try again later.');
+				toast.error("Pricing details unavailable. Please try again later.");
 				return;
 			}
 
 			const { amount } = priceDetails;
 
-			if (typeof amount === 'string' && amount.trim().endsWith('%')) {
-				toast.error('Percentage-based pricing requires contacting sales.');
+			if (typeof amount === "string" && amount.trim().endsWith("%")) {
+				toast.error("Percentage-based pricing requires contacting sales.");
 				return;
 			}
 
-			const resolvedAmount = typeof amount === 'number' ? amount : Number.parseFloat(amount.trim());
+			const resolvedAmount =
+				typeof amount === "number" ? amount : Number.parseFloat(amount.trim());
 
 			if (!Number.isFinite(resolvedAmount) || resolvedAmount <= 0) {
-				toast.error('Pricing information for this plan is unavailable.');
+				toast.error("Pricing information for this plan is unavailable.");
 				return;
 			}
 
 			let stripeToast: ReturnType<typeof startStripeToast> | undefined;
 			try {
 				setLoading(plan.id);
-				stripeToast = startStripeToast('Preparing checkout…');
+				stripeToast = startStripeToast("Preparing checkout…");
 
 				const metadata: Record<string, string> = {
 					planName: plan.name,
@@ -122,9 +138,9 @@ const Pricing: React.FC<PricingProps> = ({ title, subtitle, plans, callbackUrl }
 					metadata.callbackUrl = resolvedCallbackUrl;
 				}
 
-				const response = await fetch('/api/stripe/intent', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
+				const response = await fetch("/api/stripe/intent", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
 						price: Math.round(resolvedAmount * 100),
 						description: `${plan.name} subscription (${planType})`,
@@ -134,31 +150,35 @@ const Pricing: React.FC<PricingProps> = ({ title, subtitle, plans, callbackUrl }
 
 				if (!response.ok) {
 					const errorData = await response.json().catch(() => ({}));
-					throw new Error(errorData.error || 'Failed to create payment intent');
+					throw new Error(errorData.error || "Failed to create payment intent");
 				}
 
 				const data = (await response.json()) as { clientSecret?: string };
 				if (!data.clientSecret) {
-					throw new Error('Unable to initialize checkout. Please try again.');
+					throw new Error("Unable to initialize checkout. Please try again.");
 				}
 
 				setCheckoutState({
 					clientSecret: data.clientSecret,
 					plan,
 					planType,
-					mode: 'payment',
-					context: 'standard',
+					mode: "payment",
+					context: "standard",
 				});
-				stripeToast?.success('Checkout ready. Complete your purchase in the payment form.');
+				stripeToast?.success(
+					"Checkout ready. Complete your purchase in the payment form.",
+				);
 			} catch (error) {
 				const message =
-					error instanceof Error ? error.message : 'Payment failed. Please try again.';
+					error instanceof Error
+						? error.message
+						: "Payment failed. Please try again.";
 				stripeToast?.error(message);
 			} finally {
 				setLoading(null);
 			}
 		},
-		[planType, callbackUrl]
+		[planType, callbackUrl],
 	);
 
 	if (!Array.isArray(plans) || plans.length === 0) {
@@ -200,7 +220,7 @@ const Pricing: React.FC<PricingProps> = ({ title, subtitle, plans, callbackUrl }
 						<p className="mb-4 text-gray-600 text-lg dark:text-gray-400">
 							No {planType} plans available at the moment.
 						</p>
-						<Button variant="outline" onClick={() => setPlanType('monthly')}>
+						<Button variant="outline" onClick={() => setPlanType("monthly")}>
 							View Monthly Plans
 						</Button>
 					</div>
@@ -219,8 +239,8 @@ const Pricing: React.FC<PricingProps> = ({ title, subtitle, plans, callbackUrl }
 
 				<div className="my-16 text-center">
 					<p className="mb-4 text-black text-lg dark:text-white/80">
-						Want early access to Deal Scale? Help shape the future of scalable MVPs designed for
-						ambitious founders and agencies!
+						Want early access to Deal Scale? Help shape the future of scalable
+						MVPs designed for ambitious founders and agencies!
 					</p>
 					<Link href="/contact-pilot" className="inline-block">
 						<Button

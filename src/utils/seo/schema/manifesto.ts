@@ -1,17 +1,21 @@
-import type { ManifestoSectionSummary } from '@/data/about/timelineSummary';
-import { companyData } from '@/data/company';
-import { defaultSeo } from '@/utils/seo/staticSeo';
+import type { ManifestoSectionSummary } from "@/data/about/timelineSummary";
+import { companyData } from "@/data/company";
+import { defaultSeo } from "@/utils/seo/staticSeo";
 
-import { ORGANIZATION_ID, SCHEMA_CONTEXT, buildAbsoluteUrl } from './helpers';
+import { ORGANIZATION_ID, SCHEMA_CONTEXT, buildAbsoluteUrl } from "./helpers";
 
-function slugifyAnchor(anchor: string, fallback: string, index: number): string {
+function slugifyAnchor(
+	anchor: string,
+	fallback: string,
+	index: number,
+): string {
 	const base = anchor.trim() || fallback.trim().toLowerCase();
 	return (
 		base
-			.normalize('NFKD')
-			.replace(/[\u0300-\u036f]/g, '')
-			.replace(/[^a-z0-9]+/gi, '-')
-			.replace(/^-+|-+$/g, '')
+			.normalize("NFKD")
+			.replace(/[\u0300-\u036f]/g, "")
+			.replace(/[^a-z0-9]+/gi, "-")
+			.replace(/^-+|-+$/g, "")
 			.toLowerCase() || `section-${index + 1}`
 	);
 }
@@ -24,27 +28,27 @@ export interface BuildManifestoSchemaOptions {
 
 export function buildManifestoSchema(
 	sections: ManifestoSectionSummary[],
-	options: BuildManifestoSchemaOptions = {}
+	options: BuildManifestoSchemaOptions = {},
 ) {
-	const baseUrl = buildAbsoluteUrl(options.url ?? '/about');
+	const baseUrl = buildAbsoluteUrl(options.url ?? "/about");
 	const seriesId = `${baseUrl}#manifesto`;
 
 	return {
-		'@context': SCHEMA_CONTEXT,
-		'@type': 'CreativeWorkSeries',
-		'@id': seriesId,
-		name: options.name ?? 'Lead Orchestra Blue Ocean Manifesto',
+		"@context": SCHEMA_CONTEXT,
+		"@type": "CreativeWorkSeries",
+		"@id": seriesId,
+		name: options.name ?? "Lead Orchestra Blue Ocean Manifesto",
 		headline:
 			options.description ??
-			'Ten-part manifesto outlining how Lead Orchestra automates wealth creation for real estate operators.',
+			"Ten-part manifesto outlining how Lead Orchestra automates wealth creation for real estate operators.",
 		description:
 			options.description ??
-			'Discover how Lead Orchestra scales revenue leverage with automation, ownership, and lifestyle-driven outcomes.',
+			"Discover how Lead Orchestra scales revenue leverage with automation, ownership, and lifestyle-driven outcomes.",
 		url: baseUrl,
-		inLanguage: 'en-US',
+		inLanguage: "en-US",
 		author: {
-			'@type': 'Organization',
-			'@id': ORGANIZATION_ID,
+			"@type": "Organization",
+			"@id": ORGANIZATION_ID,
 			name: companyData.companyName,
 			url: defaultSeo.canonical,
 		},
@@ -53,11 +57,11 @@ export function buildManifestoSchema(
 			const anchor = slugifyAnchor(section.anchor, section.title, index);
 			const partId = `${seriesId}-${anchor}`;
 			return {
-				'@type': 'CreativeWork',
-				'@id': partId,
+				"@type": "CreativeWork",
+				"@id": partId,
 				name: section.title,
 				headline: section.subtitle || section.title,
-				description: section.summary || section.subtitle || '',
+				description: section.summary || section.subtitle || "",
 				position: index + 1,
 				url: `${baseUrl}#${anchor}`,
 			};
@@ -65,10 +69,10 @@ export function buildManifestoSchema(
 		itemListElement: sections.map((section, index) => {
 			const anchor = slugifyAnchor(section.anchor, section.title, index);
 			return {
-				'@type': 'ListItem',
+				"@type": "ListItem",
 				position: index + 1,
 				name: section.title,
-				description: section.summary || section.subtitle || '',
+				description: section.summary || section.subtitle || "",
 				url: `${baseUrl}#${anchor}`,
 			};
 		}),

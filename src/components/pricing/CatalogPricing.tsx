@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import { ProductCheckoutForm } from '@/components/checkout/product/ProductCheckoutForm';
-import PricingCheckoutDialog from '@/components/home/pricing/PricingCheckoutDialog';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { CardStack } from '@/components/ui/card-stack';
-import { GlassCard } from '@/components/ui/glass-card';
-import { FOUNDERS_CIRCLE_DEADLINE } from '@/constants/foundersCircleDeadline';
-import { ProductSelectionProvider } from '@/contexts/ProductSelectionContext';
-import { mockDiscountCodes } from '@/data/discount/mockDiscountCodes';
-import { creditProducts } from '@/data/products/credits';
-import { useCountdown } from '@/hooks/useCountdown';
-import { useNavigationRouter } from '@/hooks/useNavigationRouter';
-import { useWaitCursor } from '@/hooks/useWaitCursor';
-import { startStripeToast } from '@/lib/ui/stripeToast';
-import { cn } from '@/lib/utils';
-import type { DiscountCode } from '@/types/discount/discountCode';
+import { ProductCheckoutForm } from "@/components/checkout/product/ProductCheckoutForm";
+import PricingCheckoutDialog from "@/components/home/pricing/PricingCheckoutDialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { CardStack } from "@/components/ui/card-stack";
+import { GlassCard } from "@/components/ui/glass-card";
+import { FOUNDERS_CIRCLE_DEADLINE } from "@/constants/foundersCircleDeadline";
+import { ProductSelectionProvider } from "@/contexts/ProductSelectionContext";
+import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
+import { creditProducts } from "@/data/products/credits";
+import { useCountdown } from "@/hooks/useCountdown";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { startStripeToast } from "@/lib/ui/stripeToast";
+import { cn } from "@/lib/utils";
+import type { DiscountCode } from "@/types/discount/discountCode";
 import type {
 	OneTimePlan,
 	Plan,
@@ -23,68 +23,81 @@ import type {
 	PricingInterval,
 	RecurringPlan,
 	SelfHostedPlan,
-} from '@/types/service/plans';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { Loader2 } from 'lucide-react';
-import { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import toast from 'react-hot-toast';
-import { AffiliateCommissionModal } from './AffiliateCommissionModal';
-import { AffiliatePartnerTeaser } from './AffiliatePartnerTeaser';
-import { PartnershipCard, SelfHostedCard, toPartnershipProps } from './OneTimePlanCard';
-import { RecurringPlanCard } from './RecurringPlanCard';
-import { RoiEstimatorModal } from './RoiEstimatorModal';
+} from "@/types/service/plans";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { Loader2 } from "lucide-react";
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
+import toast from "react-hot-toast";
+import { AffiliateCommissionModal } from "./AffiliateCommissionModal";
+import { AffiliatePartnerTeaser } from "./AffiliatePartnerTeaser";
+import {
+	PartnershipCard,
+	SelfHostedCard,
+	toPartnershipProps,
+} from "./OneTimePlanCard";
+import { RecurringPlanCard } from "./RecurringPlanCard";
+import { RoiEstimatorModal } from "./RoiEstimatorModal";
 
-type PricingView = PricingInterval | 'oneTime';
+type PricingView = PricingInterval | "oneTime";
 
 const VIEW_OPTIONS: Array<{ value: PricingView; label: string }> = [
-	{ value: 'monthly', label: 'Monthly' },
-	{ value: 'annual', label: 'Annual' },
-	{ value: 'oneTime', label: 'One-Time' },
+	{ value: "monthly", label: "Monthly" },
+	{ value: "annual", label: "Annual" },
+	{ value: "oneTime", label: "One-Time" },
 ];
 
 const ANNUAL_PLAN_BADGES: Record<
 	string,
-	{ label: string; variant: 'basic' | 'starter' | 'enterprise' }
+	{ label: string; variant: "basic" | "starter" | "enterprise" }
 > = {
-	basicAnnual: { label: 'Basic Annual', variant: 'basic' },
-	starterAnnual: { label: 'Starter Annual', variant: 'starter' },
-	enterpriseAnnual: { label: 'Enterprise Annual', variant: 'enterprise' },
+	basicAnnual: { label: "Basic Annual", variant: "basic" },
+	starterAnnual: { label: "Starter Annual", variant: "starter" },
+	enterpriseAnnual: { label: "Enterprise Annual", variant: "enterprise" },
 };
 
 const MONTHLY_PLAN_BADGES: Record<
 	string,
-	{ label: string; variant: 'basic' | 'starter' | 'enterprise' }
+	{ label: string; variant: "basic" | "starter" | "enterprise" }
 > = {
-	basic: { label: 'Basic Monthly', variant: 'basic' },
-	starter: { label: 'Starter Monthly', variant: 'starter' },
-	enterprisePlus: { label: 'Enterprise+ Monthly', variant: 'enterprise' },
+	basic: { label: "Basic Monthly", variant: "basic" },
+	starter: { label: "Starter Monthly", variant: "starter" },
+	enterprisePlus: { label: "Enterprise+ Monthly", variant: "enterprise" },
 };
 
 const ONE_TIME_PLAN_BADGES: Record<
 	string,
-	{ label: string; variant: 'partner' | 'basic' | 'starter' | 'enterprise' }
+	{ label: string; variant: "partner" | "basic" | "starter" | "enterprise" }
 > = {
-	commissionPartner: { label: 'Commission Partner', variant: 'partner' },
+	commissionPartner: { label: "Commission Partner", variant: "partner" },
 };
 
-const toLegacyPlan = (plan: RecurringPlan, interval: PricingInterval): Plan => ({
+const toLegacyPlan = (
+	plan: RecurringPlan,
+	interval: PricingInterval,
+): Plan => ({
 	id: `${plan.id}-${interval}`,
 	name: plan.name,
 	price: {
 		monthly: {
-			amount: interval === 'monthly' ? plan.price : 0,
-			description: interval === 'monthly' ? 'per month' : '',
-			features: interval === 'monthly' ? plan.features : [],
+			amount: interval === "monthly" ? plan.price : 0,
+			description: interval === "monthly" ? "per month" : "",
+			features: interval === "monthly" ? plan.features : [],
 		},
 		annual: {
-			amount: interval === 'annual' ? plan.price : 0,
-			description: interval === 'annual' ? 'per year' : '',
-			features: interval === 'annual' ? plan.features : [],
+			amount: interval === "annual" ? plan.price : 0,
+			description: interval === "annual" ? "per year" : "",
+			features: interval === "annual" ? plan.features : [],
 		},
-		oneTime: { amount: 0, description: '', features: [] },
+		oneTime: { amount: 0, description: "", features: [] },
 	},
-	cta: { text: 'Complete Checkout', type: 'checkout' },
+	cta: { text: "Complete Checkout", type: "checkout" },
 });
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
@@ -92,7 +105,7 @@ const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 	: null;
 
 const isSelfHosted = (plan: OneTimePlan): plan is SelfHostedPlan =>
-	'ctaPrimary' in plan && 'roiEstimator' in plan;
+	"ctaPrimary" in plan && "roiEstimator" in plan;
 
 /**
  * CatalogPricing renders the pricing catalog with optional teaser sections.
@@ -140,20 +153,25 @@ export const CatalogPricing = ({
 	showOpenSource = false,
 }: CatalogPricingProps) => {
 	const router = useNavigationRouter();
-	const [view, setView] = useState<PricingView>('monthly');
+	const [view, setView] = useState<PricingView>("monthly");
 	const [loading, setLoading] = useState<string | null>(null);
 	const [checkoutState, setCheckoutState] = useState<{
 		plan: Plan;
 		view: PricingInterval;
 		clientSecret: string;
-		mode: 'payment' | 'setup';
-		context: 'standard' | 'trial';
+		mode: "payment" | "setup";
+		context: "standard" | "trial";
 		postTrialAmount?: number;
 	} | null>(null);
 	const [roiOpen, setRoiOpen] = useState(false);
-	const [productCheckoutSecret, setProductCheckoutSecret] = useState<string | null>(null);
-	const [productCheckoutCoupon, setProductCheckoutCoupon] = useState<string | null>(null);
-	const [productCheckoutDiscount, setProductCheckoutDiscount] = useState<DiscountCode | null>(null);
+	const [productCheckoutSecret, setProductCheckoutSecret] = useState<
+		string | null
+	>(null);
+	const [productCheckoutCoupon, setProductCheckoutCoupon] = useState<
+		string | null
+	>(null);
+	const [productCheckoutDiscount, setProductCheckoutDiscount] =
+		useState<DiscountCode | null>(null);
 	const [productCheckoutLoading, setProductCheckoutLoading] = useState(false);
 	const [trialLoading, setTrialLoading] = useState(false);
 	const [affiliateModalOpen, setAffiliateModalOpen] = useState(false);
@@ -161,7 +179,7 @@ export const CatalogPricing = ({
 		targetTimestamp: FOUNDERS_CIRCLE_DEADLINE,
 	});
 	const freeTrialBadgeText = foundersCountdown.isExpired
-		? 'Limited-Time Trial · Offer ended'
+		? "Limited-Time Trial · Offer ended"
 		: `Limited-Time Trial · Closes in ${foundersCountdown.formatted}`;
 
 	useWaitCursor(productCheckoutLoading || trialLoading);
@@ -169,12 +187,12 @@ export const CatalogPricing = ({
 	const availableViews = useMemo(
 		() =>
 			VIEW_OPTIONS.filter(({ value }) => {
-				if (value === 'oneTime') {
+				if (value === "oneTime") {
 					return catalog.pricing.oneTime.length > 0;
 				}
 				return catalog.pricing[value].length > 0;
 			}).map((option) => option.value),
-		[catalog]
+		[catalog],
 	);
 
 	useEffect(() => {
@@ -187,13 +205,15 @@ export const CatalogPricing = ({
 	const annualPlans = catalog.pricing.annual;
 	const oneTimePlans = catalog.pricing.oneTime;
 
-	const recurringPlans = view === 'monthly' ? monthlyPlans : view === 'annual' ? annualPlans : [];
+	const recurringPlans =
+		view === "monthly" ? monthlyPlans : view === "annual" ? annualPlans : [];
 
 	const selfHostedPlan = oneTimePlans.find(
-		(plan): plan is SelfHostedPlan => 'roiEstimator' in plan
+		(plan): plan is SelfHostedPlan => "roiEstimator" in plan,
 	);
 	const partnershipPlans = oneTimePlans.filter(
-		(plan): plan is Exclude<OneTimePlan, SelfHostedPlan> => !('roiEstimator' in plan)
+		(plan): plan is Exclude<OneTimePlan, SelfHostedPlan> =>
+			!("roiEstimator" in plan),
 	);
 
 	const handleSubscribe = useCallback(
@@ -203,13 +223,15 @@ export const CatalogPricing = ({
 
 				const amountInCents = Math.round(recurringPlan.price * 100);
 				if (amountInCents <= 0) {
-					toast.error('This plan cannot be purchased online. Contact our team.');
+					toast.error(
+						"This plan cannot be purchased online. Contact our team.",
+					);
 					return false;
 				}
 
-				const response = await fetch('/api/stripe/intent', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
+				const response = await fetch("/api/stripe/intent", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
 						price: amountInCents,
 						description: `${recurringPlan.name} subscription (${interval})`,
@@ -224,7 +246,7 @@ export const CatalogPricing = ({
 
 				if (!response.ok) {
 					const errorData = await response.json().catch(() => ({}));
-					throw new Error(errorData.error || 'Failed to create payment intent');
+					throw new Error(errorData.error || "Failed to create payment intent");
 				}
 
 				const { clientSecret } = (await response.json()) as {
@@ -232,50 +254,54 @@ export const CatalogPricing = ({
 				};
 
 				if (!clientSecret) {
-					throw new Error('Unable to initialize checkout. Please try again.');
+					throw new Error("Unable to initialize checkout. Please try again.");
 				}
 
 				setCheckoutState({
 					clientSecret,
 					view: interval,
 					plan: toLegacyPlan(recurringPlan, interval),
-					mode: 'payment',
-					context: 'standard',
+					mode: "payment",
+					context: "standard",
 				});
 
 				return true;
 			} catch (error) {
-				toast.error(error instanceof Error ? error.message : 'Unable to start checkout');
+				toast.error(
+					error instanceof Error ? error.message : "Unable to start checkout",
+				);
 				return false;
 			} finally {
 				setLoading(null);
 			}
 		},
-		[callbackUrl]
+		[callbackUrl],
 	);
 
 	const handleViewChange = (next: PricingView) => {
 		setView(next);
 	};
 
-	const freePlan = monthlyPlans.find((plan) => plan.id === 'open-source');
-	const basicPlan = monthlyPlans.find((plan) => plan.id === 'team');
-	const starterPlan = monthlyPlans.find((plan) => plan.id === 'agency');
+	const freePlan = monthlyPlans.find((plan) => plan.id === "open-source");
+	const basicPlan = monthlyPlans.find((plan) => plan.id === "team");
+	const starterPlan = monthlyPlans.find((plan) => plan.id === "agency");
 
 	const aiCreditsProduct = useMemo(
-		() => creditProducts.find((product) => product.slug === 'lead-credits'),
-		[]
+		() => creditProducts.find((product) => product.slug === "lead-credits"),
+		[],
 	);
 
 	const handleProductCheckout = useCallback(
 		async (coupon: string) => {
 			if (!aiCreditsProduct) {
-				toast.error('Lead credits product is unavailable. Please try again later.');
+				toast.error(
+					"Lead credits product is unavailable. Please try again later.",
+				);
 				return;
 			}
 
 			if (!stripePromise) {
-				toast.error('Checkout is unavailable right now.');
+				toast.error("Checkout is unavailable right now.");
 				return;
 			}
 
@@ -283,22 +309,24 @@ export const CatalogPricing = ({
 			const normalizedCoupon = coupon.toUpperCase();
 			setProductCheckoutCoupon(normalizedCoupon);
 			setProductCheckoutDiscount(
-				mockDiscountCodes.find((dc) => dc.code.toUpperCase() === normalizedCoupon) ?? null
+				mockDiscountCodes.find(
+					(dc) => dc.code.toUpperCase() === normalizedCoupon,
+				) ?? null,
 			);
-			const stripeToast = startStripeToast('Preparing checkout…');
+			const stripeToast = startStripeToast("Preparing checkout…");
 
 			try {
 				await navigator.clipboard.writeText(coupon);
-				toast.success('Coupon copied to clipboard');
+				toast.success("Coupon copied to clipboard");
 			} catch (error) {
 				console.error(error);
-				toast.error('Unable to copy coupon. Try again.');
+				toast.error("Unable to copy coupon. Try again.");
 			}
 
 			try {
-				const response = await fetch('/api/stripe/intent', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
+				const response = await fetch("/api/stripe/intent", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
 						price: Math.round(aiCreditsProduct.price * 100),
 						description: `${aiCreditsProduct.name} (${coupon})`,
@@ -306,7 +334,9 @@ export const CatalogPricing = ({
 							productId: aiCreditsProduct.id,
 							productName: aiCreditsProduct.name,
 							couponCode: coupon,
-							productCategories: aiCreditsProduct.categories?.map((category) => category).join(','),
+							productCategories: aiCreditsProduct.categories
+								?.map((category) => category)
+								.join(","),
 						},
 					}),
 				});
@@ -314,8 +344,8 @@ export const CatalogPricing = ({
 				if (!response.ok) {
 					const errorData = await response
 						.json()
-						.catch(() => ({ message: 'Failed to start checkout' }));
-					throw new Error(errorData.message || 'Failed to start checkout');
+						.catch(() => ({ message: "Failed to start checkout" }));
+					throw new Error(errorData.message || "Failed to start checkout");
 				}
 
 				const data = (await response.json()) as {
@@ -323,14 +353,14 @@ export const CatalogPricing = ({
 					id?: string;
 				};
 				if (!data.clientSecret) {
-					throw new Error('Checkout unavailable. Please try again.');
+					throw new Error("Checkout unavailable. Please try again.");
 				}
 
 				// Try to apply discount, but don't fail if it doesn't work
 				if (data.id) {
-					const applyDiscount = await fetch('/api/stripe/intent', {
-						method: 'PUT',
-						headers: { 'Content-Type': 'application/json' },
+					const applyDiscount = await fetch("/api/stripe/intent", {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({
 							intentId: data.id,
 							discountCode: coupon,
@@ -340,25 +370,34 @@ export const CatalogPricing = ({
 					if (!applyDiscount.ok) {
 						// If discount fails, just show a warning but still open checkout
 						// The coupon is already copied, so user can apply it manually
-						console.warn('Discount code could not be automatically applied:', coupon);
-						toast.success(`Coupon ${coupon} copied. Apply it in checkout to claim the discount.`);
+						console.warn(
+							"Discount code could not be automatically applied:",
+							coupon,
+						);
+						toast.success(
+							`Coupon ${coupon} copied. Apply it in checkout to claim the discount.`,
+						);
 					}
 				}
 
 				setProductCheckoutSecret(data.clientSecret);
-				stripeToast.success('Checkout ready. Complete your purchase in the payment form.');
+				stripeToast.success(
+					"Checkout ready. Complete your purchase in the payment form.",
+				);
 			} catch (error) {
 				const message =
-					error instanceof Error ? error.message : 'Checkout failed. Please try again.';
+					error instanceof Error
+						? error.message
+						: "Checkout failed. Please try again.";
 				stripeToast.error(message);
-				console.error('AI credits checkout error:', error);
+				console.error("AI credits checkout error:", error);
 				setProductCheckoutCoupon(null);
 				setProductCheckoutDiscount(null);
 			} finally {
 				setProductCheckoutLoading(false);
 			}
 		},
-		[aiCreditsProduct]
+		[aiCreditsProduct],
 	);
 
 	const handleCloseProductCheckout = () => {
@@ -373,16 +412,18 @@ export const CatalogPricing = ({
 		}
 
 		if (!basicPlan) {
-			toast.error('The Basic plan is currently unavailable. Please try again soon.');
+			toast.error(
+				"The Basic plan is currently unavailable. Please try again soon.",
+			);
 			return;
 		}
 
 		setTrialLoading(true);
-		const stripeToast = startStripeToast('Starting your free trial…');
+		const stripeToast = startStripeToast("Starting your free trial…");
 		try {
-			const response = await fetch('/api/stripe/trial', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const response = await fetch("/api/stripe/trial", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					planId: basicPlan.id,
 					planName: basicPlan.name,
@@ -392,7 +433,9 @@ export const CatalogPricing = ({
 
 			if (!response.ok) {
 				const errorData = await response.json().catch(() => ({}));
-				throw new Error(errorData.error || 'Unable to prepare free trial checkout.');
+				throw new Error(
+					errorData.error || "Unable to prepare free trial checkout.",
+				);
 			}
 
 			const { clientSecret } = (await response.json()) as {
@@ -400,39 +443,45 @@ export const CatalogPricing = ({
 			};
 
 			if (!clientSecret) {
-				throw new Error('Free trial checkout is unavailable right now.');
+				throw new Error("Free trial checkout is unavailable right now.");
 			}
 
-			const legacyPlan = toLegacyPlan(basicPlan, 'monthly');
+			const legacyPlan = toLegacyPlan(basicPlan, "monthly");
 			legacyPlan.price.monthly.amount = 0;
-			legacyPlan.price.monthly.description = 'Free trial — no charge today';
+			legacyPlan.price.monthly.description = "Free trial — no charge today";
 			legacyPlan.price.monthly.features = [
-				'No charge today. Keep your Basic access after the trial by staying active.',
+				"No charge today. Keep your Basic access after the trial by staying active.",
 				...legacyPlan.price.monthly.features,
 			];
 
 			setCheckoutState({
 				clientSecret,
-				view: 'monthly',
+				view: "monthly",
 				plan: legacyPlan,
-				mode: 'setup',
-				context: 'trial',
+				mode: "setup",
+				context: "trial",
 				postTrialAmount: basicPlan.price,
 			});
 			stripeToast.success(
-				'Free trial ready. Complete checkout to start your trial — no charge today.'
+				"Free trial ready. Complete checkout to start your trial — no charge today.",
 			);
 		} catch (error) {
-			stripeToast.error(error instanceof Error ? error.message : 'Unable to start the free trial.');
-			console.error('Trial checkout error:', error);
+			stripeToast.error(
+				error instanceof Error
+					? error.message
+					: "Unable to start the free trial.",
+			);
+			console.error("Trial checkout error:", error);
 		} finally {
 			setTrialLoading(false);
 		}
 	}, [basicPlan, trialLoading]);
 
-	const isMinimalMode = !showFreePreview && !showUpgradeStack && !showAddOnStack && !showPilotBlurb;
+	const isMinimalMode =
+		!showFreePreview && !showUpgradeStack && !showAddOnStack && !showPilotBlurb;
 
-	const minimalStackActive = view === 'monthly' && !showFreePreview && !!freePlan && !!basicPlan;
+	const minimalStackActive =
+		view === "monthly" && !showFreePreview && !!freePlan && !!basicPlan;
 
 	const minimalStackItems = useMemo(() => {
 		if (!minimalStackActive || !freePlan || !basicPlan) {
@@ -443,12 +492,12 @@ export const CatalogPricing = ({
 			{
 				id: 0,
 				name: freePlan.name,
-				designation: 'Free Trial',
+				designation: "Free Trial",
 				content: (
 					<RecurringPlanCard
 						plan={{
 							...freePlan,
-							ctaType: 'upgrade',
+							ctaType: "upgrade",
 						}}
 						view="monthly"
 						onSubscribe={() => {
@@ -458,7 +507,7 @@ export const CatalogPricing = ({
 						}}
 						loading={trialLoading}
 						ctaOverride={{
-							label: trialLoading ? 'Starting Trial...' : 'Start Free Trial',
+							label: trialLoading ? "Starting Trial..." : "Start Free Trial",
 							onClick: () => {
 								if (!trialLoading) {
 									void handleStartTrial();
@@ -476,23 +525,23 @@ export const CatalogPricing = ({
 			{
 				id: 1,
 				name: basicPlan.name,
-				designation: 'Basic Plan',
+				designation: "Basic Plan",
 				content: (
 					<RecurringPlanCard
 						plan={basicPlan}
 						view="monthly"
 						onSubscribe={() => {
-							void handleSubscribe(basicPlan, 'monthly');
+							void handleSubscribe(basicPlan, "monthly");
 						}}
 						loading={loading === `${basicPlan.id}-monthly`}
 						ctaOverride={{
 							label:
 								loading === `${basicPlan.id}-monthly`
-									? 'Processing...'
+									? "Processing..."
 									: `Choose ${basicPlan.name}`,
 							onClick: () => {
 								if (loading !== `${basicPlan.id}-monthly`) {
-									void handleSubscribe(basicPlan, 'monthly');
+									void handleSubscribe(basicPlan, "monthly");
 								}
 							},
 						}}
@@ -528,16 +577,19 @@ export const CatalogPricing = ({
 			items.push({
 				id: 0,
 				name: basicPlan.name,
-				designation: 'Pilot pricing locks in for 2 years',
+				designation: "Pilot pricing locks in for 2 years",
 				content: (
 					<div className="flex flex-col gap-4">
 						<div className="space-y-1">
 							<p className="text-[10px] text-muted-foreground uppercase tracking-[0.25em]">
 								Most Popular
 							</p>
-							<h4 className="font-semibold text-foreground text-lg">{basicPlan.name}</h4>
+							<h4 className="font-semibold text-foreground text-lg">
+								{basicPlan.name}
+							</h4>
 							<p className="text-muted-foreground text-xs">
-								{basicPlan.features?.[0] ?? 'Voice & SMS automation bundle ready to scale.'}
+								{basicPlan.features?.[0] ??
+									"Voice & SMS automation bundle ready to scale."}
 							</p>
 						</div>
 						<div className="rounded-lg border border-primary/10 bg-primary/5 p-3 text-center text-[11px] text-primary">
@@ -546,7 +598,7 @@ export const CatalogPricing = ({
 						<Button
 							size="sm"
 							onClick={() => {
-								void handleSubscribe(basicPlan, 'monthly');
+								void handleSubscribe(basicPlan, "monthly");
 							}}
 						>
 							Lock In Pilot Pricing
@@ -560,23 +612,29 @@ export const CatalogPricing = ({
 			items.push({
 				id: 1,
 				name: starterPlan.name,
-				designation: 'Scale teams quickly',
+				designation: "Scale teams quickly",
 				content: (
 					<div className="flex flex-col gap-4">
 						<div className="space-y-1">
 							<p className="text-[10px] text-primary/60 uppercase tracking-[0.25em]">
 								Upgrade Path
 							</p>
-							<h4 className="font-semibold text-foreground text-lg">{starterPlan.name}</h4>
+							<h4 className="font-semibold text-foreground text-lg">
+								{starterPlan.name}
+							</h4>
 							<p className="text-muted-foreground text-xs">
 								{starterPlan.features?.[1] ??
-									'Workflow automation and inbound AI agents for multi-market teams.'}
+									"Workflow automation and inbound AI agents for multi-market teams."}
 							</p>
 						</div>
 						<div className="rounded-lg border border-primary/10 bg-primary/5 p-3 text-center text-[11px] text-primary">
 							Scale to inbound automation with dedicated success support.
 						</div>
-						<Button size="sm" variant="secondary" onClick={() => router.push('/contact')}>
+						<Button
+							size="sm"
+							variant="secondary"
+							onClick={() => router.push("/contact")}
+						>
 							Plan Demo Call
 						</Button>
 					</div>
@@ -587,15 +645,17 @@ export const CatalogPricing = ({
 		if (showAddOnStack && aiCreditsProduct) {
 			items.push({
 				id: 2,
-				name: 'Lead Credits',
-				designation: 'Add-on Discount',
+				name: "Lead Credits",
+				designation: "Add-on Discount",
 				content: (
 					<div className="flex flex-col gap-4">
 						<div className="space-y-1">
 							<p className="text-[10px] text-primary/70 uppercase tracking-[0.25em]">
 								Add-On Boost
 							</p>
-							<h4 className="font-semibold text-foreground text-lg">Lead Credits</h4>
+							<h4 className="font-semibold text-foreground text-lg">
+								Lead Credits
+							</h4>
 							<p className="text-muted-foreground text-xs">
 								Top up lead credits with the launch coupon applied instantly.
 							</p>
@@ -604,7 +664,7 @@ export const CatalogPricing = ({
 							type="button"
 							className="group flex items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary/10 p-3 text-center font-semibold text-[11px] text-primary transition hover:bg-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
 							disabled={productCheckoutLoading}
-							onClick={() => handleProductCheckout('SCALE50')}
+							onClick={() => handleProductCheckout("SCALE50")}
 							aria-live="assertive"
 						>
 							{productCheckoutLoading ? (
@@ -629,7 +689,9 @@ export const CatalogPricing = ({
 										<rect width="12" height="12" x="3" y="7" rx="2" />
 									</svg>
 									<span>
-										Copy <span className="font-mono tracking-[0.3em]">SCALE50</span> & Open Checkout
+										Copy{" "}
+										<span className="font-mono tracking-[0.3em]">SCALE50</span>{" "}
+										& Open Checkout
 									</span>
 								</>
 							)}
@@ -671,9 +733,9 @@ export const CatalogPricing = ({
 			return null;
 		}
 
-		return new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: 'USD',
+		return new Intl.NumberFormat("en-US", {
+			style: "currency",
+			currency: "USD",
 			maximumFractionDigits: 0,
 		}).format(highestMonthlyPlanPrice * 0.5);
 	}, [highestMonthlyPlanPrice]);
@@ -684,61 +746,73 @@ export const CatalogPricing = ({
 				<div className="pointer-events-none absolute inset-0 bg-grid-lines opacity-10" />
 				<div className="mx-auto max-w-6xl">
 					<header className="pt-12 text-center md:pt-16">
-						<p className="text-primary/70 text-xs uppercase tracking-wide">Pricing</p>
-						<h2 className="mt-2 font-semibold text-4xl text-foreground">{title}</h2>
+						<p className="text-primary/70 text-xs uppercase tracking-wide">
+							Pricing
+						</p>
+						<h2 className="mt-2 font-semibold text-4xl text-foreground">
+							{title}
+						</h2>
 						<p className="mt-4 text-muted-foreground">{subtitle}</p>
 						<div className="mt-6 inline-flex gap-2 rounded-full border border-border/70 bg-background/80 p-1 shadow-inner backdrop-blur">
-							{VIEW_OPTIONS.filter(({ value }) => availableViews.includes(value)).map(
-								({ value, label }) => (
-									<Button
-										key={value}
-										variant={view === value ? 'default' : 'ghost'}
-										size="sm"
-										className={cn(
-											'rounded-full px-4',
-											view === value ? 'shadow-md' : 'text-muted-foreground'
-										)}
-										onClick={() => handleViewChange(value)}
-									>
-										{label}
-									</Button>
-								)
-							)}
+							{VIEW_OPTIONS.filter(({ value }) =>
+								availableViews.includes(value),
+							).map(({ value, label }) => (
+								<Button
+									key={value}
+									variant={view === value ? "default" : "ghost"}
+									size="sm"
+									className={cn(
+										"rounded-full px-4",
+										view === value ? "shadow-md" : "text-muted-foreground",
+									)}
+									onClick={() => handleViewChange(value)}
+								>
+									{label}
+								</Button>
+							))}
 						</div>
 					</header>
 
-					{view === 'monthly' ? (
+					{view === "monthly" ? (
 						<div className="mt-12 space-y-6">
-							{(showFreePreview || (showUpgradeStack && stackItems.length > 0)) && (
+							{(showFreePreview ||
+								(showUpgradeStack && stackItems.length > 0)) && (
 								<div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
 									{showFreePreview && freePlan && (
 										<GlassCard className="flex flex-col items-center gap-5 p-6 text-center">
 											<div className="flex flex-col items-center gap-2">
-												<Badge variant="secondary" className="bg-primary/10 text-primary">
-													{showOpenSource ? 'Open Source' : 'Free Trial'}
+												<Badge
+													variant="secondary"
+													className="bg-primary/10 text-primary"
+												>
+													{showOpenSource ? "Open Source" : "Free Trial"}
 												</Badge>
 												<h3 className="font-semibold text-2xl text-foreground">
 													{showOpenSource
 														? freePlan.name
-														: 'Explore Lead Orchestra with Free Trial'}
+														: "Explore Lead Orchestra with Free Trial"}
 												</h3>
 												<p className="text-muted-foreground text-sm">
 													{showOpenSource
 														? freePlan.idealFor
 															? `Ideal for ${freePlan.idealFor.toLowerCase()}`
-															: '100% free and open-source scraping engine'
-														: 'Test scraping workflows, data normalization, and CRM export before you upgrade.'}
+															: "100% free and open-source scraping engine"
+														: "Test scraping workflows, data normalization, and CRM export before you upgrade."}
 												</p>
 											</div>
 											<ul className="list-none space-y-3 text-center text-muted-foreground text-sm">
 												{showOpenSource
-													? freePlan.features?.map((feature) => <li key={feature}>{feature}</li>)
+													? freePlan.features?.map((feature) => (
+															<li key={feature}>{feature}</li>
+														))
 													: [
-															'5 demo scraping jobs',
-															'1 active campaign',
-															'Dashboard + CRM preview',
-															'Upgrade to Team plan for full access',
-														].map((feature) => <li key={feature}>{feature}</li>)}
+															"5 demo scraping jobs",
+															"1 active campaign",
+															"Dashboard + CRM preview",
+															"Upgrade to Team plan for full access",
+														].map((feature) => (
+															<li key={feature}>{feature}</li>
+														))}
 											</ul>
 											<div className="flex w-full flex-col gap-3 sm:flex-row">
 												{showOpenSource ? (
@@ -757,9 +831,11 @@ export const CatalogPricing = ({
 															className="flex-1 whitespace-nowrap"
 															onClick={() => {
 																if (basicPlan) {
-																	void handleSubscribe(basicPlan, 'monthly');
+																	void handleSubscribe(basicPlan, "monthly");
 																} else {
-																	toast.error('Team plan checkout is temporarily unavailable.');
+																	toast.error(
+																		"Team plan checkout is temporarily unavailable.",
+																	);
 																}
 															}}
 															disabled={loading === `${basicPlan?.id}-monthly`}
@@ -777,12 +853,17 @@ export const CatalogPricing = ({
 														>
 															{trialLoading ? (
 																<>
-																	<Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
-																	<span className="sr-only">Starting trial…</span>
+																	<Loader2
+																		className="mr-2 h-4 w-4 animate-spin"
+																		aria-hidden
+																	/>
+																	<span className="sr-only">
+																		Starting trial…
+																	</span>
 																	<span aria-hidden>Starting trial…</span>
 																</>
 															) : (
-																'Start Free Trial'
+																"Start Free Trial"
 															)}
 														</Button>
 														<Button
@@ -790,9 +871,11 @@ export const CatalogPricing = ({
 															className="flex-1 whitespace-nowrap"
 															onClick={() => {
 																if (basicPlan) {
-																	void handleSubscribe(basicPlan, 'monthly');
+																	void handleSubscribe(basicPlan, "monthly");
 																} else {
-																	toast.error('Team plan checkout is temporarily unavailable.');
+																	toast.error(
+																		"Team plan checkout is temporarily unavailable.",
+																	);
 																}
 															}}
 															disabled={loading === `${basicPlan?.id}-monthly`}
@@ -806,7 +889,12 @@ export const CatalogPricing = ({
 									)}
 									{showUpgradeStack && stackItems.length > 0 && (
 										<div className="flex items-center justify-center">
-											<CardStack items={stackItems} offset={8} scaleFactor={0.04} height={180} />
+											<CardStack
+												items={stackItems}
+												offset={8}
+												scaleFactor={0.04}
+												height={180}
+											/>
 										</div>
 									)}
 								</div>
@@ -814,14 +902,18 @@ export const CatalogPricing = ({
 							{showPilotBlurb && (
 								<GlassCard className="flex flex-col gap-4 border border-primary/30 bg-gradient-to-br from-primary/5 via-background to-background/90 p-6 lg:flex-row lg:items-center">
 									<div className="space-y-2">
-										<p className="text-primary/70 text-xs uppercase">Pilot Testing Program</p>
+										<p className="text-primary/70 text-xs uppercase">
+											Pilot Testing Program
+										</p>
 										<h3 className="font-semibold text-foreground text-xl">
 											Upgrade unlocks full automation and white-glove onboarding
 										</h3>
 										<p className="text-muted-foreground text-sm">
-											Basic adds automation-ready credits, custom voices, and CRM sync with pilot
-											pricing locked for <strong>2 years</strong>. Starter goes further with
-											workflow automation, medium queue access, and inbound agents.
+											Basic adds automation-ready credits, custom voices, and
+											CRM sync with pilot pricing locked for{" "}
+											<strong>2 years</strong>. Starter goes further with
+											workflow automation, medium queue access, and inbound
+											agents.
 										</p>
 									</div>
 									<Button
@@ -829,9 +921,9 @@ export const CatalogPricing = ({
 										className="whitespace-nowrap"
 										onClick={() => {
 											if (basicPlan) {
-												void handleSubscribe(basicPlan, 'monthly');
+												void handleSubscribe(basicPlan, "monthly");
 											} else {
-												router.push('/contact');
+												router.push("/contact");
 											}
 										}}
 									>
@@ -842,7 +934,7 @@ export const CatalogPricing = ({
 						</div>
 					) : null}
 
-					{view !== 'oneTime' && recurringPlans.length > 0 ? (
+					{view !== "oneTime" && recurringPlans.length > 0 ? (
 						<div className="mt-12 grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:grid-cols-4">
 							{minimalStackActive && minimalStackItems.length === 2 ? (
 								<div className="md:col-span-2">
@@ -861,13 +953,18 @@ export const CatalogPricing = ({
 								}
 
 								const monthlyBadgeConfig =
-									view === 'monthly' ? MONTHLY_PLAN_BADGES[plan.id] : undefined;
+									view === "monthly" ? MONTHLY_PLAN_BADGES[plan.id] : undefined;
 								const annualBadgeConfig =
-									view === 'annual' ? ANNUAL_PLAN_BADGES[plan.id] : undefined;
+									view === "annual" ? ANNUAL_PLAN_BADGES[plan.id] : undefined;
 
 								const defaultAnnualBadge =
-									view === 'annual' && plan.ctaType === 'subscribe' && !annualBadgeConfig ? (
-										<Badge variant="secondary" className="bg-primary/10 text-primary">
+									view === "annual" &&
+									plan.ctaType === "subscribe" &&
+									!annualBadgeConfig ? (
+										<Badge
+											variant="secondary"
+											className="bg-primary/10 text-primary"
+										>
 											Save 15%
 										</Badge>
 									) : undefined;
@@ -876,73 +973,96 @@ export const CatalogPricing = ({
 									<RecurringPlanCard
 										key={`${plan.id}-${view}`}
 										plan={plan}
-										view={view === 'monthly' ? 'monthly' : 'annual'}
+										view={view === "monthly" ? "monthly" : "annual"}
 										onSubscribe={
-											plan.ctaType === 'subscribe'
+											plan.ctaType === "subscribe"
 												? () =>
-														void handleSubscribe(plan, view === 'monthly' ? 'monthly' : 'annual')
+														void handleSubscribe(
+															plan,
+															view === "monthly" ? "monthly" : "annual",
+														)
 												: undefined
 										}
-										loading={loading === `${plan.id}-${view === 'monthly' ? 'monthly' : 'annual'}`}
+										loading={
+											loading ===
+											`${plan.id}-${view === "monthly" ? "monthly" : "annual"}`
+										}
 										ctaOverride={
-											plan.ctaType === 'contactSales'
+											plan.ctaType === "contactSales"
 												? {
-														label: 'Talk to Sales',
-														href: '/contact',
+														label: "Talk to Sales",
+														href: "/contact",
 													}
-												: plan.ctaType === 'link' || plan.ctaType === 'upgrade'
+												: plan.ctaType === "link" || plan.ctaType === "upgrade"
 													? {
 															label:
 																plan.ctaLabel ??
-																(plan.ctaType === 'upgrade'
-																	? 'Start Free Trial'
-																	: 'View on GitHub'),
-															href: plan.ctaType === 'link' ? 'https://github.com' : '/signup',
+																(plan.ctaType === "upgrade"
+																	? "Start Free Trial"
+																	: "View on GitHub"),
+															href:
+																plan.ctaType === "link"
+																	? "https://github.com"
+																	: "/signup",
 														}
 													: undefined
 										}
 										badge={defaultAnnualBadge}
-										badgeLabel={monthlyBadgeConfig?.label ?? annualBadgeConfig?.label}
-										badgeVariant={monthlyBadgeConfig?.variant ?? annualBadgeConfig?.variant}
+										badgeLabel={
+											monthlyBadgeConfig?.label ?? annualBadgeConfig?.label
+										}
+										badgeVariant={
+											monthlyBadgeConfig?.variant ?? annualBadgeConfig?.variant
+										}
 									/>
 								);
 							})}
 						</div>
 					) : null}
 
-					{view === 'oneTime' ? (
+					{view === "oneTime" ? (
 						<div className="mt-12 flex flex-col gap-6 lg:grid lg:grid-cols-12">
 							<div className="flex flex-col gap-8 lg:col-span-5">
 								<SelfHostedCard
 									variant="selfHosted"
-									title={selfHostedPlan?.name ?? 'Self-Hosted / AI Enablement License'}
-									description={selfHostedPlan?.pricingModel ?? 'Custom — Contact Sales'}
+									title={
+										selfHostedPlan?.name ??
+										"Self-Hosted / AI Enablement License"
+									}
+									description={
+										selfHostedPlan?.pricingModel ?? "Custom — Contact Sales"
+									}
 									features={
 										selfHostedPlan?.includes ?? [
-											'Private deployment with Docker/Kubernetes support',
-											'White-label branding & dedicated RBAC',
-											'Compliance toolkit (TCPA, GDPR, Colorado AI Act)',
+											"Private deployment with Docker/Kubernetes support",
+											"White-label branding & dedicated RBAC",
+											"Compliance toolkit (TCPA, GDPR, Colorado AI Act)",
 										]
 									}
 									summary={
 										selfHostedPlan?.notes.slice(0, 3) ?? [
-											'Setup cost typically equals 5–10% of Year-1 ROI.',
-											'Average partners reach 2–3× ROI in Year-1.',
-											'Buyout ends revenue share after a 3-year runway.',
+											"Setup cost typically equals 5–10% of Year-1 ROI.",
+											"Average partners reach 2–3× ROI in Year-1.",
+											"Buyout ends revenue share after a 3-year runway.",
 										]
 									}
 									requirements={
 										selfHostedPlan?.requirements ?? [
-											'Executive sponsor for AI governance sign-off',
-											'Secure cloud or on-prem budget for private deployment',
-											'Dedicated technical contact for integrations',
-											'Annual compliance review cadence with DealScale success team',
+											"Executive sponsor for AI governance sign-off",
+											"Secure cloud or on-prem budget for private deployment",
+											"Dedicated technical contact for integrations",
+											"Annual compliance review cadence with DealScale success team",
 										]
 									}
-									onPrimary={() => router.push('/contact')}
-									primaryLabel={selfHostedPlan?.ctaPrimary.label ?? 'Contact Sales'}
+									onPrimary={() => router.push("/contact")}
+									primaryLabel={
+										selfHostedPlan?.ctaPrimary.label ?? "Contact Sales"
+									}
 									onSecondary={() => setRoiOpen(true)}
-									secondaryLabel={selfHostedPlan?.ctaSecondary.label ?? 'Estimate ROI & Setup Cost'}
+									secondaryLabel={
+										selfHostedPlan?.ctaSecondary.label ??
+										"Estimate ROI & Setup Cost"
+									}
 								/>
 							</div>
 							<div className="lg:col-span-7">
@@ -992,8 +1112,8 @@ export const CatalogPricing = ({
 							options={{
 								clientSecret: productCheckoutSecret,
 								appearance: {
-									theme: 'stripe',
-									variables: { colorPrimary: '#4f46e5' },
+									theme: "stripe",
+									variables: { colorPrimary: "#4f46e5" },
 								},
 							}}
 						>

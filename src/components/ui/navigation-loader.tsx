@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
-import { useNavigationLoaderStore } from '@/stores/navigation-loader';
+import { useNavigationLoaderStore } from "@/stores/navigation-loader";
 
-import { Spinner } from './spinner';
+import { Spinner } from "./spinner";
 
-const isClient = typeof window !== 'undefined';
+const isClient = typeof window !== "undefined";
 
 function shouldStartNavigationFromEvent(event: MouseEvent): boolean {
 	if (!isClient) return false;
@@ -19,21 +19,24 @@ function shouldStartNavigationFromEvent(event: MouseEvent): boolean {
 	}
 
 	const target = event.target as HTMLElement | null;
-	const anchor = target?.closest('a');
+	const anchor = target?.closest("a");
 	if (!anchor) return false;
 
-	if (anchor.hasAttribute('download')) return false;
-	if (anchor.getAttribute('target') === '_blank') return false;
-	if (anchor.getAttribute('rel')?.includes('external')) return false;
+	if (anchor.hasAttribute("download")) return false;
+	if (anchor.getAttribute("target") === "_blank") return false;
+	if (anchor.getAttribute("rel")?.includes("external")) return false;
 
-	const href = anchor.getAttribute('href');
-	if (!href || href.startsWith('#')) return false;
+	const href = anchor.getAttribute("href");
+	if (!href || href.startsWith("#")) return false;
 
 	const destination = new URL(href, window.location.href);
 	if (destination.origin !== window.location.origin) return false;
 
 	const currentUrl = new URL(window.location.href);
-	if (destination.pathname === currentUrl.pathname && destination.search === currentUrl.search) {
+	if (
+		destination.pathname === currentUrl.pathname &&
+		destination.search === currentUrl.search
+	) {
 		return false;
 	}
 
@@ -44,8 +47,12 @@ export function NavigationLoader() {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const isNavigating = useNavigationLoaderStore((state) => state.isNavigating);
-	const startNavigation = useNavigationLoaderStore((state) => state.startNavigation);
-	const finishNavigation = useNavigationLoaderStore((state) => state.finishNavigation);
+	const startNavigation = useNavigationLoaderStore(
+		(state) => state.startNavigation,
+	);
+	const finishNavigation = useNavigationLoaderStore(
+		(state) => state.finishNavigation,
+	);
 
 	const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
 
@@ -67,18 +74,18 @@ export function NavigationLoader() {
 			startNavigation();
 		};
 
-		document.addEventListener('click', handleClickCapture, true);
-		window.addEventListener('popstate', handlePopstate);
+		document.addEventListener("click", handleClickCapture, true);
+		window.addEventListener("popstate", handlePopstate);
 
 		return () => {
-			document.removeEventListener('click', handleClickCapture, true);
-			window.removeEventListener('popstate', handlePopstate);
+			document.removeEventListener("click", handleClickCapture, true);
+			window.removeEventListener("popstate", handlePopstate);
 		};
 	}, [startNavigation]);
 
 	const locationKey = useMemo(() => {
-		const search = searchParams ? `?${searchParams.toString()}` : '';
-		return `${pathname ?? ''}${search}`;
+		const search = searchParams ? `?${searchParams.toString()}` : "";
+		return `${pathname ?? ""}${search}`;
 	}, [pathname, searchParams]);
 
 	const [lastLocation, setLastLocation] = useState<string | null>(null);

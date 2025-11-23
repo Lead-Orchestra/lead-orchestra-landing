@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const toastMocks = {
 	loading: vi.fn(),
@@ -6,51 +6,54 @@ const toastMocks = {
 	error: vi.fn(),
 };
 
-vi.mock('react-hot-toast', () => ({
+vi.mock("react-hot-toast", () => ({
 	toast: {
-		loading: (...args: Parameters<typeof toastMocks.loading>) => toastMocks.loading(...args),
-		success: (...args: Parameters<typeof toastMocks.success>) => toastMocks.success(...args),
-		error: (...args: Parameters<typeof toastMocks.error>) => toastMocks.error(...args),
+		loading: (...args: Parameters<typeof toastMocks.loading>) =>
+			toastMocks.loading(...args),
+		success: (...args: Parameters<typeof toastMocks.success>) =>
+			toastMocks.success(...args),
+		error: (...args: Parameters<typeof toastMocks.error>) =>
+			toastMocks.error(...args),
 	},
 }));
 
-let startStripeToast: typeof import('@/lib/ui/stripeToast').startStripeToast;
+let startStripeToast: typeof import("@/lib/ui/stripeToast").startStripeToast;
 
 beforeEach(async () => {
-	toastMocks.loading.mockReset().mockReturnValue('toast-id');
+	toastMocks.loading.mockReset().mockReturnValue("toast-id");
 	toastMocks.success.mockReset();
 	toastMocks.error.mockReset();
-	({ startStripeToast } = await import('@/lib/ui/stripeToast'));
+	({ startStripeToast } = await import("@/lib/ui/stripeToast"));
 });
 
-describe('startStripeToast', () => {
-	it('creates a persistent loading toast and returns handlers', () => {
-		const handlers = startStripeToast('Working…');
+describe("startStripeToast", () => {
+	it("creates a persistent loading toast and returns handlers", () => {
+		const handlers = startStripeToast("Working…");
 
-		expect(toastMocks.loading).toHaveBeenCalledWith('Working…', {
+		expect(toastMocks.loading).toHaveBeenCalledWith("Working…", {
 			duration: Number.POSITIVE_INFINITY,
 		});
-		expect(handlers.id).toBe('toast-id');
+		expect(handlers.id).toBe("toast-id");
 	});
 
-	it('updates toast to success with consistent id', () => {
-		const handlers = startStripeToast('Working…');
+	it("updates toast to success with consistent id", () => {
+		const handlers = startStripeToast("Working…");
 
-		handlers.success('All set!');
+		handlers.success("All set!");
 
-		expect(toastMocks.success).toHaveBeenCalledWith('All set!', {
-			id: 'toast-id',
+		expect(toastMocks.success).toHaveBeenCalledWith("All set!", {
+			id: "toast-id",
 			duration: 5000,
 		});
 	});
 
-	it('updates toast to error with consistent id', () => {
-		const handlers = startStripeToast('Working…');
+	it("updates toast to error with consistent id", () => {
+		const handlers = startStripeToast("Working…");
 
-		handlers.error('Something went wrong');
+		handlers.error("Something went wrong");
 
-		expect(toastMocks.error).toHaveBeenCalledWith('Something went wrong', {
-			id: 'toast-id',
+		expect(toastMocks.error).toHaveBeenCalledWith("Something went wrong", {
+			id: "toast-id",
 			duration: 6000,
 		});
 	});

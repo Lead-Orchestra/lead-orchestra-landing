@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Input } from '@/components/ui/input';
+import { Input } from "@/components/ui/input";
 
 interface EventFilterProps {
 	categories: Array<{ id: string; name: string }>;
@@ -33,8 +33,8 @@ export default function EventFilter({
 						onClick={() => onCategoryChange(category.id)}
 						className={`rounded-full px-4 py-2 font-medium text-sm transition-colors ${
 							activeCategory === category.id
-								? 'bg-primary text-black dark:text-white'
-								: 'bg-white/5 text-black hover:bg-white/10 dark:text-white/70'
+								? "bg-primary text-black dark:text-white"
+								: "bg-white/5 text-black hover:bg-white/10 dark:text-white/70"
 						}`}
 					>
 						{category.name}

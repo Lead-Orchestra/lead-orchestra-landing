@@ -1,10 +1,11 @@
-import type { CartItem, CartState, CartSummary } from '@/types/cart/index';
-import type { ProductType } from '@/types/products';
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import type { CartItem, CartState, CartSummary } from "@/types/cart/index";
+import type { ProductType } from "@/types/products";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 // Helper to safely get the price of an item (supports both product and variant prices)
-const getItemPrice = (item: CartItem): number => item.selectedVariant?.price ?? item.price;
+const getItemPrice = (item: CartItem): number =>
+	item.selectedVariant?.price ?? item.price;
 
 // Helper to check if an item requires shipping
 const itemRequiresShipping = (item: CartItem): boolean =>
@@ -38,7 +39,8 @@ export const useCartStore = create<CartState>()(
 					// Check if item already exists in cart (matching product and variant)
 					const existingItemIndex = state.items.findIndex(
 						(item) =>
-							item.id === product.id && (!variant || item.selectedVariant?.id === variant.id)
+							item.id === product.id &&
+							(!variant || item.selectedVariant?.id === variant.id),
 					);
 
 					if (existingItemIndex >= 0) {
@@ -62,7 +64,8 @@ export const useCartStore = create<CartState>()(
 				set((state) => ({
 					items: state.items.filter(
 						(item) =>
-							item.id !== productId || (variantId ? item.selectedVariant?.id !== variantId : false)
+							item.id !== productId ||
+							(variantId ? item.selectedVariant?.id !== variantId : false),
 					),
 				}));
 			},
@@ -75,14 +78,15 @@ export const useCartStore = create<CartState>()(
 
 				set((state) => ({
 					items: state.items.map((item) =>
-						item.id === productId && (!variantId || item.selectedVariant?.id === variantId)
+						item.id === productId &&
+						(!variantId || item.selectedVariant?.id === variantId)
 							? {
 									...item,
 									quantity,
 									// Update the timestamp when quantity changes
 									addedAt: Date.now(),
 								}
-							: item
+							: item,
 					),
 				}));
 			},
@@ -90,18 +94,28 @@ export const useCartStore = create<CartState>()(
 			clearCart: () => set({ items: [] }),
 
 			getCartTotal: () =>
-				get().items.reduce((total, item) => total + getItemPrice(item) * item.quantity, 0),
+				get().items.reduce(
+					(total, item) => total + getItemPrice(item) * item.quantity,
+					0,
+				),
 
-			getItemCount: () => get().items.reduce((count, item) => count + item.quantity, 0),
+			getItemCount: () =>
+				get().items.reduce((count, item) => count + item.quantity, 0),
 
 			requiresShipping: () => get().items.some(itemRequiresShipping),
 
 			getCartSummary: (shippingCost = 0, taxRate = 0, discountAmount = 0) => {
 				const items = get().items;
-				const subtotal = items.reduce((sum, item) => sum + getItemPrice(item) * item.quantity, 0);
+				const subtotal = items.reduce(
+					(sum, item) => sum + getItemPrice(item) * item.quantity,
+					0,
+				);
 
 				const itemCount = items.length;
-				const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+				const totalQuantity = items.reduce(
+					(sum, item) => sum + item.quantity,
+					0,
+				);
 				const requiresShipping = items.some(itemRequiresShipping);
 
 				// Calculate tax on the subtotal (excluding shipping)
@@ -127,9 +141,9 @@ export const useCartStore = create<CartState>()(
 			},
 		}),
 		{
-			name: 'cart-storage',
+			name: "cart-storage",
 			storage: (() => {
-				if (typeof window === 'undefined') {
+				if (typeof window === "undefined") {
 					return {
 						getItem: () => Promise.resolve(null),
 						setItem: () => Promise.resolve(),
@@ -154,13 +168,17 @@ export const useCartStore = create<CartState>()(
 			})(),
 			// Only persist the items array to storage
 			partialize: (state) => ({ items: state.items }),
-		}
-	)
+		},
+	),
 );
 
 // Export a hook to use the cart summary
 // This is a convenience hook that uses the store's getCartSummary method
-export const useCartSummary = (shippingCost = 0, taxRate = 0, discountAmount = 0) => {
+export const useCartSummary = (
+	shippingCost = 0,
+	taxRate = 0,
+	discountAmount = 0,
+) => {
 	return useCartStore((state) => {
 		return state.getCartSummary(shippingCost, taxRate, discountAmount);
 	});
@@ -180,12 +198,16 @@ export const useCartItems = () => {
 export const useCartItem = (productId: string, variantId?: string) => {
 	return useCartStore((state) =>
 		state.items.find(
-			(item) => item.id === productId && (!variantId || item.selectedVariant?.id === variantId)
-		)
+			(item) =>
+				item.id === productId &&
+				(!variantId || item.selectedVariant?.id === variantId),
+		),
 	);
 };
 
 // Export a hook to get the total number of items in the cart
 export const useCartItemCount = () => {
-	return useCartStore((state) => state.items.reduce((count, item) => count + item.quantity, 0));
+	return useCartStore((state) =>
+		state.items.reduce((count, item) => count + item.quantity, 0),
+	);
 };

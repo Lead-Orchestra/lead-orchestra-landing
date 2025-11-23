@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import CloserApplicationForm from '@/components/contact/form/CloserApplicationForm';
+import CloserApplicationForm from "@/components/contact/form/CloserApplicationForm";
 
 export default function CloserApplication() {
 	return (
@@ -9,7 +9,7 @@ export default function CloserApplication() {
 				<CloserApplicationForm
 					onSuccess={() => {
 						// Optionally redirect or show success message
-						console.log('Closer application submitted successfully');
+						console.log("Closer application submitted successfully");
 					}}
 				/>
 			</div>

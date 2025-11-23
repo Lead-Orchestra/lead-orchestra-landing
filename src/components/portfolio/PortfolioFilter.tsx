@@ -1,8 +1,8 @@
 // In src/components/portfolio/PortfolioFilter.tsx
-'use client';
+"use client";
 
-import { Input } from '@/components/ui/input';
-import { useCategoryFilter } from '@/hooks/use-category-filter';
+import { Input } from "@/components/ui/input";
+import { useCategoryFilter } from "@/hooks/use-category-filter";
 
 interface PortfolioFilterProps {
 	categories: Array<{ id: string; name: string }>;
@@ -17,7 +17,11 @@ export default function PortfolioFilter({
 	onSearch,
 	onCategoryChange,
 }: PortfolioFilterProps) {
-	const { CategoryFilter } = useCategoryFilter(categories, activeCategory, onCategoryChange);
+	const { CategoryFilter } = useCategoryFilter(
+		categories,
+		activeCategory,
+		onCategoryChange,
+	);
 	return (
 		<div className="mb-8">
 			<Input

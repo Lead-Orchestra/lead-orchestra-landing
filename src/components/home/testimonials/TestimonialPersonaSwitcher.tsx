@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { PERSONA_DISPLAY_ORDER, PERSONA_LABELS } from '@/data/personas/catalog';
-import { cn } from '@/lib/utils';
-import { usePersonaStore } from '@/stores/usePersonaStore';
-import { motion, useReducedMotion } from 'framer-motion';
+import { PERSONA_DISPLAY_ORDER, PERSONA_LABELS } from "@/data/personas/catalog";
+import { cn } from "@/lib/utils";
+import { usePersonaStore } from "@/stores/usePersonaStore";
+import { motion, useReducedMotion } from "framer-motion";
 
 export const PersonaSwitcher = () => {
 	const { persona, setPersona } = usePersonaStore();
@@ -19,10 +19,10 @@ export const PersonaSwitcher = () => {
 						key={option}
 						type="button"
 						className={cn(
-							'relative z-10 flex flex-1 flex-col items-center justify-center rounded-full px-4 py-2 font-medium text-xs uppercase tracking-wide transition-colors sm:text-sm',
+							"relative z-10 flex flex-1 flex-col items-center justify-center rounded-full px-4 py-2 font-medium text-xs uppercase tracking-wide transition-colors sm:text-sm",
 							isActive
-								? 'text-black dark:text-white'
-								: 'text-black/70 hover:text-black focus-visible:text-black dark:text-white/80 dark:focus-visible:text-white dark:hover:text-white'
+								? "text-black dark:text-white"
+								: "text-black/70 hover:text-black focus-visible:text-black dark:text-white/80 dark:focus-visible:text-white dark:hover:text-white",
 						)}
 						onClick={() => setPersona(option)}
 						aria-pressed={isActive}
@@ -34,14 +34,16 @@ export const PersonaSwitcher = () => {
 								transition={
 									shouldReduceMotion
 										? { duration: 0 }
-										: { type: 'spring', stiffness: 250, damping: 25 }
+										: { type: "spring", stiffness: 250, damping: 25 }
 								}
 							/>
 						)}
 						<span className="relative z-10 flex flex-col items-center leading-tight">
-							{PERSONA_LABELS[option].split(' ').slice(0, 2).join(' ')}
-							{PERSONA_LABELS[option].split(' ').length > 2 && (
-								<span>{PERSONA_LABELS[option].split(' ').slice(2).join(' ')}</span>
+							{PERSONA_LABELS[option].split(" ").slice(0, 2).join(" ")}
+							{PERSONA_LABELS[option].split(" ").length > 2 && (
+								<span>
+									{PERSONA_LABELS[option].split(" ").slice(2).join(" ")}
+								</span>
 							)}
 						</span>
 					</button>
@@ -51,4 +53,4 @@ export const PersonaSwitcher = () => {
 	);
 };
 
-PersonaSwitcher.displayName = 'PersonaSwitcher';
+PersonaSwitcher.displayName = "PersonaSwitcher";

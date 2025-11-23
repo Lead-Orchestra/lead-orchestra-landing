@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type { StaticImageData } from 'next/image';
-import type React from 'react';
-import { HeroOffering } from '../HeroOffering';
-import { HeroCta } from './HeroCta';
+import type { StaticImageData } from "next/image";
+import type React from "react";
+import { HeroOffering } from "../HeroOffering";
+import { HeroCta } from "./HeroCta";
 
 // * Props for Hero: all fields optional, defaults provided
 export interface HeroProps {
@@ -14,7 +14,7 @@ export interface HeroProps {
 	highlight?: string;
 	ctaLabel?: string;
 	ctaOnClick?: () => void;
-	ctaVariant?: 'button' | 'form';
+	ctaVariant?: "button" | "form";
 	ctaForm?: React.ReactNode;
 	showLearnMore?: boolean;
 	children?: React.ReactNode;
@@ -27,14 +27,14 @@ export interface HeroProps {
  * Defaults to original values if props not provided.
  */
 const Hero: React.FC<HeroProps> = ({
-	badgeLeft = 'AI Driven',
-	badgeRight = 'Future Proof MVPs',
-	headline = 'Launch with Confidence',
+	badgeLeft = "AI Driven",
+	badgeRight = "Future Proof MVPs",
+	headline = "Launch with Confidence",
 	subheadline = "Don't risk becoming another startup that loses $22,500-$48,000 on an MVP that breaks and bounces users. Instead, Scale Confidently and convert your investment into market dominance.",
-	highlight = 'Scale Seamlessly',
-	ctaLabel = 'Talk to Sales',
+	highlight = "Scale Seamlessly",
+	ctaLabel = "Talk to Sales",
 	ctaOnClick,
-	ctaVariant = 'button',
+	ctaVariant = "button",
 	ctaForm,
 	showLearnMore = true,
 	children,
@@ -47,7 +47,11 @@ const Hero: React.FC<HeroProps> = ({
 			<div className="-translate-x-1/2 absolute top-1/4 left-1/2 h-[380px] w-[380px] rounded-full bg-glow-gradient blur-3xl sm:h-[480px] sm:w-[480px] lg:h-[620px] lg:w-[620px] xl:h-[780px] xl:w-[780px]" />
 			<div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col gap-10 pt-6 lg:flex-row lg:items-center lg:justify-between lg:gap-12 xl:gap-16">
 				{/* On mobile, image/model is first; on md+ screens, text is first */}
-				<HeroOffering image={image} imageAlt={imageAlt} className="order-1 lg:order-2" />
+				<HeroOffering
+					image={image}
+					imageAlt={imageAlt}
+					className="order-1 lg:order-2"
+				/>
 				<HeroCta
 					badgeLeft={badgeLeft}
 					badgeRight={badgeRight}

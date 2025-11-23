@@ -1,6 +1,6 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 // * Maps custom SeoMeta to Next.js Metadata type, including canonical tag
-import type { SeoMeta } from './seo';
+import type { SeoMeta } from "./seo";
 
 type ManifestoSection =
 	| {
@@ -13,9 +13,9 @@ type ManifestoSection =
 
 function toAbsoluteImageUrl(image?: string): string | undefined {
 	if (!image) return undefined;
-	if (image.startsWith('http')) return image;
-	const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://dealscale.io';
-	return `${base}${image.startsWith('/') ? '' : '/'}${image}`;
+	if (image.startsWith("http")) return image;
+	const base = process.env.NEXT_PUBLIC_SITE_URL || "https://dealscale.io";
+	return `${base}${image.startsWith("/") ? "" : "/"}${image}`;
 }
 
 function slugify(value: string, fallback: string, index: number): string {
@@ -24,10 +24,10 @@ function slugify(value: string, fallback: string, index: number): string {
 		base
 			.toString()
 			.trim()
-			.normalize('NFKD')
-			.replace(/[\u0300-\u036f]/g, '')
-			.replace(/[^a-z0-9]+/gi, '-')
-			.replace(/^-+|-+$/g, '')
+			.normalize("NFKD")
+			.replace(/[\u0300-\u036f]/g, "")
+			.replace(/[^a-z0-9]+/gi, "-")
+			.replace(/^-+|-+$/g, "")
 			.toLowerCase() || `section-${index + 1}`
 	);
 }
@@ -35,22 +35,28 @@ function slugify(value: string, fallback: string, index: number): string {
 export function mapSeoMetaToMetadata(seo: SeoMeta): Metadata {
 	const imageUrl = toAbsoluteImageUrl(seo.image);
 	const manifestoSections = Array.isArray(
-		(seo as { manifestoSections?: ManifestoSection[] }).manifestoSections
+		(seo as { manifestoSections?: ManifestoSection[] }).manifestoSections,
 	)
 		? (((seo as { manifestoSections?: ManifestoSection[] }).manifestoSections ??
 				[]) as ManifestoSection[])
 		: undefined;
 
 	const canonicalBase =
-		seo.canonical || process.env.NEXT_PUBLIC_SITE_URL || 'https://dealscale.io/about';
+		seo.canonical ||
+		process.env.NEXT_PUBLIC_SITE_URL ||
+		"https://dealscale.io/about";
 
 	const seeAlsoLinks = manifestoSections
 		? manifestoSections.map((section, index) => {
 				const anchor =
-					typeof section.anchor === 'string' && section.anchor.length > 0
+					typeof section.anchor === "string" && section.anchor.length > 0
 						? section.anchor
-						: slugify(typeof section.title === 'string' ? section.title : '', 'manifesto', index);
-				return `${canonicalBase}${anchor.startsWith('#') ? '' : '#'}${anchor}`;
+						: slugify(
+								typeof section.title === "string" ? section.title : "",
+								"manifesto",
+								index,
+							);
+				return `${canonicalBase}${anchor.startsWith("#") ? "" : "#"}${anchor}`;
 			})
 		: undefined;
 
@@ -73,13 +79,13 @@ export function mapSeoMetaToMetadata(seo: SeoMeta): Metadata {
 						},
 					]
 				: undefined,
-			type: seo.type || 'website',
+			type: seo.type || "website",
 			// @ts-expect-error - `seeAlso` is a valid OpenGraph property but not yet typed by Next.js
 			seeAlso: seeAlsoLinks,
 		},
 		twitter: imageUrl
 			? {
-					card: 'summary_large_image',
+					card: "summary_large_image",
 					images: [imageUrl],
 					title: seo.title,
 					description: seo.description,

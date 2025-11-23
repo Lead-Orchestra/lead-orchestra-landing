@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { GlassCard } from '@/components/ui/glass-card';
-import type { PartnershipPlan } from '@/types/service/plans';
-import { CheckCircle } from 'lucide-react';
-import Link from 'next/link';
-import type { ReactNode } from 'react';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { GlassCard } from "@/components/ui/glass-card";
+import type { PartnershipPlan } from "@/types/service/plans";
+import { CheckCircle } from "lucide-react";
+import Link from "next/link";
+import type { ReactNode } from "react";
 
 interface BaseProps {
 	title: string;
@@ -15,12 +15,12 @@ interface BaseProps {
 	onPrimary?: () => void;
 	primaryLabel: string;
 	badgeLabel?: string;
-	badgeVariant?: 'basic' | 'starter' | 'enterprise' | 'partner';
+	badgeVariant?: "basic" | "starter" | "enterprise" | "partner";
 	badge?: ReactNode;
 }
 
 interface SelfHostedProps extends BaseProps {
-	variant: 'selfHosted';
+	variant: "selfHosted";
 	onSecondary: () => void;
 	secondaryLabel: string;
 	summary: string[];
@@ -28,7 +28,7 @@ interface SelfHostedProps extends BaseProps {
 }
 
 interface PartnershipProps extends BaseProps {
-	variant?: 'partnership';
+	variant?: "partnership";
 	requirements?: string[];
 	href?: string;
 }
@@ -53,7 +53,7 @@ const renderBadge = ({
 }: {
 	badge?: ReactNode;
 	badgeLabel?: string;
-	badgeVariant?: 'basic' | 'starter' | 'enterprise' | 'partner';
+	badgeVariant?: "basic" | "starter" | "enterprise" | "partner";
 }) => {
 	if (badge) {
 		return <div className="shrink-0">{badge}</div>;
@@ -63,13 +63,13 @@ const renderBadge = ({
 	}
 
 	const badgeClass =
-		badgeVariant === 'starter'
-			? 'bg-gradient-to-r from-orange-500/10 to-orange-500/20 text-orange-400'
-			: badgeVariant === 'enterprise'
-				? 'bg-gradient-to-r from-emerald-500/10 to-emerald-500/20 text-emerald-400'
-				: badgeVariant === 'partner'
-					? 'bg-gradient-to-r from-purple-500/10 to-purple-500/20 text-purple-400'
-					: 'bg-gradient-to-r from-sky-500/10 to-sky-500/20 text-sky-400';
+		badgeVariant === "starter"
+			? "bg-gradient-to-r from-orange-500/10 to-orange-500/20 text-orange-400"
+			: badgeVariant === "enterprise"
+				? "bg-gradient-to-r from-emerald-500/10 to-emerald-500/20 text-emerald-400"
+				: badgeVariant === "partner"
+					? "bg-gradient-to-r from-purple-500/10 to-purple-500/20 text-purple-400"
+					: "bg-gradient-to-r from-sky-500/10 to-sky-500/20 text-sky-400";
 
 	return (
 		<Badge className={badgeClass} variant="secondary">
@@ -96,9 +96,15 @@ export const SelfHostedCard = ({
 		<div className="flex flex-col gap-6 p-6">
 			<div className="flex items-start justify-between gap-3">
 				<div>
-					<p className="text-primary/80 text-xs uppercase">Private Deployment</p>
-					<h3 className="mt-1 font-semibold text-3xl text-foreground">{title}</h3>
-					{description ? <p className="mt-2 text-muted-foreground text-sm">{description}</p> : null}
+					<p className="text-primary/80 text-xs uppercase">
+						Private Deployment
+					</p>
+					<h3 className="mt-1 font-semibold text-3xl text-foreground">
+						{title}
+					</h3>
+					{description ? (
+						<p className="mt-2 text-muted-foreground text-sm">{description}</p>
+					) : null}
 				</div>
 				{renderBadge({ badge, badgeLabel, badgeVariant })}
 			</div>
@@ -122,7 +128,11 @@ export const SelfHostedCard = ({
 				</ul>
 			</div>
 			<div className="mt-auto grid grid-cols-1 gap-3 sm:grid-cols-2">
-				<Button className="w-full justify-center" onClick={onPrimary} variant="default">
+				<Button
+					className="w-full justify-center"
+					onClick={onPrimary}
+					variant="default"
+				>
 					{primaryLabel}
 				</Button>
 				<Button
@@ -147,15 +157,19 @@ export const PartnershipCard = ({
 	href,
 	badge,
 	badgeLabel,
-	badgeVariant = 'partner',
+	badgeVariant = "partner",
 }: PartnershipProps) => (
 	<GlassCard className="border-border">
 		<div className="flex flex-col gap-6 p-6">
 			<div className="flex items-start justify-between gap-3">
 				<div>
 					<p className="text-primary/60 text-xs uppercase">Performance Model</p>
-					<h3 className="mt-1 font-semibold text-2xl text-foreground">{title}</h3>
-					{description ? <p className="mt-2 text-muted-foreground text-sm">{description}</p> : null}
+					<h3 className="mt-1 font-semibold text-2xl text-foreground">
+						{title}
+					</h3>
+					{description ? (
+						<p className="mt-2 text-muted-foreground text-sm">{description}</p>
+					) : null}
 				</div>
 				{renderBadge({ badge, badgeLabel, badgeVariant })}
 			</div>
@@ -185,12 +199,14 @@ export const PartnershipCard = ({
 	</GlassCard>
 );
 
-export const toPartnershipProps = (plan: PartnershipPlan): PartnershipProps => ({
-	variant: 'partnership',
+export const toPartnershipProps = (
+	plan: PartnershipPlan,
+): PartnershipProps => ({
+	variant: "partnership",
 	title: plan.name,
 	description: plan.pricingModel,
 	features: plan.includes,
 	requirements: plan.requirements,
-	primaryLabel: plan.ctaType === 'apply' ? 'Apply Now' : 'Contact Sales',
-	href: '/contact',
+	primaryLabel: plan.ctaType === "apply" ? "Apply Now" : "Contact Sales",
+	href: "/contact",
 });

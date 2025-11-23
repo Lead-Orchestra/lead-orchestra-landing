@@ -1,8 +1,8 @@
-import * as productAbTests from '@/data/products/copy';
-import type { ABTest, ABTestCopy, AbTestVariant } from '@/types/testing';
+import * as productAbTests from "@/data/products/copy";
+import type { ABTest, ABTestCopy, AbTestVariant } from "@/types/testing";
 
 const isAbTest = (value: unknown): value is ABTest => {
-	if (!value || typeof value !== 'object') {
+	if (!value || typeof value !== "object") {
 		return false;
 	}
 
@@ -25,18 +25,22 @@ const collectVariants = (variantSource: AbTestVariant[]) =>
 		return accumulator;
 	}, []);
 
-describe('Product AB test copy', () => {
-	it('ensures every variant includes hope and fear messaging', () => {
+describe("Product AB test copy", () => {
+	it("ensures every variant includes hope and fear messaging", () => {
 		const missing: string[] = [];
 
 		Object.entries(productAbTests).forEach(([exportName, value]) => {
-			const tests = Array.isArray(value) ? value.filter(isAbTest) : isAbTest(value) ? [value] : [];
+			const tests = Array.isArray(value)
+				? value.filter(isAbTest)
+				: isAbTest(value)
+					? [value]
+					: [];
 
 			tests.forEach((test) => {
 				collectVariants(test.variants).forEach((variant, index) => {
 					if (!hasHopeAndFear(variant.copy)) {
 						missing.push(
-							`${exportName} -> ${test.id} -> variant[${index}] (${variant.name ?? 'unnamed'})`
+							`${exportName} -> ${test.id} -> variant[${index}] (${variant.name ?? "unnamed"})`,
 						);
 					}
 				});

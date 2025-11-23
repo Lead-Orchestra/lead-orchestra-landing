@@ -1,14 +1,15 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useProductSelection } from '@/contexts/ProductSelectionContext';
-import { cn } from '@/lib/utils';
-import { Minus, Plus } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useProductSelection } from "@/contexts/ProductSelectionContext";
+import { cn } from "@/lib/utils";
+import { Minus, Plus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 // Touch-friendly minimum target size (44x44px as per WCAG)
-const TOUCH_TARGET_SIZE = 'min-w-[44px] min-h-[44px] sm:min-w-[36px] sm:min-h-[36px]';
+const TOUCH_TARGET_SIZE =
+	"min-w-[44px] min-h-[44px] sm:min-w-[36px] sm:min-h-[36px]";
 
 export default function ProductQuantitySelect({
 	max = 10,
@@ -49,7 +50,7 @@ export default function ProductQuantitySelect({
 		const numValue = Number.parseInt(value, 10);
 
 		// Allow empty input for better UX when deleting numbers
-		if (value === '') {
+		if (value === "") {
 			setQuantity(Number.NaN);
 			return;
 		}
@@ -75,17 +76,17 @@ export default function ProductQuantitySelect({
 
 	// Handle keyboard navigation
 	const handleKeyDown = (e: React.KeyboardEvent) => {
-		if (e.key === 'ArrowUp') {
+		if (e.key === "ArrowUp") {
 			e.preventDefault();
 			increment();
-		} else if (e.key === 'ArrowDown') {
+		} else if (e.key === "ArrowDown") {
 			e.preventDefault();
 			decrement();
 		}
 	};
 
 	return (
-		<div className={cn('my-5 w-full', className)}>
+		<div className={cn("my-5 w-full", className)}>
 			<div className="mb-2 flex items-center justify-between">
 				<h3 className="font-medium text-primary text-sm">Quantity</h3>
 			</div>
@@ -96,10 +97,10 @@ export default function ProductQuantitySelect({
 					size="icon"
 					className={cn(
 						TOUCH_TARGET_SIZE,
-						'rounded-r-none border-r-0 transition-colors duration-200',
-						'hover:bg-gray-100 active:bg-gray-200',
-						'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-						quantity <= min && 'cursor-not-allowed opacity-50'
+						"rounded-r-none border-r-0 transition-colors duration-200",
+						"hover:bg-gray-100 active:bg-gray-200",
+						"focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+						quantity <= min && "cursor-not-allowed opacity-50",
 					)}
 					onClick={decrement}
 					disabled={quantity <= min}
@@ -115,7 +116,7 @@ export default function ProductQuantitySelect({
 						type="number"
 						min={min}
 						max={max}
-						value={Number.isNaN(quantity) ? '' : quantity}
+						value={Number.isNaN(quantity) ? "" : quantity}
 						onChange={handleInputChange}
 						onBlur={handleBlur}
 						onKeyDown={handleKeyDown}
@@ -124,10 +125,10 @@ export default function ProductQuantitySelect({
 						aria-valuemax={max}
 						aria-valuenow={Number.isNaN(quantity) ? min : quantity}
 						className={cn(
-							'h-auto w-16 rounded-none border-x-0 py-2 text-center font-medium text-base',
-							'[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
-							'focus-visible:ring-2 focus-visible:ring-ring',
-							isInvalid && 'border-red-500 focus-visible:ring-red-200'
+							"h-auto w-16 rounded-none border-x-0 py-2 text-center font-medium text-base",
+							"[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
+							"focus-visible:ring-2 focus-visible:ring-ring",
+							isInvalid && "border-red-500 focus-visible:ring-red-200",
 						)}
 					/>
 					{isInvalid && (
@@ -143,10 +144,10 @@ export default function ProductQuantitySelect({
 					size="icon"
 					className={cn(
 						TOUCH_TARGET_SIZE,
-						'rounded-l-none border-l-0 transition-colors duration-200',
-						'hover:bg-gray-100 active:bg-gray-200',
-						'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-						quantity >= max && 'cursor-not-allowed opacity-50'
+						"rounded-l-none border-l-0 transition-colors duration-200",
+						"hover:bg-gray-100 active:bg-gray-200",
+						"focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+						quantity >= max && "cursor-not-allowed opacity-50",
 					)}
 					onClick={increment}
 					disabled={quantity >= max}

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { BorderBeam } from '@/components/magicui/border-beam';
-import { Button } from '@/components/ui/button';
-import type { LineStatus } from '@/types/transcript';
-import { PhoneCall, Play } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { BorderBeam } from "@/components/magicui/border-beam";
+import { Button } from "@/components/ui/button";
+import type { LineStatus } from "@/types/transcript";
+import { PhoneCall, Play } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface CallControlsProps {
 	playingDemo: boolean;
@@ -12,7 +12,7 @@ interface CallControlsProps {
 	onPlayDemo: () => void;
 	onEndCall: (manual?: boolean) => void;
 	onSessionReset?: () => void;
-	variant?: 'default' | 'floating';
+	variant?: "default" | "floating";
 	showEndButton?: boolean; // <-- add this
 }
 
@@ -22,7 +22,7 @@ export const CallControls = ({
 	onPlayDemo,
 	onEndCall,
 	onSessionReset,
-	variant = 'default',
+	variant = "default",
 	showEndButton,
 }: CallControlsProps) => {
 	const [showCompleteModal, setShowCompleteModal] = useState(false);
@@ -33,7 +33,7 @@ export const CallControls = ({
 		return () => {
 			isMounted.current = false;
 			// Cleanup any audio elements
-			const audioElements = document.getElementsByTagName('audio');
+			const audioElements = document.getElementsByTagName("audio");
 			for (const audio of audioElements) {
 				audio.pause();
 				audio.currentTime = 0;
@@ -54,7 +54,7 @@ export const CallControls = ({
 
 		try {
 			// Stop any currently playing audio
-			const audioElements = document.getElementsByTagName('audio');
+			const audioElements = document.getElementsByTagName("audio");
 			for (const audio of audioElements) {
 				if (audio) {
 					audio.pause();
@@ -67,7 +67,7 @@ export const CallControls = ({
 				onPlayDemo();
 			}
 		} catch (error) {
-			console.error('Error handling play click:', error);
+			console.error("Error handling play click:", error);
 		}
 
 		// Prevent any default behavior and stop propagation
@@ -76,7 +76,7 @@ export const CallControls = ({
 	};
 
 	// Show Play Demo button when call is idle or completed
-	const showPlayButton = callStatus === 'idle' || callStatus === 'complete';
+	const showPlayButton = callStatus === "idle" || callStatus === "complete";
 
 	return (
 		<>
@@ -86,11 +86,11 @@ export const CallControls = ({
 						onClick={handlePlayClick}
 						type="button"
 						className={cn(
-							'group relative z-10 mx-auto flex h-14 w-full max-w-xs flex-col items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full bg-gradient-to-r from-primary to-primary/80 px-4 font-medium text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-105 hover:shadow-primary/30 hover:shadow-xl sm:flex-row sm:gap-2 sm:px-8 sm:text-lg',
-							playingDemo && 'from-primary/80 to-primary/60'
+							"group relative z-10 mx-auto flex h-14 w-full max-w-xs flex-col items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full bg-gradient-to-r from-primary to-primary/80 px-4 font-medium text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-105 hover:shadow-primary/30 hover:shadow-xl sm:flex-row sm:gap-2 sm:px-8 sm:text-lg",
+							playingDemo && "from-primary/80 to-primary/60",
 						)}
 						disabled={playingDemo}
-						aria-label={playingDemo ? 'Playing demo' : 'Play demo'}
+						aria-label={playingDemo ? "Playing demo" : "Play demo"}
 					>
 						{playingDemo ? (
 							<span className="flex items-center">
@@ -112,7 +112,7 @@ export const CallControls = ({
 								initialOffset={15}
 								className="from-transparent via-yellow-500 to-transparent"
 								transition={{
-									type: 'spring',
+									type: "spring",
 									stiffness: 60,
 									damping: 20,
 								}}
@@ -136,5 +136,5 @@ export const CallControls = ({
 };
 
 function cn(...classes: (string | boolean | undefined)[]) {
-	return classes.filter(Boolean).join(' ');
+	return classes.filter(Boolean).join(" ");
 }

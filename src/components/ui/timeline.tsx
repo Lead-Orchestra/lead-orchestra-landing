@@ -1,8 +1,13 @@
-'use client';
-import { motion, useMotionValueEvent, useScroll, useTransform } from 'motion/react';
-import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
-import { AuroraText } from '../magicui/aurora-text';
+"use client";
+import {
+	motion,
+	useMotionValueEvent,
+	useScroll,
+	useTransform,
+} from "motion/react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { AuroraText } from "../magicui/aurora-text";
 export interface TimelineEntry {
 	title: string;
 	subtitle?: string;
@@ -13,7 +18,9 @@ export interface TimelineEntry {
  * TimelineDealScales renders a timeline using the provided data.
  * Pass any TimelineEntry[] as the `data` prop.
  */
-export const TimelineDealScales = ({ data }: { data: TimelineEntry[] }) => <Timeline data={data} />;
+export const TimelineDealScales = ({ data }: { data: TimelineEntry[] }) => (
+	<Timeline data={data} />
+);
 
 export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
 	const ref = useRef<HTMLDivElement>(null);
@@ -30,14 +37,17 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
 
 	const { scrollYProgress } = useScroll({
 		target: containerRef,
-		offset: ['start 10%', 'end 50%'],
+		offset: ["start 10%", "end 50%"],
 	});
 
 	const heightTransform = useTransform(scrollYProgress, [0, 1], [0, height]);
 	const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
 
 	return (
-		<div className="w-full rounded-lg bg-card font-sans md:px-10" ref={containerRef}>
+		<div
+			className="w-full rounded-lg bg-card font-sans md:px-10"
+			ref={containerRef}
+		>
 			<div ref={ref} className="relative mx-auto max-w-7xl pb-20">
 				{data.map((item, index) => (
 					<div
@@ -54,7 +64,9 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
 									{item.title}
 								</AuroraText>
 								{item.subtitle && (
-									<p className="mt-2 text-lg text-muted-foreground">{item.subtitle}</p>
+									<p className="mt-2 text-lg text-muted-foreground">
+										{item.subtitle}
+									</p>
 								)}
 							</div>
 						</div>
@@ -64,10 +76,12 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
 									{item.title}
 								</h3>
 								{item.subtitle && (
-									<p className="mb-4 text-md text-muted-foreground">{item.subtitle}</p>
+									<p className="mb-4 text-md text-muted-foreground">
+										{item.subtitle}
+									</p>
 								)}
 							</div>
-							{item.content}{' '}
+							{item.content}{" "}
 						</div>
 					</div>
 				))}

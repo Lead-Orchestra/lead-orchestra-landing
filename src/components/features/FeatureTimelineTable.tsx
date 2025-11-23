@@ -1,7 +1,13 @@
-'use client';
+"use client";
 
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from "@/components/ui/badge";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import {
 	Table,
 	TableBody,
@@ -10,12 +16,12 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '@/components/ui/table';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 export type FeatureTimelineMilestone = {
 	quarter: string;
-	status: 'Live' | 'Limited Beta' | 'In Build' | 'Planned';
+	status: "Live" | "Limited Beta" | "In Build" | "Planned";
 	initiative: string;
 	focus: string;
 	summary: string;
@@ -23,13 +29,13 @@ export type FeatureTimelineMilestone = {
 };
 
 const statusVariant: Record<
-	FeatureTimelineMilestone['status'],
-	'default' | 'secondary' | 'outline'
+	FeatureTimelineMilestone["status"],
+	"default" | "secondary" | "outline"
 > = {
-	Live: 'default',
-	'Limited Beta': 'secondary',
-	'In Build': 'outline',
-	Planned: 'outline',
+	Live: "default",
+	"Limited Beta": "secondary",
+	"In Build": "outline",
+	Planned: "outline",
 };
 
 type FeatureTimelineTableProps = {
@@ -37,7 +43,10 @@ type FeatureTimelineTableProps = {
 	className?: string;
 };
 
-export function FeatureTimelineTable({ rows, className }: FeatureTimelineTableProps) {
+export function FeatureTimelineTable({
+	rows,
+	className,
+}: FeatureTimelineTableProps) {
 	if (!rows.length) {
 		return null;
 	}
@@ -45,23 +54,25 @@ export function FeatureTimelineTable({ rows, className }: FeatureTimelineTablePr
 	return (
 		<Card
 			className={cn(
-				'border-border/60 bg-card/90 backdrop-blur supports-[backdrop-filter]:bg-card/80',
-				className
+				"border-border/60 bg-card/90 backdrop-blur supports-[backdrop-filter]:bg-card/80",
+				className,
 			)}
 		>
 			<CardHeader className="gap-2">
-				<CardTitle className="text-balance text-2xl">Delivery Roadmap</CardTitle>
+				<CardTitle className="text-balance text-2xl">
+					Delivery Roadmap
+				</CardTitle>
 				<CardDescription className="text-pretty">
-					A transparent view of what is live inside Lead Orchestra today, what is enjoying limited
-					beta access, and the initiatives we are building next for developers, agencies, and data
-					teams.
+					A transparent view of what is live inside Lead Orchestra today, what
+					is enjoying limited beta access, and the initiatives we are building
+					next for developers, agencies, and data teams.
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="pt-4">
 				<Table>
 					<TableCaption className="text-muted-foreground text-xs">
-						Status values update automatically from our product ops module—no screenshots, no stale
-						decks.
+						Status values update automatically from our product ops module—no
+						screenshots, no stale decks.
 					</TableCaption>
 					<TableHeader>
 						<TableRow className="bg-muted/40 hover:bg-muted/40">
@@ -93,10 +104,14 @@ export function FeatureTimelineTable({ rows, className }: FeatureTimelineTablePr
 								</TableCell>
 								<TableCell className="align-top font-semibold text-foreground">
 									{row.initiative}
-									<p className="mt-2 text-muted-foreground text-sm">{row.summary}</p>
+									<p className="mt-2 text-muted-foreground text-sm">
+										{row.summary}
+									</p>
 								</TableCell>
 								<TableCell className="align-top">
-									<Badge variant={statusVariant[row.status]}>{row.status}</Badge>
+									<Badge variant={statusVariant[row.status]}>
+										{row.status}
+									</Badge>
 								</TableCell>
 								<TableCell className="align-top text-muted-foreground text-sm">
 									{row.focus}

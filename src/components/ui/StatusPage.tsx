@@ -1,31 +1,37 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle, XCircle } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { ArrowRight, CheckCircle, XCircle } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
-import { useNavigationRouter } from '@/hooks/useNavigationRouter';
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
 
 interface StatusPageProps {
-	type: 'success' | 'error';
+	type: "success" | "error";
 	className?: string;
 }
 
-export function StatusPage({ type, className = '' }: StatusPageProps) {
+export function StatusPage({ type, className = "" }: StatusPageProps) {
 	const router = useNavigationRouter();
 	const searchParams = useSearchParams();
 
-	const isSuccess = type === 'success';
+	const isSuccess = type === "success";
 	const Icon = isSuccess ? CheckCircle : XCircle;
-	const iconColor = isSuccess ? 'text-green-500' : 'text-red-500';
+	const iconColor = isSuccess ? "text-green-500" : "text-red-500";
 
-	const title = searchParams.get('title') || (isSuccess ? 'Payment Successful' : 'Payment Failed');
+	const title =
+		searchParams.get("title") ||
+		(isSuccess ? "Payment Successful" : "Payment Failed");
 	const subtitle =
-		searchParams.get('subtitle') ||
-		(isSuccess ? 'Your order has been confirmed.' : 'There was an issue with your payment.');
-	const ctaText = searchParams.get('ctaText') || (isSuccess ? 'View Orders' : 'Try Again');
-	const ctaHref = searchParams.get('ctaHref') || (isSuccess ? '/orders' : '/products');
+		searchParams.get("subtitle") ||
+		(isSuccess
+			? "Your order has been confirmed."
+			: "There was an issue with your payment.");
+	const ctaText =
+		searchParams.get("ctaText") || (isSuccess ? "View Orders" : "Try Again");
+	const ctaHref =
+		searchParams.get("ctaHref") || (isSuccess ? "/orders" : "/products");
 
 	const handleCtaClick = () => {
 		if (ctaHref) {
@@ -45,7 +51,7 @@ export function StatusPage({ type, className = '' }: StatusPageProps) {
 			>
 				<div className="mb-6 flex justify-center">
 					<div
-						className={`rounded-full bg-opacity-20 p-4 ${isSuccess ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'}`}
+						className={`rounded-full bg-opacity-20 p-4 ${isSuccess ? "bg-green-100 dark:bg-green-900" : "bg-red-100 dark:bg-red-900"}`}
 					>
 						<Icon className={`h-16 w-16 ${iconColor}`} />
 					</div>
@@ -57,7 +63,11 @@ export function StatusPage({ type, className = '' }: StatusPageProps) {
 
 				<p className="mb-8 text-muted-foreground">{subtitle}</p>
 
-				<Button onClick={handleCtaClick} className="group gap-2 transition-all" size="lg">
+				<Button
+					onClick={handleCtaClick}
+					className="group gap-2 transition-all"
+					size="lg"
+				>
 					{ctaText}
 					<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
 				</Button>

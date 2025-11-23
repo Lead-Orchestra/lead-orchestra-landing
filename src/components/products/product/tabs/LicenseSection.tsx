@@ -1,6 +1,6 @@
-import { licenses } from '@/data/products/license';
+import { licenses } from "@/data/products/license";
 
-import type { LicenseType } from '@/types/products';
+import type { LicenseType } from "@/types/products";
 
 interface LicenseSectionProps {
 	licenseName?: LicenseType;
@@ -29,7 +29,9 @@ const LicenseSection = ({ licenseName }: LicenseSectionProps) => {
 			)}
 			<div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-3">
 				<div>
-					<h4 className="mb-1 font-medium text-black text-sm dark:text-white">Permissions</h4>
+					<h4 className="mb-1 font-medium text-black text-sm dark:text-white">
+						Permissions
+					</h4>
 					<ul className="ml-4 list-disc text-black text-xs dark:text-white">
 						{license.permissions.map((perm) => (
 							<li key={perm}>{perm}</li>
@@ -37,7 +39,9 @@ const LicenseSection = ({ licenseName }: LicenseSectionProps) => {
 					</ul>
 				</div>
 				<div>
-					<h4 className="mb-1 font-medium text-black text-sm dark:text-white">Conditions</h4>
+					<h4 className="mb-1 font-medium text-black text-sm dark:text-white">
+						Conditions
+					</h4>
 					<ul className="ml-4 list-disc text-black text-xs dark:text-white">
 						{license.conditions.map((cond) => (
 							<li key={cond}>{cond}</li>
@@ -45,7 +49,9 @@ const LicenseSection = ({ licenseName }: LicenseSectionProps) => {
 					</ul>
 				</div>
 				<div>
-					<h4 className="mb-1 font-medium text-black text-sm dark:text-white">Limitations</h4>
+					<h4 className="mb-1 font-medium text-black text-sm dark:text-white">
+						Limitations
+					</h4>
 					<ul className="ml-4 list-disc text-black text-xs dark:text-white">
 						{license.limitations.map((lim) => (
 							<li key={lim}>{lim}</li>

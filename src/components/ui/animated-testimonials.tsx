@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
+import { AnimatePresence, motion } from "motion/react";
 
-import type { TeamMember } from '@/types/about/team';
-import { useEffect, useState } from 'react';
-import { v4 as uuid } from 'uuid';
+import type { TeamMember } from "@/types/about/team";
+import { useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
 
 export const AnimatedTestimonials = ({
 	testimonials,
@@ -67,7 +67,9 @@ export const AnimatedTestimonials = ({
 										scale: isActive(index) ? 1 : 0.95,
 										z: isActive(index) ? 0 : -100,
 										rotate: isActive(index) ? 0 : randomRotateY(),
-										zIndex: isActive(index) ? 40 : testimonials.length + 2 - index,
+										zIndex: isActive(index)
+											? 40
+											: testimonials.length + 2 - index,
 										y: isActive(index) ? [0, -80, 0] : 0,
 									}}
 									exit={{
@@ -78,7 +80,7 @@ export const AnimatedTestimonials = ({
 									}}
 									transition={{
 										duration: 0.4,
-										ease: 'easeInOut',
+										ease: "easeInOut",
 									}}
 									className="absolute inset-0 origin-bottom"
 								>
@@ -112,7 +114,7 @@ export const AnimatedTestimonials = ({
 						}}
 						transition={{
 							duration: 0.2,
-							ease: 'easeInOut',
+							ease: "easeInOut",
 						}}
 					>
 						<h3 className="flex items-center gap-2 font-bold text-2xl text-black dark:text-white">
@@ -157,23 +159,23 @@ export const AnimatedTestimonials = ({
 							))}
 						</div>
 						<motion.p className="mt-8 text-gray-500 text-lg dark:text-neutral-300">
-							{testimonials[active].bio.split(' ').map((word, index) => (
+							{testimonials[active].bio.split(" ").map((word, index) => (
 								<motion.span
 									// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 									key={index}
 									initial={{
-										filter: 'blur(10px)',
+										filter: "blur(10px)",
 										opacity: 0,
 										y: 5,
 									}}
 									animate={{
-										filter: 'blur(0px)',
+										filter: "blur(0px)",
 										opacity: 1,
 										y: 0,
 									}}
 									transition={{
 										duration: 0.2,
-										ease: 'easeInOut',
+										ease: "easeInOut",
 										delay: 0.02 * index,
 									}}
 									className="inline-block"

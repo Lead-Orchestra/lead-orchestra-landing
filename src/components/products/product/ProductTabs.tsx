@@ -3,17 +3,17 @@ import {
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { cn } from '@/lib/utils';
-import type { LicenseType, Review } from '@/types/products';
-import type { ShippingTimeEstimate } from '@/types/products/shipping';
-import type { ABTestCopy } from '@/types/testing';
-import { Star } from 'lucide-react';
-import { v4 as uuid } from 'uuid';
-import DetailsTabContent from './tabs/DetailsTabContent';
-import FaqTabContent from './tabs/FaqTabContent';
-import ReviewsTabContent from './tabs/ReviewsTabContent';
+} from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
+import type { LicenseType, Review } from "@/types/products";
+import type { ShippingTimeEstimate } from "@/types/products/shipping";
+import type { ABTestCopy } from "@/types/testing";
+import { Star } from "lucide-react";
+import { v4 as uuid } from "uuid";
+import DetailsTabContent from "./tabs/DetailsTabContent";
+import FaqTabContent from "./tabs/FaqTabContent";
+import ReviewsTabContent from "./tabs/ReviewsTabContent";
 
 interface FAQ {
 	question: string;
@@ -33,7 +33,7 @@ interface ProductTabsProps {
 }
 
 // * Presentational component: Next.js compatible, no navigation or SSR logic
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 const ProductTabs = ({
 	description,
@@ -48,10 +48,10 @@ const ProductTabs = ({
 }: ProductTabsProps) => {
 	const prevTab = useRef<string>(value);
 	useEffect(() => {
-		if (value === 'reviews' && prevTab.current !== 'reviews') {
-			const el = document.getElementById('reviews');
+		if (value === "reviews" && prevTab.current !== "reviews") {
+			const el = document.getElementById("reviews");
 			if (el) {
-				el.scrollIntoView({ behavior: 'smooth' });
+				el.scrollIntoView({ behavior: "smooth" });
 			}
 		}
 		prevTab.current = value;
@@ -60,7 +60,10 @@ const ProductTabs = ({
 		return Array.from({ length: 5 }, (_, i) => (
 			<Star
 				key={uuid()}
-				className={cn('h-4 w-4', i < rating ? 'fill-current text-yellow-400' : 'text-muted')}
+				className={cn(
+					"h-4 w-4",
+					i < rating ? "fill-current text-yellow-400" : "text-muted",
+				)}
 			/>
 		));
 	};

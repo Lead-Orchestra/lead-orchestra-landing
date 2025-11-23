@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { useCallback, useEffect, useRef } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useCallback, useEffect, useRef } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 type ScrollDistanceIndicatorProps = {
 	className?: string;
@@ -37,7 +37,7 @@ export function ScrollDistanceIndicator({
 	}, [progress]);
 
 	useEffect(() => {
-		if (typeof window === 'undefined') return undefined;
+		if (typeof window === "undefined") return undefined;
 
 		const onScroll = () => {
 			if (frameRef.current) {
@@ -47,13 +47,13 @@ export function ScrollDistanceIndicator({
 		};
 
 		handleScroll();
-		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener("scroll", onScroll, { passive: true });
 
 		return () => {
 			if (frameRef.current) {
 				cancelAnimationFrame(frameRef.current);
 			}
-			window.removeEventListener('scroll', onScroll);
+			window.removeEventListener("scroll", onScroll);
 		};
 	}, [handleScroll]);
 
@@ -63,7 +63,7 @@ export function ScrollDistanceIndicator({
 				cancelAnimationFrame(frameRef.current);
 			}
 		},
-		[]
+		[],
 	);
 
 	const width = useTransform(animatedProgress, (latest) => {
@@ -74,12 +74,15 @@ export function ScrollDistanceIndicator({
 	return (
 		<div
 			className={cn(
-				'pointer-events-none fixed inset-x-0 top-0 z-[65] flex h-0 justify-center',
-				className
+				"pointer-events-none fixed inset-x-0 top-0 z-[65] flex h-0 justify-center",
+				className,
 			)}
 			aria-hidden="true"
 		>
-			<div className="pointer-events-auto relative w-full max-w-7xl px-3" style={{ height }}>
+			<div
+				className="pointer-events-auto relative w-full max-w-7xl px-3"
+				style={{ height }}
+			>
 				<div className="absolute inset-0 rounded-full bg-border/40 backdrop-blur-[1px]" />
 				<motion.div
 					className="absolute inset-y-0 left-0 rounded-full bg-primary shadow-[0_0_12px_rgba(99,102,241,0.45)]"

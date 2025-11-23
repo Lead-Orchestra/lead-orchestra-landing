@@ -15,6 +15,6 @@ export interface FeatureRequest {
 	created_at: string;
 	updated_at?: string;
 	upvotes: number;
-	userVote?: 'up' | 'down' | null;
+	userVote?: "up" | "down" | null;
 	iconIndex?: number; // * Optional: which icon to show (0-4)
 }

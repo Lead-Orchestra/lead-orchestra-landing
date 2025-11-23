@@ -2,44 +2,51 @@
 // ! ProductGrid: displays a grid of products with filtering and pagination
 // * Follows DRY, SOLID, and type-safe best practices (see user rules)
 
-'use client';
-import { useAuthModal } from '@/components/auth/use-auth-store';
-import { usePagination } from '@/hooks/use-pagination';
-import { cn } from '@/lib/utils';
-import { ProductCategory, type ProductType } from '@/types/products';
-import { useSession } from 'next-auth/react';
-import type React from 'react';
-import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import FreeResourceCard from './product/FreeResourceCard';
-import ProductCardNew from './product/ProductCardNew';
-import ProductFilter from './product/ProductFilter';
-import type { ProductCategoryOption } from './product/ProductFilter';
-import ProductHero from './product/ProductHero';
-import MonetizeCard from './workflow/MonetizeCard';
-import WorkflowCreateModal from './workflow/WorkflowCreateModal';
+"use client";
+import { useAuthModal } from "@/components/auth/use-auth-store";
+import { usePagination } from "@/hooks/use-pagination";
+import { cn } from "@/lib/utils";
+import { ProductCategory, type ProductType } from "@/types/products";
+import { useSession } from "next-auth/react";
+import type React from "react";
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
+import FreeResourceCard from "./product/FreeResourceCard";
+import ProductCardNew from "./product/ProductCardNew";
+import ProductFilter from "./product/ProductFilter";
+import type { ProductCategoryOption } from "./product/ProductFilter";
+import ProductHero from "./product/ProductHero";
+import MonetizeCard from "./workflow/MonetizeCard";
+import WorkflowCreateModal from "./workflow/WorkflowCreateModal";
 // todo: Move to data file or API
 
 // * Category pretty labels for ProductCategory enum
 const CATEGORY_LABELS: Record<ProductCategory, string> = {
-	credits: 'Credits',
-	workflows: 'Workflows',
-	essentials: 'Essentials',
-	notion: 'Notion',
-	voices: 'Voices',
-	'text-agents': 'Text Agents',
-	leads: 'Leads',
-	data: 'Data',
-	monetize: 'Monetize',
-	automation: 'Automation',
-	'add-on': 'Add-On',
-	agents: 'Agents',
-	'free-resources': 'Free Resources',
-	'sales-scripts': 'Sales Scripts',
-	prompts: 'Prompts',
-	'remote-closers': "Virtual Assistants (VA's)",
+	credits: "Credits",
+	workflows: "Workflows",
+	essentials: "Essentials",
+	notion: "Notion",
+	voices: "Voices",
+	"text-agents": "Text Agents",
+	leads: "Leads",
+	data: "Data",
+	monetize: "Monetize",
+	automation: "Automation",
+	"add-on": "Add-On",
+	agents: "Agents",
+	"free-resources": "Free Resources",
+	"sales-scripts": "Sales Scripts",
+	prompts: "Prompts",
+	"remote-closers": "Virtual Assistants (VA's)",
 };
 
-const MONETIZE_PORTAL_URL = 'https://app.dealscale.io';
+const MONETIZE_PORTAL_URL = "https://app.dealscale.io";
 const MONETIZE_CATEGORY_OVERRIDES: Partial<
 	Record<
 		ProductCategory,
@@ -51,29 +58,29 @@ const MONETIZE_CATEGORY_OVERRIDES: Partial<
 	>
 > = {
 	[ProductCategory.Workflows]: {
-		title: 'Monetize Your Workflow',
-		subtitle: 'Share your automation with the world and earn revenue',
-		ariaLabel: 'Create and monetize your workflow',
+		title: "Monetize Your Workflow",
+		subtitle: "Share your automation with the world and earn revenue",
+		ariaLabel: "Create and monetize your workflow",
 	},
 	[ProductCategory.Agents]: {
-		title: 'Launch Your Agent on Deal Scale',
-		subtitle: 'List your AI agent and start collecting revenue faster',
-		ariaLabel: 'Launch your AI agent on Deal Scale',
+		title: "Launch Your Agent on Deal Scale",
+		subtitle: "List your AI agent and start collecting revenue faster",
+		ariaLabel: "Launch your AI agent on Deal Scale",
 	},
 	[ProductCategory.Voices]: {
-		title: 'Monetize Your Voice Agent',
-		subtitle: 'Tap into our network and deploy your concierge for clients',
-		ariaLabel: 'Monetize your voice agent on Deal Scale',
+		title: "Monetize Your Voice Agent",
+		subtitle: "Tap into our network and deploy your concierge for clients",
+		ariaLabel: "Monetize your voice agent on Deal Scale",
 	},
 	[ProductCategory.SalesScripts]: {
-		title: 'Sell Your Sales Scripts',
-		subtitle: 'Publish proven cadences to thousands of Deal Scale operators',
-		ariaLabel: 'Sell your sales scripts on Deal Scale',
+		title: "Sell Your Sales Scripts",
+		subtitle: "Publish proven cadences to thousands of Deal Scale operators",
+		ariaLabel: "Sell your sales scripts on Deal Scale",
 	},
 	[ProductCategory.Prompts]: {
-		title: 'List Your Prompt Library',
-		subtitle: 'Package prompts, earn recurring revenue, and reach new teams',
-		ariaLabel: 'List your prompt library on Deal Scale',
+		title: "List Your Prompt Library",
+		subtitle: "Package prompts, earn recurring revenue, and reach new teams",
+		ariaLabel: "List your prompt library on Deal Scale",
 	},
 };
 const MONETIZE_CATEGORY_TARGETS: ReadonlySet<string> = new Set([
@@ -93,18 +100,21 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 	const { data: session } = useSession();
 	const { open: openAuthModal } = useAuthModal();
 	const [showWorkflowModal, setShowWorkflowModal] = useState(false);
-	const [activeCategory, setActiveCategory] = useState<string>('all');
+	const [activeCategory, setActiveCategory] = useState<string>("all");
 	const freeResourceCategory = ProductCategory.FreeResources;
 	// On mount, check for #category=... in the hash and set activeCategory
 	useEffect(() => {
-		if (typeof window !== 'undefined' && window.location.hash.startsWith('#category=')) {
-			const cat = window.location.hash.replace('#category=', '');
-			if (cat && cat !== 'all') {
+		if (
+			typeof window !== "undefined" &&
+			window.location.hash.startsWith("#category=")
+		) {
+			const cat = window.location.hash.replace("#category=", "");
+			if (cat && cat !== "all") {
 				setActiveCategory(cat.toLowerCase());
 			}
 		}
 	}, []);
-	const [searchTerm, setSearchTerm] = useState<string>('');
+	const [searchTerm, setSearchTerm] = useState<string>("");
 
 	// Dynamically generate unique categories from products (not types)
 
@@ -136,7 +146,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 				return false;
 			}
 
-			if (activeCategory !== 'all' && activeCategory !== freeResourceCategory) {
+			if (activeCategory !== "all" && activeCategory !== freeResourceCategory) {
 				return false;
 			}
 
@@ -153,14 +163,14 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 
 	const filteredProducts = useMemo(() => {
 		let filtered = products;
-		if (activeCategory !== 'all') {
+		if (activeCategory !== "all") {
 			filtered = filtered.filter(
 				(p) =>
 					Array.isArray(p.categories) &&
 					p.categories
 						.map(String)
 						.map((s) => s.toLowerCase())
-						.includes(activeCategory)
+						.includes(activeCategory),
 			);
 		}
 
@@ -170,22 +180,24 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 				// Exclude products where users BUY things (they don't earn from these):
 				// 1. Individual VAs (users hire them, VAs earn but buyers don't)
 				const isIndividualCloser =
-					product.id?.startsWith('va-') || product.sku?.startsWith('LO-VA-');
+					product.id?.startsWith("va-") || product.sku?.startsWith("LO-VA-");
 				// 2. Individual workflows (users BUY these, they don't earn from them)
 				const isIndividualWorkflow =
-					product.id?.includes('-workflow') || product.sku?.startsWith('WF-');
+					product.id?.includes("-workflow") || product.sku?.startsWith("WF-");
 				// 3. Individual agents (users BUY these, they don't earn from them)
 				const isIndividualAgent =
-					product.id?.includes('-agent') ||
-					product.id?.includes('-concierge') ||
-					product.sku?.startsWith('AG-');
+					product.id?.includes("-agent") ||
+					product.id?.includes("-concierge") ||
+					product.sku?.startsWith("AG-");
 				// 4. Free resources (users download these for free, they don't earn from them)
-				const isFreeResource = product.categories?.includes(ProductCategory.FreeResources);
+				const isFreeResource = product.categories?.includes(
+					ProductCategory.FreeResources,
+				);
 				// 5. Products with price > 0 where users pay (not earn)
 				const isBuyableProduct =
 					product.price > 0 &&
-					!product.id?.includes('marketplace') &&
-					!product.sku?.includes('MARKETPLACE');
+					!product.id?.includes("marketplace") &&
+					!product.sku?.includes("MARKETPLACE");
 
 				// Exclude these - only show marketplace entry points where users can APPLY/SELL to earn
 				if (
@@ -209,26 +221,34 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 		if (searchTerm.trim()) {
 			const term = searchTerm.trim().toLowerCase();
 			filtered = filtered.filter(
-				(p) => p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term)
+				(p) =>
+					p.name.toLowerCase().includes(term) ||
+					p.description.toLowerCase().includes(term),
 			);
 		}
 		if (activeCategory === freeResourceCategory) {
-			filtered = filtered.filter((product) => product.categories.includes(freeResourceCategory));
+			filtered = filtered.filter((product) =>
+				product.categories.includes(freeResourceCategory),
+			);
 		}
 
 		const shouldExcludeFeaturedFreebies =
-			activeCategory === 'all' || activeCategory === freeResourceCategory;
+			activeCategory === "all" || activeCategory === freeResourceCategory;
 
 		if (shouldExcludeFeaturedFreebies) {
 			filtered = filtered.filter(
 				(product) =>
-					!(product.categories.includes(freeResourceCategory) && product.isFeaturedFreeResource)
+					!(
+						product.categories.includes(freeResourceCategory) &&
+						product.isFeaturedFreeResource
+					),
 			);
 		}
 		return filtered;
 	}, [products, activeCategory, searchTerm, freeResourceCategory]);
 
-	const shouldShowEmptyState = filteredProducts.length === 0 && featuredFreeResources.length === 0;
+	const shouldShowEmptyState =
+		filteredProducts.length === 0 && featuredFreeResources.length === 0;
 
 	// Pagination
 	const {
@@ -255,29 +275,37 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 			return;
 		}
 
-		openAuthModal('signin', () => setShowWorkflowModal(true));
+		openAuthModal("signin", () => setShowWorkflowModal(true));
 	}, [openAuthModal, session, setShowWorkflowModal]);
 
 	const buildMonetizeParams = useCallback(
 		(category: ProductCategory) => ({
-			utm_source: 'deal-scale-marketplace',
-			utm_medium: 'cta',
-			utm_campaign: 'monetize-card',
+			utm_source: "deal-scale-marketplace",
+			utm_medium: "cta",
+			utm_campaign: "monetize-card",
 			utm_content: `category-${category}`,
 		}),
-		[]
+		[],
 	);
 
 	const gridItems = useMemo(() => {
-		const items: { key: string; node: ReactNode }[] = paginatedProducts.map((product) => ({
-			key: product.sku,
-			node: <ProductCardNew {...product} className="w-full" callbackUrl={callbackUrl} />,
-		}));
+		const items: { key: string; node: ReactNode }[] = paginatedProducts.map(
+			(product) => ({
+				key: product.sku,
+				node: (
+					<ProductCardNew
+						{...product}
+						className="w-full"
+						callbackUrl={callbackUrl}
+					/>
+				),
+			}),
+		);
 
 		if (MONETIZE_CATEGORY_TARGETS.has(activeCategory)) {
 			const categoryKey = activeCategory as ProductCategory;
 			const copy = MONETIZE_CATEGORY_OVERRIDES[categoryKey];
-			const ariaLabel = copy?.ariaLabel ?? 'Monetize on Deal Scale';
+			const ariaLabel = copy?.ariaLabel ?? "Monetize on Deal Scale";
 
 			const cardNode =
 				categoryKey === ProductCategory.Workflows ? (
@@ -304,7 +332,13 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 		}
 
 		return items;
-	}, [paginatedProducts, callbackUrl, activeCategory, handleWorkflowClick, buildMonetizeParams]);
+	}, [
+		paginatedProducts,
+		callbackUrl,
+		activeCategory,
+		handleWorkflowClick,
+		buildMonetizeParams,
+	]);
 
 	return (
 		<>
@@ -324,18 +358,24 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 					/>
 					{shouldShowEmptyState ? (
 						<div className="py-16 text-center">
-							<p className="text-black dark:text-white/70">No products found for your criteria.</p>
+							<p className="text-black dark:text-white/70">
+								No products found for your criteria.
+							</p>
 						</div>
 					) : (
 						<>
 							{featuredFreeResources.length > 0 && (
 								<div className="mb-10 flex w-full flex-col gap-6">
 									{featuredFreeResources.map((product) => (
-										<FreeResourceCard key={`free-resource-${product.sku}`} product={product} />
+										<FreeResourceCard
+											key={`free-resource-${product.sku}`}
+											product={product}
+										/>
 									))}
 								</div>
 							)}
-							{(filteredProducts.length > 0 || activeCategory === 'workflows') &&
+							{(filteredProducts.length > 0 ||
+								activeCategory === "workflows") &&
 								gridItems.length > 0 && (
 									<div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
 										{gridItems.map((item) => (
@@ -343,7 +383,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 										))}
 									</div>
 								)}
-							{activeCategory === 'workflows' && (
+							{activeCategory === "workflows" && (
 								<WorkflowCreateModal
 									open={showWorkflowModal}
 									onClose={() => setShowWorkflowModal(false)}
@@ -383,10 +423,10 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, callbackUrl }) => {
 													<button
 														key={pageNum}
 														className={cn(
-															'rounded-md border px-3 py-1 font-semibold text-sm transition',
+															"rounded-md border px-3 py-1 font-semibold text-sm transition",
 															isActive
-																? 'border-blue-500 bg-blue-600 text-white shadow-sm dark:border-blue-400 dark:bg-blue-500 dark:text-slate-950'
-																: 'border-slate-300 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800'
+																? "border-blue-500 bg-blue-600 text-white shadow-sm dark:border-blue-400 dark:bg-blue-500 dark:text-slate-950"
+																: "border-slate-300 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800",
 														)}
 														onClick={() => setPage(pageNum)}
 														type="button"

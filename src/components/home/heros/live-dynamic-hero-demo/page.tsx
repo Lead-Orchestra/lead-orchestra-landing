@@ -1,11 +1,16 @@
-'use client';
+"use client";
 
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
+import dynamic from "next/dynamic";
+import Link from "next/link";
 
-import { useDeferredLoad } from '@/components/providers/useDeferredLoad';
+import { useDeferredLoad } from "@/components/providers/useDeferredLoad";
 
-import { LIVE_COPY, LIVE_PRIMARY_CTA, LIVE_SECONDARY_CTA, PERSONA_LABEL } from './_config';
+import {
+	LIVE_COPY,
+	LIVE_PRIMARY_CTA,
+	LIVE_SECONDARY_CTA,
+	PERSONA_LABEL,
+} from "./_config";
 
 // Keep for potential future use
 // const LiveDynamicHeroClient = dynamic(
@@ -16,20 +21,20 @@ import { LIVE_COPY, LIVE_PRIMARY_CTA, LIVE_SECONDARY_CTA, PERSONA_LABEL } from '
 // 	},
 // );
 
-const HeroSideBySide = dynamic(() => import('./HeroSideBySide'), {
+const HeroSideBySide = dynamic(() => import("./HeroSideBySide"), {
 	ssr: false,
 	loading: () => <HeroStaticFallback />,
 });
 
 function HeroStaticFallback() {
 	const {
-		problem: problemPhrase = 'buying stale lead lists from Apollo and ZoomInfo',
-		solution: solutionPhrase = 'scraping your own fresh leads from any website',
+		problem: problemPhrase = "buying stale lead lists from Apollo and ZoomInfo",
+		solution: solutionPhrase = "scraping your own fresh leads from any website",
 	} = LIVE_COPY?.values ?? {};
 	const description =
-		typeof LIVE_COPY?.subtitle === 'string'
+		typeof LIVE_COPY?.subtitle === "string"
 			? LIVE_COPY.subtitle
-			: 'Stop buying stale lead lists. Scrape your own fresh leads. Fresh leads, not rented lists.';
+			: "Stop buying stale lead lists. Scrape your own fresh leads. Fresh leads, not rented lists.";
 
 	return (
 		<section className="relative flex min-h-[92vh] items-center justify-center overflow-hidden bg-gradient-to-b from-background via-muted/40 to-background text-foreground">
@@ -45,7 +50,9 @@ function HeroStaticFallback() {
 				<h1 className="font-bold text-4xl text-foreground leading-tight sm:text-5xl md:text-6xl">
 					Stop {problemPhrase}, start {solutionPhrase}
 				</h1>
-				<p className="max-w-3xl text-base text-muted-foreground sm:text-lg">{description}</p>
+				<p className="max-w-3xl text-base text-muted-foreground sm:text-lg">
+					{description}
+				</p>
 				<div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
 					<Link
 						href="/contact"

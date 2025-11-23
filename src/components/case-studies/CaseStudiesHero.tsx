@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import Header from '../common/Header';
+import { motion } from "framer-motion";
+import Header from "../common/Header";
 
 const CaseStudiesHero = () => {
 	return (

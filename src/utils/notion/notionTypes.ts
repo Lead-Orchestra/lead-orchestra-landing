@@ -1,7 +1,7 @@
 // Original content from scripts/utils/notion.ts
 
 export type NotionFilesExternal = {
-	type: 'external';
+	type: "external";
 	name: string;
 	external: {
 		url: string;
@@ -9,7 +9,7 @@ export type NotionFilesExternal = {
 };
 
 export type NotionFilesFile = {
-	type: 'file';
+	type: "file";
 	name: string;
 	file: {
 		url: string;
@@ -18,14 +18,14 @@ export type NotionFilesFile = {
 };
 
 export type NotionFilesProperty = {
-	type: 'files';
+	type: "files";
 	files: Array<NotionFilesExternal | NotionFilesFile>;
 };
 
 export type NotionRichTextProperty = {
-	type: 'rich_text';
+	type: "rich_text";
 	rich_text: Array<{
-		type: 'text';
+		type: "text";
 		text: {
 			content: string;
 			link: {
@@ -38,9 +38,9 @@ export type NotionRichTextProperty = {
 };
 
 export type NotionTitleProperty = {
-	type: 'title';
+	type: "title";
 	title: Array<{
-		type: 'text';
+		type: "text";
 		text: {
 			content: string;
 			link: {
@@ -53,12 +53,12 @@ export type NotionTitleProperty = {
 };
 
 export type NotionUrlProperty = {
-	type: 'url';
+	type: "url";
 	url: string | null;
 };
 
 export type NotionSelectProperty = {
-	type: 'select';
+	type: "select";
 	select: {
 		id: string;
 		name: string;
@@ -67,7 +67,7 @@ export type NotionSelectProperty = {
 };
 
 export type NotionCheckboxProperty = {
-	type: 'checkbox';
+	type: "checkbox";
 	checkbox: boolean;
 };
 
@@ -89,15 +89,15 @@ export type NotionQueryResponse = {
 };
 
 export function inferKind(name: string): {
-	kind: 'image' | 'video' | 'other';
+	kind: "image" | "video" | "other";
 	ext: string;
 } {
-	const ext = (name.split('.').pop() || '').toLowerCase();
-	if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif', 'svg'].includes(ext)) {
-		return { kind: 'image', ext };
+	const ext = (name.split(".").pop() || "").toLowerCase();
+	if (["jpg", "jpeg", "png", "gif", "webp", "avif", "svg"].includes(ext)) {
+		return { kind: "image", ext };
 	}
-	if (['mp4', 'webm', 'ogg', 'mov', 'm4v', 'mkv'].includes(ext)) {
-		return { kind: 'video', ext };
+	if (["mp4", "webm", "ogg", "mov", "m4v", "mkv"].includes(ext)) {
+		return { kind: "video", ext };
 	}
-	return { kind: 'other', ext };
+	return { kind: "other", ext };
 }

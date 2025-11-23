@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { AnimatePresence, motion } from 'motion/react';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "motion/react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 type LaserBeamsWithCollisionProps = {
 	children: React.ReactNode;
@@ -36,7 +36,7 @@ export function LaserBeamsWithCollision({
 	beamWidth = 3,
 	durationRange = [6.5, 10.5],
 	delayRange = [0.6, 2.4],
-	gridColor = 'rgba(59,130,246,0.06)',
+	gridColor = "rgba(59,130,246,0.06)",
 }: LaserBeamsWithCollisionProps): JSX.Element {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const parentRef = useRef<HTMLDivElement>(null);
@@ -56,8 +56,10 @@ export function LaserBeamsWithCollision({
 			const height = beamHeight + Math.max(0, 140 - distance * 48);
 
 			const seed = index + 1;
-			const duration = minDuration + (maxDuration - minDuration) * seededRandom(seed * 5.73);
-			const delay = minDelay + (maxDelay - minDelay) * seededRandom(seed * 11.37);
+			const duration =
+				minDuration + (maxDuration - minDuration) * seededRandom(seed * 5.73);
+			const delay =
+				minDelay + (maxDelay - minDelay) * seededRandom(seed * 11.37);
 
 			return {
 				initialX: `calc(${percent}% - ${beamWidth / 2}px)`,
@@ -67,14 +69,21 @@ export function LaserBeamsWithCollision({
 				height,
 			};
 		});
-	}, [beamCount, beamHeight, beamWidth, clampedCount, delayRange, durationRange]);
+	}, [
+		beamCount,
+		beamHeight,
+		beamWidth,
+		clampedCount,
+		delayRange,
+		durationRange,
+	]);
 
 	return (
 		<div
 			ref={parentRef}
 			className={cn(
-				'relative flex min-h-[720px] w-full items-center justify-center overflow-hidden bg-gradient-to-b from-background via-background/95 to-background',
-				className
+				"relative flex min-h-[720px] w-full items-center justify-center overflow-hidden bg-gradient-to-b from-background via-background/95 to-background",
+				className,
 			)}
 		>
 			<div
@@ -107,7 +116,7 @@ export function LaserBeamsWithCollision({
 				className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-sky-500/12 to-sky-500/32"
 				style={{
 					boxShadow:
-						'0 0 26px rgba(36, 99, 235, 0.24), 0 1px 1px rgba(14, 116, 144, 0.2), 0 0 0 1px rgba(15, 23, 42, 0.22), 0 0 4px rgba(37, 99, 235, 0.26)',
+						"0 0 26px rgba(36, 99, 235, 0.24), 0 1px 1px rgba(14, 116, 144, 0.2), 0 0 0 1px rgba(15, 23, 42, 0.22), 0 0 4px rgba(37, 99, 235, 0.26)",
 				}}
 			/>
 		</div>
@@ -138,7 +147,7 @@ const CollisionMechanism = React.forwardRef<
 			seed,
 			beamOptions,
 		},
-		ref
+		ref,
 	) => {
 		const beamRef = useRef<HTMLDivElement>(null);
 		const [collision, setCollision] = useState<{
@@ -161,7 +170,8 @@ const CollisionMechanism = React.forwardRef<
 					const parentRect = parentRef.current.getBoundingClientRect();
 
 					if (beamRect.bottom >= containerRect.top) {
-						const relativeX = beamRect.left - parentRect.left + beamRect.width / 2;
+						const relativeX =
+							beamRect.left - parentRect.left + beamRect.width / 2;
 						const relativeY = beamRect.bottom - parentRect.top;
 						setCollision({
 							detected: true,
@@ -200,8 +210,10 @@ const CollisionMechanism = React.forwardRef<
 
 		const duration =
 			beamOptions?.duration ??
-			minDuration + (maxDuration - minDuration) * seededRandom(seed * 2.97 + beamKey);
-		const repeatDelay = minDelay + (maxDelay - minDelay) * seededRandom(seed * 3.61 + beamKey);
+			minDuration +
+				(maxDuration - minDuration) * seededRandom(seed * 2.97 + beamKey);
+		const repeatDelay =
+			minDelay + (maxDelay - minDelay) * seededRandom(seed * 3.61 + beamKey);
 
 		return (
 			<>
@@ -210,20 +222,20 @@ const CollisionMechanism = React.forwardRef<
 					ref={beamRef}
 					animate="animate"
 					initial={{
-						translateY: '-200px',
-						translateX: beamOptions?.initialX ?? '0px',
+						translateY: "-200px",
+						translateX: beamOptions?.initialX ?? "0px",
 					}}
 					variants={{
 						animate: {
-							translateY: '1800px',
-							translateX: beamOptions?.translateX ?? '0px',
+							translateY: "1800px",
+							translateX: beamOptions?.translateX ?? "0px",
 						},
 					}}
 					transition={{
 						duration,
 						repeat: Number.POSITIVE_INFINITY,
-						repeatType: 'loop',
-						ease: 'linear',
+						repeatType: "loop",
+						ease: "linear",
 						delay: beamOptions?.delay ?? 0,
 						repeatDelay,
 					}}
@@ -241,19 +253,21 @@ const CollisionMechanism = React.forwardRef<
 							style={{
 								left: `${collision.coordinates.x}px`,
 								top: `${collision.coordinates.y}px`,
-								transform: 'translate(-50%, -50%)',
+								transform: "translate(-50%, -50%)",
 							}}
 						/>
 					) : null}
 				</AnimatePresence>
 			</>
 		);
-	}
+	},
 );
 
-CollisionMechanism.displayName = 'LaserCollisionMechanism';
+CollisionMechanism.displayName = "LaserCollisionMechanism";
 
-const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>): JSX.Element => {
+const Explosion = ({
+	...props
+}: React.HTMLProps<HTMLDivElement>): JSX.Element => {
 	const spans = useMemo(
 		() =>
 			Array.from({ length: 22 }, (_, index) => ({
@@ -262,16 +276,16 @@ const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>): JSX.Element =
 				y: -Math.abs(seededRandom(index + 3) * 60 + 20),
 				duration: 0.6 + seededRandom(index + 5) * 0.7,
 			})),
-		[]
+		[],
 	);
 
 	return (
-		<div {...props} className={cn('absolute z-20 h-2 w-2', props.className)}>
+		<div {...props} className={cn("absolute z-20 h-2 w-2", props.className)}>
 			<motion.div
 				initial={{ opacity: 0.4, scale: 0.8 }}
 				animate={{ opacity: 0, scale: 1.8 }}
 				exit={{ opacity: 0 }}
-				transition={{ duration: 1.1, ease: 'easeOut' }}
+				transition={{ duration: 1.1, ease: "easeOut" }}
 				className="-inset-x-10 absolute top-0 m-auto h-2 w-14 rounded-full bg-[radial-gradient(circle,rgba(96,165,250,0.72)_0%,rgba(37,99,235,0)_70%)] blur-[6px]"
 			/>
 			{spans.map((span) => (
@@ -279,7 +293,7 @@ const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>): JSX.Element =
 					key={span.id}
 					initial={{ x: 0, y: 0, opacity: 1 }}
 					animate={{ x: span.x, y: span.y, opacity: 0 }}
-					transition={{ duration: span.duration, ease: 'easeOut' }}
+					transition={{ duration: span.duration, ease: "easeOut" }}
 					className="absolute h-1 w-1 rounded-full bg-gradient-to-b from-sky-400 to-indigo-500"
 				/>
 			))}

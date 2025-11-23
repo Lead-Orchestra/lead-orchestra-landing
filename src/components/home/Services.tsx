@@ -1,21 +1,27 @@
-'use client';
+"use client";
 
-import ServiceCard from '@/components/services/ServiceCard';
-import ServiceFilter from '@/components/services/ServiceFilter';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { usePagination } from '@/hooks/use-pagination';
-import { useDataModuleGuardTelemetry } from '@/hooks/useDataModuleGuardTelemetry';
-import { useDataModule } from '@/stores/useDataModuleStore';
+import ServiceCard from "@/components/services/ServiceCard";
+import ServiceFilter from "@/components/services/ServiceFilter";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { usePagination } from "@/hooks/use-pagination";
+import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
+import { useDataModule } from "@/stores/useDataModuleStore";
 import {
 	SERVICE_CATEGORIES,
 	type ServiceCategoryValue,
 	type ServiceItemData,
 	type ServicesData,
-} from '@/types/service/services';
-import Link from 'next/link';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Header from '../common/Header';
+} from "@/types/service/services";
+import Link from "next/link";
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
+import Header from "../common/Header";
 
 interface ServicesSectionProps {
 	title?: string;
@@ -36,28 +42,28 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// useRef initializer only runs once per component instance, so this is safe
 	// It will differ between server and client instances, but that's OK for logging
 	const componentInstanceId = useRef<string>(
-		typeof window !== 'undefined'
+		typeof window !== "undefined"
 			? `client-${Date.now()}-${Math.random().toString(36).substring(7)}`
-			: `server-${Date.now()}-${Math.random().toString(36).substring(7)}`
+			: `server-${Date.now()}-${Math.random().toString(36).substring(7)}`,
 	);
 	renderIdRef.current += 1;
 	hookCountRef.current = 0;
 
 	// CRITICAL: Date.now() can cause hydration mismatch if used in render output
 	// Only use for logging, not for actual rendering logic
-	const renderTimestamp = typeof window !== 'undefined' ? Date.now() : 0;
+	const renderTimestamp = typeof window !== "undefined" ? Date.now() : 0;
 	console.log(
 		`[ServicesSection:${componentInstanceId.current}] Render #${renderIdRef.current} starting (local hooks start at 0)`,
 		{
-			isServer: typeof window === 'undefined',
+			isServer: typeof window === "undefined",
 			timestamp: renderTimestamp,
 			instanceId: componentInstanceId.current,
-		}
+		},
 	);
 
 	const {
-		title = 'Tailored Solutions for Visionary Companies',
-		subtitle = 'Whether launching lean or scaling enterprise-wide, we craft user-centric digital experiences that drive growth and innovation.',
+		title = "Tailored Solutions for Visionary Companies",
+		subtitle = "Whether launching lean or scaling enterprise-wide, we craft user-centric digital experiences that drive growth and innovation.",
 		showTabs = [
 			SERVICE_CATEGORIES.LEAD_GENERATION,
 			SERVICE_CATEGORIES.LEAD_PREQUALIFICATION,
@@ -76,28 +82,31 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// This can cause hydration mismatches if used for conditional rendering
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(internalActiveTab)`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(internalActiveTab)`,
 	);
-	const [internalActiveTab, setInternalActiveTab] = useState<ServiceCategoryValue>(showTabs[0]);
+	const [internalActiveTab, setInternalActiveTab] =
+		useState<ServiceCategoryValue>(showTabs[0]);
 	// Pagination state now handled by usePagination
 
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(searchTerm)`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(searchTerm)`,
 	);
-	const [searchTerm, setSearchTerm] = useState('');
+	const [searchTerm, setSearchTerm] = useState("");
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(activeCategory)`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(activeCategory)`,
 	);
-	const [activeCategory, setActiveCategory] = useState<ServiceCategoryValue | ''>('');
+	const [activeCategory, setActiveCategory] = useState<
+		ServiceCategoryValue | ""
+	>("");
 	// Initialize cardsPerPage safely for SSR
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(cardsPerPage)`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useState(cardsPerPage)`,
 	);
 	const [cardsPerPage, setCardsPerPage] = useState(() => {
-		if (typeof window !== 'undefined') {
+		if (typeof window !== "undefined") {
 			if (window.innerWidth < 640) return 6;
 			if (window.innerWidth < 1024) return 3;
 			return 6;
@@ -105,17 +114,18 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		return 6; // SSR fallback
 	});
 
-	const activeTab = activeTabProp !== undefined ? activeTabProp : internalActiveTab;
+	const activeTab =
+		activeTabProp !== undefined ? activeTabProp : internalActiveTab;
 
 	// CRITICAL: Use error-safe selector to prevent throwing during SSR
 	// If selector throws, React's error recovery might skip subsequent hooks
 	// NOTE: Cannot wrap hooks in try-catch - hooks must be called unconditionally
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModule - BEFORE`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModule - BEFORE`,
 	);
 	const servicesModuleResult = useDataModule(
-		'service/services',
+		"service/services",
 		// Error-safe selector - never throws, always returns valid object
 		({ status, data, error }) => {
 			try {
@@ -127,21 +137,21 @@ const ServicesSection = (props: ServicesSectionProps) => {
 				};
 			} catch (selectorError) {
 				// If selector throws, return safe fallback to prevent hook skipping
-				console.error('[Services] Selector error:', selectorError);
+				console.error("[Services] Selector error:", selectorError);
 				return {
-					status: 'error' as const,
+					status: "error" as const,
 					services: {} as ServicesData,
 					getServicesByCategory: undefined,
 					error: selectorError,
 				};
 			}
-		}
+		},
 	);
 	console.log(
 		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModule - AFTER`,
 		{
 			status: servicesModuleResult.status,
-		}
+		},
 	);
 
 	const {
@@ -156,17 +166,19 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// Use useMemo to ensure stable references and prevent hook order issues
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(allServices)`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(allServices)`,
 	);
 	const allServices = useMemo(() => {
-		if (!servicesData || typeof servicesData !== 'object') {
+		if (!servicesData || typeof servicesData !== "object") {
 			return [];
 		}
-		return Object.values(servicesData).flatMap((cat) => Object.values(cat ?? {}));
+		return Object.values(servicesData).flatMap((cat) =>
+			Object.values(cat ?? {}),
+		);
 	}, [servicesData]);
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(categoryOptions)`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(categoryOptions)`,
 	);
 	const categoryOptions = useMemo(() => {
 		const unique = new Set<string>();
@@ -188,21 +200,25 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// This must be a hook (useCallback) to maintain consistent hook order
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useCallback(filterServices)`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useCallback(filterServices)`,
 	);
 	const filterServices = useCallback(
 		(categoryValue: ServiceCategoryValue) => {
 			// Get category entries - inline to avoid dependency issues
 			let categoryEntries: Array<[string, ServiceItemData]>;
-			if (typeof servicesByCategoryFn === 'function') {
+			if (typeof servicesByCategoryFn === "function") {
 				const categoryServices = servicesByCategoryFn(categoryValue) ?? {};
-				categoryEntries = Object.entries(categoryServices) as Array<[string, ServiceItemData]>;
+				categoryEntries = Object.entries(categoryServices) as Array<
+					[string, ServiceItemData]
+				>;
 			} else {
 				const categoryServices = servicesData?.[categoryValue];
 				if (!categoryServices) {
 					categoryEntries = [];
 				} else {
-					categoryEntries = Object.entries(categoryServices) as Array<[string, ServiceItemData]>;
+					categoryEntries = Object.entries(categoryServices) as Array<
+						[string, ServiceItemData]
+					>;
 				}
 			}
 
@@ -211,7 +227,9 @@ const ServicesSection = (props: ServicesSectionProps) => {
 			}
 			let filtered = categoryEntries;
 			if (activeCategory) {
-				filtered = filtered.filter(([_, s]) => s.categories.includes(activeCategory));
+				filtered = filtered.filter(([_, s]) =>
+					s.categories.includes(activeCategory),
+				);
 			}
 			if (searchTerm) {
 				const term = searchTerm.toLowerCase();
@@ -219,24 +237,27 @@ const ServicesSection = (props: ServicesSectionProps) => {
 					([_, s]) =>
 						s.title.toLowerCase().includes(term) ||
 						s.description.toLowerCase().includes(term) ||
-						s.features.some((f) => f.toLowerCase().includes(term))
+						s.features.some((f) => f.toLowerCase().includes(term)),
 				);
 			}
 			return filtered;
 		},
-		[activeCategory, searchTerm, servicesData, servicesByCategoryFn]
+		[activeCategory, searchTerm, servicesData, servicesByCategoryFn],
 	);
 
 	// Memoize filteredEntries - CRITICAL: Must be a hook to maintain hook order
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(filteredEntries)`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(filteredEntries)`,
 	);
-	const filteredEntries = useMemo(() => filterServices(activeTab), [filterServices, activeTab]);
+	const filteredEntries = useMemo(
+		() => filterServices(activeTab),
+		[filterServices, activeTab],
+	);
 
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(guardDetail) - THIS IS HOOK 33 IN ERROR - CRITICAL HOOK`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useMemo(guardDetail) - THIS IS HOOK 33 IN ERROR - CRITICAL HOOK`,
 	);
 	const guardDetail = useMemo(
 		() => ({
@@ -244,16 +265,16 @@ const ServicesSection = (props: ServicesSectionProps) => {
 			activeCategory: activeCategory || undefined,
 			searchTerm: searchTerm || undefined,
 		}),
-		[activeCategory, activeTab, searchTerm]
+		[activeCategory, activeTab, searchTerm],
 	);
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModuleGuardTelemetry`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useDataModuleGuardTelemetry`,
 	);
 
 	useDataModuleGuardTelemetry({
-		key: 'service/services',
-		surface: 'home/ServicesSection',
+		key: "service/services",
+		surface: "home/ServicesSection",
 		status: servicesStatus,
 		hasData: filteredEntries.length > 0,
 		error: servicesError,
@@ -263,7 +284,7 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// Call usePagination ONCE at the top level
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: usePagination`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: usePagination`,
 	);
 	const {
 		pagedItems,
@@ -286,27 +307,27 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	});
 	hookCountRef.current += 1;
 	console.log(
-		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useEffect(resize)`
+		`[ServicesSection:${componentInstanceId.current}] Local Hook ${hookCountRef.current}: useEffect(resize)`,
 	);
 
 	useEffect(() => {
 		// Only run on client
-		if (typeof window === 'undefined') return;
+		if (typeof window === "undefined") return;
 
 		const handleResize = () => {
 			const newCardsPerPage = getCardsPerPage();
 			setCardsPerPage(newCardsPerPage);
 		};
-		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
 	const handleTabChange = (tab: ServiceCategoryValue) => {
 		// Reset pagination and search state when tab changes
 		setPage(1);
 		reset();
-		setSearchTerm('');
-		setActiveCategory('');
+		setSearchTerm("");
+		setActiveCategory("");
 
 		// Call the appropriate tab change handler
 		if (onTabChange) {
@@ -320,22 +341,22 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	const getTabLabel = (tab: ServiceCategoryValue) => {
 		switch (tab) {
 			case SERVICE_CATEGORIES.LEAD_GENERATION:
-				return 'Lead Generation';
+				return "Lead Generation";
 			case SERVICE_CATEGORIES.LEAD_PREQUALIFICATION:
-				return 'Lead Pre-qualification';
+				return "Lead Pre-qualification";
 			case SERVICE_CATEGORIES.SKIP_TRACING:
-				return 'Skip Tracing';
+				return "Skip Tracing";
 			case SERVICE_CATEGORIES.AI_FEATURES:
-				return 'AI Features';
+				return "AI Features";
 			case SERVICE_CATEGORIES.REAL_ESTATE_TOOLS:
-				return 'Tools';
+				return "Tools";
 			default:
 				return tab;
 		}
 	};
 
 	function getCardsPerPage() {
-		if (typeof window !== 'undefined') {
+		if (typeof window !== "undefined") {
 			if (window.innerWidth < 640) return 6; // mobile: 3 when collapsed, 6 when expanded
 			if (window.innerWidth < 1024) return 3; // md
 			return 6; // desktop (2 rows of 3)
@@ -347,9 +368,9 @@ const ServicesSection = (props: ServicesSectionProps) => {
 	// It's called during JSX rendering, so any errors here can cause hydration mismatches
 	const renderCardsForCategory = (categoryValue: ServiceCategoryValue) => {
 		try {
-			const isLoading = ['idle', 'loading'].includes(servicesStatus);
+			const isLoading = ["idle", "loading"].includes(servicesStatus);
 			const hasEntries = filteredEntries.length > 0;
-			const encounteredError = servicesStatus === 'error' && !hasEntries;
+			const encounteredError = servicesStatus === "error" && !hasEntries;
 
 			const filterControls = (
 				<ServiceFilter
@@ -371,13 +392,18 @@ const ServicesSection = (props: ServicesSectionProps) => {
 				return (
 					<>
 						{filterControls}
-						<div className="py-12 text-center text-muted-foreground">Loading services…</div>
+						<div className="py-12 text-center text-muted-foreground">
+							Loading services…
+						</div>
 					</>
 				);
 			}
 
 			if (encounteredError) {
-				console.error('[ServicesSection] Failed to load services', servicesError);
+				console.error(
+					"[ServicesSection] Failed to load services",
+					servicesError,
+				);
 				return (
 					<>
 						{filterControls}
@@ -398,24 +424,26 @@ const ServicesSection = (props: ServicesSectionProps) => {
 					) : (
 						<>
 							<div className="grid min-h-0 grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-3">
-								{pagedItems.map(([serviceKey, serviceData]: [string, ServiceItemData]) => (
-									<ServiceCard
-										id={serviceData.id}
-										key={serviceData.slugDetails.slug ?? serviceKey}
-										iconName={serviceData.iconName}
-										title={serviceData.title}
-										description={serviceData.description}
-										features={serviceData.features || []}
-										slugDetails={serviceData.slugDetails}
-										categories={serviceData.categories}
-										price={serviceData.price}
-										onSale={serviceData.onSale}
-										showBanner={serviceData.showBanner}
-										bannerText={serviceData.bannerText}
-										bannerColor={serviceData.bannerColor}
-										className="flex flex-col"
-									/>
-								))}
+								{pagedItems.map(
+									([serviceKey, serviceData]: [string, ServiceItemData]) => (
+										<ServiceCard
+											id={serviceData.id}
+											key={serviceData.slugDetails.slug ?? serviceKey}
+											iconName={serviceData.iconName}
+											title={serviceData.title}
+											description={serviceData.description}
+											features={serviceData.features || []}
+											slugDetails={serviceData.slugDetails}
+											categories={serviceData.categories}
+											price={serviceData.price}
+											onSale={serviceData.onSale}
+											showBanner={serviceData.showBanner}
+											bannerText={serviceData.bannerText}
+											bannerColor={serviceData.bannerColor}
+											className="flex flex-col"
+										/>
+									),
+								)}
 							</div>
 							<div className="mt-12 flex w-full flex-col items-center justify-center gap-6">
 								{canShowPagination && (
@@ -446,8 +474,8 @@ const ServicesSection = (props: ServicesSectionProps) => {
 													key={`page-${i + 1}`}
 													className={`rounded-lg px-4 py-2 transition-colors ${
 														page === i + 1
-															? 'bg-primary text-primary-foreground'
-															: 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+															? "bg-primary text-primary-foreground"
+															: "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
 													}`}
 													onClick={() => setPage(i + 1)}
 													type="button"
@@ -484,10 +512,15 @@ const ServicesSection = (props: ServicesSectionProps) => {
 			);
 		} catch (renderError) {
 			// If rendering throws, return safe fallback to prevent hydration mismatch
-			console.error('[ServicesSection] Error in renderCardsForCategory:', renderError);
+			console.error(
+				"[ServicesSection] Error in renderCardsForCategory:",
+				renderError,
+			);
 			return (
 				<>
-					<div className="py-12 text-center text-muted-foreground">Unable to load services.</div>
+					<div className="py-12 text-center text-muted-foreground">
+						Unable to load services.
+					</div>
 				</>
 			);
 		}
@@ -497,24 +530,32 @@ const ServicesSection = (props: ServicesSectionProps) => {
 		`[ServicesSection:${componentInstanceId.current}] Render #${renderIdRef.current} COMPLETE - Local hooks: ${hookCountRef.current} - About to return JSX`,
 		{
 			instanceId: componentInstanceId.current,
-			isServer: typeof window === 'undefined',
-		}
+			isServer: typeof window === "undefined",
+		},
 	);
 
 	// CRITICAL: Wrap return in try-catch to ensure component ALWAYS renders, even if JSX throws
 	// This prevents hydration mismatches where server renders nothing but client renders something
 	try {
-		console.log(`[ServicesSection:${componentInstanceId.current}] Attempting to render JSX...`);
+		console.log(
+			`[ServicesSection:${componentInstanceId.current}] Attempting to render JSX...`,
+		);
 		const jsxResult = (
 			<section id="services" className="px-4 py-6 md:px-6 md:py-16 lg:px-8">
 				<div className="mx-auto max-w-7xl">
 					<div className="mb-12 text-center">
-						<Header title={title} subtitle={subtitle} className="mb-12 md:mb-16" />
+						<Header
+							title={title}
+							subtitle={subtitle}
+							className="mb-12 md:mb-16"
+						/>
 					</div>
 
 					<Tabs
 						value={activeTab}
-						onValueChange={(value) => handleTabChange(value as ServiceCategoryValue)}
+						onValueChange={(value) =>
+							handleTabChange(value as ServiceCategoryValue)
+						}
 						className="w-full"
 					>
 						<div className="-mx-4 mb-8 flex w-full overflow-x-auto px-4 sm:justify-center">
@@ -552,11 +593,16 @@ const ServicesSection = (props: ServicesSectionProps) => {
 				</div>
 			</section>
 		);
-		console.log(`[ServicesSection:${componentInstanceId.current}] JSX rendered successfully`);
+		console.log(
+			`[ServicesSection:${componentInstanceId.current}] JSX rendered successfully`,
+		);
 		return jsxResult;
 	} catch (error) {
 		// If JSX rendering throws, log and return fallback to prevent hydration mismatch
-		console.error(`[ServicesSection:${componentInstanceId.current}] ERROR rendering JSX:`, error);
+		console.error(
+			`[ServicesSection:${componentInstanceId.current}] ERROR rendering JSX:`,
+			error,
+		);
 		// Return minimal valid structure to match server/client
 		return (
 			<section id="services" className="px-4 py-6 md:px-6 md:py-16 lg:px-8">

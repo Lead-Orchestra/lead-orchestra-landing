@@ -2,7 +2,7 @@
 // * Hero section for the products page: bold headline, subtitle, horizontally scrolling hero cards
 // ! Follows DRY, SOLID, and type-safe best practices
 
-import { BorderBeam } from '@/components/magicui/border-beam';
+import { BorderBeam } from "@/components/magicui/border-beam";
 import {
 	Carousel,
 	type CarouselApi,
@@ -10,14 +10,14 @@ import {
 	CarouselItem,
 	CarouselNext,
 	CarouselPrevious,
-} from '@/components/ui/carousel';
-import type { HeroGridItem } from '@/data/products/hero';
-import { DEFAULT_GRID, defaultHeroProps } from '@/data/products/hero';
-import { toast } from '@/hooks/use-toast';
-import { useNavigationRouter } from '@/hooks/useNavigationRouter';
-import { cn } from '@/lib/utils';
-import type React from 'react';
-import { useEffect, useMemo, useState } from 'react';
+} from "@/components/ui/carousel";
+import type { HeroGridItem } from "@/data/products/hero";
+import { DEFAULT_GRID, defaultHeroProps } from "@/data/products/hero";
+import { toast } from "@/hooks/use-toast";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
+import { cn } from "@/lib/utils";
+import type React from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export type ProductHeroProps = {
 	headline?: string;
@@ -39,9 +39,9 @@ interface ProductHeroExtendedProps extends ProductHeroProps {
 const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 	const router = useNavigationRouter();
 	const {
-		headline = '',
-		highlight = '',
-		subheadline = '',
+		headline = "",
+		highlight = "",
+		subheadline = "",
 		grid = [],
 		testimonial,
 		categories = [],
@@ -52,16 +52,19 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 		...props,
 	};
 
-	const [heroCarouselApi, setHeroCarouselApi] = useState<CarouselApi | null>(null);
+	const [heroCarouselApi, setHeroCarouselApi] = useState<CarouselApi | null>(
+		null,
+	);
 	const [activeHeroSlide, setActiveHeroSlide] = useState(0);
 	const [heroSlideCount, setHeroSlideCount] = useState(0);
 
 	// Helper for keyboard accessibility
-	const handleKeyDown = (href: string) => (e: React.KeyboardEvent<HTMLButtonElement>) => {
-		if (e.key === 'Enter' || e.key === ' ') {
-			router.push(href);
-		}
-	};
+	const handleKeyDown =
+		(href: string) => (e: React.KeyboardEvent<HTMLButtonElement>) => {
+			if (e.key === "Enter" || e.key === " ") {
+				router.push(href);
+			}
+		};
 
 	// Handle category selection with scroll behavior
 	const handleCategorySelect = (categoryId: string) => {
@@ -70,18 +73,23 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 			setActiveCategory(categoryId);
 			window.location.hash = `category=${categoryId}`;
 			setTimeout(() => {
-				gridRef.current?.scrollIntoView({ behavior: 'smooth' });
+				gridRef.current?.scrollIntoView({ behavior: "smooth" });
 			}, 100);
 			// * Logging for success
 			console.log(`[ProductHero] Category click successful: '${categoryId}'`);
 		} else {
-			toast({ title: 'Category does not exist.' });
+			toast({ title: "Category does not exist." });
 			// ! Logging for failure
-			console.warn(`[ProductHero] Category click failed: '${categoryId}' does not exist`);
+			console.warn(
+				`[ProductHero] Category click failed: '${categoryId}' does not exist`,
+			);
 		}
 	};
 
-	const heroGrid = useMemo(() => (grid.length > 0 ? grid : DEFAULT_GRID), [grid]);
+	const heroGrid = useMemo(
+		() => (grid.length > 0 ? grid : DEFAULT_GRID),
+		[grid],
+	);
 
 	useEffect(() => {
 		if (!heroCarouselApi) {
@@ -94,23 +102,29 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 
 		setHeroSlideCount(heroCarouselApi.scrollSnapList().length);
 		handleSelect();
-		heroCarouselApi.on('select', handleSelect);
+		heroCarouselApi.on("select", handleSelect);
 
 		return () => {
-			heroCarouselApi.off('select', handleSelect);
+			heroCarouselApi.off("select", handleSelect);
 		};
 	}, [heroCarouselApi, heroGrid.length]);
 
 	return (
 		<div className="mx-auto my-5 max-w-6xl px-4 text-center sm:px-6 lg:px-8">
 			<h1 className="mb-8 font-bold text-5xl text-primary md:text-7xl">
-				{headline}{' '}
+				{headline}{" "}
 				<span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
 					{highlight}
 				</span>
 			</h1>
-			<p className="mx-auto mb-16 max-w-2xl text-foreground/80 text-xl">{subheadline}</p>
-			<Carousel opts={{ align: 'start' }} className="group relative" setApi={setHeroCarouselApi}>
+			<p className="mx-auto mb-16 max-w-2xl text-foreground/80 text-xl">
+				{subheadline}
+			</p>
+			<Carousel
+				opts={{ align: "start" }}
+				className="group relative"
+				setApi={setHeroCarouselApi}
+			>
 				<CarouselContent className="ml-0 flex min-w-0 snap-x items-start gap-4 sm:gap-6">
 					{heroGrid.map((item) => (
 						<CarouselItem
@@ -167,8 +181,10 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 							key={`hero-dot-${index.toString()}`}
 							type="button"
 							className={cn(
-								'h-2.5 w-2.5 rounded-full border border-primary/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
-								activeHeroSlide === index ? 'bg-primary' : 'bg-primary/20 hover:bg-primary/40'
+								"h-2.5 w-2.5 rounded-full border border-primary/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+								activeHeroSlide === index
+									? "bg-primary"
+									: "bg-primary/20 hover:bg-primary/40",
 							)}
 							onClick={() => heroCarouselApi?.scrollTo(index)}
 							aria-label={`Go to hero slide ${index + 1}`}
@@ -179,9 +195,13 @@ const ProductHero: React.FC<ProductHeroExtendedProps> = (props) => {
 
 			<div className="glow relative mx-auto my-5 max-w-2xl overflow-hidden rounded-2xl bg-card p-8 text-card-foreground shadow-lg">
 				<BorderBeam duration={8} size={100} />
-				<blockquote className="mb-4 text-foreground/90 text-lg">{testimonial?.quote}</blockquote>
+				<blockquote className="mb-4 text-foreground/90 text-lg">
+					{testimonial?.quote}
+				</blockquote>
 				{testimonial?.author && (
-					<cite className="font-medium text-primary">— {testimonial.author}</cite>
+					<cite className="font-medium text-primary">
+						— {testimonial.author}
+					</cite>
 				)}
 			</div>
 		</div>

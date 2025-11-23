@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import ClientLottie from '@/components/ui/ClientLottie';
-import type { ServiceHowItWorks } from '@/types/service/services';
-import type { LottieRefCurrentProps } from 'lottie-react';
-import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import ClientLottie from "@/components/ui/ClientLottie";
+import type { ServiceHowItWorks } from "@/types/service/services";
+import type { LottieRefCurrentProps } from "lottie-react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Props for HowItWorksCarousel component.
@@ -42,7 +42,7 @@ const HowItWorksCarousel: React.FC<HowItWorksCarouselProps> = ({
 	const stepsCount = howItWorks.length;
 
 	// Default Lottie animation import
-	const defaultLottieData = require('@/assets/animations/processSteps.json');
+	const defaultLottieData = require("@/assets/animations/processSteps.json");
 
 	// Use default animation if none provided
 	const animationData = lottieData || defaultLottieData;
@@ -143,7 +143,7 @@ const HowItWorksCarousel: React.FC<HowItWorksCarouselProps> = ({
 					onClick={prevStep}
 					disabled={activeIndex === 0}
 					type="button"
-					className={`flex h-10 w-10 items-center justify-center rounded-full p-0 shadow-md transition-colors ${activeIndex === 0 ? 'cursor-not-allowed bg-primary/30 text-card-foreground' : 'bg-primary text-card-foreground hover:bg-primary/80'}`}
+					className={`flex h-10 w-10 items-center justify-center rounded-full p-0 shadow-md transition-colors ${activeIndex === 0 ? "cursor-not-allowed bg-primary/30 text-card-foreground" : "bg-primary text-card-foreground hover:bg-primary/80"}`}
 					aria-label="Previous step"
 				>
 					<svg
@@ -167,7 +167,7 @@ const HowItWorksCarousel: React.FC<HowItWorksCarouselProps> = ({
 							key={uuidv4()}
 							type="button"
 							onClick={() => goToStep(i)}
-							className={`h-3 w-3 rounded-full transition-all duration-200 ${i === activeIndex ? 'w-6 bg-primary' : 'bg-gray-400'}`}
+							className={`h-3 w-3 rounded-full transition-all duration-200 ${i === activeIndex ? "w-6 bg-primary" : "bg-gray-400"}`}
 							aria-label={`Go to item ${i + 1}`}
 						/>
 					))}
@@ -176,7 +176,7 @@ const HowItWorksCarousel: React.FC<HowItWorksCarouselProps> = ({
 					type="button"
 					onClick={nextStep}
 					disabled={activeIndex === stepsCount - 1}
-					className={`flex h-10 w-10 items-center justify-center rounded-full p-0 shadow-md transition-colors ${activeIndex === stepsCount - 1 ? 'cursor-not-allowed bg-primary/30 text-card-foreground' : 'bg-primary text-card-foreground hover:bg-primary/80'}`}
+					className={`flex h-10 w-10 items-center justify-center rounded-full p-0 shadow-md transition-colors ${activeIndex === stepsCount - 1 ? "cursor-not-allowed bg-primary/30 text-card-foreground" : "bg-primary text-card-foreground hover:bg-primary/80"}`}
 					aria-label="Next step"
 				>
 					<svg

@@ -1,4 +1,4 @@
-import type { ProductType } from '@/types/products';
+import type { ProductType } from "@/types/products";
 
 export interface ProductVariant {
 	id: string;
@@ -8,7 +8,8 @@ export interface ProductVariant {
 	[key: string]: unknown; // Allow for additional variant properties
 }
 
-export interface CartItem extends Omit<ProductType, 'types' | 'colors' | 'sizes'> {
+export interface CartItem
+	extends Omit<ProductType, "types" | "colors" | "sizes"> {
 	/**
 	 * The selected variant of the product, if applicable
 	 */
@@ -91,7 +92,11 @@ export interface CartState {
 	 * @param quantity Quantity to add (default: 1)
 	 * @param variant Optional product variant
 	 */
-	addItem: (product: ProductType, quantity?: number, variant?: ProductVariant) => void;
+	addItem: (
+		product: ProductType,
+		quantity?: number,
+		variant?: ProductVariant,
+	) => void;
 
 	/**
 	 * Remove an item from the cart
@@ -107,7 +112,11 @@ export interface CartState {
 	 * @param quantity New quantity
 	 * @param variantId Optional variant ID
 	 */
-	updateQuantity: (productId: string, quantity: number, variantId?: string) => void;
+	updateQuantity: (
+		productId: string,
+		quantity: number,
+		variantId?: string,
+	) => void;
 
 	/**
 	 * Remove all items from the cart
@@ -132,7 +141,11 @@ export interface CartState {
 	/**
 	 * Calculate a detailed cart summary
 	 */
-	getCartSummary: (shippingCost?: number, taxRate?: number, discountAmount?: number) => CartSummary;
+	getCartSummary: (
+		shippingCost?: number,
+		taxRate?: number,
+		discountAmount?: number,
+	) => CartSummary;
 }
 
 /**

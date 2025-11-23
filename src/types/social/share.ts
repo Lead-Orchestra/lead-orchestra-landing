@@ -1,6 +1,6 @@
-import type { ButtonProps } from '@/components/ui/button';
+import type { ButtonProps } from "@/components/ui/button";
 
-export type SocialPlatform = 'facebook' | 'twitter' | 'linkedin';
+export type SocialPlatform = "facebook" | "twitter" | "linkedin";
 
 export interface PlatformTextConfig {
 	/** Default text template function */
@@ -32,9 +32,9 @@ export interface SocialShareBaseProps {
 	/** Custom class name for the container */
 	className?: string;
 	/** Size of the buttons */
-	size?: 'sm' | 'default' | 'lg';
+	size?: "sm" | "default" | "lg";
 	/** Variant of the buttons */
-	variant?: ButtonProps['variant'];
+	variant?: ButtonProps["variant"];
 	/** Whether to show labels on the buttons */
 	showLabels?: boolean;
 	/** Whether to show the share button */

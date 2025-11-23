@@ -1,7 +1,12 @@
-'use client';
+"use client";
 
-import type { LineStatus, Speaker, Transcript, TranscriptLine } from '@/types/transcript';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import type {
+	LineStatus,
+	Speaker,
+	Transcript,
+	TranscriptLine,
+} from "@/types/transcript";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface TranscriptPlayerProps {
 	transcript: Transcript;
@@ -12,7 +17,7 @@ interface TranscriptPlayerProps {
 	// as requestAnimationFrame manages its own elapsed time from when playingDemo becomes true.
 	// It's kept if the parent component has other uses for it.
 	demoStartTime: number | null;
-	onStatusChange: (status: LineStatus | 'ended') => void; // "ended" is explicitly used
+	onStatusChange: (status: LineStatus | "ended") => void; // "ended" is explicitly used
 	onLineChange: (line: TranscriptLine) => void;
 	onAiActiveChange: (active: boolean) => void;
 	onAiStatusTextChange: (text: string) => void;
@@ -82,15 +87,16 @@ export const TranscriptPlayer = ({
 			// Find the current line being spoken
 			const currentLine = transcript.lines.find(
 				(line: TranscriptLine) =>
-					currentTimeInDemo >= line.startTime && currentTimeInDemo <= line.startTime + line.duration
+					currentTimeInDemo >= line.startTime &&
+					currentTimeInDemo <= line.startTime + line.duration,
 			);
 
 			// Handle the case when we're between lines
 			if (!currentLine) {
 				if (lastProcessedLine.current) {
 					onSpeakerChangeRef.current(null);
-					onAiStatusTextChangeRef.current('');
-					onClientStatusTextChangeRef.current('');
+					onAiStatusTextChangeRef.current("");
+					onClientStatusTextChangeRef.current("");
 					// * No need to call onLineChangeRef.current(null) here, as parent will handle currentLine being null
 					lastProcessedLine.current = null;
 					currentSpeakerRef.current = null;
@@ -98,13 +104,13 @@ export const TranscriptPlayer = ({
 				return;
 			}
 
-			const isAI = currentLine.speaker === 'ai';
+			const isAI = currentLine.speaker === "ai";
 			const isNewLine = currentLine !== lastProcessedLine.current;
 			const isNewSpeaker = currentLine.speaker !== currentSpeakerRef.current;
 
 			// * Debug log for current line and speaker determination
 			console.log(
-				`[TranscriptPlayer] Time: ${currentTimeInDemo.toFixed(0)}, LineID: ${currentLine.id}, Speaker: ${currentLine.speaker}, isAI: ${isAI}, NewLine: ${isNewLine}, NewSpeaker: ${isNewSpeaker}`
+				`[TranscriptPlayer] Time: ${currentTimeInDemo.toFixed(0)}, LineID: ${currentLine.id}, Speaker: ${currentLine.speaker}, isAI: ${isAI}, NewLine: ${isNewLine}, NewSpeaker: ${isNewSpeaker}`,
 			);
 
 			// Only update if we have a new line or a speaker change
@@ -113,7 +119,7 @@ export const TranscriptPlayer = ({
 				if (isNewSpeaker || isInitialRender.current) {
 					// * Debug log for speaker change callback
 					console.log(
-						`[TranscriptPlayer] Calling onSpeakerChange with: ${currentLine.speaker}, onAiActiveChange with: ${isAI}`
+						`[TranscriptPlayer] Calling onSpeakerChange with: ${currentLine.speaker}, onAiActiveChange with: ${isAI}`,
 					);
 					onSpeakerChangeRef.current(currentLine.speaker as Speaker);
 					currentSpeakerRef.current = currentLine.speaker as Speaker;
@@ -121,8 +127,8 @@ export const TranscriptPlayer = ({
 				}
 
 				// * Update generic status text
-				onAiStatusTextChangeRef.current(isAI ? 'Speaking...' : '');
-				onClientStatusTextChangeRef.current(!isAI ? 'Speaking...' : '');
+				onAiStatusTextChangeRef.current(isAI ? "Speaking..." : "");
+				onClientStatusTextChangeRef.current(!isAI ? "Speaking..." : "");
 
 				// * Update the current line
 				if (isNewLine || isInitialRender.current) {
@@ -132,7 +138,7 @@ export const TranscriptPlayer = ({
 				}
 			}
 		},
-		[transcript.lines]
+		[transcript.lines],
 	);
 
 	// Handle demo animation sequence using transcript timing
@@ -166,7 +172,7 @@ export const TranscriptPlayer = ({
 				const elapsedTimeInSeconds = Math.floor(elapsedTime / 1000);
 
 				console.log(
-					`[TranscriptPlayer Animate] currentTime: ${currentTime}, demoStartTime: ${demoStartTimeRef.current}, elapsed(ms): ${elapsedTime}, elapsed(s): ${elapsedTimeInSeconds}`
+					`[TranscriptPlayer Animate] currentTime: ${currentTime}, demoStartTime: ${demoStartTimeRef.current}, elapsed(ms): ${elapsedTime}, elapsed(s): ${elapsedTimeInSeconds}`,
 				);
 
 				onTimeUpdateRef.current(elapsedTimeInSeconds); // * Report time in seconds
@@ -174,7 +180,7 @@ export const TranscriptPlayer = ({
 
 				// Check if we've reached the end of the transcript demo
 				if (elapsedTime >= transcript.totalDuration) {
-					onStatusChange('transcript_ended'); // Indicate transcript is done, not the whole call
+					onStatusChange("transcript_ended"); // Indicate transcript is done, not the whole call
 					// The animation loop will stop on the next frame because playingDemo will likely be set to false by parent
 					// or we could explicitly cancel the animationFrameId here if needed, but parent should control 'playingDemo'
 					return; // Stop this animation loop for the transcript player
@@ -188,7 +194,7 @@ export const TranscriptPlayer = ({
 
 		// Start the animation loop
 		console.log(
-			`[TranscriptPlayer] Starting animation. Initial demoStartTimeRef.current: ${demoStartTimeRef.current}`
+			`[TranscriptPlayer] Starting animation. Initial demoStartTimeRef.current: ${demoStartTimeRef.current}`,
 		);
 		animationFrameId = requestAnimationFrame(animate);
 

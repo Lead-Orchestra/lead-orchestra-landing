@@ -1,9 +1,12 @@
-import { act } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { resetNavigationLoaderStore, useNavigationLoaderStore } from '@/stores/navigation-loader';
+import {
+	resetNavigationLoaderStore,
+	useNavigationLoaderStore,
+} from "@/stores/navigation-loader";
 
-describe('navigation loader store', () => {
+describe("navigation loader store", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
 		resetNavigationLoaderStore();
@@ -15,14 +18,15 @@ describe('navigation loader store', () => {
 		resetNavigationLoaderStore();
 	});
 
-	it('starts with navigation disabled', () => {
+	it("starts with navigation disabled", () => {
 		const { isNavigating } = useNavigationLoaderStore.getState();
 
 		expect(isNavigating).toBe(false);
 	});
 
-	it('tracks start and completion of navigation', () => {
-		const { startNavigation, finishNavigation } = useNavigationLoaderStore.getState();
+	it("tracks start and completion of navigation", () => {
+		const { startNavigation, finishNavigation } =
+			useNavigationLoaderStore.getState();
 
 		let navigationId = 0;
 		act(() => {
@@ -38,7 +42,7 @@ describe('navigation loader store', () => {
 		expect(useNavigationLoaderStore.getState().isNavigating).toBe(false);
 	});
 
-	it('clears stuck navigation after timeout', () => {
+	it("clears stuck navigation after timeout", () => {
 		const { startNavigation } = useNavigationLoaderStore.getState();
 
 		act(() => {

@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
 /**
  * Example usage of IntentModal with exit intent and feedback capture.
  * This file demonstrates various use cases - copy patterns as needed.
  */
 
-import { useExitIntent } from '@/hooks/useExitIntent';
-import { useState } from 'react';
-import { Button } from './button';
-import { Input } from './input';
-import { IntentModal } from './intent-modal';
-import { Label } from './label';
-import { Textarea } from './textarea';
+import { useExitIntent } from "@/hooks/useExitIntent";
+import { useState } from "react";
+import { Button } from "./button";
+import { Input } from "./input";
+import { IntentModal } from "./intent-modal";
+import { Label } from "./label";
+import { Textarea } from "./textarea";
 
 /**
  * Example: Exit Intent Feedback Modal
@@ -22,8 +22,8 @@ import { Textarea } from './textarea';
  */
 export function ExitIntentFeedbackExample() {
 	const [open, setOpen] = useState(false);
-	const [feedback, setFeedback] = useState('');
-	const [email, setEmail] = useState('');
+	const [feedback, setFeedback] = useState("");
+	const [email, setEmail] = useState("");
 
 	useExitIntent({
 		onExitIntent: () => setOpen(true),
@@ -35,8 +35,8 @@ export function ExitIntentFeedbackExample() {
 		// Handle feedback submission
 		console.log({ feedback, email });
 		setOpen(false);
-		setFeedback('');
-		setEmail('');
+		setFeedback("");
+		setEmail("");
 	};
 
 	return (
@@ -94,13 +94,13 @@ export function ExitIntentFeedbackExample() {
  */
 export function NewsletterSignupExample() {
 	const [open, setOpen] = useState(false);
-	const [email, setEmail] = useState('');
+	const [email, setEmail] = useState("");
 
 	const handleSubscribe = () => {
 		// Handle newsletter subscription
 		console.log({ email });
 		setOpen(false);
-		setEmail('');
+		setEmail("");
 	};
 
 	return (
@@ -150,12 +150,12 @@ export function NewsletterSignupExample() {
  * Embedded directly in the page
  */
 export function InlineFeedbackExample() {
-	const [feedback, setFeedback] = useState('');
+	const [feedback, setFeedback] = useState("");
 
 	const handleSubmit = () => {
 		// Handle feedback submission
 		console.log({ feedback });
-		setFeedback('');
+		setFeedback("");
 	};
 
 	return (
@@ -231,8 +231,8 @@ export function SurveyExample() {
 						onClick={() => setRating(num)}
 						className={`h-12 w-12 rounded-full border-2 transition ${
 							rating === num
-								? 'border-primary bg-primary text-primary-foreground'
-								: 'border-border hover:border-primary/50'
+								? "border-primary bg-primary text-primary-foreground"
+								: "border-border hover:border-primary/50"
 						}`}
 					>
 						{num}

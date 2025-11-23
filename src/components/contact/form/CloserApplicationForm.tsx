@@ -1,17 +1,25 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { type ControllerRenderProps, FormProvider, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+	type ControllerRenderProps,
+	FormProvider,
+	useForm,
+} from "react-hook-form";
+import { toast } from "sonner";
 
-import { type CloserFormValues, closerFormFields, closerFormSchema } from '@/data/contact/closer';
-import type { FieldConfig, RenderFieldProps } from '@/types/contact/formFields';
+import {
+	type CloserFormValues,
+	closerFormFields,
+	closerFormSchema,
+} from "@/data/contact/closer";
+import type { FieldConfig, RenderFieldProps } from "@/types/contact/formFields";
 
-import Header from '@/components/common/Header';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import Header from "@/components/common/Header";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Form,
 	FormControl,
@@ -19,39 +27,42 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { createFieldProps, renderFormField } from './formFieldHelpers';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { createFieldProps, renderFormField } from "./formFieldHelpers";
 
 type CloserApplicationFormProps = {
 	onSuccess?: () => void;
 	prefill?: Partial<CloserFormValues>;
 };
 
-export default function CloserApplicationForm({ onSuccess, prefill }: CloserApplicationFormProps) {
+export default function CloserApplicationForm({
+	onSuccess,
+	prefill,
+}: CloserApplicationFormProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const form = useForm<CloserFormValues>({
 		resolver: zodResolver(closerFormSchema),
 		defaultValues: {
-			firstName: '',
-			lastName: '',
-			email: '',
-			phone: '',
-			realEstateLicense: '',
-			licenseState: '',
-			yearsExperience: '',
-			dealsClosed: '',
-			availability: '',
-			portfolioUrl: '',
-			whyApply: '',
+			firstName: "",
+			lastName: "",
+			email: "",
+			phone: "",
+			realEstateLicense: "",
+			licenseState: "",
+			yearsExperience: "",
+			dealsClosed: "",
+			availability: "",
+			portfolioUrl: "",
+			whyApply: "",
 			termsAccepted: false,
 			...prefill,
 		},
@@ -66,32 +77,35 @@ export default function CloserApplicationForm({ onSuccess, prefill }: CloserAppl
 	}, [prefill]);
 
 	const onSubmit = async (data: CloserFormValues) => {
-		console.log('[CloserApplicationForm] onSubmit called', data);
+		console.log("[CloserApplicationForm] onSubmit called", data);
 		setIsSubmitting(true);
 		try {
-			const response = await fetch('/api/closers/apply', {
-				method: 'POST',
+			const response = await fetch("/api/closers/apply", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(data),
 			});
 
 			if (!response.ok) {
 				const errorData = await response.json().catch(() => ({}));
-				throw new Error(errorData.error || 'Failed to submit your closer application.');
+				throw new Error(
+					errorData.error || "Failed to submit your closer application.",
+				);
 			}
 
 			toast.success(
-				"Application submitted successfully! We'll review your application and get back to you soon."
+				"Application submitted successfully! We'll review your application and get back to you soon.",
 			);
 			form.reset();
 			if (onSuccess) {
 				onSuccess();
 			}
 		} catch (err) {
-			console.error('[CloserApplicationForm] Error in onSubmit', err);
-			const message = err instanceof Error ? err.message : 'An unknown error occurred.';
+			console.error("[CloserApplicationForm] Error in onSubmit", err);
+			const message =
+				err instanceof Error ? err.message : "An unknown error occurred.";
 			toast.error(message);
 		} finally {
 			setIsSubmitting(false);
@@ -117,7 +131,7 @@ export default function CloserApplicationForm({ onSuccess, prefill }: CloserAppl
 								control={form.control}
 								name={field.name as keyof CloserFormValues}
 								render={({ field: formField }) => {
-									if (field.type === 'checkbox') {
+									if (field.type === "checkbox") {
 										return (
 											<FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
 												<FormControl>
@@ -129,7 +143,9 @@ export default function CloserApplicationForm({ onSuccess, prefill }: CloserAppl
 												<div className="space-y-1 leading-none">
 													<FormLabel className="cursor-pointer">
 														{field.label}
-														{field.required && <span className="ml-1 text-red-500">*</span>}
+														{field.required && (
+															<span className="ml-1 text-red-500">*</span>
+														)}
 													</FormLabel>
 													<FormMessage />
 												</div>
@@ -141,7 +157,9 @@ export default function CloserApplicationForm({ onSuccess, prefill }: CloserAppl
 										<FormItem className="space-y-1">
 											<FormLabel className="text-black dark:text-white/70">
 												{field.label}
-												{field.required && <span className="ml-1 text-red-500">*</span>}
+												{field.required && (
+													<span className="ml-1 text-red-500">*</span>
+												)}
 											</FormLabel>
 											<FormControl>
 												{renderFormField(
@@ -152,10 +170,13 @@ export default function CloserApplicationForm({ onSuccess, prefill }: CloserAppl
 															label: field.label,
 															placeholder: field.placeholder,
 															required: field.required,
-															options: field.type === 'select' ? field.options : undefined,
+															options:
+																field.type === "select"
+																	? field.options
+																	: undefined,
 														} as FieldConfig,
-														formField
-													)
+														formField,
+													),
 												)}
 											</FormControl>
 											<FormMessage />
@@ -172,7 +193,7 @@ export default function CloserApplicationForm({ onSuccess, prefill }: CloserAppl
 									Submitting...
 								</>
 							) : (
-								'Submit Application'
+								"Submit Application"
 							)}
 						</Button>
 					</form>

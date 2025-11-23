@@ -1,5 +1,5 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -7,12 +7,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/ui/dialog';
-import type { ProductResource, ProductType } from '@/types/products';
-import { Sparkles } from 'lucide-react';
-import Link from 'next/link';
-import type { FC } from 'react';
-import { useMemo, useState } from 'react';
+} from "@/components/ui/dialog";
+import type { ProductResource, ProductType } from "@/types/products";
+import { Sparkles } from "lucide-react";
+import Link from "next/link";
+import type { FC } from "react";
+import { useMemo, useState } from "react";
 
 /** Props for rendering the highlighted free resource card. */
 export interface FreeResourceCardProps {
@@ -20,10 +20,10 @@ export interface FreeResourceCardProps {
 	product: ProductType;
 }
 
-const CTA_DOWNLOAD_LABEL = 'Download Resource';
-const CTA_EXTERNAL_LABEL = 'Visit Resource';
-const CTA_DEMO_LABEL = 'View Demo';
-const CTA_DETAILS_LABEL = 'View Details';
+const CTA_DOWNLOAD_LABEL = "Download Resource";
+const CTA_EXTERNAL_LABEL = "Visit Resource";
+const CTA_DEMO_LABEL = "View Demo";
+const CTA_DETAILS_LABEL = "View Details";
 
 const FreeResourceCard: FC<FreeResourceCardProps> = ({ product }) => {
 	const resource = product.resource;
@@ -42,7 +42,7 @@ const FreeResourceCard: FC<FreeResourceCardProps> = ({ product }) => {
 	}
 
 	const renderPrimaryCta = (resourceMeta: ProductResource) => {
-		if (resourceMeta.type === 'download') {
+		if (resourceMeta.type === "download") {
 			return (
 				<Button asChild size="lg" className="w-full">
 					<a
@@ -79,16 +79,23 @@ const FreeResourceCard: FC<FreeResourceCardProps> = ({ product }) => {
 					</div>
 					<h3 className="mb-3 font-semibold text-3xl text-primary">
 						{productHref ? (
-							<Link href={productHref} className="transition hover:text-primary/80">
+							<Link
+								href={productHref}
+								className="transition hover:text-primary/80"
+							>
 								{product.name}
 							</Link>
 						) : (
 							product.name
 						)}
 					</h3>
-					<p className="max-w-2xl text-base text-foreground/80">{product.description}</p>
+					<p className="max-w-2xl text-base text-foreground/80">
+						{product.description}
+					</p>
 					{resource.fileSize && (
-						<p className="mt-4 text-foreground/60 text-sm">File size: {resource.fileSize}</p>
+						<p className="mt-4 text-foreground/60 text-sm">
+							File size: {resource.fileSize}
+						</p>
 					)}
 				</div>
 				<div className="flex w-full flex-col items-stretch gap-3 md:max-w-xs">
@@ -104,7 +111,8 @@ const FreeResourceCard: FC<FreeResourceCardProps> = ({ product }) => {
 								<DialogHeader>
 									<DialogTitle>{product.name} Demo</DialogTitle>
 									<DialogDescription>
-										See how to get the most value from this resource in just a couple of minutes.
+										See how to get the most value from this resource in just a
+										couple of minutes.
 									</DialogDescription>
 								</DialogHeader>
 								<div className="aspect-video w-full overflow-hidden rounded-xl">

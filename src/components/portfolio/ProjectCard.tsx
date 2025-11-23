@@ -1,9 +1,9 @@
-import type { Project } from '@/types/projects';
-import { motion } from 'framer-motion';
-import { ArrowUpRight, ExternalLink, Github } from 'lucide-react';
-import Image from 'next/image';
-import { v4 as uuidv4 } from 'uuid';
-import { Button } from '../ui/button';
+import type { Project } from "@/types/projects";
+import { motion } from "framer-motion";
+import { ArrowUpRight, ExternalLink, Github } from "lucide-react";
+import Image from "next/image";
+import { v4 as uuidv4 } from "uuid";
+import { Button } from "../ui/button";
 
 export const ProjectCard: React.FC<{
 	project: Project;
@@ -52,7 +52,7 @@ export const ProjectCard: React.FC<{
 
 			<div
 				className={
-					'absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/80 to-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100'
+					"absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/80 to-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
 				}
 			>
 				<div className="w-full p-6">
@@ -64,7 +64,11 @@ export const ProjectCard: React.FC<{
 								className="border-border bg-card text-card-foreground transition-colors hover:bg-primary/10"
 								asChild
 							>
-								<a href={project.github} target="_blank" rel="noopener noreferrer">
+								<a
+									href={project.github}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
 									<Github className="mr-1 h-4 w-4" />
 									Try For Free
 								</a>
@@ -77,7 +81,11 @@ export const ProjectCard: React.FC<{
 								className="border-border bg-card text-card-foreground transition-colors hover:bg-primary/10"
 								asChild
 							>
-								<a href={project.liveUrl.url} target="_blank" rel="noopener noreferrer">
+								<a
+									href={project.liveUrl.url}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
 									<ExternalLink className="mr-1 h-4 w-4" />
 									Starting At: ${project.liveUrl.price}
 								</a>
@@ -90,7 +98,11 @@ export const ProjectCard: React.FC<{
 								className="border-border bg-card text-card-foreground transition-colors hover:bg-primary/10"
 								asChild
 							>
-								<a href={project.clientUrl} target="_blank" rel="noopener noreferrer">
+								<a
+									href={project.clientUrl}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
 									<ExternalLink className="mr-1 h-4 w-4" />
 									View Live
 								</a>
@@ -105,7 +117,9 @@ export const ProjectCard: React.FC<{
 			<h3 className="mb-2 font-semibold text-xl transition-colors group-hover:text-primary">
 				{project.title}
 			</h3>
-			<p className="mb-4 text-black text-sm dark:text-white/70">{project.description}</p>
+			<p className="mb-4 text-black text-sm dark:text-white/70">
+				{project.description}
+			</p>
 
 			<div className="mb-4 flex flex-wrap gap-2">
 				{project.technologies.map((tech) => (

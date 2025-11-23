@@ -1,7 +1,7 @@
-import type React from 'react';
-import { memo, useMemo } from 'react';
+import type React from "react";
+import { memo, useMemo } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 /**
  * InteractiveGridPattern is a component that renders a grid pattern with interactive squares.
@@ -52,8 +52,8 @@ const InteractiveGridPatternComponent = ({
 			width={svgWidth}
 			height={svgHeight}
 			className={cn(
-				'absolute inset-0 h-full w-full border border-gray-400/30 dark:border-gray-600/30',
-				className
+				"absolute inset-0 h-full w-full border border-gray-400/30 dark:border-gray-600/30",
+				className,
 			)}
 			{...props}
 		>
@@ -65,8 +65,8 @@ const InteractiveGridPatternComponent = ({
 					width={width}
 					height={height}
 					className={cn(
-						'fill-transparent stroke-gray-400/30 transition-colors duration-500 ease-out hover:fill-gray-300/30 dark:stroke-gray-600/30 dark:hover:fill-gray-700/30',
-						squaresClassName
+						"fill-transparent stroke-gray-400/30 transition-colors duration-500 ease-out hover:fill-gray-300/30 dark:stroke-gray-600/30 dark:hover:fill-gray-700/30",
+						squaresClassName,
 					)}
 				/>
 			))}
@@ -74,6 +74,6 @@ const InteractiveGridPatternComponent = ({
 	);
 };
 
-InteractiveGridPatternComponent.displayName = 'InteractiveGridPattern';
+InteractiveGridPatternComponent.displayName = "InteractiveGridPattern";
 
 export const InteractiveGridPattern = memo(InteractiveGridPatternComponent);

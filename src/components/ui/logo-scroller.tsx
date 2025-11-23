@@ -1,7 +1,7 @@
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
-import React, { useRef, useEffect } from 'react';
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import React, { useRef, useEffect } from "react";
 interface LogoScrollerProps {
 	logos: {
 		id: number;
@@ -12,7 +12,11 @@ interface LogoScrollerProps {
 	activeIndex?: number;
 }
 
-export const LogoScroller = ({ logos, className, activeIndex }: LogoScrollerProps) => {
+export const LogoScroller = ({
+	logos,
+	className,
+	activeIndex,
+}: LogoScrollerProps) => {
 	const scrollRef = useRef<HTMLDivElement>(null);
 
 	// Auto-scroll effect
@@ -46,14 +50,14 @@ export const LogoScroller = ({ logos, className, activeIndex }: LogoScrollerProp
 			animationId = requestAnimationFrame(scroll);
 		};
 
-		scrollContainer.addEventListener('mouseenter', pauseAnimation);
-		scrollContainer.addEventListener('mouseleave', resumeAnimation);
+		scrollContainer.addEventListener("mouseenter", pauseAnimation);
+		scrollContainer.addEventListener("mouseleave", resumeAnimation);
 
 		// Clean up
 		return () => {
 			cancelAnimationFrame(animationId);
-			scrollContainer.removeEventListener('mouseenter', pauseAnimation);
-			scrollContainer.removeEventListener('mouseleave', resumeAnimation);
+			scrollContainer.removeEventListener("mouseenter", pauseAnimation);
+			scrollContainer.removeEventListener("mouseleave", resumeAnimation);
 		};
 	}, []);
 
@@ -61,16 +65,19 @@ export const LogoScroller = ({ logos, className, activeIndex }: LogoScrollerProp
 	const duplicatedLogos = [...logos, ...logos];
 
 	return (
-		<div className={cn('relative overflow-hidden', className)}>
-			<div ref={scrollRef} className="scrollbar-none flex space-x-8 overflow-x-auto py-4">
+		<div className={cn("relative overflow-hidden", className)}>
+			<div
+				ref={scrollRef}
+				className="scrollbar-none flex space-x-8 overflow-x-auto py-4"
+			>
 				{duplicatedLogos.map((logo, index) => (
 					<div
 						key={`${logo.id}-${index}`}
 						className={cn(
-							'flex flex-shrink-0 items-center justify-center px-4 transition-all duration-300',
+							"flex flex-shrink-0 items-center justify-center px-4 transition-all duration-300",
 							activeIndex !== undefined && index % logos.length === activeIndex
-								? 'scale-110 opacity-100'
-								: 'opacity-60 hover:opacity-100'
+								? "scale-110 opacity-100"
+								: "opacity-60 hover:opacity-100",
 						)}
 					>
 						<Image

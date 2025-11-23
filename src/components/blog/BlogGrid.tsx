@@ -1,25 +1,29 @@
-'use client';
+"use client";
 
-import type { PersonaKey } from '@/data/personas/catalog';
-import { useNavigationRouter } from '@/hooks/useNavigationRouter';
-import { usePersonaStore } from '@/stores/usePersonaStore';
+import type { PersonaKey } from "@/data/personas/catalog";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
+import { usePersonaStore } from "@/stores/usePersonaStore";
 import type {
 	BeehiivPost,
 	BeehiivPostContentEmailStats,
 	BeehiivPostContentWebStats,
-} from '@/types/behiiv';
-import { motion } from 'framer-motion';
-import { useSearchParams } from 'next/navigation';
-import React, { Suspense, lazy, useMemo } from 'react';
-import FeaturedBlogCard from './FeaturedBlogCard';
-const BlogCard = lazy(() => import('./BlogCard').then((mod) => ({ default: mod.BlogCard })));
+} from "@/types/behiiv";
+import { motion } from "framer-motion";
+import { useSearchParams } from "next/navigation";
+import React, { Suspense, lazy, useMemo } from "react";
+import FeaturedBlogCard from "./FeaturedBlogCard";
+const BlogCard = lazy(() =>
+	import("./BlogCard").then((mod) => ({ default: mod.BlogCard })),
+);
 
 export function truncateTitle(title: string, maxLength = 60): string {
 	return title.length > maxLength ? `${title.slice(0, maxLength)}…` : title;
 }
 
 export function truncateSubtitle(subtitle: string, maxLength = 60): string {
-	return subtitle.length > maxLength ? `${subtitle.slice(0, maxLength)}…` : subtitle;
+	return subtitle.length > maxLength
+		? `${subtitle.slice(0, maxLength)}…`
+		: subtitle;
 }
 
 type PageWindowOptions = {
@@ -33,7 +37,10 @@ export function getPageWindow({
 	totalPages,
 	windowSize = 3,
 }: PageWindowOptions): number[] {
-	const safeCurrent = Math.min(Math.max(currentPage, 1), Math.max(totalPages, 1));
+	const safeCurrent = Math.min(
+		Math.max(currentPage, 1),
+		Math.max(totalPages, 1),
+	);
 	const safeWindow = Math.max(windowSize, 1);
 	const halfWindow = Math.floor(safeWindow / 2);
 
@@ -66,7 +73,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const WEEK_MS = 7 * DAY_MS;
 const MONTH_MS = 30 * DAY_MS;
 
-type FreshnessBadge = '7-day' | '30-day' | 'all';
+type FreshnessBadge = "7-day" | "30-day" | "all";
 
 type ExtendedEmailStats = BeehiivPostContentEmailStats & {
 	open_rate?: number;
@@ -84,34 +91,63 @@ const PERSONA_PREFERENCES: Partial<
 > = {
 	investor: {
 		tags: [
-			'finding motivated sellers',
-			'investor wholesaler tools',
-			'ai & automation',
-			'deal analysis',
-			'wholesaling',
+			"finding motivated sellers",
+			"investor wholesaler tools",
+			"ai & automation",
+			"deal analysis",
+			"wholesaling",
 		],
-		keywords: ['investor', 'deal flow', 'portfolio', 'cash buyer', 'underwriting'],
+		keywords: [
+			"investor",
+			"deal flow",
+			"portfolio",
+			"cash buyer",
+			"underwriting",
+		],
 	},
 	wholesaler: {
-		tags: ['wholesaling', 'lead qualification', 'closing deals', 'lead & sales strategy'],
-		keywords: ['wholesale', 'assignment', 'motivated seller', 'disposition', 'seller outreach'],
+		tags: [
+			"wholesaling",
+			"lead qualification",
+			"closing deals",
+			"lead & sales strategy",
+		],
+		keywords: [
+			"wholesale",
+			"assignment",
+			"motivated seller",
+			"disposition",
+			"seller outreach",
+		],
 	},
 	agent: {
-		tags: ['lead-generation', 'lead-conversion', 'scaling your business', 'pipeline', 'follow-up'],
-		keywords: ['agent', 'listing', 'buyer', 'referral', 'commission'],
+		tags: [
+			"lead-generation",
+			"lead-conversion",
+			"scaling your business",
+			"pipeline",
+			"follow-up",
+		],
+		keywords: ["agent", "listing", "buyer", "referral", "commission"],
 	},
 	founder: {
-		tags: ['product', 'go-to-market', 'ai & automation', 'startup', 'scaling your business'],
-		keywords: ['founder', 'startup', 'mvp', 'product', 'growth'],
+		tags: [
+			"product",
+			"go-to-market",
+			"ai & automation",
+			"startup",
+			"scaling your business",
+		],
+		keywords: ["founder", "startup", "mvp", "product", "growth"],
 	},
 	loan_officer: {
-		tags: ['mortgage', 'loan automation', 'lead qualification', 'follow-up'],
-		keywords: ['loan', 'mortgage', 'borrower', 'refi', 'lender'],
+		tags: ["mortgage", "loan automation", "lead qualification", "follow-up"],
+		keywords: ["loan", "mortgage", "borrower", "refi", "lender"],
 	},
 };
 
 const getNumericValue = (value: unknown): number =>
-	typeof value === 'number' && Number.isFinite(value) ? value : 0;
+	typeof value === "number" && Number.isFinite(value) ? value : 0;
 
 const computeAnalyticsScore = (post: BeehiivPost): number => {
 	const webStats = post.stats?.web as BeehiivPostContentWebStats | undefined;
@@ -135,17 +171,19 @@ const computeAnalyticsScore = (post: BeehiivPost): number => {
 };
 
 const tokenize = (text?: string): string[] =>
-	(text ?? '')
+	(text ?? "")
 		.toLowerCase()
 		.split(/[^a-z0-9]+/g)
-		.filter((token, index, arr) => token.length >= 4 && arr.indexOf(token) === index);
+		.filter(
+			(token, index, arr) => token.length >= 4 && arr.indexOf(token) === index,
+		);
 
 const toTime = (value: unknown): number => {
-	if (typeof value === 'number') {
+	if (typeof value === "number") {
 		const ms = value < 1_000_000_000_000 ? value * 1000 : value;
 		return Number.isFinite(ms) ? ms : 0;
 	}
-	if (typeof value === 'string') {
+	if (typeof value === "string") {
 		const numeric = Number(value);
 		if (!Number.isNaN(numeric)) {
 			const ms = numeric < 1_000_000_000_000 ? numeric * 1000 : numeric;
@@ -171,28 +209,30 @@ const getPublishedTimestamp = (post: BeehiivPost): number => {
 
 const getFreshnessBadge = (publishedTimestamp: number): FreshnessBadge => {
 	if (!Number.isFinite(publishedTimestamp) || publishedTimestamp === 0) {
-		return 'all';
+		return "all";
 	}
 	const ageMs = Date.now() - publishedTimestamp;
-	if (ageMs <= WEEK_MS) return '7-day';
-	if (ageMs <= MONTH_MS) return '30-day';
-	return 'all';
+	if (ageMs <= WEEK_MS) return "7-day";
+	if (ageMs <= MONTH_MS) return "30-day";
+	return "all";
 };
 
 const computePersonaAffinity = (
 	post: BeehiivPost,
 	persona: PersonaKey,
-	goal: string | undefined
+	goal: string | undefined,
 ): number => {
 	const preference = PERSONA_PREFERENCES[persona];
 	if (!preference) return 0;
 
 	const tags = new Set(
 		(Array.isArray(post.content_tags) ? post.content_tags : [])
-			.filter((tag): tag is string => typeof tag === 'string')
-			.map((tag) => tag.toLowerCase())
+			.filter((tag): tag is string => typeof tag === "string")
+			.map((tag) => tag.toLowerCase()),
 	);
-	const haystack = `${post.title ?? ''} ${post.subtitle ?? ''}`.toLowerCase().replace(/\s+/g, ' ');
+	const haystack = `${post.title ?? ""} ${post.subtitle ?? ""}`
+		.toLowerCase()
+		.replace(/\s+/g, " ");
 
 	let score = 0;
 
@@ -228,12 +268,12 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
 	const persona = usePersonaStore((state) => state.persona);
 	const goal = usePersonaStore((state) => state.goal);
 	const pageSize = useMemo(() => {
-		const s = searchParams?.get('per_page');
+		const s = searchParams?.get("per_page");
 		const parsed = s ? Number(s) : Number.NaN;
 		return Number.isFinite(parsed) && parsed > 0 ? parsed : 12;
 	}, [searchParams]);
 	const currentPage = useMemo(() => {
-		const p = searchParams?.get('page');
+		const p = searchParams?.get("page");
 		const parsed = p ? Number(p) : Number.NaN;
 		return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
 	}, [searchParams]);
@@ -242,7 +282,9 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
 		return (
 			<div className="glass-card rounded-xl py-20 text-center">
 				<h3 className="mb-2 font-semibold text-2xl">No posts found</h3>
-				<p className="text-black dark:text-white/70">Try changing your search or filter criteria</p>
+				<p className="text-black dark:text-white/70">
+					Try changing your search or filter criteria
+				</p>
 			</div>
 		);
 	}
@@ -251,11 +293,15 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
 		return [...posts].sort((a, b) => {
 			const diff = getPublishedTimestamp(b) - getPublishedTimestamp(a);
 			if (diff !== 0) return diff;
-			const aViews = typeof a.stats?.web?.views === 'number' ? a.stats.web.views : 0;
-			const bViews = typeof b.stats?.web?.views === 'number' ? b.stats.web.views : 0;
+			const aViews =
+				typeof a.stats?.web?.views === "number" ? a.stats.web.views : 0;
+			const bViews =
+				typeof b.stats?.web?.views === "number" ? b.stats.web.views : 0;
 			if (aViews !== bViews) return bViews - aViews;
-			const aClicks = typeof a.stats?.web?.clicks === 'number' ? a.stats.web.clicks : 0;
-			const bClicks = typeof b.stats?.web?.clicks === 'number' ? b.stats.web.clicks : 0;
+			const aClicks =
+				typeof a.stats?.web?.clicks === "number" ? a.stats.web.clicks : 0;
+			const bClicks =
+				typeof b.stats?.web?.clicks === "number" ? b.stats.web.clicks : 0;
 			return bClicks - aClicks;
 		});
 	}, [posts]);
@@ -264,9 +310,12 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
 		return posts.map((post) => {
 			const publishedTimestamp = getPublishedTimestamp(post);
 			const badge = getFreshnessBadge(publishedTimestamp);
-			const recencyMultiplier = badge === '7-day' ? 1.35 : badge === '30-day' ? 1.15 : 1;
+			const recencyMultiplier =
+				badge === "7-day" ? 1.35 : badge === "30-day" ? 1.15 : 1;
 			const baseScore = computeAnalyticsScore(post);
-			const personaScore = persona ? computePersonaAffinity(post, persona, goal) : 0;
+			const personaScore = persona
+				? computePersonaAffinity(post, persona, goal)
+				: 0;
 			const finalScore = baseScore * recencyMultiplier + personaScore;
 			return {
 				post,
@@ -297,13 +346,14 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
 	}, [regularPosts, gridPageSize]);
 
 	const totalPagesFromParams = useMemo(() => {
-		const total = searchParams?.get('total_pages');
+		const total = searchParams?.get("total_pages");
 		const parsed = total ? Number(total) : Number.NaN;
 		return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
 	}, [searchParams]);
 
 	const hasFullPage = regularPosts.length >= gridPageSize;
-	const totalPages = totalPagesFromParams ?? (hasFullPage ? currentPage + 1 : currentPage);
+	const totalPages =
+		totalPagesFromParams ?? (hasFullPage ? currentPage + 1 : currentPage);
 	const pageWindow = useMemo(
 		() =>
 			getPageWindow({
@@ -311,20 +361,22 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
 				totalPages,
 				windowSize: 3,
 			}),
-		[currentPage, totalPages]
+		[currentPage, totalPages],
 	);
 
 	// URL-driven pagination: push ?page= and enforce per_page=10 so server returns 10 and grid uses first as featured + 9 regular
 	const goToPage = (next: number) => {
-		const params = new URLSearchParams(searchParams?.toString() || '');
-		params.set('page', String(next));
-		if (!params.get('per_page')) params.set('per_page', String(pageSize));
+		const params = new URLSearchParams(searchParams?.toString() || "");
+		params.set("page", String(next));
+		if (!params.get("per_page")) params.set("per_page", String(pageSize));
 		router.push(`/blogs?${params.toString()}`);
 	};
 
 	const disablePrev = currentPage <= 1;
 	const disableNext =
-		totalPagesFromParams !== null ? currentPage >= totalPagesFromParams : !hasFullPage;
+		totalPagesFromParams !== null
+			? currentPage >= totalPagesFromParams
+			: !hasFullPage;
 
 	return (
 		<div className="space-y-10">
@@ -370,10 +422,10 @@ const BlogGrid = ({ posts }: { posts: BeehiivPost[] }) => {
 						onClick={() => goToPage(page)}
 						className={`rounded px-3 py-1 text-sm transition ${
 							page === currentPage
-								? 'bg-primary text-primary-foreground shadow'
-								: 'bg-muted text-foreground hover:bg-muted/80'
+								? "bg-primary text-primary-foreground shadow"
+								: "bg-muted text-foreground hover:bg-muted/80"
 						}`}
-						aria-current={page === currentPage ? 'page' : undefined}
+						aria-current={page === currentPage ? "page" : undefined}
 						aria-label={`Go to page ${page}`}
 					>
 						{page}

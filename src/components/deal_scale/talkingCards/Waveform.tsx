@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { useEffect, useMemo, useRef } from 'react';
+import { cn } from "@/lib/utils";
+import { useEffect, useMemo, useRef } from "react";
 
-type WaveformVariant = 'sine' | 'square' | 'sawtooth' | 'triangle';
+type WaveformVariant = "sine" | "square" | "sawtooth" | "triangle";
 
 interface WaveformProps extends React.HTMLAttributes<HTMLDivElement> {
 	/**
@@ -16,7 +16,7 @@ interface WaveformProps extends React.HTMLAttributes<HTMLDivElement> {
 	 * Position of the waveform
 	 * @default 'bottom'
 	 */
-	position?: 'top' | 'bottom';
+	position?: "top" | "bottom";
 
 	/**
 	 * Number of bars in the waveform
@@ -66,11 +66,11 @@ const WAVEFORM_CURVES: Record<WaveformVariant, (t: number) => number> = {
 const Waveform = ({
 	className,
 	isActive = true,
-	position = 'bottom',
+	position = "bottom",
 	barCount = 21,
-	variant = 'sine',
+	variant = "sine",
 	speed = 1.5,
-	color = 'hsl(var(--primary))',
+	color = "hsl(var(--primary))",
 	inactiveOpacity = 0.15,
 	activeOpacity = 0.8,
 	style,
@@ -83,13 +83,13 @@ const Waveform = ({
 	// Generate stable keys for the bars
 	const barKeys = useMemo(
 		() => Array.from({ length: barCount }, (_, i) => `waveform-bar-${i}`),
-		[barCount]
+		[barCount],
 	);
 
 	// Get the animation curve based on variant
 	const getAnimationValue = useMemo(
 		() => WAVEFORM_CURVES[variant] || WAVEFORM_CURVES.sine,
-		[variant]
+		[variant],
 	);
 
 	// Animation loop
@@ -97,7 +97,9 @@ const Waveform = ({
 		if (!isActive || !containerRef.current) return;
 
 		const container = containerRef.current;
-		const bars = container.querySelectorAll<HTMLDivElement>('[data-waveform-bar]');
+		const bars = container.querySelectorAll<HTMLDivElement>(
+			"[data-waveform-bar]",
+		);
 
 		if (bars.length === 0) return;
 
@@ -140,9 +142,11 @@ const Waveform = ({
 	// Set initial styles when inactive
 	useEffect(() => {
 		if (!isActive && containerRef.current) {
-			const bars = containerRef.current.querySelectorAll<HTMLDivElement>('[data-waveform-bar]');
+			const bars = containerRef.current.querySelectorAll<HTMLDivElement>(
+				"[data-waveform-bar]",
+			);
 			for (const bar of bars) {
-				bar.style.height = '15%';
+				bar.style.height = "15%";
 				bar.style.opacity = inactiveOpacity.toString();
 			}
 		}
@@ -152,16 +156,16 @@ const Waveform = ({
 		<div
 			ref={containerRef}
 			className={cn(
-				'flex h-12 items-end gap-0.5',
-				position === 'top' && 'flex-col-reverse',
-				'transition-opacity duration-300',
-				!isActive && 'opacity-70',
-				className
+				"flex h-12 items-end gap-0.5",
+				position === "top" && "flex-col-reverse",
+				"transition-opacity duration-300",
+				!isActive && "opacity-70",
+				className,
 			)}
 			aria-hidden="true"
 			style={
 				{
-					'--waveform-color': color,
+					"--waveform-color": color,
 					...style,
 				} as React.CSSProperties
 			}
@@ -172,23 +176,24 @@ const Waveform = ({
 					key={key}
 					data-waveform-bar
 					className={cn(
-						'w-0.5 min-w-[2px] rounded-full bg-[var(--waveform-color)]',
-						'transition-all duration-300 ease-in-out',
-						'hover:scale-x-150 hover:bg-accent hover:opacity-100',
-						'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-						'motion-reduce:transition-none motion-reduce:hover:scale-100',
-						'opacity will-change-transform,'
+						"w-0.5 min-w-[2px] rounded-full bg-[var(--waveform-color)]",
+						"transition-all duration-300 ease-in-out",
+						"hover:scale-x-150 hover:bg-accent hover:opacity-100",
+						"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+						"motion-reduce:transition-none motion-reduce:hover:scale-100",
+						"opacity will-change-transform,",
 					)}
 					style={
 						{
-							height: isActive ? '15%' : '15%',
+							height: isActive ? "15%" : "15%",
 							opacity: isActive ? inactiveOpacity : inactiveOpacity,
 							transition: isActive
-								? 'height 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-in-out'
-								: 'height 0.5s ease-in-out, opacity 0.5s ease-in-out, transform 0.2s ease-in-out',
-							transformOrigin: position === 'top' ? 'bottom center' : 'top center',
-							'--tw-ring-offset-shadow': '0 0 #0000',
-							'--tw-ring-shadow': '0 0 #0000',
+								? "height 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.2s ease-in-out"
+								: "height 0.5s ease-in-out, opacity 0.5s ease-in-out, transform 0.2s ease-in-out",
+							transformOrigin:
+								position === "top" ? "bottom center" : "top center",
+							"--tw-ring-offset-shadow": "0 0 #0000",
+							"--tw-ring-shadow": "0 0 #0000",
 						} as React.CSSProperties
 					}
 				/>

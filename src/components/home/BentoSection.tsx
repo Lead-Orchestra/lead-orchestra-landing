@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import BentoPage from '@/components/bento/page';
-import type { BentoFeature } from '@/types/bento/features';
-import React from 'react';
+import BentoPage from "@/components/bento/page";
+import type { BentoFeature } from "@/types/bento/features";
+import React from "react";
 
 interface BentoSectionProps {
 	title: string;

@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from "react";
 
 const PHONE_WIDTH = 433;
 const PHONE_HEIGHT = 882;
@@ -16,7 +16,7 @@ const HEIGHT_PCT = (SCREEN_HEIGHT / PHONE_HEIGHT) * 100;
 const RADIUS_H = (SCREEN_RADIUS / SCREEN_WIDTH) * 100;
 const RADIUS_V = (SCREEN_RADIUS / SCREEN_HEIGHT) * 100;
 
-type IphoneColorScheme = 'light' | 'dark';
+type IphoneColorScheme = "light" | "dark";
 
 const COLOR_SCHEMES: Record<
 	IphoneColorScheme,
@@ -31,22 +31,22 @@ const COLOR_SCHEMES: Record<
 	}
 > = {
 	light: {
-		outerFill: '#E5E5E5',
-		outerStroke: '#E5E5E5',
-		accentFill: '#E5E5E5',
-		innerFill: '#FFFFFF',
-		highlightFill: '#F5F5F5',
-		cameraBodyFill: '#F5F5F5',
-		cameraLensFill: '#E5E5E5',
+		outerFill: "#E5E5E5",
+		outerStroke: "#E5E5E5",
+		accentFill: "#E5E5E5",
+		innerFill: "#FFFFFF",
+		highlightFill: "#F5F5F5",
+		cameraBodyFill: "#F5F5F5",
+		cameraLensFill: "#E5E5E5",
 	},
 	dark: {
-		outerFill: '#111b2e',
-		outerStroke: '#1e293b',
-		accentFill: '#16233b',
-		innerFill: '#030910',
-		highlightFill: '#1f2a3d',
-		cameraBodyFill: '#243554',
-		cameraLensFill: '#3b4d6d',
+		outerFill: "#111b2e",
+		outerStroke: "#1e293b",
+		accentFill: "#16233b",
+		innerFill: "#030910",
+		highlightFill: "#1f2a3d",
+		cameraBodyFill: "#243554",
+		cameraLensFill: "#3b4d6d",
 	},
 };
 
@@ -61,7 +61,7 @@ export function Iphone({
 	src,
 	videoSrc,
 	children,
-	colorScheme = 'light',
+	colorScheme = "light",
 	className,
 	style,
 	...props
@@ -83,7 +83,7 @@ export function Iphone({
 
 	return (
 		<div
-			className={`relative inline-block w-full align-middle leading-none ${className ?? ''}`}
+			className={`relative inline-block w-full align-middle leading-none ${className ?? ""}`}
 			style={{
 				aspectRatio: `${PHONE_WIDTH}/${PHONE_HEIGHT}`,
 				...style,
@@ -93,7 +93,7 @@ export function Iphone({
 			{hasScreenContent && (
 				<div
 					className={`absolute z-0 overflow-hidden ${
-						hasChildren ? 'pointer-events-auto' : 'pointer-events-none'
+						hasChildren ? "pointer-events-auto" : "pointer-events-none"
 					}`}
 					style={screenStyle}
 				>
@@ -118,7 +118,9 @@ export function Iphone({
 					) : null}
 
 					{hasChildren ? (
-						<div className="pointer-events-auto relative size-full">{children}</div>
+						<div className="pointer-events-auto relative size-full">
+							{children}
+						</div>
 					) : null}
 				</div>
 			)}
@@ -128,11 +130,11 @@ export function Iphone({
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg"
 				className="pointer-events-none absolute inset-0 size-full"
-				style={{ transform: 'translateZ(0)' }}
+				style={{ transform: "translateZ(0)" }}
 				aria-hidden="true"
 			>
 				<title>iPhone frame</title>
-				<g mask={hasScreenContent ? 'url(#screenPunch)' : undefined}>
+				<g mask={hasScreenContent ? "url(#screenPunch)" : undefined}>
 					<path
 						d="M2 73C2 32.6832 34.6832 0 75 0H357C397.317 0 430 32.6832 430 73V809C430 849.317 397.317 882 357 882H75C34.6832 882 2 849.317 2 809V73Z"
 						fill={palette.outerFill}
@@ -170,7 +172,7 @@ export function Iphone({
 					fill={palette.outerFill}
 					stroke={palette.outerStroke}
 					strokeWidth={0.5}
-					mask={hasScreenContent ? 'url(#screenPunch)' : undefined}
+					mask={hasScreenContent ? "url(#screenPunch)" : undefined}
 				/>
 
 				<path
@@ -188,7 +190,13 @@ export function Iphone({
 
 				<defs>
 					<mask id="screenPunch" maskUnits="userSpaceOnUse">
-						<rect x="0" y="0" width={PHONE_WIDTH} height={PHONE_HEIGHT} fill="white" />
+						<rect
+							x="0"
+							y="0"
+							width={PHONE_WIDTH}
+							height={PHONE_HEIGHT}
+							fill="white"
+						/>
 						<rect
 							x={SCREEN_X}
 							y={SCREEN_Y}

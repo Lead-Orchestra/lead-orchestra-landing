@@ -1,30 +1,29 @@
-import { act, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { FooterBetaCta } from '../FooterBetaCta';
+import { FooterBetaCta } from "../FooterBetaCta";
 
-describe('FooterBetaCta', () => {
+describe("FooterBetaCta", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
-		vi.setSystemTime(new Date('2025-11-13T00:00:00Z'));
+		vi.setSystemTime(new Date("2025-11-13T00:00:00Z"));
 	});
 
 	afterEach(() => {
 		vi.useRealTimers();
 	});
 
-	it('renders countdown messaging and CTA link', async () => {
+	it("renders countdown messaging and CTA link", async () => {
 		render(<FooterBetaCta />);
 
 		expect(screen.getByText(/Founders Circle/i)).toBeInTheDocument();
 		expect(await screen.findByText(/Closes in/i)).toBeInTheDocument();
-		expect(screen.getByRole('link', { name: /request early access/i })).toHaveAttribute(
-			'href',
-			'/contact?utm_source=founders-circle-footer'
-		);
+		expect(
+			screen.getByRole("link", { name: /request early access/i }),
+		).toHaveAttribute("href", "/contact?utm_source=founders-circle-footer");
 	});
 
-	it('updates countdown timer', async () => {
+	it("updates countdown timer", async () => {
 		render(<FooterBetaCta />);
 
 		await act(async () => {

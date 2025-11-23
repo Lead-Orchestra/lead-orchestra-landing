@@ -1,10 +1,12 @@
-import TrustedByScroller from '@/components/contact/utils/TrustedByScroller';
-import { FeatureShowcase } from '@/components/demos/real-time-analytics/FeatureShowcase';
-import { REAL_TIME_FEATURES } from '@/components/demos/real-time-analytics/feature-config';
-import ExitIntentBoundary from '@/components/exit-intent/ExitIntentBoundary';
-import { BlogPreview } from '@/components/home/BlogPreview';
-import { ConnectAnythingHero } from '@/components/home/ConnectAnythingHero';
-import { UploadLeadsHero } from '@/components/home/UploadLeadsHero';
+export const runtime = 'edge';
+
+import TrustedByScroller from "@/components/contact/utils/TrustedByScroller";
+import { FeatureShowcase } from "@/components/demos/real-time-analytics/FeatureShowcase";
+import { REAL_TIME_FEATURES } from "@/components/demos/real-time-analytics/feature-config";
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
+import { BlogPreview } from "@/components/home/BlogPreview";
+import { ConnectAnythingHero } from "@/components/home/ConnectAnythingHero";
+import { UploadLeadsHero } from "@/components/home/UploadLeadsHero";
 // Above-the-fold components (eager load for LCP)
 import {
 	DEFAULT_PERSONA,
@@ -13,76 +15,95 @@ import {
 	LIVE_COPY,
 	PERSONA_GOAL,
 	PERSONA_LABEL,
-} from '@/components/home/heros/live-dynamic-hero-demo/_config';
-import LiveDynamicHero from '@/components/home/heros/live-dynamic-hero-demo/page';
-import { SectionWrapper } from '@/components/layout/SectionWrapper';
-import { Separator } from '@/components/ui/separator';
-import { activityStream } from '@/data/activity/activityStream';
-import { caseStudies } from '@/data/caseStudy/caseStudies';
-import { faqItems } from '@/data/faq/default';
+} from "@/components/home/heros/live-dynamic-hero-demo/_config";
+import LiveDynamicHero from "@/components/home/heros/live-dynamic-hero-demo/page";
+import { SectionWrapper } from "@/components/layout/SectionWrapper";
+import { Separator } from "@/components/ui/separator";
+import { activityStream } from "@/data/activity/activityStream";
+import { caseStudies } from "@/data/caseStudy/caseStudies";
+import { faqItems } from "@/data/faq/default";
 import {
 	AI_OUTREACH_STUDIO_ANCHOR,
 	AI_OUTREACH_STUDIO_FEATURES,
 	AI_OUTREACH_STUDIO_SEO,
 	AI_OUTREACH_STUDIO_TAGLINE,
-} from '@/data/home/aiOutreachStudio';
-import { pricingCatalog } from '@/data/service/slug_data/pricing';
-import { generalDealScaleTestimonials } from '@/data/service/slug_data/testimonials';
-import { companyLogos } from '@/data/service/slug_data/trustedCompanies';
-import { getLatestBeehiivPosts } from '@/lib/beehiiv/getPosts';
-import { exitIntentEnabled } from '@/lib/config/exitIntent';
-import { cn } from '@/lib/utils';
-import type { BeehiivPost } from '@/types/behiiv';
-import { mapSeoMetaToMetadata } from '@/utils/seo/mapSeoMetaToMetadata';
+} from "@/data/home/aiOutreachStudio";
+import { pricingCatalog } from "@/data/service/slug_data/pricing";
+import { generalDealScaleTestimonials } from "@/data/service/slug_data/testimonials";
+import { companyLogos } from "@/data/service/slug_data/trustedCompanies";
+import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
+import { cn } from "@/lib/utils";
+import type { BeehiivPost } from "@/types/behiiv";
+import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import {
 	SchemaInjector,
 	buildActivityFeedSchema,
 	buildBlogSchema,
 	buildServiceSchema,
 	getTestimonialReviewData,
-} from '@/utils/seo/schema';
-import { getStaticSeo } from '@/utils/seo/staticSeo';
-import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
+} from "@/utils/seo/schema";
+import { getStaticSeo } from "@/utils/seo/staticSeo";
+import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 
 // Below-the-fold components (lazy load with dynamic imports for code splitting)
-import { AboutUsSection } from '@/components/about/AboutUsSection';
-const CaseStudyGrid = dynamic(() => import('@/components/case-studies/CaseStudyGrid'), {
-	loading: () => <CaseStudyFallback />,
-});
-const ContactForm = dynamic(() => import('@/components/contact/form/ContactForm'), {
-	loading: () => <ContactFallback />,
-});
-const Faq = dynamic(() => import('@/components/faq'), {
+import { AboutUsSection } from "@/components/about/AboutUsSection";
+const CaseStudyGrid = dynamic(
+	() => import("@/components/case-studies/CaseStudyGrid"),
+	{
+		loading: () => <CaseStudyFallback />,
+	},
+);
+const ContactForm = dynamic(
+	() => import("@/components/contact/form/ContactForm"),
+	{
+		loading: () => <ContactFallback />,
+	},
+);
+const Faq = dynamic(() => import("@/components/faq"), {
 	loading: () => <FaqFallback />,
 });
-const ClientBento = dynamic(() => import('@/components/home/ClientBento'), {
+const ClientBento = dynamic(() => import("@/components/home/ClientBento"), {
 	loading: () => <BentoFallback />,
 });
-const MarketingCatalogPricing = dynamic(() => import('@/components/pricing/CatalogPricing'), {
-	loading: () => <PricingFallback />,
-});
-const Testimonials = dynamic(() => import('@/components/home/Testimonials'), {
+const MarketingCatalogPricing = dynamic(
+	() => import("@/components/pricing/CatalogPricing"),
+	{
+		loading: () => <PricingFallback />,
+	},
+);
+const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
 	loading: () => <TestimonialFallback />,
 });
-const FeatureSectionActivity = dynamic(() => import('@/components/home/FeatureSectionActivity'), {
-	loading: () => <SectionFallback className="min-h-[28rem] rounded-3xl border-dashed" />,
-});
+const FeatureSectionActivity = dynamic(
+	() => import("@/components/home/FeatureSectionActivity"),
+	{
+		loading: () => (
+			<SectionFallback className="min-h-[28rem] rounded-3xl border-dashed" />
+		),
+	},
+);
 const CallDemoShowcase = dynamic(
 	() =>
-		import('@/components/home/CallDemoShowcase').then((mod) => ({
+		import("@/components/home/CallDemoShowcase").then((mod) => ({
 			default: mod.CallDemoShowcase,
 		})),
 	{
-		loading: () => <SectionFallback className="min-h-[28rem] rounded-3xl border-dashed" />,
-	}
+		loading: () => (
+			<SectionFallback className="min-h-[28rem] rounded-3xl border-dashed" />
+		),
+	},
 );
-const InstagramEmbed = dynamic(() => import('@/components/home/InstagramEmbed'), {
-	loading: () => <InstagramFallback />,
-});
+const InstagramEmbed = dynamic(
+	() => import("@/components/home/InstagramEmbed"),
+	{
+		loading: () => <InstagramFallback />,
+	},
+);
 
-const THREE_KEYS = ['first', 'second', 'third'] as const;
-const FOUR_KEYS = ['alpha', 'beta', 'gamma', 'delta'] as const;
+const THREE_KEYS = ["first", "second", "third"] as const;
+const FOUR_KEYS = ["alpha", "beta", "gamma", "delta"] as const;
 
 const CaseStudyFallback = () => (
 	<div className="mx-auto grid w-full max-w-6xl gap-6 md:grid-cols-3">
@@ -215,9 +236,9 @@ const InstagramFallback = () => (
 const SectionFallback = ({ className }: { className?: string }) => (
 	<div
 		className={cn(
-			'flex h-full w-full items-center justify-center rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm',
-			'dark:border-white/15 dark:bg-white/5',
-			className
+			"flex h-full w-full items-center justify-center rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm",
+			"dark:border-white/15 dark:bg-white/5",
+			className,
 		)}
 		aria-hidden="true"
 	>
@@ -232,10 +253,11 @@ const SectionFallback = ({ className }: { className?: string }) => (
 // Success metrics
 
 export async function generateMetadata(): Promise<Metadata> {
-	const seo = getStaticSeo('/');
+	const seo = getStaticSeo("/");
 	const persona = HERO_COPY_V7.personas[DEFAULT_PERSONA];
 
-	const personaAudienceLabel = PERSONA_LABEL.replace(/^For\s+/i, '').trim() || PERSONA_LABEL;
+	const personaAudienceLabel =
+		PERSONA_LABEL.replace(/^For\s+/i, "").trim() || PERSONA_LABEL;
 	const personaPromise = `We orchestrate every deal touchpoint so ${personaAudienceLabel} stay in deal mode.`;
 	const outreachTagline = AI_OUTREACH_STUDIO_TAGLINE;
 
@@ -252,13 +274,12 @@ export async function generateMetadata(): Promise<Metadata> {
 	];
 	const heroKeywords = Array.from(new Set(heroKeywordsBase));
 	const aiOutreachKeywords = Array.from(AI_OUTREACH_STUDIO_SEO.keywords);
-	const combinedKeywords = Array.from(new Set([...heroKeywords, ...aiOutreachKeywords])).slice(
-		0,
-		48
-	);
+	const combinedKeywords = Array.from(
+		new Set([...heroKeywords, ...aiOutreachKeywords]),
+	).slice(0, 48);
 	const heroDescription =
 		LIVE_COPY.subtitle ||
-		'Scrape Anything. Export Everywhere. Open-source lead scraping and data ingestion that plugs into anything. Fresh leads, not rented lists.';
+		"Scrape Anything. Export Everywhere. Open-source lead scraping and data ingestion that plugs into anything. Fresh leads, not rented lists.";
 	const aiOutreachDescription = AI_OUTREACH_STUDIO_SEO.description;
 	const combinedDescriptionSegments = [
 		outreachTagline,
@@ -268,11 +289,12 @@ export async function generateMetadata(): Promise<Metadata> {
 	];
 	const combinedDescription = combinedDescriptionSegments
 		.filter((segment) => segment && segment.length > 0)
-		.join(' ');
+		.join(" ");
 
 	const enrichedSeo = mapSeoMetaToMetadata({
 		...seo,
-		title: 'Lead Orchestra | Open-Source Lead Scraping & Data Ingestion That Plugs Into Anything',
+		title:
+			"Lead Orchestra | Open-Source Lead Scraping & Data Ingestion That Plugs Into Anything",
 		description: combinedDescription,
 		keywords: combinedKeywords,
 	});
@@ -294,8 +316,12 @@ type IndexSearchParams = {
 };
 
 // Main page component
-const Index = async ({ searchParams }: { searchParams?: Promise<IndexSearchParams> } = {}) => {
-	const resolvedSearchParams: IndexSearchParams = searchParams ? await searchParams : {};
+const Index = async ({
+	searchParams,
+}: { searchParams?: Promise<IndexSearchParams> } = {}) => {
+	const resolvedSearchParams: IndexSearchParams = searchParams
+		? await searchParams
+		: {};
 	const pageParam = Array.isArray(resolvedSearchParams.page)
 		? resolvedSearchParams.page[0]
 		: resolvedSearchParams.page;
@@ -303,33 +329,42 @@ const Index = async ({ searchParams }: { searchParams?: Promise<IndexSearchParam
 	const currentPage = pageParam ? Number.parseInt(pageParam, 10) || 1 : 1;
 
 	// Paginate the case studies
-	const paginatedCaseStudies = paginate(caseStudies, currentPage, CASE_STUDY_PAGE_SIZE);
+	const paginatedCaseStudies = paginate(
+		caseStudies,
+		currentPage,
+		CASE_STUDY_PAGE_SIZE,
+	);
 
 	const posts = await getLatestBeehiivPosts();
-	const homepageSeo = getStaticSeo('/');
-	const canonicalUrl = homepageSeo.canonical ?? 'https://dealscale.io';
+	const homepageSeo = getStaticSeo("/");
+	const canonicalUrl = homepageSeo.canonical ?? "https://dealscale.io";
 	const heroDescription =
 		LIVE_COPY.subtitle ||
-		'Scrape Anything. Export Everywhere. Open-source lead scraping and data ingestion that plugs into anything. Fresh leads, not rented lists.';
-	const personaAudienceLabel = PERSONA_LABEL.replace(/^For\s+/i, '').trim() || PERSONA_LABEL;
+		"Scrape Anything. Export Everywhere. Open-source lead scraping and data ingestion that plugs into anything. Fresh leads, not rented lists.";
+	const personaAudienceLabel =
+		PERSONA_LABEL.replace(/^For\s+/i, "").trim() || PERSONA_LABEL;
 	const personaPromise = `Scrape Anything. Export Everywhere.`;
 	const heroServiceDescription = [personaPromise, heroDescription]
 		.filter((segment) => segment && segment.length > 0)
-		.join(' ');
+		.join(" ");
 	const aiOutreachNarrative = [
 		AI_OUTREACH_STUDIO_TAGLINE,
 		AI_OUTREACH_STUDIO_SEO.description,
 		personaPromise,
 	]
 		.filter((segment) => segment && segment.length > 0)
-		.join(' ');
+		.join(" ");
 	const activityNarrative = `Open-source scraping engine that helps ${personaAudienceLabel} access fresh leads with zero credit limits.`;
 	const aiOutreachFeatureDescription = `${AI_OUTREACH_STUDIO_TAGLINE} Scrape any source, normalize data, and export seamlessly.`;
-	const { reviews: testimonialReviews, aggregateRating: testimonialAggregateRating } =
-		getTestimonialReviewData();
+	const {
+		reviews: testimonialReviews,
+		aggregateRating: testimonialAggregateRating,
+	} = getTestimonialReviewData();
 	const blogSchema = buildBlogSchema({
 		canonicalUrl: `${canonicalUrl}/blogs`,
-		name: homepageSeo.title ? `${homepageSeo.title} Blog` : 'Lead Orchestra Blog',
+		name: homepageSeo.title
+			? `${homepageSeo.title} Blog`
+			: "Lead Orchestra Blog",
 		description:
 			homepageSeo.description ??
 			"Lead Orchestra's latest insights on open-source scraping, MCP protocol, data ingestion, and developer tools.",
@@ -340,11 +375,11 @@ const Index = async ({ searchParams }: { searchParams?: Promise<IndexSearchParam
 		description: heroServiceDescription,
 		url: `${canonicalUrl}#lead-orchestra-hero`,
 		serviceType: PERSONA_GOAL,
-		category: 'Open-Source Lead Scraping & Data Ingestion',
-		areaServed: ['United States', 'Global'],
+		category: "Open-Source Lead Scraping & Data Ingestion",
+		areaServed: ["United States", "Global"],
 		offers: {
-			price: '0',
-			priceCurrency: 'USD',
+			price: "0",
+			priceCurrency: "USD",
 			url: `${canonicalUrl}/contact`,
 		},
 		aggregateRating: testimonialAggregateRating,
@@ -354,29 +389,29 @@ const Index = async ({ searchParams }: { searchParams?: Promise<IndexSearchParam
 		name: `${AI_OUTREACH_STUDIO_SEO.name} by Lead Orchestra`,
 		description: aiOutreachNarrative,
 		url: `${canonicalUrl}#${AI_OUTREACH_STUDIO_ANCHOR}`,
-		serviceType: 'Open-Source Data Ingestion',
-		category: 'Developer Tools & Data Infrastructure',
-		areaServed: ['United States', 'Global'],
+		serviceType: "Open-Source Data Ingestion",
+		category: "Developer Tools & Data Infrastructure",
+		areaServed: ["United States", "Global"],
 		offers: {
-			price: '0',
-			priceCurrency: 'USD',
+			price: "0",
+			priceCurrency: "USD",
 			url: `${canonicalUrl}/contact`,
 		},
 		aggregateRating: testimonialAggregateRating,
 		reviews: testimonialReviews,
 	});
 	const activityFeedSchema = buildActivityFeedSchema(activityStream, {
-		url: '/#live-activity-stream',
+		url: "/#live-activity-stream",
 		description: activityNarrative,
 	});
 	const aiOutreachFeatureListSchema = {
-		'@context': 'https://schema.org',
-		'@type': 'ItemList',
-		'@id': `${canonicalUrl}#${AI_OUTREACH_STUDIO_ANCHOR}-feature-list`,
+		"@context": "https://schema.org",
+		"@type": "ItemList",
+		"@id": `${canonicalUrl}#${AI_OUTREACH_STUDIO_ANCHOR}-feature-list`,
 		name: `${AI_OUTREACH_STUDIO_SEO.name} Feature Highlights`,
 		description: aiOutreachFeatureDescription,
 		itemListElement: AI_OUTREACH_STUDIO_FEATURES.map((feature, index) => ({
-			'@type': 'ListItem',
+			"@type": "ListItem",
 			position: index + 1,
 			name: feature.title,
 			description: feature.description,
@@ -399,7 +434,11 @@ const Index = async ({ searchParams }: { searchParams?: Promise<IndexSearchParam
 				<CallDemoShowcase />
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
-			<SectionWrapper id="feature-activity" lazy={false} fallbackLabel="Lead Orchestra Features">
+			<SectionWrapper
+				id="feature-activity"
+				lazy={false}
+				fallbackLabel="Lead Orchestra Features"
+			>
 				<>
 					<FeatureSectionActivity />
 					<div className="mt-12">
@@ -408,15 +447,27 @@ const Index = async ({ searchParams }: { searchParams?: Promise<IndexSearchParam
 				</>
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
-			<SectionWrapper id="connect-anything" lazy={false} fallbackLabel="Connect Any CRM">
+			<SectionWrapper
+				id="connect-anything"
+				lazy={false}
+				fallbackLabel="Connect Any CRM"
+			>
 				<ConnectAnythingHero />
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
-			<SectionWrapper id="upload-leads" lazy={false} fallbackLabel="Upload Leads & Perform Actions">
+			<SectionWrapper
+				id="upload-leads"
+				lazy={false}
+				fallbackLabel="Upload Leads & Perform Actions"
+			>
 				<UploadLeadsHero />
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
-			<SectionWrapper id="case-studies" lazy={false} fallback={<CaseStudyFallback />}>
+			<SectionWrapper
+				id="case-studies"
+				lazy={false}
+				fallback={<CaseStudyFallback />}
+			>
 				<CaseStudyGrid
 					caseStudies={caseStudies}
 					limit={3}
@@ -425,17 +476,25 @@ const Index = async ({ searchParams }: { searchParams?: Promise<IndexSearchParam
 				/>
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
-			<SectionWrapper id="testimonials" lazy={false} fallback={<TestimonialFallback />}>
+			<SectionWrapper
+				id="testimonials"
+				lazy={false}
+				fallback={<TestimonialFallback />}
+			>
 				<Testimonials
 					testimonials={generalDealScaleTestimonials}
-					title={'What Developers & Agencies Say'}
+					title={"What Developers & Agencies Say"}
 					subtitle={
-						'Hear from developers, agencies, and data teams about their experiences with Lead Orchestra'
+						"Hear from developers, agencies, and data teams about their experiences with Lead Orchestra"
 					}
 				/>
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
-			<SectionWrapper id="pricing" rootMargin="1200px" fallback={<PricingFallback />}>
+			<SectionWrapper
+				id="pricing"
+				rootMargin="1200px"
+				fallback={<PricingFallback />}
+			>
 				<MarketingCatalogPricing
 					title="Free Open-Source + Enterprise Options"
 					subtitle="100% free and open-source with no credit card required. Self-hosted enterprise licensing available for teams needing compliance and control."
@@ -451,11 +510,19 @@ const Index = async ({ searchParams }: { searchParams?: Promise<IndexSearchParam
 				<AboutUsSection />
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
-			<SectionWrapper id="client-bento" rootMargin="1200px" fallback={<BentoFallback />}>
+			<SectionWrapper
+				id="client-bento"
+				rootMargin="1200px"
+				fallback={<BentoFallback />}
+			>
 				<ClientBento />
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
-			<SectionWrapper id="blog-preview" rootMargin="1200px" fallback={<BlogFallback />}>
+			<SectionWrapper
+				id="blog-preview"
+				rootMargin="1200px"
+				fallback={<BlogFallback />}
+			>
 				<BlogPreview title="Latest Blogs" posts={posts} />
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
@@ -467,13 +534,21 @@ const Index = async ({ searchParams }: { searchParams?: Promise<IndexSearchParam
 				/>
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
-			<SectionWrapper id="contact" rootMargin="1200px" fallback={<ContactFallback />}>
+			<SectionWrapper
+				id="contact"
+				rootMargin="1200px"
+				fallback={<ContactFallback />}
+			>
 				<div className="flex items-center justify-center py-5 lg:col-span-7">
 					<ContactForm />
 				</div>
 			</SectionWrapper>
 			<Separator className="w-full border-white/10" />
-			<SectionWrapper id="instagram" rootMargin="1200px" fallback={<InstagramFallback />}>
+			<SectionWrapper
+				id="instagram"
+				rootMargin="1200px"
+				fallback={<InstagramFallback />}
+			>
 				<InstagramEmbed />
 			</SectionWrapper>
 		</>

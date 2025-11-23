@@ -1,7 +1,7 @@
 export interface Subscriber {
 	id: string;
 	email: string;
-	status: 'validating' | 'active' | 'unsubscribed' | 'pending';
+	status: "validating" | "active" | "unsubscribed" | "pending";
 	created: number;
 	subscription_tier: string;
 	subscription_premium_tier_names: string[];

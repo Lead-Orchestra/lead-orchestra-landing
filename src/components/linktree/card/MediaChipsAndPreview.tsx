@@ -1,26 +1,33 @@
-'use client';
-import * as React from 'react';
-import type { LinkCardProps } from '../LinkCard';
+"use client";
+import * as React from "react";
+import type { LinkCardProps } from "../LinkCard";
 
 export type MediaChipsAndPreviewProps = Pick<
 	LinkCardProps,
-	'imageUrl' | 'thumbnailUrl' | 'videoUrl' | 'files' | 'pageId' | 'slug'
+	"imageUrl" | "thumbnailUrl" | "videoUrl" | "files" | "pageId" | "slug"
 >;
 
-const supportedInlineExts = new Set(['mp4', 'webm', 'ogg', 'ogv', 'mov', 'm4v']);
+const supportedInlineExts = new Set([
+	"mp4",
+	"webm",
+	"ogg",
+	"ogv",
+	"mov",
+	"m4v",
+]);
 const videoMimeByExt: Record<string, string> = {
-	mp4: 'video/mp4',
-	webm: 'video/webm',
-	ogg: 'video/ogg',
-	ogv: 'video/ogg',
-	mov: 'video/quicktime',
-	m4v: 'video/x-m4v',
+	mp4: "video/mp4",
+	webm: "video/webm",
+	ogg: "video/ogg",
+	ogv: "video/ogg",
+	mov: "video/quicktime",
+	m4v: "video/x-m4v",
 };
 
 function extOf(url?: string): string | undefined {
 	if (!url) return undefined;
 	const m = /\.([a-z0-9]+)(?:$|\?|#)/i.exec(url);
-	return (m?.[1] || '').toLowerCase();
+	return (m?.[1] || "").toLowerCase();
 }
 
 export function MediaChipsAndPreview({
@@ -34,7 +41,8 @@ export function MediaChipsAndPreview({
 	// Derive best candidates from files
 	const firstVideoFromFiles = React.useMemo(() => {
 		const vids = files?.filter(
-			(f) => f.kind === 'video' || /\.(mp4|webm|ogg|mov|m4v)(?:$|\?|#)/i.test(f.url)
+			(f) =>
+				f.kind === "video" || /\.(mp4|webm|ogg|mov|m4v)(?:$|\?|#)/i.test(f.url),
 		);
 		return vids?.length ? vids[0] : undefined;
 	}, [files]);
@@ -42,7 +50,8 @@ export function MediaChipsAndPreview({
 	const firstImageFromFiles = React.useMemo(() => {
 		const imgs = files?.filter(
 			(f) =>
-				f.kind === 'image' || /\.(jpg|jpeg|png|gif|webp|avif|svg|heic|heif)(?:$|\?|#)/i.test(f.url)
+				f.kind === "image" ||
+				/\.(jpg|jpeg|png|gif|webp|avif|svg|heic|heif)(?:$|\?|#)/i.test(f.url),
 		);
 		return imgs?.length ? imgs[0] : undefined;
 	}, [files]);
@@ -51,8 +60,11 @@ export function MediaChipsAndPreview({
 	const rawVideoSrc = firstVideoFromFiles?.url || videoUrl || undefined;
 	const videoExt = extOf(rawVideoSrc);
 	const canInlinePlay =
-		Boolean(rawVideoSrc) && Boolean(videoExt && supportedInlineExts.has(videoExt));
-	const videoType = videoExt ? (videoMimeByExt[videoExt] ?? undefined) : undefined;
+		Boolean(rawVideoSrc) &&
+		Boolean(videoExt && supportedInlineExts.has(videoExt));
+	const videoType = videoExt
+		? (videoMimeByExt[videoExt] ?? undefined)
+		: undefined;
 	const proxiedVideoSrc = rawVideoSrc
 		? `/api/proxy-video?url=${encodeURIComponent(rawVideoSrc)}`
 		: undefined;
@@ -60,7 +72,7 @@ export function MediaChipsAndPreview({
 	// UI state - show image by default, video is toggled by chip
 	const [showInlineVideo, setShowInlineVideo] = React.useState(false);
 	const [showInlineImage, setShowInlineImage] = React.useState(
-		Boolean(firstImageFromFiles?.url || imageUrl)
+		Boolean(firstImageFromFiles?.url || imageUrl),
 	);
 	const [showInlineThumb, setShowInlineThumb] = React.useState(false);
 
@@ -68,9 +80,9 @@ export function MediaChipsAndPreview({
 		try {
 			const payload = { pageId, slug } as { pageId?: string; slug?: string };
 			if (payload.pageId || payload.slug) {
-				fetch('/api/linktree/click', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
+				fetch("/api/linktree/click", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify(payload),
 				}).catch(() => {});
 			}
@@ -97,8 +109,10 @@ export function MediaChipsAndPreview({
 							}}
 							className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] text-muted-foreground leading-5 hover:bg-accent"
 							aria-pressed={showInlineVideo}
-							aria-label={showInlineVideo ? 'Hide video preview' : 'Show video preview'}
-							title={showInlineVideo ? 'Hide video' : 'Preview video'}
+							aria-label={
+								showInlineVideo ? "Hide video preview" : "Show video preview"
+							}
+							title={showInlineVideo ? "Hide video" : "Preview video"}
 						>
 							<span aria-hidden>▶</span>
 							<span>Video</span>
@@ -114,8 +128,10 @@ export function MediaChipsAndPreview({
 							}}
 							className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] text-muted-foreground leading-5 hover:bg-accent"
 							aria-pressed={showInlineImage}
-							aria-label={showInlineImage ? 'Hide image preview' : 'Show image preview'}
-							title={showInlineImage ? 'Hide image' : 'Preview image'}
+							aria-label={
+								showInlineImage ? "Hide image preview" : "Show image preview"
+							}
+							title={showInlineImage ? "Hide image" : "Preview image"}
 						>
 							<span aria-hidden>🖼️</span>
 							<span>Image</span>
@@ -131,8 +147,8 @@ export function MediaChipsAndPreview({
 							}}
 							className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] text-muted-foreground leading-5 hover:bg-accent"
 							aria-pressed={showInlineThumb}
-							aria-label={showInlineThumb ? 'Hide thumbnail' : 'Show thumbnail'}
-							title={showInlineThumb ? 'Hide thumbnail' : 'Preview thumbnail'}
+							aria-label={showInlineThumb ? "Hide thumbnail" : "Show thumbnail"}
+							title={showInlineThumb ? "Hide thumbnail" : "Preview thumbnail"}
 						>
 							<span aria-hidden>🖼️</span>
 							<span>Thumb</span>
@@ -144,17 +160,21 @@ export function MediaChipsAndPreview({
 								canInlinePlay &&
 								showInlineVideo &&
 								rawVideoSrc &&
-								(f.kind === 'video' || /\.(mp4|webm|ogg|mov|m4v)(?:$|\?|#)/i.test(f.url))
+								(f.kind === "video" ||
+									/\.(mp4|webm|ogg|mov|m4v)(?:$|\?|#)/i.test(f.url))
 							) {
 								return false;
 							}
 							if (
-								f.kind === 'image' ||
-								/\.(jpg|jpeg|png|gif|webp|avif|svg|heic|heif)(?:$|\?|#)/i.test(f.url)
+								f.kind === "image" ||
+								/\.(jpg|jpeg|png|gif|webp|avif|svg|heic|heif)(?:$|\?|#)/i.test(
+									f.url,
+								)
 							) {
 								return false;
 							}
-							if (f.url === (firstImageFromFiles?.url || imageUrl)) return false;
+							if (f.url === (firstImageFromFiles?.url || imageUrl))
+								return false;
 							return true;
 						})
 						.map((f) => (
@@ -166,10 +186,12 @@ export function MediaChipsAndPreview({
 									e.stopPropagation();
 									trackClick();
 									const to = encodeURIComponent(f.url);
-									const pid = pageId ? `&pageId=${encodeURIComponent(pageId)}` : '';
-									const s = slug ? `&slug=${encodeURIComponent(slug)}` : '';
+									const pid = pageId
+										? `&pageId=${encodeURIComponent(pageId)}`
+										: "";
+									const s = slug ? `&slug=${encodeURIComponent(slug)}` : "";
 									const url = `/api/redirect?isFile=1&to=${to}${pid}${s}`;
-									window.open(url, '_self');
+									window.open(url, "_self");
 								}}
 								className="inline-flex max-w-[8rem] items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] text-muted-foreground leading-5 hover:bg-accent"
 								aria-label={`Download ${f.name}`}
@@ -198,7 +220,9 @@ export function MediaChipsAndPreview({
 								setShowInlineVideo(false);
 							}}
 						>
-							{videoType ? <source src={proxiedVideoSrc ?? rawVideoSrc} type={videoType} /> : null}
+							{videoType ? (
+								<source src={proxiedVideoSrc ?? rawVideoSrc} type={videoType} />
+							) : null}
 							<source src={proxiedVideoSrc ?? rawVideoSrc} />
 							<track
 								kind="captions"
@@ -228,9 +252,11 @@ export function MediaChipsAndPreview({
 					{showInlineImage &&
 						(() => {
 							const rawImg = firstImageFromFiles?.url || imageUrl;
-							const heic = /(\.heic|\.heif)(?:$|\?|#)/i.test(rawImg ?? '');
+							const heic = /(\.heic|\.heif)(?:$|\?|#)/i.test(rawImg ?? "");
 							const cloud = (
-								typeof process !== 'undefined' ? process.env.CLOUDINARY_CLOUD_NAME : undefined
+								typeof process !== "undefined"
+									? process.env.CLOUDINARY_CLOUD_NAME
+									: undefined
 							) as string | undefined;
 							const imgSrc =
 								heic && cloud && rawImg

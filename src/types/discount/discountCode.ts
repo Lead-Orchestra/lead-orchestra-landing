@@ -1,6 +1,10 @@
-import type { ProductCategory, ProductType } from '../products';
-import type { Plan } from '../service/plans';
-import type { Feature, ServiceCategoryValue, ServiceItemData } from '../service/services';
+import type { ProductCategory, ProductType } from "../products";
+import type { Plan } from "../service/plans";
+import type {
+	Feature,
+	ServiceCategoryValue,
+	ServiceItemData,
+} from "../service/services";
 
 // Discount code type for payment forms
 export interface DiscountCode {
@@ -18,14 +22,14 @@ export interface DiscountCode {
 	description?: string;
 
 	// Product-specific restrictions
-	productIds?: Array<ProductType['id']>;
+	productIds?: Array<ProductType["id"]>;
 	productCategoryIds?: ProductCategory[];
 
 	// Service-specific restrictions
-	serviceIds?: Array<ServiceItemData['id']>;
+	serviceIds?: Array<ServiceItemData["id"]>;
 	serviceCategoryIds?: ServiceCategoryValue[];
-	planIds?: Array<Plan['id']>;
-	planCategoryIds?: Plan['pricingCategoryId'][];
+	planIds?: Array<Plan["id"]>;
+	planCategoryIds?: Plan["pricingCategoryId"][];
 
 	// Feature-specific restrictions
 }

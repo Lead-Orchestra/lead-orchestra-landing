@@ -21,7 +21,8 @@
 	display: inline;
 	padding-inline: 0.08em;
 	font-weight: 700;
-	transition: opacity 0.4s ease, transform 0.4s ease, background 0.4s ease, color 0.4s ease;
+	transition: opacity 0.4s ease, transform 0.4s ease, background 0.4s ease,
+		color 0.4s ease;
 	position: relative;
 }
 
@@ -38,14 +39,20 @@
 
 .heroHeadlineAccentPersona {
 	color: var(--hero-accent-problem-fallback, #f97316);
-	background: var(--hero-accent-problem, linear-gradient(92deg, #f97316, #ef4444 55%, #fb7185));
+	background: var(
+		--hero-accent-problem,
+		linear-gradient(92deg, #f97316, #ef4444 55%, #fb7185)
+	);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	text-shadow: 0 0 16px rgba(249, 115, 22, 0.28);
 }
 
 .heroHeadlineAccentAction {
-	background: var(--hero-accent-action, linear-gradient(90deg, #3b82f6, #06b6d4));
+	background: var(
+		--hero-accent-action,
+		linear-gradient(90deg, #3b82f6, #06b6d4)
+	);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	text-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
@@ -53,7 +60,10 @@
 
 .heroHeadlineAccentRisk {
 	color: var(--hero-accent-risk-fallback, #facc15);
-	background: var(--hero-accent-risk, linear-gradient(95deg, #facc15, #f97316 60%, #fb923c));
+	background: var(
+		--hero-accent-risk,
+		linear-gradient(95deg, #facc15, #f97316 60%, #fb923c)
+	);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	text-shadow: 0 0 14px rgba(251, 191, 36, 0.32);

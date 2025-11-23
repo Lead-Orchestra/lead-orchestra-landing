@@ -1,4 +1,4 @@
-import type { ROIEstimator, RoiEstimatorTier } from '@/types/service/plans';
+import type { ROIEstimator, RoiEstimatorTier } from "@/types/service/plans";
 
 export type RoiTierKey = string;
 

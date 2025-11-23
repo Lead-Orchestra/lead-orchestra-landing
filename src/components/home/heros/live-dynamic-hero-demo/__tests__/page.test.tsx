@@ -1,53 +1,53 @@
-import type { HeroVideoConfig } from '@external/dynamic-hero';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import React from 'react';
-import type { ReactNode } from 'react';
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Mock } from 'vitest';
-import '@testing-library/jest-dom';
+import type { HeroVideoConfig } from "@external/dynamic-hero";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import React from "react";
+import type { ReactNode } from "react";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import type { Mock } from "vitest";
+import "@testing-library/jest-dom";
 
 const startTrialMock = vi.fn(() => Promise.resolve());
 const closeCheckoutMock = vi.fn();
 const playVideoMock = vi.fn();
 
-vi.mock('../../live-dynamic-hero-demo/LiveDynamicHeroClient', () => {
-	const React = require('react');
+vi.mock("../../live-dynamic-hero-demo/LiveDynamicHeroClient", () => {
+	const React = require("react");
 	return {
 		__esModule: true,
 		default: () => {
 			// Render buttons directly to match PersonaCTA mock structure
 			return React.createElement(
-				'div',
+				"div",
 				{},
-				React.createElement('p', {}, 'AI real estate hero content'),
+				React.createElement("p", {}, "AI real estate hero content"),
 				React.createElement(
-					'div',
+					"div",
 					{},
 					React.createElement(
-						'button',
+						"button",
 						{
-							type: 'button',
+							type: "button",
 							onClick: startTrialMock,
-							'data-testid': 'primary-cta',
+							"data-testid": "primary-cta",
 						},
-						'Get Started in 1 Click'
+						"Get Started in 1 Click",
 					),
 					React.createElement(
-						'button',
+						"button",
 						{
-							type: 'button',
+							type: "button",
 							onClick: playVideoMock,
 						},
-						'See How It Works'
+						"See How It Works",
 					),
-					React.createElement('p', {}, 'Review the rollout steps')
-				)
+					React.createElement("p", {}, "Review the rollout steps"),
+				),
 			);
 		},
 	};
 });
 
-vi.mock('@/components/home/heros/useHeroTrialCheckout', () => ({
+vi.mock("@/components/home/heros/useHeroTrialCheckout", () => ({
 	__esModule: true,
 	useHeroTrialCheckout: () => ({
 		isTrialLoading: false,
@@ -57,7 +57,7 @@ vi.mock('@/components/home/heros/useHeroTrialCheckout', () => ({
 	}),
 }));
 
-vi.mock('@/components/cta/PersonaCTA', () => ({
+vi.mock("@/components/cta/PersonaCTA", () => ({
 	__esModule: true,
 	default: ({
 		primary,
@@ -91,19 +91,21 @@ vi.mock('@/components/cta/PersonaCTA', () => ({
 	),
 }));
 
-vi.mock('@/components/ui/avatar-circles', () => ({
+vi.mock("@/components/ui/avatar-circles", () => ({
 	AvatarCircles: () => <div data-testid="avatar-circles" />,
 }));
 
 const hydratedDeferredMock = vi.fn(() => true);
-vi.mock('@/components/providers/useDeferredLoad', () => ({
+vi.mock("@/components/providers/useDeferredLoad", () => ({
 	__esModule: true,
 	useDeferredLoad: (...args: unknown[]) => hydratedDeferredMock(...args),
 }));
 
-vi.mock('@external/dynamic-hero', () => {
-	const React = require('react');
-	const resolveHeroCopy = vi.fn((input: unknown, fallback: unknown) => input ?? fallback);
+vi.mock("@external/dynamic-hero", () => {
+	const React = require("react");
+	const resolveHeroCopy = vi.fn(
+		(input: unknown, fallback: unknown) => input ?? fallback,
+	);
 	return {
 		HeroAurora: ({ children }: { children?: ReactNode }) => (
 			<div data-testid="hero-aurora">{children}</div>
@@ -120,32 +122,34 @@ vi.mock('@external/dynamic-hero', () => {
 		useHeroVideoConfig: vi.fn(
 			(fallback?: HeroVideoConfig) =>
 				fallback ?? {
-					src: 'https://example.com/placeholder',
-					poster: '/placeholder.svg',
-					provider: 'other',
-				}
+					src: "https://example.com/placeholder",
+					poster: "/placeholder.svg",
+					provider: "other",
+				},
 		),
 		setHeroVideoConfig: vi.fn(),
 		resetHeroVideoConfig: vi.fn(),
 	};
 });
 
-vi.mock('motion/react', () => ({
+vi.mock("motion/react", () => ({
 	useInView: () => true,
 }));
 
-let LiveDynamicHeroDemoPage: typeof import('../../live-dynamic-hero-demo/page').default;
+let LiveDynamicHeroDemoPage: typeof import(
+	"../../live-dynamic-hero-demo/page",
+).default;
 
 beforeAll(async () => {
-	Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
+	Object.defineProperty(window.HTMLElement.prototype, "scrollIntoView", {
 		configurable: true,
 		value: vi.fn(),
 	});
-	Object.defineProperty(globalThis, 'IntersectionObserver', {
+	Object.defineProperty(globalThis, "IntersectionObserver", {
 		writable: true,
 		value: class {
 			readonly root: Element | Document | null = null;
-			readonly rootMargin = '0px';
+			readonly rootMargin = "0px";
 			readonly thresholds = [0];
 			constructor(private readonly callback: IntersectionObserverCallback) {}
 			disconnect(): void {
@@ -160,7 +164,7 @@ beforeAll(async () => {
 							intersectionRatio: 1,
 						} as IntersectionObserverEntry,
 					],
-					this as unknown as IntersectionObserver
+					this as unknown as IntersectionObserver,
 				);
 			}
 			takeRecords(): IntersectionObserverEntry[] {
@@ -171,11 +175,14 @@ beforeAll(async () => {
 			}
 		},
 	});
-	globalThis.requestAnimationFrame = (callback: FrameRequestCallback): number => {
+	globalThis.requestAnimationFrame = (
+		callback: FrameRequestCallback,
+	): number => {
 		callback(0);
 		return 0;
 	};
-	LiveDynamicHeroDemoPage = (await import('../../live-dynamic-hero-demo/page')).default;
+	LiveDynamicHeroDemoPage = (await import("../../live-dynamic-hero-demo/page"))
+		.default;
 });
 
 beforeEach(() => {
@@ -183,42 +190,48 @@ beforeEach(() => {
 	hydratedDeferredMock.mockReturnValue(true);
 });
 
-describe('LiveDynamicHeroDemoPage', () => {
-	it('renders fallback Stop/Start/Before copy from live hero config', () => {
+describe("LiveDynamicHeroDemoPage", () => {
+	it("renders fallback Stop/Start/Before copy from live hero config", () => {
 		hydratedDeferredMock.mockReturnValueOnce(false);
 		render(<LiveDynamicHeroDemoPage />);
 
-		expect(screen.getByText(/losing track of off-market leads/i)).toBeInTheDocument();
-		expect(screen.getByText(/ai real estate deal flow automation/i)).toBeInTheDocument();
-		expect(screen.getByText(/your next profitable deal slips/i)).toBeInTheDocument();
+		expect(
+			screen.getByText(/losing track of off-market leads/i),
+		).toBeInTheDocument();
+		expect(
+			screen.getByText(/ai real estate deal flow automation/i),
+		).toBeInTheDocument();
+		expect(
+			screen.getByText(/your next profitable deal slips/i),
+		).toBeInTheDocument();
 	});
 
-	it('renders CTA labels and supporting copy', async () => {
+	it("renders CTA labels and supporting copy", async () => {
 		render(<LiveDynamicHeroDemoPage />);
 
 		// Wait for hydrated version to render - findByText already asserts element exists
-		await screen.findByText('Get Started in 1 Click', {}, { timeout: 3000 });
+		await screen.findByText("Get Started in 1 Click", {}, { timeout: 3000 });
 		await screen.findByText(/Review the rollout steps/i, {}, { timeout: 3000 });
 	});
 
-	it('triggers Stripe trial checkout when primary CTA is clicked', async () => {
+	it("triggers Stripe trial checkout when primary CTA is clicked", async () => {
 		render(<LiveDynamicHeroDemoPage />);
 
-		const primaryCta = await screen.findByTestId('primary-cta');
+		const primaryCta = await screen.findByTestId("primary-cta");
 		fireEvent.click(primaryCta);
 
 		expect(startTrialMock).toHaveBeenCalledTimes(1);
 	});
 
-	it('scrolls to the video preview and plays it when secondary CTA is clicked', async () => {
+	it("scrolls to the video preview and plays it when secondary CTA is clicked", async () => {
 		const scrollIntoView = vi.fn();
-		(window.HTMLElement.prototype.scrollIntoView as unknown as Mock).mockImplementation(
-			scrollIntoView
-		);
+		(
+			window.HTMLElement.prototype.scrollIntoView as unknown as Mock
+		).mockImplementation(scrollIntoView);
 
 		render(<LiveDynamicHeroDemoPage />);
 
-		const secondary = await screen.findByRole('button', {
+		const secondary = await screen.findByRole("button", {
 			name: /see how it works/i,
 		});
 		fireEvent.click(secondary);

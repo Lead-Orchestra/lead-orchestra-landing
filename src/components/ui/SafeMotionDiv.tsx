@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import type {
 	ForwardRefComponent,
@@ -6,9 +6,9 @@ import type {
 	TargetAndTransition,
 	Transition,
 	VariantLabels,
-} from 'framer-motion';
-import type React from 'react';
-import { useEffect, useState } from 'react';
+} from "framer-motion";
+import type React from "react";
+import { useEffect, useState } from "react";
 
 type SafeMotionDivProps = {
 	children: React.ReactNode;
@@ -27,16 +27,16 @@ const SafeMotionDiv: React.FC<SafeMotionDivProps> = ({
 }) => {
 	const [MotionDiv, setMotionDiv] = useState<ForwardRefComponent<
 		HTMLDivElement,
-		HTMLMotionProps<'div'>
+		HTMLMotionProps<"div">
 	> | null>(null);
 
 	useEffect(() => {
-		import('framer-motion')
+		import("framer-motion")
 			.then((mod) => {
 				setMotionDiv(mod.motion.div);
 			})
 			.catch((error) => {
-				console.error('Failed to load Framer Motion:', error);
+				console.error("Failed to load Framer Motion:", error);
 			});
 	}, []);
 
@@ -45,7 +45,12 @@ const SafeMotionDiv: React.FC<SafeMotionDivProps> = ({
 	}
 
 	return (
-		<MotionDiv initial={initial} animate={animate} exit={exit} transition={transition}>
+		<MotionDiv
+			initial={initial}
+			animate={animate}
+			exit={exit}
+			transition={transition}
+		>
 			{children}
 		</MotionDiv>
 	);

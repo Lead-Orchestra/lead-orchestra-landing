@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import BentoPage from '@/components/bento/page';
-import { useDataModule } from '@/stores/useDataModuleStore';
-import type { BentoFeature } from '@/types/bento/features';
-import { useMemo } from 'react';
+import BentoPage from "@/components/bento/page";
+import { useDataModule } from "@/stores/useDataModuleStore";
+import type { BentoFeature } from "@/types/bento/features";
+import { useMemo } from "react";
 
 interface ClientBentoProps {
 	features?: BentoFeature[];
@@ -13,18 +13,21 @@ interface ClientBentoProps {
 
 export default function ClientBento({
 	features,
-	title = 'Your AI Lead Engine in Four Moves',
-	subtitle = 'Every pillar blends simplicity, speed, status, and scale so you stay focused on closing.',
+	title = "Your AI Lead Engine in Four Moves",
+	subtitle = "Every pillar blends simplicity, speed, status, and scale so you stay focused on closing.",
 }: ClientBentoProps) {
 	const {
 		status,
 		features: moduleFeatures,
 		error,
-	} = useDataModule('bento/main', ({ status: moduleStatus, data, error: moduleError }) => ({
-		status: moduleStatus,
-		features: data?.MainBentoFeatures ?? [],
-		error: moduleError,
-	}));
+	} = useDataModule(
+		"bento/main",
+		({ status: moduleStatus, data, error: moduleError }) => ({
+			status: moduleStatus,
+			features: data?.MainBentoFeatures ?? [],
+			error: moduleError,
+		}),
+	);
 
 	const resolvedFeatures = useMemo(() => {
 		if (features && features.length > 0) {
@@ -33,28 +36,33 @@ export default function ClientBento({
 		return moduleFeatures;
 	}, [features, moduleFeatures]);
 
-	const isLoadingFromStore = !features && (status === 'idle' || status === 'loading');
-	const isErroredFromStore = !features && status === 'error';
+	const isLoadingFromStore =
+		!features && (status === "idle" || status === "loading");
+	const isErroredFromStore = !features && status === "error";
 	const hasResolvedFeatures = resolvedFeatures.length > 0;
 
 	if (isLoadingFromStore) {
 		return (
 			<div className="flex items-center justify-center rounded-2xl border border-white/10 bg-black/20 p-10 text-white/70">
-				<span className="animate-pulse text-sm">Loading feature highlights…</span>
+				<span className="animate-pulse text-sm">
+					Loading feature highlights…
+				</span>
 			</div>
 		);
 	}
 
 	if (isErroredFromStore) {
-		console.error('[ClientBento] Failed to load bento features', error);
+		console.error("[ClientBento] Failed to load bento features", error);
 		return (
 			<div className="flex items-center justify-center rounded-2xl border border-destructive/20 bg-destructive/10 p-10 text-destructive-foreground">
-				<span className="text-sm">Unable to load feature highlights right now.</span>
+				<span className="text-sm">
+					Unable to load feature highlights right now.
+				</span>
 			</div>
 		);
 	}
 
-	if (!features && status === 'ready' && !hasResolvedFeatures) {
+	if (!features && status === "ready" && !hasResolvedFeatures) {
 		return (
 			<div className="flex items-center justify-center rounded-2xl border border-white/10 bg-black/20 p-10 text-white/70">
 				<span className="text-sm">Feature highlights coming soon.</span>
@@ -62,5 +70,7 @@ export default function ClientBento({
 		);
 	}
 
-	return <BentoPage features={resolvedFeatures} title={title} subtitle={subtitle} />;
+	return (
+		<BentoPage features={resolvedFeatures} title={title} subtitle={subtitle} />
+	);
 }

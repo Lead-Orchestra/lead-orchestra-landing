@@ -1,17 +1,17 @@
-import type { PaymentSectionProps } from '@/types/checkout';
-import { PaymentElement } from '@stripe/react-stripe-js';
+import type { PaymentSectionProps } from "@/types/checkout";
+import { PaymentElement } from "@stripe/react-stripe-js";
 
 export function PaymentSection({ error }: PaymentSectionProps) {
 	return (
 		<div className="space-y-4">
 			<PaymentElement
 				options={{
-					layout: 'tabs',
+					layout: "tabs",
 					fields: {
 						billingDetails: {
 							address: {
-								country: 'auto',
-								postalCode: 'auto',
+								country: "auto",
+								postalCode: "auto",
 							},
 						},
 					},

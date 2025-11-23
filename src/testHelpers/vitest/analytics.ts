@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
 type PlausibleModule = {
 	init: ReturnType<typeof vi.fn>;
@@ -19,7 +19,7 @@ type PosthogModule = {
  * server-only utilities from the app directory.
  */
 export const mockServerOnly = () => {
-	vi.mock('server-only', () => ({}));
+	vi.mock("server-only", () => ({}));
 };
 
 /**
@@ -33,7 +33,7 @@ export const mockAnalyticsProviders = () => {
 		init: vi.fn(),
 	};
 
-	vi.mock('@plausible-analytics/tracker', () => ({
+	vi.mock("@plausible-analytics/tracker", () => ({
 		__esModule: true,
 		init: plausible.init,
 	}));
@@ -48,7 +48,7 @@ export const mockAnalyticsProviders = () => {
 		onFeatureFlags: vi.fn(),
 	};
 
-	vi.mock('posthog-js', () => ({
+	vi.mock("posthog-js", () => ({
 		__esModule: true,
 		...posthog,
 	}));

@@ -2,8 +2,8 @@
 // * Hook for listing Beehiiv publications with stats (v2 API)
 // ! Requires BEEHIIV_API_KEY in .env
 // ! Optionally uses Beehiiv SDK if installed, else falls back to fetch
-import type { Publication, PublicationsResponse } from '@/types/behiiv';
-import { useEffect, useState } from 'react';
+import type { Publication, PublicationsResponse } from "@/types/behiiv";
+import { useEffect, useState } from "react";
 
 export function usePublications() {
 	const [publications, setPublications] = useState<Publication[]>([]);
@@ -15,11 +15,11 @@ export function usePublications() {
 			setLoading(true);
 			// * Logging for debugging
 			// eslint-disable-next-line no-console
-			console.log('[usePublications] Fetching publications...');
+			console.log("[usePublications] Fetching publications...");
 			try {
 				const apiKey = process.env.BEEHIIV_API_KEY;
-				if (!apiKey) throw new Error('BEEHIIV_API_KEY is missing from .env');
-				const url = 'https://api.beehiiv.com/v2/publications?expand=stats';
+				if (!apiKey) throw new Error("BEEHIIV_API_KEY is missing from .env");
+				const url = "https://api.beehiiv.com/v2/publications?expand=stats";
 				// eslint-disable-next-line no-console
 				console.log(`[usePublications] Request URL: ${url}`);
 				const response = await fetch(url, {
@@ -33,18 +33,18 @@ export function usePublications() {
 				try {
 					responseBody = await response.clone().json();
 					// eslint-disable-next-line no-console
-					console.log('[usePublications] Response body:', responseBody);
+					console.log("[usePublications] Response body:", responseBody);
 				} catch (jsonErr) {
 					// eslint-disable-next-line no-console
-					console.error('[usePublications] Failed to parse JSON:', jsonErr);
+					console.error("[usePublications] Failed to parse JSON:", jsonErr);
 				}
-				if (!response.ok) throw new Error('Failed to fetch publications');
+				if (!response.ok) throw new Error("Failed to fetch publications");
 				const data: PublicationsResponse = responseBody as PublicationsResponse;
 				setPublications(data.data);
 			} catch (err) {
 				// eslint-disable-next-line no-console
-				console.error('[usePublications] Error:', err);
-				setError(err instanceof Error ? err.message : 'Unknown error');
+				console.error("[usePublications] Error:", err);
+				setError(err instanceof Error ? err.message : "Unknown error");
 			} finally {
 				setLoading(false);
 			}

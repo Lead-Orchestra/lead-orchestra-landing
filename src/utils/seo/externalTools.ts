@@ -1,13 +1,16 @@
-import type { FAQItem } from '@/types/faq';
+import type { FAQItem } from "@/types/faq";
 
-import type { SeoMeta } from '@/utils/seo/seo';
-import { defaultSeo, staticSeoMeta } from '@/utils/seo/staticSeo';
+import type { SeoMeta } from "@/utils/seo/seo";
+import { defaultSeo, staticSeoMeta } from "@/utils/seo/staticSeo";
 
-import { buildFAQPageSchema, buildProductSchema } from '@/utils/seo/schema/builders';
-import { SCHEMA_CONTEXT } from '@/utils/seo/schema/helpers';
-import type { ProductSchema } from '@/utils/seo/schema/types';
+import {
+	buildFAQPageSchema,
+	buildProductSchema,
+} from "@/utils/seo/schema/builders";
+import { SCHEMA_CONTEXT } from "@/utils/seo/schema/helpers";
+import type { ProductSchema } from "@/utils/seo/schema/types";
 
-const EXTERNAL_TOOLS_BASE = '/external-tools';
+const EXTERNAL_TOOLS_BASE = "/external-tools";
 
 const normalizePath = (slug: string): string => {
 	const trimmed = slug.trim();
@@ -17,9 +20,9 @@ const normalizePath = (slug: string): string => {
 		return trimmed;
 	}
 
-	const normalized = trimmed.startsWith('/') ? trimmed.slice(1) : trimmed;
+	const normalized = trimmed.startsWith("/") ? trimmed.slice(1) : trimmed;
 
-	return `${EXTERNAL_TOOLS_BASE}/${normalized}`.replace(/\/{2,}/g, '/');
+	return `${EXTERNAL_TOOLS_BASE}/${normalized}`.replace(/\/{2,}/g, "/");
 };
 
 export const getExternalToolSeo = (slug: string): SeoMeta => {
@@ -71,21 +74,21 @@ export const buildExternalToolHowToSchema = ({
 	supplies,
 	tools,
 }: ExternalToolHowToSchemaInput) => ({
-	'@context': SCHEMA_CONTEXT,
-	'@type': 'HowTo' as const,
-	'@id': `${canonicalUrl}#howto`,
+	"@context": SCHEMA_CONTEXT,
+	"@type": "HowTo" as const,
+	"@id": `${canonicalUrl}#howto`,
 	url: canonicalUrl,
 	name,
 	description,
 	totalTime,
 	step: steps.map((step, index) => ({
-		'@type': 'HowToStep' as const,
+		"@type": "HowToStep" as const,
 		position: index + 1,
 		name: step.name,
 		text: step.text,
 	})),
 	supply: supplies?.map((item) => ({
-		'@type': 'HowToSupply' as const,
+		"@type": "HowToSupply" as const,
 		name: item,
 	})),
 	tool: tools,

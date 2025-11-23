@@ -1,6 +1,6 @@
-import type { BetaTesterFormValues } from '@/data/contact/formFields';
-import type { PriorityPilotFormValues } from '@/data/contact/pilotFormFields';
-import type { TesterApplicationRequest } from '@/types/testers';
+import type { BetaTesterFormValues } from "@/data/contact/formFields";
+import type { PriorityPilotFormValues } from "@/data/contact/pilotFormFields";
+import type { TesterApplicationRequest } from "@/types/testers";
 
 interface BetaExtras {
 	featureVotes?: string[];
@@ -16,18 +16,20 @@ const sanitizeArray = (values?: string[] | null): string[] => {
 	if (!Array.isArray(values)) {
 		return [];
 	}
-	return values.map((value) => value.trim()).filter((value) => value.length > 0);
+	return values
+		.map((value) => value.trim())
+		.filter((value) => value.length > 0);
 };
 
 export const mapBetaTesterApplication = (
 	data: BetaTesterFormValues,
-	extras: BetaExtras = {}
+	extras: BetaExtras = {},
 ): TesterApplicationRequest => {
 	const wantedFeatures = sanitizeArray(data.wantedFeatures);
 	const featureVotes = sanitizeArray(extras.featureVotes);
 
 	const payload: TesterApplicationRequest = {
-		tester_type: 'beta',
+		tester_type: "beta",
 		company: data.companyName.trim(),
 		icp_type: data.icpType,
 		employee_count: data.employeeCount,
@@ -49,13 +51,13 @@ export const mapBetaTesterApplication = (
 
 export const mapPilotTesterApplication = (
 	data: PriorityPilotFormValues,
-	extras: PilotExtras = {}
+	extras: PilotExtras = {},
 ): TesterApplicationRequest => {
 	const wantedFeatures = sanitizeArray(extras.wantedFeatures);
 	const featureVotes = sanitizeArray(extras.featureVotes);
 
 	const payload: TesterApplicationRequest = {
-		tester_type: 'pilot',
+		tester_type: "pilot",
 		company: data.companyName.trim(),
 		icp_type: data.icpType,
 		employee_count: data.teamSizeAcquisitions,

@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import BentoPage from '@/components/bento/page';
-import { CTASection } from '@/components/common/CTASection';
-import { TechStackSection } from '@/components/common/TechStackSection';
-import Faq from '@/components/faq';
-import Pricing from '@/components/home/Pricing';
-import Testimonials from '@/components/home/Testimonials';
-import { BusinessChallenge } from '@/components/services/BusinessChallenge';
-import { FlowChart } from '@/components/services/HowItWorks';
-import HowItWorksCarousel from '@/components/services/HowItWorksCarousel';
-import ServiceHero from '@/components/services/ServiceHero';
-import { SectionHeading } from '@/components/ui/section-heading';
-import { Separator } from '@/components/ui/separator';
-import { MainBentoFeatures } from '@/data/bento/main';
-import type { ServiceItemData } from '@/types/service/services';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import BentoPage from "@/components/bento/page";
+import { CTASection } from "@/components/common/CTASection";
+import { TechStackSection } from "@/components/common/TechStackSection";
+import Faq from "@/components/faq";
+import Pricing from "@/components/home/Pricing";
+import Testimonials from "@/components/home/Testimonials";
+import { BusinessChallenge } from "@/components/services/BusinessChallenge";
+import { FlowChart } from "@/components/services/HowItWorks";
+import HowItWorksCarousel from "@/components/services/HowItWorksCarousel";
+import ServiceHero from "@/components/services/ServiceHero";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { Separator } from "@/components/ui/separator";
+import { MainBentoFeatures } from "@/data/bento/main";
+import type { ServiceItemData } from "@/types/service/services";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface ServicePageClientProps {
 	service: ServiceItemData | null;
@@ -76,7 +76,7 @@ const ServicePageClient: React.FC<ServicePageClientProps> = ({ service }) => {
 			</section>
 			<Separator className="mx-auto my-8 max-w-7xl border-white/10" />
 			<TechStackSection
-				title={`${title.split(' ').slice(0, 2).join(' ')} Tech Stack`}
+				title={`${title.split(" ").slice(0, 2).join(" ")} Tech Stack`}
 				description={`Cutting-edge technologies that power our ${title.toLowerCase()} solutions.`}
 				stacks={slugDetails.integrations}
 			/>

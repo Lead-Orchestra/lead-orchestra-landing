@@ -1,32 +1,33 @@
-'use client';
+"use client";
 
-import { Play, XIcon } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
-import Image from 'next/image';
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import type { HTMLAttributes } from 'react';
+import { Play, XIcon } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
+import type { HTMLAttributes } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import type { HeroVideoConfig } from '../types/video';
+import type { HeroVideoConfig } from "../types/video";
 import {
 	isVideoThumbnail,
 	resolveHeroThumbnailSrc,
 	resolveHeroVideoSrc,
 	shouldBypassImageOptimization,
-} from '../utils/video';
+} from "../utils/video";
 
-export interface HeroVideoDialogProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface HeroVideoDialogProps
+	extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
 	video: HeroVideoConfig;
 	animationStyle?:
-		| 'from-bottom'
-		| 'from-center'
-		| 'from-top'
-		| 'from-left'
-		| 'from-right'
-		| 'fade'
-		| 'top-in-bottom-out'
-		| 'left-in-right-out';
+		| "from-bottom"
+		| "from-center"
+		| "from-top"
+		| "from-left"
+		| "from-right"
+		| "fade"
+		| "top-in-bottom-out"
+		| "left-in-right-out";
 	thumbnailAlt?: string;
 	open?: boolean;
 	defaultOpen?: boolean;
@@ -34,52 +35,52 @@ export interface HeroVideoDialogProps extends Omit<HTMLAttributes<HTMLDivElement
 }
 
 const animationPresets = {
-	'from-bottom': {
-		initial: { y: '100%', opacity: 0 },
+	"from-bottom": {
+		initial: { y: "100%", opacity: 0 },
 		animate: { y: 0, opacity: 1 },
-		exit: { y: '100%', opacity: 0 },
+		exit: { y: "100%", opacity: 0 },
 	},
-	'from-center': {
+	"from-center": {
 		initial: { scale: 0.5, opacity: 0 },
 		animate: { scale: 1, opacity: 1 },
 		exit: { scale: 0.5, opacity: 0 },
 	},
-	'from-top': {
-		initial: { y: '-100%', opacity: 0 },
+	"from-top": {
+		initial: { y: "-100%", opacity: 0 },
 		animate: { y: 0, opacity: 1 },
-		exit: { y: '-100%', opacity: 0 },
+		exit: { y: "-100%", opacity: 0 },
 	},
-	'from-left': {
-		initial: { x: '-100%', opacity: 0 },
+	"from-left": {
+		initial: { x: "-100%", opacity: 0 },
 		animate: { x: 0, opacity: 1 },
-		exit: { x: '-100%', opacity: 0 },
+		exit: { x: "-100%", opacity: 0 },
 	},
-	'from-right': {
-		initial: { x: '100%', opacity: 0 },
+	"from-right": {
+		initial: { x: "100%", opacity: 0 },
 		animate: { x: 0, opacity: 1 },
-		exit: { x: '100%', opacity: 0 },
+		exit: { x: "100%", opacity: 0 },
 	},
 	fade: {
 		initial: { opacity: 0 },
 		animate: { opacity: 1 },
 		exit: { opacity: 0 },
 	},
-	'top-in-bottom-out': {
-		initial: { y: '-100%', opacity: 0 },
+	"top-in-bottom-out": {
+		initial: { y: "-100%", opacity: 0 },
 		animate: { y: 0, opacity: 1 },
-		exit: { y: '100%', opacity: 0 },
+		exit: { y: "100%", opacity: 0 },
 	},
-	'left-in-right-out': {
-		initial: { x: '-100%', opacity: 0 },
+	"left-in-right-out": {
+		initial: { x: "-100%", opacity: 0 },
 		animate: { x: 0, opacity: 1 },
-		exit: { x: '100%', opacity: 0 },
+		exit: { x: "100%", opacity: 0 },
 	},
 } as const;
 
 export function HeroVideoDialog({
 	video,
-	animationStyle = 'from-center',
-	thumbnailAlt = 'Video thumbnail',
+	animationStyle = "from-center",
+	thumbnailAlt = "Video thumbnail",
 	className,
 	open,
 	defaultOpen = false,
@@ -90,8 +91,8 @@ export function HeroVideoDialog({
 	const isControlled = open !== undefined;
 	const isOpen = isControlled ? Boolean(open) : internalOpen;
 	const preset = useMemo(
-		() => animationPresets[animationStyle] ?? animationPresets['from-center'],
-		[animationStyle]
+		() => animationPresets[animationStyle] ?? animationPresets["from-center"],
+		[animationStyle],
 	);
 
 	const videoSrc = resolveHeroVideoSrc(video);
@@ -105,7 +106,7 @@ export function HeroVideoDialog({
 			}
 			onOpenChange?.(next);
 		},
-		[isControlled, onOpenChange]
+		[isControlled, onOpenChange],
 	);
 
 	useEffect(() => {
@@ -122,7 +123,10 @@ export function HeroVideoDialog({
 		setOpen(false);
 	};
 	return (
-		<div className={cn('relative h-full w-full', className)} {...containerProps}>
+		<div
+			className={cn("relative h-full w-full", className)}
+			{...containerProps}
+		>
 			{!isOpen ? (
 				<button
 					type="button"
@@ -163,7 +167,7 @@ export function HeroVideoDialog({
 									className="size-8 scale-100 fill-white text-white transition-transform duration-200 ease-out group-hover:scale-105"
 									style={{
 										filter:
-											'drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06))',
+											"drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06))",
 									}}
 								/>
 							</div>
@@ -180,7 +184,11 @@ export function HeroVideoDialog({
 						className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md"
 						onClick={closeModal}
 						onKeyDown={(event) => {
-							if (event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') {
+							if (
+								event.key === "Escape" ||
+								event.key === "Enter" ||
+								event.key === " "
+							) {
 								event.preventDefault();
 								closeModal();
 							}
@@ -189,7 +197,7 @@ export function HeroVideoDialog({
 					>
 						<motion.div
 							{...preset}
-							transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+							transition={{ type: "spring", damping: 30, stiffness: 300 }}
 							className="relative mx-4 aspect-video w-full max-w-4xl md:mx-0"
 							onClick={(event) => event.stopPropagation()}
 						>

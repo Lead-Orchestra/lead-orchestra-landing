@@ -1,12 +1,12 @@
-import { Button } from '@/components/ui/button';
-import { useHasMounted } from '@/hooks/useHasMounted';
-import type { CaseStudy } from '@/types/case-study';
-import { motion } from 'framer-motion';
-import { ChevronLeft, Eye, Share } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { toast } from 'sonner';
-import { v4 as uuidv4 } from 'uuid';
+import { Button } from "@/components/ui/button";
+import { useHasMounted } from "@/hooks/useHasMounted";
+import type { CaseStudy } from "@/types/case-study";
+import { motion } from "framer-motion";
+import { ChevronLeft, Eye, Share } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
 interface CaseStudyDetailHeaderProps {
 	caseStudy: CaseStudy;
@@ -19,7 +19,7 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 
 	const handleShare = () => {
 		navigator.clipboard.writeText(window.location.href);
-		toast.success('You can now share this case study with others');
+		toast.success("You can now share this case study with others");
 	};
 
 	return (
@@ -62,9 +62,13 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 							)}
 						</div>
 
-						<h1 className="mb-4 font-bold text-3xl md:text-4xl lg:text-5xl">{caseStudy.title}</h1>
+						<h1 className="mb-4 font-bold text-3xl md:text-4xl lg:text-5xl">
+							{caseStudy.title}
+						</h1>
 
-						<p className="mb-8 text-black text-xl dark:text-white/80">{caseStudy.subtitle}</p>
+						<p className="mb-8 text-black text-xl dark:text-white/80">
+							{caseStudy.subtitle}
+						</p>
 
 						<div className="mb-6 flex flex-wrap justify-center gap-2 sm:justify-start">
 							{caseStudy.tags.map((tag, index) => (
@@ -131,7 +135,9 @@ const CaseStudyDetailHeader = ({ caseStudy }: CaseStudyDetailHeaderProps) => {
 							transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
 							className="glass-card rounded-xl p-6 text-center"
 						>
-							<h3 className="mb-2 font-bold text-4xl text-primary">{result.value}</h3>
+							<h3 className="mb-2 font-bold text-4xl text-primary">
+								{result.value}
+							</h3>
 							<p className="text-black dark:text-white/70">{result.title}</p>
 						</motion.div>
 					))}

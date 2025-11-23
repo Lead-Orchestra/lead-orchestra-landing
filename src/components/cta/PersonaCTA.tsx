@@ -1,1 +1,1 @@
-export { default } from '../dynamic-hero/src/components/PersonaCTA';
+export { default } from "../dynamic-hero/src/components/PersonaCTA";

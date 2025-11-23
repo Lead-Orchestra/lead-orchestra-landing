@@ -49,13 +49,17 @@ export type DropshippingIntegration = {
 	/** ISO8601 timestamp of the last successful sync with supplier */
 	lastSynced: string;
 	/** Current sync status with supplier feed or API */
-	syncStatus: 'active' | 'paused' | 'error' | 'pending' | 'disconnected';
+	syncStatus: "active" | "paused" | "error" | "pending" | "disconnected";
 	/** SKU as mapped to supplier's catalog, if available */
 	mappedSku?: string;
 	/** Supplier name or ID for reference */
 	supplierName?: string;
 	/** Product availability status at supplier */
-	supplierStockStatus?: 'in_stock' | 'out_of_stock' | 'limited' | 'discontinued';
+	supplierStockStatus?:
+		| "in_stock"
+		| "out_of_stock"
+		| "limited"
+		| "discontinued";
 	/** Quantity available at supplier, if provided */
 	supplierStockQty?: number;
 	/** Any error message or last sync note */

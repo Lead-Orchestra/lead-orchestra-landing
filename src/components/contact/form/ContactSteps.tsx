@@ -1,7 +1,7 @@
 // src/components/contact/ContactSteps.tsx
 // ! ContactSteps component now takes steps as a typed prop
 // * Enforces type safety and renders dynamic step numbers
-import React from 'react';
+import React from "react";
 
 // ? Step type definition for type safety
 export interface ContactStep {
@@ -40,8 +40,12 @@ export function ContactSteps({ steps, title }: ContactStepsProps) {
 							<span className="font-bold text-lg text-primary">{idx + 1}</span>
 						</div>
 						<div>
-							<h3 className="font-semibold text-black text-lg dark:text-white/70">{step.title}</h3>
-							<p className="text-black text-sm dark:text-white/70">{step.description}</p>
+							<h3 className="font-semibold text-black text-lg dark:text-white/70">
+								{step.title}
+							</h3>
+							<p className="text-black text-sm dark:text-white/70">
+								{step.description}
+							</p>
 						</div>
 					</div>
 				))}

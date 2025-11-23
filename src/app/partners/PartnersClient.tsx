@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { CTASection } from '@/components/common/CTASection';
-import TrustedByMarquee from '@/components/contact/utils/TrustedByScroller';
-import { AuroraText } from '@/components/magicui/aurora-text';
-import { BlurFade } from '@/components/magicui/blur-fade';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import type { CompanyLogoDictType } from '@/data/service/slug_data/trustedCompanies';
-import { CheckCircle2 } from 'lucide-react';
-import Link from 'next/link';
+import { CTASection } from "@/components/common/CTASection";
+import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
+import { AuroraText } from "@/components/magicui/aurora-text";
+import { BlurFade } from "@/components/magicui/blur-fade";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import type { CompanyLogoDictType } from "@/data/service/slug_data/trustedCompanies";
+import { CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 
 interface PartnersClientProps {
 	partners: CompanyLogoDictType;
@@ -23,9 +23,16 @@ export default function PartnersClient({ partners }: PartnersClientProps) {
 				<h2 className="text-center font-bold text-3xl">Our Partners</h2>
 				<section className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
 					{Object.values(partners).map((partner) => (
-						<Card key={partner.name} className="transition-shadow hover:shadow-lg">
+						<Card
+							key={partner.name}
+							className="transition-shadow hover:shadow-lg"
+						>
 							<CardContent className="flex flex-col items-center p-6">
-								<img src={partner.logo} alt={partner.name} className="mb-4 h-16 object-contain" />
+								<img
+									src={partner.logo}
+									alt={partner.name}
+									className="mb-4 h-16 object-contain"
+								/>
 								<h3 className="mb-2 font-bold text-lg">{partner.name}</h3>
 								<p className="mb-2 text-center text-muted-foreground text-sm">
 									{partner.description}
@@ -69,19 +76,28 @@ function PartnersHero() {
 						Partnerships
 					</span>
 					<h1 className="font-bold text-4xl tracking-tight md:text-5xl">
-						<AuroraText>Build revenue driving partnerships with DealScale</AuroraText>
+						<AuroraText>
+							Build revenue driving partnerships with DealScale
+						</AuroraText>
 					</h1>
 					<p className="text-lg text-muted-foreground">
-						Collaborate with our team to unlock new growth, expand your capabilities, and deliver
-						differentiated value to your clients. We co-create go-to-market motions, share product
-						insights, and ensure you have the support needed to win more deals together.
+						Collaborate with our team to unlock new growth, expand your
+						capabilities, and deliver differentiated value to your clients. We
+						co-create go-to-market motions, share product insights, and ensure
+						you have the support needed to win more deals together.
 					</p>
 					<div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
 						<Button asChild className="px-8 py-6 text-base">
 							<Link href="/contact?type=partnership">Become a Partner</Link>
 						</Button>
-						<Button variant="outline" asChild className="border-primary/50 px-8 py-6 text-base">
-							<Link href="/contact?type=integration">Book a Discovery Call</Link>
+						<Button
+							variant="outline"
+							asChild
+							className="border-primary/50 px-8 py-6 text-base"
+						>
+							<Link href="/contact?type=integration">
+								Book a Discovery Call
+							</Link>
 						</Button>
 					</div>
 				</div>
@@ -92,16 +108,23 @@ function PartnersHero() {
 					<ul className="space-y-4 text-muted-foreground text-sm">
 						<li className="flex items-start gap-3">
 							<CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" />
-							<span>Co-branded campaigns and demos tailored to your client workflows.</span>
-						</li>
-						<li className="flex items-start gap-3">
-							<CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" />
-							<span>Revenue-sharing plans aligned with pipeline velocity and retention.</span>
+							<span>
+								Co-branded campaigns and demos tailored to your client
+								workflows.
+							</span>
 						</li>
 						<li className="flex items-start gap-3">
 							<CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" />
 							<span>
-								Shared insights from DealScale&apos;s AI platform to strengthen your services.
+								Revenue-sharing plans aligned with pipeline velocity and
+								retention.
+							</span>
+						</li>
+						<li className="flex items-start gap-3">
+							<CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" />
+							<span>
+								Shared insights from DealScale&apos;s AI platform to strengthen
+								your services.
 							</span>
 						</li>
 						<li className="flex items-start gap-3">

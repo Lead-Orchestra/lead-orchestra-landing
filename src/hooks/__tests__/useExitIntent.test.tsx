@@ -1,20 +1,20 @@
-import { act, renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useExitIntent } from '../useExitIntent';
+import { useExitIntent } from "../useExitIntent";
 
 const FIRE_MOUSE_LEAVE = (clientY: number) => {
-	const event = new MouseEvent('mouseleave', {
+	const event = new MouseEvent("mouseleave", {
 		clientY,
 	});
 	document.dispatchEvent(event);
 };
 
-describe('useExitIntent', () => {
+describe("useExitIntent", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
 		sessionStorage.clear();
-		process.env.NEXT_PUBLIC_ENABLE_EXIT_INTENT = 'true';
+		process.env.NEXT_PUBLIC_ENABLE_EXIT_INTENT = "true";
 	});
 
 	afterEach(() => {
@@ -22,13 +22,13 @@ describe('useExitIntent', () => {
 		delete process.env.NEXT_PUBLIC_ENABLE_EXIT_INTENT;
 	});
 
-	it('does not trigger before minTimeOnPage elapses', () => {
+	it("does not trigger before minTimeOnPage elapses", () => {
 		const onExitIntent = vi.fn();
 		renderHook(() =>
 			useExitIntent({
 				onExitIntent,
 				minTimeOnPage: 5000,
-			})
+			}),
 		);
 
 		act(() => {
@@ -38,13 +38,13 @@ describe('useExitIntent', () => {
 		expect(onExitIntent).not.toHaveBeenCalled();
 	});
 
-	it('triggers when threshold is met after minTimeOnPage', () => {
+	it("triggers when threshold is met after minTimeOnPage", () => {
 		const onExitIntent = vi.fn();
 		renderHook(() =>
 			useExitIntent({
 				onExitIntent,
 				minTimeOnPage: 3000,
-			})
+			}),
 		);
 
 		act(() => {
@@ -55,14 +55,14 @@ describe('useExitIntent', () => {
 		expect(onExitIntent).toHaveBeenCalledTimes(1);
 	});
 
-	it('only triggers once per session when configured', () => {
+	it("only triggers once per session when configured", () => {
 		const onExitIntent = vi.fn();
 		renderHook(() =>
 			useExitIntent({
 				onExitIntent,
 				minTimeOnPage: 1000,
 				oncePerSession: true,
-			})
+			}),
 		);
 
 		act(() => {
@@ -72,16 +72,16 @@ describe('useExitIntent', () => {
 		});
 
 		expect(onExitIntent).toHaveBeenCalledTimes(1);
-		expect(sessionStorage.getItem('exit-intent-triggered')).toBe('true');
+		expect(sessionStorage.getItem("exit-intent-triggered")).toBe("true");
 	});
 
-	it('respects enabled flag', () => {
+	it("respects enabled flag", () => {
 		const onExitIntent = vi.fn();
 		renderHook(() =>
 			useExitIntent({
 				onExitIntent,
 				enabled: false,
-			})
+			}),
 		);
 
 		act(() => {
@@ -91,14 +91,14 @@ describe('useExitIntent', () => {
 		expect(onExitIntent).not.toHaveBeenCalled();
 	});
 
-	it('does not trigger when env flag disabled', () => {
+	it("does not trigger when env flag disabled", () => {
 		delete process.env.NEXT_PUBLIC_ENABLE_EXIT_INTENT;
 		const onExitIntent = vi.fn();
 		renderHook(() =>
 			useExitIntent({
 				onExitIntent,
 				minTimeOnPage: 1000,
-			})
+			}),
 		);
 
 		act(() => {

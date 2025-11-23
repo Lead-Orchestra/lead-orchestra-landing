@@ -1,9 +1,9 @@
-'use client';
-import { cn } from '@/lib/utils';
-import { motion } from 'motion/react';
-import type React from 'react';
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { twMerge } from 'tailwind-merge';
+"use client";
+import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
+import type React from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 export const TextRevealCard = ({
 	text,
@@ -59,8 +59,8 @@ export const TextRevealCard = ({
 			onTouchMove={touchMoveHandler}
 			ref={cardRef}
 			className={cn(
-				'relative w-full max-w-[40rem] overflow-hidden rounded-xl border border-white/[0.08] bg-[#1d1c20] p-5 sm:rounded-2xl sm:p-8',
-				className
+				"relative w-full max-w-[40rem] overflow-hidden rounded-xl border border-white/[0.08] bg-[#1d1c20] p-5 sm:rounded-2xl sm:p-8",
+				className,
 			)}
 		>
 			{children}
@@ -68,7 +68,7 @@ export const TextRevealCard = ({
 			<div className="relative flex min-h-[12rem] flex-col justify-center overflow-hidden">
 				<motion.div
 					style={{
-						width: '100%',
+						width: "100%",
 					}}
 					animate={
 						isMouseOver
@@ -85,7 +85,7 @@ export const TextRevealCard = ({
 				>
 					<p
 						style={{
-							textShadow: '4px 4px 15px rgba(0,0,0,0.5)',
+							textShadow: "4px 4px 15px rgba(0,0,0,0.5)",
 						}}
 						className="bg-gradient-to-b from-white to-neutral-300 bg-clip-text py-6 font-bold text-2xl text-transparent text-white sm:text-[2.75rem]"
 					>
@@ -100,7 +100,7 @@ export const TextRevealCard = ({
 					}}
 					transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
 					className="-translate-y-1/2 absolute z-50 h-[70%] w-[6px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent will-change-transform"
-					style={{ top: '50%' }}
+					style={{ top: "50%" }}
 				/>
 
 				<div className="overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
@@ -121,7 +121,11 @@ export const TextRevealCardTitle = ({
 	children: React.ReactNode;
 	className?: string;
 }) => {
-	return <h2 className={twMerge('mb-2 text-lg text-white', className)}>{children}</h2>;
+	return (
+		<h2 className={twMerge("mb-2 text-lg text-white", className)}>
+			{children}
+		</h2>
+	);
 };
 
 export const TextRevealCardDescription = ({
@@ -131,7 +135,9 @@ export const TextRevealCardDescription = ({
 	children: React.ReactNode;
 	className?: string;
 }) => {
-	return <p className={twMerge('text-[#a9a9a9] text-sm', className)}>{children}</p>;
+	return (
+		<p className={twMerge("text-[#a9a9a9] text-sm", className)}>{children}</p>
+	);
 };
 
 const Stars = () => {
@@ -140,7 +146,7 @@ const Stars = () => {
 	const random = () => Math.random();
 	const starIds = useMemo(
 		() => Array.from({ length: 80 }, () => Math.random().toString(36).slice(2)),
-		[]
+		[],
 	);
 	return (
 		<div className="absolute inset-0">
@@ -156,16 +162,16 @@ const Stars = () => {
 					transition={{
 						duration: random() * 10 + 20,
 						repeat: Number.POSITIVE_INFINITY,
-						ease: 'linear',
+						ease: "linear",
 					}}
 					style={{
-						position: 'absolute',
+						position: "absolute",
 						top: `${random() * 100}%`,
 						left: `${random() * 100}%`,
-						width: '2px',
-						height: '2px',
-						backgroundColor: 'white',
-						borderRadius: '50%',
+						width: "2px",
+						height: "2px",
+						backgroundColor: "white",
+						borderRadius: "50%",
 						zIndex: 1,
 					}}
 					className="inline-block"

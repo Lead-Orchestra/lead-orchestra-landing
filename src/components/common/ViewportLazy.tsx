@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import type { ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type ViewportLazyProps = {
 	children: ReactNode;
@@ -21,7 +21,10 @@ function getObserverEntry(rootMargin: string): ObserverRegistryEntry {
 	let entry = observerRegistry.get(rootMargin);
 
 	if (!entry) {
-		const targets = new Map<Element, (entry: IntersectionObserverEntry) => void>();
+		const targets = new Map<
+			Element,
+			(entry: IntersectionObserverEntry) => void
+		>();
 		const observer = new IntersectionObserver(
 			(entries) => {
 				for (const entry of entries) {
@@ -31,7 +34,7 @@ function getObserverEntry(rootMargin: string): ObserverRegistryEntry {
 					}
 				}
 			},
-			{ rootMargin }
+			{ rootMargin },
 		);
 
 		entry = { observer, targets };
@@ -44,7 +47,7 @@ function getObserverEntry(rootMargin: string): ObserverRegistryEntry {
 function subscribeToObserver(
 	target: Element,
 	rootMargin: string,
-	callback: (entry: IntersectionObserverEntry) => void
+	callback: (entry: IntersectionObserverEntry) => void,
 ) {
 	const entry = getObserverEntry(rootMargin);
 	entry.targets.set(target, callback);
@@ -78,12 +81,12 @@ export function ViewportLazy({
 	children,
 	className,
 	fallback,
-	rootMargin = '256px',
+	rootMargin = "256px",
 }: ViewportLazyProps) {
 	const [isVisible, setIsVisible] = useState(false);
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const label = useMemo(() => {
-		if (typeof children === 'string') {
+		if (typeof children === "string") {
 			return children.slice(0, 24);
 		}
 		return undefined;
@@ -95,9 +98,9 @@ export function ViewportLazy({
 		const node = containerRef.current;
 		if (!node) return;
 
-		if (!('IntersectionObserver' in window)) {
+		if (!("IntersectionObserver" in window)) {
 			setIsVisible(true);
-			console.log('[ViewportLazy] revealed', label ?? containerRef.current);
+			console.log("[ViewportLazy] revealed", label ?? containerRef.current);
 			return;
 		}
 

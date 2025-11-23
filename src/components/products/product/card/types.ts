@@ -1,22 +1,22 @@
-import type { ProductCategory, ProductType } from '@/types/products';
-import type { ABTest } from '@/types/testing';
+import type { ProductCategory, ProductType } from "@/types/products";
+import type { ABTest } from "@/types/testing";
 
 export interface ProductCardProps
 	extends Pick<
 		ProductType,
-		| 'id'
-		| 'name'
-		| 'description'
-		| 'price'
-		| 'images'
-		| 'salesIncentive'
-		| 'sku'
-		| 'reviews'
-		| 'types'
-		| 'colors'
-		| 'sizes'
-		| 'categories'
-		| 'abTest'
+		| "id"
+		| "name"
+		| "description"
+		| "price"
+		| "images"
+		| "salesIncentive"
+		| "sku"
+		| "reviews"
+		| "types"
+		| "colors"
+		| "sizes"
+		| "categories"
+		| "abTest"
 	> {
 	className?: string;
 	showBanner?: boolean;

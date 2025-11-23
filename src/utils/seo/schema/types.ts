@@ -1,7 +1,7 @@
-export type SchemaContext = 'https://schema.org';
+export type SchemaContext = "https://schema.org";
 
 export type ContactPointSchema = {
-	'@type': 'ContactPoint';
+	"@type": "ContactPoint";
 	contactType: string;
 	telephone?: string;
 	email?: string;
@@ -10,7 +10,7 @@ export type ContactPointSchema = {
 };
 
 export type PostalAddressSchema = {
-	'@type': 'PostalAddress';
+	"@type": "PostalAddress";
 	streetAddress: string;
 	addressLocality?: string;
 	addressRegion?: string;
@@ -27,11 +27,11 @@ export type OfferInput = {
 };
 
 export type OfferSchema = OfferInput & {
-	'@type': 'Offer';
+	"@type": "Offer";
 };
 
 export type AggregateRatingSchema = {
-	'@type': 'AggregateRating';
+	"@type": "AggregateRating";
 	ratingValue: number;
 	reviewCount: number;
 	bestRating?: number;
@@ -40,9 +40,9 @@ export type AggregateRatingSchema = {
 };
 
 export type OrganizationSchema = {
-	'@context': SchemaContext;
-	'@type': 'Organization';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "Organization";
+	"@id": string;
 	name: string;
 	legalName: string;
 	url: string;
@@ -51,14 +51,14 @@ export type OrganizationSchema = {
 	alternateName?: string | string[];
 	foundingDate?: string;
 	founder?: {
-		'@type': 'Person';
+		"@type": "Person";
 		name: string;
 		jobTitle?: string;
 		url?: string;
 	};
 	knowsAbout?: string[];
 	brand?: {
-		'@type': 'Brand';
+		"@type": "Brand";
 		name: string;
 		logo?: string;
 	};
@@ -71,26 +71,26 @@ export type OrganizationSchema = {
 };
 
 export type WebSiteSchema = {
-	'@context': SchemaContext;
-	'@type': 'WebSite';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "WebSite";
+	"@id": string;
 	url: string;
 	name: string;
 	description: string;
 	publisher: {
-		'@id': string;
+		"@id": string;
 	};
 	potentialAction?: {
-		'@type': 'SearchAction';
+		"@type": "SearchAction";
 		target: string;
-		'query-input': string;
+		"query-input": string;
 	};
 	hasPart?: WebPageReference[];
 };
 
 export type WebPageReference = {
-	'@type': 'WebPage' | 'CreativeWork';
-	'@id': string;
+	"@type": "WebPage" | "CreativeWork";
+	"@id": string;
 	url: string;
 	name?: string;
 };
@@ -108,9 +108,9 @@ export type ServiceSchemaInput = {
 };
 
 export type ServiceSchema = {
-	'@context': SchemaContext;
-	'@type': 'Service';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "Service";
+	"@id": string;
 	name: string;
 	description: string;
 	url: string;
@@ -118,7 +118,7 @@ export type ServiceSchema = {
 	category?: string;
 	areaServed?: string[];
 	provider: {
-		'@id': string;
+		"@id": string;
 	};
 	offers?: OfferSchema;
 	aggregateRating?: AggregateRatingSchema;
@@ -136,31 +136,31 @@ export type ProductSchemaInput = {
 };
 
 export type ProductSchema = {
-	'@context': SchemaContext;
-	'@type': 'Product';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "Product";
+	"@id": string;
 	name: string;
 	description: string;
 	url: string;
 	sku?: string;
 	brand: {
-		'@type': 'Brand';
+		"@type": "Brand";
 		name: string;
 	};
 	image?: string[];
 	offers: OfferSchema;
 	manufacturer?: {
-		'@id': string;
+		"@id": string;
 	};
 	aggregateRating?: {
-		'@type': 'AggregateRating';
+		"@type": "AggregateRating";
 		ratingValue: number;
 		reviewCount: number;
 	};
 };
 
 export type ReviewRatingSchema = {
-	'@type': 'Rating';
+	"@type": "Rating";
 	ratingValue: number;
 	bestRating?: number;
 	worstRating?: number;
@@ -168,22 +168,22 @@ export type ReviewRatingSchema = {
 };
 
 export type ReviewSchema = {
-	'@type': 'Review';
+	"@type": "Review";
 	name: string;
 	reviewBody: string;
 	datePublished?: string;
 	itemReviewed?: {
-		'@id'?: string;
-		'@type'?: string;
+		"@id"?: string;
+		"@type"?: string;
 		name?: string;
 	};
 	author?: {
-		'@type': 'Organization' | 'Person';
+		"@type": "Organization" | "Person";
 		name: string;
-		'@id'?: string;
+		"@id"?: string;
 	};
 	publisher?: {
-		'@type': 'Organization' | 'Person';
+		"@type": "Organization" | "Person";
 		name: string;
 		url?: string;
 	};
@@ -191,9 +191,9 @@ export type ReviewSchema = {
 };
 
 export type CreativeWorkSchema = {
-	'@context': SchemaContext;
-	'@type': 'CreativeWork';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "CreativeWork";
+	"@id": string;
 	url: string;
 	name: string;
 	headline: string;
@@ -202,13 +202,13 @@ export type CreativeWorkSchema = {
 	dateModified?: string;
 	inLanguage?: string;
 	author: {
-		'@type': 'Organization';
-		'@id': string;
+		"@type": "Organization";
+		"@id": string;
 		name: string;
 	};
 	mainEntityOfPage?: {
-		'@type': 'WebPage';
-		'@id': string;
+		"@type": "WebPage";
+		"@id": string;
 	};
 	citation?: string;
 	image?: string;
@@ -216,28 +216,28 @@ export type CreativeWorkSchema = {
 	about?: string[];
 	review?: ReviewSchema[];
 	isRelatedTo?: Array<{
-		'@type': 'CreativeWork';
-		'@id': string;
+		"@type": "CreativeWork";
+		"@id": string;
 		url: string;
 		name: string;
 	}>;
 };
 
 export type AnswerSchema = {
-	'@type': 'Answer';
+	"@type": "Answer";
 	text: string;
 };
 
 export type QuestionSchema = {
-	'@type': 'Question';
+	"@type": "Question";
 	name: string;
 	acceptedAnswer: AnswerSchema;
 };
 
 export type FAQPageSchema = {
-	'@context': SchemaContext;
-	'@type': 'FAQPage';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "FAQPage";
+	"@id": string;
 	url: string;
 	name: string;
 	description?: string;
@@ -245,13 +245,13 @@ export type FAQPageSchema = {
 };
 
 export type BlogPostingSchema = {
-	'@context': SchemaContext;
-	'@type': 'BlogPosting';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "BlogPosting";
+	"@id": string;
 	url: string;
 	mainEntityOfPage?: {
-		'@type': 'WebPage';
-		'@id': string;
+		"@type": "WebPage";
+		"@id": string;
 	};
 	headline: string;
 	description?: string;
@@ -261,69 +261,69 @@ export type BlogPostingSchema = {
 	keywords?: string[];
 	articleSection?: string[];
 	author?: {
-		'@type': 'Person' | 'Organization';
+		"@type": "Person" | "Organization";
 		name: string;
-		'@id'?: string;
+		"@id"?: string;
 	};
 	publisher?: {
-		'@id': string;
+		"@id": string;
 	};
 	inLanguage?: string;
 };
 
 export type PropertyValueSchema = {
-	'@type': 'PropertyValue';
+	"@type": "PropertyValue";
 	name: string;
 	value?: string;
 };
 
 export type ThingSchema = {
-	'@type': 'Thing';
+	"@type": "Thing";
 	name: string;
 	description?: string;
 	additionalProperty?: PropertyValueSchema[];
 };
 
 export type DataFeedItemSchema = {
-	'@type': 'DataFeedItem';
+	"@type": "DataFeedItem";
 	position: number;
 	dateCreated?: string;
 	item: ThingSchema;
 };
 
 export type DataFeedSchema = {
-	'@context': SchemaContext;
-	'@type': 'DataFeed';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "DataFeed";
+	"@id": string;
 	name: string;
 	description?: string;
 	url: string;
 	provider: {
-		'@type': 'Organization';
+		"@type": "Organization";
 		name: string;
-		'@id': string;
+		"@id": string;
 		url: string;
 	};
 	dataFeedElement: DataFeedItemSchema[];
 };
 
 export type BlogSchema = {
-	'@context': SchemaContext;
-	'@type': 'Blog';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "Blog";
+	"@id": string;
 	url: string;
 	name: string;
 	description?: string;
 	blogPost?: BlogPostingSchema[];
 	publisher: {
-		'@id': string;
+		"@id": string;
 	};
 };
 
 export type SoftwareApplicationSchema = {
-	'@context': SchemaContext;
-	'@type': 'SoftwareApplication';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "SoftwareApplication";
+	"@id": string;
 	name: string;
 	description?: string;
 	url: string;
@@ -335,27 +335,27 @@ export type SoftwareApplicationSchema = {
 	review?: ReviewSchema[];
 	sameAs?: string[];
 	publisher: {
-		'@id': string;
+		"@id": string;
 	};
 };
 
 export type DatasetSchema = {
-	'@context': SchemaContext;
-	'@type': 'Dataset';
-	'@id': string;
+	"@context": SchemaContext;
+	"@type": "Dataset";
+	"@id": string;
 	name: string;
 	description: string;
 	url: string;
 	license?: string;
 	keywords?: string[];
 	provider: {
-		'@type': 'Organization';
-		'@id': string;
+		"@type": "Organization";
+		"@id": string;
 		name: string;
 		url: string;
 	};
 	distribution?: Array<{
-		'@type': 'DataDownload';
+		"@type": "DataDownload";
 		contentUrl: string;
 		encodingFormat?: string;
 	}>;

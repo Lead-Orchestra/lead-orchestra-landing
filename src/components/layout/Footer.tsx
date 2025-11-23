@@ -1,4 +1,4 @@
-import { NewsletterFooter } from '@/components/contact/newsletter/NewsletterFooter';
+import { NewsletterFooter } from "@/components/contact/newsletter/NewsletterFooter";
 import {
 	Facebook,
 	Github,
@@ -10,12 +10,12 @@ import {
 	Phone,
 	Twitter,
 	Youtube,
-} from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { v4 as uuidv4 } from 'uuid';
-import { FooterBetaCta } from './FooterBetaCta';
-import { FooterPersonaPrompt } from './FooterPersonaPrompt';
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { v4 as uuidv4 } from "uuid";
+import { FooterBetaCta } from "./FooterBetaCta";
+import { FooterPersonaPrompt } from "./FooterPersonaPrompt";
 
 export interface FooterProps {
 	companyName: string;
@@ -55,22 +55,25 @@ export const Footer: React.FC<FooterProps> = ({
 	cookiePolicyLink,
 }) => {
 	const currentYear = new Date().getFullYear();
-	type SocialLinkKey = Exclude<keyof FooterProps['socialLinks'], 'mediumUsername'>;
+	type SocialLinkKey = Exclude<
+		keyof FooterProps["socialLinks"],
+		"mediumUsername"
+	>;
 
 	const socialIconClass =
-		'group flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/80 text-black shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:-translate-y-0.5 hover:border-primary hover:bg-primary/10 hover:text-primary dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:border-primary/60 dark:hover:bg-primary/10';
+		"group flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/80 text-black shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:-translate-y-0.5 hover:border-primary hover:bg-primary/10 hover:text-primary dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:border-primary/60 dark:hover:bg-primary/10";
 
 	const socialIconConfigs: Array<{
 		key: SocialLinkKey;
 		Icon: LucideIcon;
 		label: string;
 	}> = [
-		{ key: 'github', Icon: Github, label: 'GitHub' },
-		{ key: 'instagram', Icon: Instagram, label: 'Instagram' },
-		{ key: 'linkedin', Icon: Linkedin, label: 'LinkedIn' },
-		{ key: 'facebook', Icon: Facebook, label: 'Facebook' },
-		{ key: 'twitter', Icon: Twitter, label: 'Twitter / X' },
-		{ key: 'youtube', Icon: Youtube, label: 'YouTube' },
+		{ key: "github", Icon: Github, label: "GitHub" },
+		{ key: "instagram", Icon: Instagram, label: "Instagram" },
+		{ key: "linkedin", Icon: Linkedin, label: "LinkedIn" },
+		{ key: "facebook", Icon: Facebook, label: "Facebook" },
+		{ key: "twitter", Icon: Twitter, label: "Twitter / X" },
+		{ key: "youtube", Icon: Youtube, label: "YouTube" },
 	];
 
 	return (
@@ -186,7 +189,9 @@ export const Footer: React.FC<FooterProps> = ({
 					</div>
 
 					<div className="col-span-1 flex flex-col items-center md:col-span-2 md:text-center lg:col-span-1">
-						<h3 className="mb-4 text-center font-semibold text-lg">Subscribe to our newsletter</h3>
+						<h3 className="mb-4 text-center font-semibold text-lg">
+							Subscribe to our newsletter
+						</h3>
 						<div className="flex w-full justify-center">
 							<NewsletterFooter />
 						</div>

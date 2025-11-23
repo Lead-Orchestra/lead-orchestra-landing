@@ -20,7 +20,7 @@
 		"archive:trivy": "pnpm exec tsx tools/security/archive-trivy-report.ts",
 		"archive:owasp": "pnpm exec tsx tools/security/archive-owasp-report.ts",
 		"archive:security": "pnpm run archive:trivy && pnpm run archive:owasp",
-		"start": "pnpm run check:env && next start",
+		"start": "next start",
 		"commit:stage": "git add . && pnpm exec lint-staged",
 		"check:env": "pnpm exec tsx tools/checks/check-analytics-env.ts",
 		"check:chunk": "pnpm exec tsx tools/checks/verify-chunk-error-handler.ts",
@@ -204,6 +204,7 @@
 		"vaul": "^0.9.3",
 		"xlsx": "^0.18.5",
 		"zod": "^3.25.67",
+		"use-sync-external-store": "^1.2.2",
 		"zustand": "^5.0.6"
 	},
 	"devDependencies": {

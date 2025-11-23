@@ -1,4 +1,4 @@
-import type Analytics from 'analytics';
+import type Analytics from "analytics";
 
 type ZohoWidget = {
 	widgetcode: string;

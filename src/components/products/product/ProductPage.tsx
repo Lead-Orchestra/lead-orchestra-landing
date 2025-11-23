@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { ProductCheckoutForm } from '@/components/checkout/product/ProductCheckoutForm';
-import { ProductSelectionProvider } from '@/contexts/ProductSelectionContext';
-import { abTestExample } from '@/data/products/copy';
-import { useWaitCursor } from '@/hooks/useWaitCursor';
-import { startStripeToast } from '@/lib/ui/stripeToast';
-import type { ProductType } from '@/types/products';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { useEffect, useState } from 'react';
-import Breadcrumbs from './Breadcrumbs';
-import ImageGallery from './ImageGallery';
-import ProductInfo from './ProductInfo';
-import ProductTabs from './ProductTabs';
+import { ProductCheckoutForm } from "@/components/checkout/product/ProductCheckoutForm";
+import { ProductSelectionProvider } from "@/contexts/ProductSelectionContext";
+import { abTestExample } from "@/data/products/copy";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { startStripeToast } from "@/lib/ui/stripeToast";
+import type { ProductType } from "@/types/products";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { useEffect, useState } from "react";
+import Breadcrumbs from "./Breadcrumbs";
+import ImageGallery from "./ImageGallery";
+import ProductInfo from "./ProductInfo";
+import ProductTabs from "./ProductTabs";
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 	? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
@@ -24,12 +24,12 @@ interface ProductPageProps {
 }
 
 const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
-	const [selectedColor, setSelectedColor] = useState('black');
-	const [selectedSize, setSelectedSize] = useState('M');
-	const [selectedType, setSelectedType] = useState('extended');
+	const [selectedColor, setSelectedColor] = useState("black");
+	const [selectedSize, setSelectedSize] = useState("M");
+	const [selectedType, setSelectedType] = useState("extended");
 	const [stripeLoaded, setStripeLoaded] = useState(false);
 	const [checkoutLoading, setCheckoutLoading] = useState(false);
-	const [activeTab, setActiveTab] = useState('details');
+	const [activeTab, setActiveTab] = useState("details");
 	const [clientSecret, setClientSecret] = useState<string | null>(null);
 	const [checkoutPrice, setCheckoutPrice] = useState<number>(0);
 	useWaitCursor(checkoutLoading);
@@ -37,9 +37,11 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 	useEffect(() => {
 		let isMounted = true;
 		if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-			loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY).then((stripe) => {
-				if (isMounted) setStripeLoaded(!!stripe);
-			});
+			loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY).then(
+				(stripe) => {
+					if (isMounted) setStripeLoaded(!!stripe);
+				},
+			);
 		}
 		return () => {
 			isMounted = false;
@@ -52,11 +54,11 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 		metadata: object;
 	}) => {
 		setCheckoutLoading(true);
-		const stripeToast = startStripeToast('Preparing checkout…');
+		const stripeToast = startStripeToast("Preparing checkout…");
 		try {
-			const response = await fetch('/api/stripe/intent', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const response = await fetch("/api/stripe/intent", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					price: Math.round(checkoutDetails.price * 100),
 					description: checkoutDetails.description,
@@ -68,22 +70,24 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 			if (!response.ok) {
 				const errorData = await response
 					.json()
-					.catch(() => ({ message: 'Failed to create payment intent' }));
-				throw new Error(errorData.message || 'Failed to create payment intent');
+					.catch(() => ({ message: "Failed to create payment intent" }));
+				throw new Error(errorData.message || "Failed to create payment intent");
 			}
 
 			const { clientSecret } = await response.json();
 			if (!clientSecret) {
-				throw new Error('Unable to initialize checkout. Please try again.');
+				throw new Error("Unable to initialize checkout. Please try again.");
 			}
 
 			setCheckoutPrice(checkoutDetails.price);
 			setClientSecret(clientSecret);
-			stripeToast.success('Checkout ready. Complete your purchase in the payment form.');
+			stripeToast.success(
+				"Checkout ready. Complete your purchase in the payment form.",
+			);
 		} catch (error: unknown) {
-			const errorMessage = 'Unable to start checkout. Please try again.';
+			const errorMessage = "Unable to start checkout. Please try again.";
 			stripeToast.error(errorMessage);
-			console.error('Checkout initiation failed:', error);
+			console.error("Checkout initiation failed:", error);
 		} finally {
 			setCheckoutLoading(false);
 		}
@@ -103,10 +107,10 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 	}
 
 	const breadcrumbItems = [
-		{ label: 'Products', href: '/products' },
+		{ label: "Products", href: "/products" },
 		{
 			label: product.name,
-			href: `/products/${product.sku || product.slug || ''}`,
+			href: `/products/${product.sku || product.slug || ""}`,
 		},
 	];
 
@@ -131,7 +135,7 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 								checkoutLoading={checkoutLoading}
 								stripeLoaded={stripeLoaded}
 								setActiveTab={setActiveTab}
-								ctaText={variantCopy?.buttonCta || 'Purchase'}
+								ctaText={variantCopy?.buttonCta || "Purchase"}
 							/>
 						</div>
 					</div>
@@ -141,7 +145,9 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 						<ProductTabs
 							description={product.description}
 							highlights={variantCopy?.highlights}
-							shipping={product.shippingInfo?.availableOptions?.[0]?.estimatedTime}
+							shipping={
+								product.shippingInfo?.availableOptions?.[0]?.estimatedTime
+							}
 							reviews={product.reviews}
 							faqs={product.faqs}
 							licenseName={product.licenseName}
@@ -161,9 +167,9 @@ const ProductPage = ({ product, callbackUrl }: ProductPageProps) => {
 					options={{
 						clientSecret,
 						appearance: {
-							theme: 'stripe',
+							theme: "stripe",
 							variables: {
-								colorPrimary: '#4f46e5',
+								colorPrimary: "#4f46e5",
 							},
 						},
 					}}

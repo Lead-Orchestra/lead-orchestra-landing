@@ -1,9 +1,9 @@
-import PartnersClient from '@/app/partners/PartnersClient';
-import type { CompanyLogoDictType } from '@/data/service/slug_data/trustedCompanies';
-import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import PartnersClient from "@/app/partners/PartnersClient";
+import type { CompanyLogoDictType } from "@/data/service/slug_data/trustedCompanies";
+import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 
-vi.mock('@/hooks/useNavigationRouter', () => {
+vi.mock("@/hooks/useNavigationRouter", () => {
 	return {
 		useNavigationRouter: () => ({
 			push: vi.fn(),
@@ -28,8 +28,8 @@ const MockObserver = class {
 };
 
 beforeAll(() => {
-	vi.stubGlobal('IntersectionObserver', MockObserver);
-	vi.stubGlobal('ResizeObserver', MockObserver);
+	vi.stubGlobal("IntersectionObserver", MockObserver);
+	vi.stubGlobal("ResizeObserver", MockObserver);
 });
 
 afterAll(() => {
@@ -38,18 +38,18 @@ afterAll(() => {
 
 const partnersFixture: CompanyLogoDictType = {
 	acme: {
-		name: 'Acme Corp',
-		logo: '/partners/acme.svg',
-		link: 'https://example.com',
-		description: 'Example integration partner.',
+		name: "Acme Corp",
+		logo: "/partners/acme.svg",
+		link: "https://example.com",
+		description: "Example integration partner.",
 	},
 };
 
-describe('PartnersClient', () => {
-	it('renders a single level-one heading', () => {
+describe("PartnersClient", () => {
+	it("renders a single level-one heading", () => {
 		render(<PartnersClient partners={partnersFixture} />);
 
-		const h1Headings = screen.getAllByRole('heading', { level: 1 });
+		const h1Headings = screen.getAllByRole("heading", { level: 1 });
 		expect(h1Headings).toHaveLength(1);
 	});
 });

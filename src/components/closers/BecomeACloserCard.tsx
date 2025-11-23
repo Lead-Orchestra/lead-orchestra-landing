@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface BecomeACloserCardProps {
 	onClick?: () => void;
@@ -14,9 +14,9 @@ interface BecomeACloserCardProps {
 
 const BecomeACloserCard = ({
 	onClick,
-	className = '',
-	title = 'Remote Closers Marketplace',
-	subtitle = 'Browse closers or apply to join',
+	className = "",
+	title = "Remote Closers Marketplace",
+	subtitle = "Browse closers or apply to join",
 	imageUrl,
 }: BecomeACloserCardProps) => {
 	return (
@@ -24,20 +24,20 @@ const BecomeACloserCard = ({
 			initial={{ opacity: 0, scale: 0.95 }}
 			animate={{ opacity: 1, scale: 1 }}
 			whileHover={{ scale: 1.02 }}
-			transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+			transition={{ type: "spring", stiffness: 300, damping: 20 }}
 			className={cn(
-				'relative flex min-h-[280px] w-full cursor-pointer flex-col overflow-hidden rounded-xl border-2 border-blue-400 border-dashed transition-all hover:border-blue-300 hover:shadow-2xl dark:border-blue-500',
+				"relative flex min-h-[280px] w-full cursor-pointer flex-col overflow-hidden rounded-xl border-2 border-blue-400 border-dashed transition-all hover:border-blue-300 hover:shadow-2xl dark:border-blue-500",
 				imageUrl
-					? 'border-blue-300'
-					: 'bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900/70 dark:via-indigo-900/70 dark:to-purple-900/70',
-				className
+					? "border-blue-300"
+					: "bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900/70 dark:via-indigo-900/70 dark:to-purple-900/70",
+				className,
 			)}
 			onClick={onClick}
 			tabIndex={0}
 			role="button"
 			aria-label="View closers marketplace"
 			onKeyDown={(event) => {
-				if (event.key === 'Enter' || event.key === ' ') {
+				if (event.key === "Enter" || event.key === " ") {
 					event.preventDefault();
 					onClick?.();
 				}
@@ -47,7 +47,7 @@ const BecomeACloserCard = ({
 				<div className="absolute inset-0">
 					<Image
 						src={imageUrl}
-						alt={title || 'Remote Closers Marketplace'}
+						alt={title || "Remote Closers Marketplace"}
 						fill
 						className="object-cover"
 						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -69,7 +69,9 @@ const BecomeACloserCard = ({
 					+
 				</div>
 				<h3 className="mb-2 font-bold text-2xl text-white">{title}</h3>
-				<p className="max-w-md text-sm text-white/90 leading-relaxed">{subtitle}</p>
+				<p className="max-w-md text-sm text-white/90 leading-relaxed">
+					{subtitle}
+				</p>
 			</div>
 		</motion.div>
 	);

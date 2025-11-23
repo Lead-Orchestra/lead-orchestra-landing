@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from "react";
 
 const SECOND_IN_MS = 1000;
 const MINUTE_IN_MS = SECOND_IN_MS * 60;
@@ -52,22 +52,27 @@ const getCountdownParts = (remainingMs: number): CountdownParts => {
 /**
  * Provides a real-time countdown to a future timestamp.
  */
-export const FOUNDERS_CIRCLE_DEADLINE_STATE_KEY = 'dealscale:founders-circle-deadline';
+export const FOUNDERS_CIRCLE_DEADLINE_STATE_KEY =
+	"dealscale:founders-circle-deadline";
 
 export const useCountdown = (
-	options: UseCountdownOptions = {}
+	options: UseCountdownOptions = {},
 ): CountdownParts & { formatted: string; targetIso: string } => {
-	const { targetTimestamp, durationMs = DAY_IN_MS * 7, intervalMs = SECOND_IN_MS } = options;
+	const {
+		targetTimestamp,
+		durationMs = DAY_IN_MS * 7,
+		intervalMs = SECOND_IN_MS,
+	} = options;
 
 	const [targetTime] = useState<number>(() => {
-		if (typeof targetTimestamp === 'number') {
+		if (typeof targetTimestamp === "number") {
 			return targetTimestamp;
 		}
 		return Date.now() + durationMs;
 	});
 
 	const [parts, setParts] = useState<CountdownParts>(() =>
-		getCountdownParts(targetTime - Date.now())
+		getCountdownParts(targetTime - Date.now()),
 	);
 
 	useEffect(() => {
@@ -96,10 +101,13 @@ export const useCountdown = (
 			`${parts.minutes}m`,
 			`${parts.seconds}s`,
 		];
-		return segments.join(' ');
+		return segments.join(" ");
 	}, [parts.days, parts.hours, parts.minutes, parts.seconds]);
 
-	const targetIso = useMemo(() => new Date(targetTime).toISOString(), [targetTime]);
+	const targetIso = useMemo(
+		() => new Date(targetTime).toISOString(),
+		[targetTime],
+	);
 
 	return {
 		...parts,

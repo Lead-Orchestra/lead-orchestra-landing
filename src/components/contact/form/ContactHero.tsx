@@ -1,40 +1,44 @@
-'use client';
+"use client";
 
-import { useDataModule } from '@/stores/useDataModuleStore';
-import { motion } from 'framer-motion';
-import { Mail, MessageSquare, Phone } from 'lucide-react';
-import Link from 'next/link';
+import { useDataModule } from "@/stores/useDataModuleStore";
+import { motion } from "framer-motion";
+import { Mail, MessageSquare, Phone } from "lucide-react";
+import Link from "next/link";
 
 export const ContactHero = () => {
 	const { status, company, error } = useDataModule(
-		'company',
+		"company",
 		({ status: moduleStatus, data, error: moduleError }) => ({
 			status: moduleStatus,
 			company: data?.companyData,
 			error: moduleError,
-		})
+		}),
 	);
 
-	const isLoading = status === 'idle' || status === 'loading';
-	const isError = status === 'error';
+	const isLoading = status === "idle" || status === "loading";
+	const isError = status === "error";
 	const hasCompany = Boolean(company);
 
 	if (isLoading) {
 		return (
 			<section className="relative overflow-hidden bg-background-dark px-6 py-20 lg:px-8">
-				<div className="text-center text-muted-foreground">Loading contact information…</div>
+				<div className="text-center text-muted-foreground">
+					Loading contact information…
+				</div>
 			</section>
 		);
 	}
 
 	if (!hasCompany) {
 		if (isError) {
-			console.error('[ContactHero] Failed to load company contact info', error);
+			console.error("[ContactHero] Failed to load company contact info", error);
 		}
 
 		return (
 			<section className="relative overflow-hidden bg-background-dark px-6 py-20 lg:px-8">
-				<div className="text-center text-muted-foreground">Contact information is coming soon.</div>
+				<div className="text-center text-muted-foreground">
+					Contact information is coming soon.
+				</div>
 			</section>
 		);
 	}
@@ -57,8 +61,8 @@ export const ContactHero = () => {
 						Get In <span className="text-primary">Touch</span>
 					</h1>
 					<p className="mx-auto mb-12 max-w-3xl text-black text-lg md:text-xl dark:text-white/70">
-						Ready to transform your business with our AI-powered solutions? Reach out to us today
-						and let's start building the future together.
+						Ready to transform your business with our AI-powered solutions?
+						Reach out to us today and let's start building the future together.
 					</p>
 
 					<div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-3">
@@ -101,7 +105,10 @@ export const ContactHero = () => {
 							</div>
 							<h3 className="mb-2 font-semibold text-lg">Live Chat</h3>
 							<p className="text-black dark:text-white/70">
-								<Link href="/contact" className="transition-colors hover:text-primary">
+								<Link
+									href="/contact"
+									className="transition-colors hover:text-primary"
+								>
 									Start a conversation
 								</Link>
 							</p>

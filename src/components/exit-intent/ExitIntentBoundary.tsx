@@ -1,12 +1,15 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import type { ExitIntentHandler, ExitIntentSettings } from '@external/use-exit-intent';
-import { useExitIntent } from '@external/use-exit-intent';
+import type {
+	ExitIntentHandler,
+	ExitIntentSettings,
+} from "@external/use-exit-intent";
+import { useExitIntent } from "@external/use-exit-intent";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -14,12 +17,12 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
 	exitIntentDebugEnabled,
 	exitIntentEnabled,
 	exitIntentSnoozeMs,
-} from '@/lib/config/exitIntent';
+} from "@/lib/config/exitIntent";
 
 interface ExitIntentBoundaryProps {
 	children: React.ReactNode;
@@ -43,56 +46,56 @@ type ExitIntentCopy = {
 
 export const EXIT_INTENT_COPY: Record<string, ExitIntentCopy> = {
 	home: {
-		headline: 'Before you go, automate your deal flow',
-		body: 'Our AI agents follow up with motivated sellers within minutes. Want the playbook?',
-		primaryCta: 'Book a pilot strategy session',
-		secondaryCta: 'No thanks',
-		primaryHref: '/contact-pilot?utm_source=exit-intent',
+		headline: "Before you go, automate your deal flow",
+		body: "Our AI agents follow up with motivated sellers within minutes. Want the playbook?",
+		primaryCta: "Book a pilot strategy session",
+		secondaryCta: "No thanks",
+		primaryHref: "/contact-pilot?utm_source=exit-intent",
 	},
 	contact: {
-		headline: 'Need more help before you leave?',
-		body: 'We can prep your outreach workflow and hand it off. Want a guided walkthrough?',
-		primaryCta: 'Talk with onboarding',
-		secondaryCta: 'Maybe later',
-		primaryHref: '/contact?utm_source=exit-intent',
+		headline: "Need more help before you leave?",
+		body: "We can prep your outreach workflow and hand it off. Want a guided walkthrough?",
+		primaryCta: "Talk with onboarding",
+		secondaryCta: "Maybe later",
+		primaryHref: "/contact?utm_source=exit-intent",
 	},
-	'contact-pilot': {
-		headline: 'Lock in your priority pilot slot',
-		body: 'Finish the pilot intake and we’ll reserve a seat for your team this week.',
-		primaryCta: 'Reserve my pilot onboarding',
-		secondaryCta: 'Skip for now',
-		primaryHref: '/contact-pilot?utm_source=exit-intent',
+	"contact-pilot": {
+		headline: "Lock in your priority pilot slot",
+		body: "Finish the pilot intake and we’ll reserve a seat for your team this week.",
+		primaryCta: "Reserve my pilot onboarding",
+		secondaryCta: "Skip for now",
+		primaryHref: "/contact-pilot?utm_source=exit-intent",
 	},
 	affiliate: {
-		headline: 'Earn commissions on every referred deal',
-		body: 'Grab your affiliate toolkit and start sharing the Deal Scale automation stack.',
-		primaryCta: 'Get affiliate resources',
-		secondaryCta: 'Not right now',
-		primaryHref: '/affiliate?utm_source=exit-intent',
+		headline: "Earn commissions on every referred deal",
+		body: "Grab your affiliate toolkit and start sharing the Deal Scale automation stack.",
+		primaryCta: "Get affiliate resources",
+		secondaryCta: "Not right now",
+		primaryHref: "/affiliate?utm_source=exit-intent",
 	},
 	pricing: {
-		headline: 'Get pricing tailored to your funnel',
-		body: 'We’ll model ROI on your current lead volumes and send a tailored roll-out plan.',
-		primaryCta: 'Request a pricing blueprint',
-		secondaryCta: 'View pricing later',
-		primaryHref: '/pricing?utm_source=exit-intent',
+		headline: "Get pricing tailored to your funnel",
+		body: "We’ll model ROI on your current lead volumes and send a tailored roll-out plan.",
+		primaryCta: "Request a pricing blueprint",
+		secondaryCta: "View pricing later",
+		primaryHref: "/pricing?utm_source=exit-intent",
 	},
 	product: {
-		headline: 'See this automation in action',
-		body: 'We can drop a guided walkthrough into your inbox in the next few minutes.',
-		primaryCta: 'Send the product walkthrough',
-		secondaryCta: 'I’ll explore later',
-		primaryHref: '/contact?utm_source=exit-intent',
+		headline: "See this automation in action",
+		body: "We can drop a guided walkthrough into your inbox in the next few minutes.",
+		primaryCta: "Send the product walkthrough",
+		secondaryCta: "I’ll explore later",
+		primaryHref: "/contact?utm_source=exit-intent",
 	},
 };
 
 export type ExitIntentVariant = keyof typeof EXIT_INTENT_COPY;
 
-const DEFAULT_VARIANT: ExitIntentVariant = 'home';
+const DEFAULT_VARIANT: ExitIntentVariant = "home";
 
 const DEFAULT_SETTINGS: ExitIntentSettings = {
 	cookie: {
-		key: 'deal-scale-exit-intent',
+		key: "deal-scale-exit-intent",
 		daysToExpire: 30,
 	},
 	desktop: {
@@ -109,7 +112,7 @@ const DEFAULT_SETTINGS: ExitIntentSettings = {
 };
 
 const VARIANT_SETTINGS: Partial<
-	Record<ExitIntentVariant, Pick<ExitIntentSettings, 'desktop' | 'mobile'>>
+	Record<ExitIntentVariant, Pick<ExitIntentSettings, "desktop" | "mobile">>
 > = {
 	contact: {
 		desktop: {
@@ -117,7 +120,7 @@ const VARIANT_SETTINGS: Partial<
 			mouseLeaveDelayInSeconds: 3,
 		},
 	},
-	'contact-pilot': {
+	"contact-pilot": {
 		desktop: {
 			delayInSecondsToTrigger: 6,
 			mouseLeaveDelayInSeconds: 2,
@@ -167,22 +170,23 @@ function EnabledExitIntentBoundary({
 			if (!debugEnabled) return;
 			if (details) {
 				// eslint-disable-next-line no-console
-				console.info('[exit-intent]', event, details);
+				console.info("[exit-intent]", event, details);
 			} else {
 				// eslint-disable-next-line no-console
-				console.info('[exit-intent]', event);
+				console.info("[exit-intent]", event);
 			}
 		},
-		[debugEnabled]
+		[debugEnabled],
 	);
 
 	const settings = useMemo(() => {
 		const merged = mergeSettings(variant);
-		log('settings:merge', { variant, settings: merged });
+		log("settings:merge", { variant, settings: merged });
 		return merged;
 	}, [log, variant]);
 
-	const { registerHandler, unsubscribe, resetState, isUnsubscribed } = useExitIntent(settings);
+	const { registerHandler, unsubscribe, resetState, isUnsubscribed } =
+		useExitIntent(settings);
 
 	const copy = EXIT_INTENT_COPY[variant] ?? EXIT_INTENT_COPY[DEFAULT_VARIANT];
 	const resolvedPrimaryHref = primaryHref ?? copy.primaryHref;
@@ -191,34 +195,34 @@ function EnabledExitIntentBoundary({
 	useEffect(() => {
 		const triggerConfig: ExitIntentHandler = {
 			id: `exit-intent-${variant}-trigger`,
-			context: ['onTrigger', 'onDesktop', 'onMobile'],
+			context: ["onTrigger", "onDesktop", "onMobile"],
 			handler: () => {
-				log('trigger:open', { variant });
+				log("trigger:open", { variant });
 				setIsOpen(true);
 			},
 		};
 
 		const unsubscribeConfig: ExitIntentHandler = {
 			id: `exit-intent-${variant}-unsubscribe`,
-			context: ['onUnsubscribe'],
+			context: ["onUnsubscribe"],
 			handler: () => {
-				log('trigger:unsubscribe-close', { variant });
+				log("trigger:unsubscribe-close", { variant });
 				setIsOpen(false);
 			},
 		};
 
-		log('handlers:register', { variant });
+		log("handlers:register", { variant });
 		registerHandler(triggerConfig);
 		registerHandler(unsubscribeConfig);
 
 		return () => {
-			log('handlers:cleanup', { variant });
+			log("handlers:cleanup", { variant });
 		};
 	}, [log, registerHandler, variant]);
 
 	useEffect(() => {
 		if (isUnsubscribed && isOpen) {
-			log('state:is-unsubscribed', { variant });
+			log("state:is-unsubscribed", { variant });
 			setIsOpen(false);
 		}
 	}, [isOpen, isUnsubscribed, log, variant]);
@@ -226,7 +230,7 @@ function EnabledExitIntentBoundary({
 	useEffect(() => {
 		return () => {
 			if (snoozeTimeoutRef.current) {
-				log('snooze:clear-timeout', { variant });
+				log("snooze:clear-timeout", { variant });
 				clearTimeout(snoozeTimeoutRef.current);
 			}
 		};
@@ -234,20 +238,20 @@ function EnabledExitIntentBoundary({
 
 	const scheduleReset = useCallback(() => {
 		if (snoozeTimeoutRef.current) {
-			log('snooze:clear-existing', { variant });
+			log("snooze:clear-existing", { variant });
 			clearTimeout(snoozeTimeoutRef.current);
 			snoozeTimeoutRef.current = null;
 		}
 
 		if (!Number.isFinite(snoozeDelay) || snoozeDelay <= 0) {
-			log('snooze:reset-immediately', { variant });
+			log("snooze:reset-immediately", { variant });
 			resetState();
 			return;
 		}
 
-		log('snooze:start', { variant, delayMs: snoozeDelay });
+		log("snooze:start", { variant, delayMs: snoozeDelay });
 		snoozeTimeoutRef.current = setTimeout(() => {
-			log('snooze:reset-fired', { variant });
+			log("snooze:reset-fired", { variant });
 			resetState();
 			snoozeTimeoutRef.current = null;
 		}, snoozeDelay);
@@ -255,7 +259,7 @@ function EnabledExitIntentBoundary({
 
 	const closeWithSnooze = useCallback(() => {
 		closingRef.current = true;
-		log('modal:close-requested', { variant });
+		log("modal:close-requested", { variant });
 		unsubscribe();
 		scheduleReset();
 		setIsOpen(false);
@@ -271,21 +275,21 @@ function EnabledExitIntentBoundary({
 
 	const handleDialogOpenChange = (nextOpen: boolean) => {
 		if (nextOpen) {
-			log('modal:open', { variant });
+			log("modal:open", { variant });
 			setIsOpen(true);
 			return;
 		}
 
 		setIsOpen(false);
-		log('modal:close', { variant });
+		log("modal:close", { variant });
 
 		if (closingRef.current) {
 			closingRef.current = false;
-			log('modal:close-with-snooze', { variant });
+			log("modal:close-with-snooze", { variant });
 			return;
 		}
 
-		log('modal:close-external', { variant });
+		log("modal:close-external", { variant });
 		unsubscribe();
 		scheduleReset();
 	};
@@ -301,7 +305,11 @@ function EnabledExitIntentBoundary({
 					</DialogHeader>
 					<DialogFooter className="gap-2 sm:flex-col sm:items-stretch">
 						<div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
-							<Button variant="secondary" onClick={handleSecondary} type="button">
+							<Button
+								variant="secondary"
+								onClick={handleSecondary}
+								type="button"
+							>
 								{copy.secondaryCta}
 							</Button>
 							{resolvedPrimaryHref ? (
@@ -328,8 +336,8 @@ export function ExitIntentBoundary(props: ExitIntentBoundaryProps) {
 	if (!exitIntentEnabled()) {
 		if (exitIntentDebugEnabled()) {
 			// eslint-disable-next-line no-console
-			console.info('[exit-intent]', 'modal:disabled', {
-				variant: props.variant ?? 'default',
+			console.info("[exit-intent]", "modal:disabled", {
+				variant: props.variant ?? "default",
 			});
 		}
 		return <>{props.children}</>;

@@ -1,13 +1,15 @@
-import type { CaseStudy } from '@/types/case-study';
-import { motion } from 'framer-motion';
-import { SectionHeading } from '../ui/section-heading';
-import { ProblemSolutions } from './ProblemSolutions';
+import type { CaseStudy } from "@/types/case-study";
+import { motion } from "framer-motion";
+import { SectionHeading } from "../ui/section-heading";
+import { ProblemSolutions } from "./ProblemSolutions";
 
 interface BusinessOutcomeProps {
 	caseStudy: CaseStudy;
 }
 
-export const CaseStudyBusinessOutcome = ({ caseStudy }: BusinessOutcomeProps) => {
+export const CaseStudyBusinessOutcome = ({
+	caseStudy,
+}: BusinessOutcomeProps) => {
 	const container = {
 		hidden: { opacity: 0 },
 		show: {
@@ -31,7 +33,12 @@ export const CaseStudyBusinessOutcome = ({ caseStudy }: BusinessOutcomeProps) =>
 			className="px-4 py-8 sm:px-6 sm:py-10 lg:px-8"
 		>
 			<div className="mx-auto max-w-5xl">
-				<SectionHeading title="Business Outcomes" centered description="" className="mb-12" />
+				<SectionHeading
+					title="Business Outcomes"
+					centered
+					description=""
+					className="mb-12"
+				/>
 
 				<ProblemSolutions caseStudy={caseStudy} />
 			</div>

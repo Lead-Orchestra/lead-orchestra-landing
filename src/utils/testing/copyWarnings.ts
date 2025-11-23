@@ -1,4 +1,4 @@
-import type { ABTest, AbTestWarning } from '@/types/testing';
+import type { ABTest, AbTestWarning } from "@/types/testing";
 
 export interface CopyWarningsResult {
 	testId: string;
@@ -16,7 +16,9 @@ const normalizeTests = (tests: ABTest | ABTest[] | undefined): ABTest[] => {
 	return Array.isArray(tests) ? tests : [tests];
 };
 
-export const collectCopyWarnings = (tests: ABTest | ABTest[] | undefined): CopyWarningsResult[] => {
+export const collectCopyWarnings = (
+	tests: ABTest | ABTest[] | undefined,
+): CopyWarningsResult[] => {
 	const normalized = normalizeTests(tests);
 
 	return normalized.map((test) => {
@@ -27,11 +29,15 @@ export const collectCopyWarnings = (tests: ABTest | ABTest[] | undefined): CopyW
 			const copy = variant.copy;
 			if (!copy) return;
 
-			if (copy.pain_points && Array.isArray(copy.pain_points) && copy.pain_points.length === 0) {
+			if (
+				copy.pain_points &&
+				Array.isArray(copy.pain_points) &&
+				copy.pain_points.length === 0
+			) {
 				inferredWarnings.push({
-					code: 'empty-pain-list',
+					code: "empty-pain-list",
 					message: `Variant "${variant.name ?? `#${index + 1}`}" defines an empty pains list.`,
-					severity: 'info',
+					severity: "info",
 					variantIndex: index,
 					variantName: variant.name,
 				});
@@ -39,9 +45,9 @@ export const collectCopyWarnings = (tests: ABTest | ABTest[] | undefined): CopyW
 
 			if (copy.fears && Array.isArray(copy.fears) && copy.fears.length === 0) {
 				inferredWarnings.push({
-					code: 'empty-fear-list',
+					code: "empty-fear-list",
 					message: `Variant "${variant.name ?? `#${index + 1}`}" defines an empty fears list.`,
-					severity: 'info',
+					severity: "info",
 					variantIndex: index,
 					variantName: variant.name,
 				});
@@ -49,23 +55,23 @@ export const collectCopyWarnings = (tests: ABTest | ABTest[] | undefined): CopyW
 
 			if (copy.hope.length > 250) {
 				inferredWarnings.push({
-					code: 'hope-too-long',
+					code: "hope-too-long",
 					message: `Hope copy exceeds 250 characters in variant "${variant.name ?? `#${index + 1}`}".`,
-					severity: 'warning',
+					severity: "warning",
 					variantIndex: index,
 					variantName: variant.name,
-					field: 'hope',
+					field: "hope",
 				});
 			}
 
 			if (copy.fear.length > 250) {
 				inferredWarnings.push({
-					code: 'fear-too-long',
+					code: "fear-too-long",
 					message: `Fear copy exceeds 250 characters in variant "${variant.name ?? `#${index + 1}`}".`,
-					severity: 'warning',
+					severity: "warning",
 					variantIndex: index,
 					variantName: variant.name,
-					field: 'fear',
+					field: "fear",
 				});
 			}
 		});

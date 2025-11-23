@@ -2,7 +2,7 @@
  * Payment and credit management type definitions
  */
 
-export type CreditType = 'lead' | 'ai' | 'skip_trace' | 'custom';
+export type CreditType = "lead" | "ai" | "skip_trace" | "custom";
 
 export interface PricingTier {
 	id: string;

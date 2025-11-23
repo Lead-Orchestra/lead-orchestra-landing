@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { ArrowDown } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { ArrowDown } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
-import type { Plan } from '@/types/service/plans';
+import type { Plan } from "@/types/service/plans";
 import {
 	DEFAULT_HERO_SOCIAL_PROOF,
 	HeroAurora,
@@ -13,10 +13,10 @@ import {
 	type HeroVideoPreviewHandle,
 	PersonaCTA,
 	resolveHeroCopy,
-} from '@external/dynamic-hero';
-import { useShallow } from 'zustand/react/shallow';
+} from "@external/dynamic-hero";
+import { useShallow } from "zustand/react/shallow";
 
-import { HeroMetricGrid } from '@/components/home/heros/HeroMetricGrid';
+import { HeroMetricGrid } from "@/components/home/heros/HeroMetricGrid";
 import {
 	CTA_MICROCOPY,
 	HERO_COPY_FALLBACK,
@@ -25,71 +25,82 @@ import {
 	QUICK_START_PERSONA_GOAL,
 	QUICK_START_PERSONA_KEY,
 	SECONDARY_CTA,
-} from '@/components/home/heros/heroConfig';
-import { useHeroTrialCheckout } from '@/components/home/heros/useHeroTrialCheckout';
-import PricingCheckoutDialog from '@/components/home/pricing/PricingCheckoutDialog';
-import { AvatarCircles } from '@/components/ui/avatar-circles';
-import { LasersBackground } from '@/components/ui/lasers-background';
-import { LightRays } from '@/components/ui/light-rays';
-import { Pointer } from '@/components/ui/pointer';
-import { DEFAULT_PERSONA_KEY, PERSONA_LABELS } from '@/data/personas/catalog';
-import { usePersonaStore } from '@/stores/usePersonaStore';
+} from "@/components/home/heros/heroConfig";
+import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
+import PricingCheckoutDialog from "@/components/home/pricing/PricingCheckoutDialog";
+import { AvatarCircles } from "@/components/ui/avatar-circles";
+import { LasersBackground } from "@/components/ui/lasers-background";
+import { LightRays } from "@/components/ui/light-rays";
+import { Pointer } from "@/components/ui/pointer";
+import { DEFAULT_PERSONA_KEY, PERSONA_LABELS } from "@/data/personas/catalog";
+import { usePersonaStore } from "@/stores/usePersonaStore";
 
 const MOCK_VIDEO: HeroVideoConfig = {
-	src: 'https://www.youtube.com/embed/qh3NGpYRG3I?rel=0&controls=1&modestbranding=1',
+	src: "https://www.youtube.com/embed/qh3NGpYRG3I?rel=0&controls=1&modestbranding=1",
 	poster:
-		'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1200&auto=format&fit=crop',
-	provider: 'youtube',
+		"https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1200&auto=format&fit=crop",
+	provider: "youtube",
 };
 
 interface TrialCheckoutState {
 	clientSecret: string;
 	plan: Plan;
-	planType: 'monthly';
-	mode: 'setup';
-	context: 'trial';
+	planType: "monthly";
+	mode: "setup";
+	context: "trial";
 	postTrialAmount?: number;
 }
 
 export default function DynamicHeroDemoPage(): JSX.Element {
 	const socialProof = DEFAULT_HERO_SOCIAL_PROOF;
-	const heroCopy = useMemo(() => resolveHeroCopy(HERO_COPY_INPUT, HERO_COPY_FALLBACK), []);
+	const heroCopy = useMemo(
+		() => resolveHeroCopy(HERO_COPY_INPUT, HERO_COPY_FALLBACK),
+		[],
+	);
 	const { persona, goal, setPersonaAndGoal } = usePersonaStore(
 		useShallow((state) => ({
 			persona: state.persona,
 			goal: state.goal,
 			setPersonaAndGoal: state.setPersonaAndGoal,
-		}))
+		})),
 	);
 	useEffect(() => {
-		if (persona !== QUICK_START_PERSONA_KEY || goal !== QUICK_START_PERSONA_GOAL) {
+		if (
+			persona !== QUICK_START_PERSONA_KEY ||
+			goal !== QUICK_START_PERSONA_GOAL
+		) {
 			setPersonaAndGoal(QUICK_START_PERSONA_KEY, QUICK_START_PERSONA_GOAL);
 		}
 	}, [goal, persona, setPersonaAndGoal]);
-	const personaLabel = PERSONA_LABELS[persona] ?? PERSONA_LABELS[DEFAULT_PERSONA_KEY];
+	const personaLabel =
+		PERSONA_LABELS[persona] ?? PERSONA_LABELS[DEFAULT_PERSONA_KEY];
 	const personaDescription = goal ?? QUICK_START_PERSONA_GOAL;
-	const { isTrialLoading, checkoutState, startTrial, closeCheckout } = useHeroTrialCheckout();
+	const { isTrialLoading, checkoutState, startTrial, closeCheckout } =
+		useHeroTrialCheckout();
 	const videoPreviewRef = useRef<HeroVideoPreviewHandle>(null);
 	const videoSectionRef = useRef<HTMLDivElement>(null);
 
 	const handleScrollToDetails = useCallback(() => {
-		const section = document.getElementById('dynamic-hero-details');
+		const section = document.getElementById("dynamic-hero-details");
 		if (section) {
-			section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			section.scrollIntoView({ behavior: "smooth", block: "start" });
 		}
 	}, []);
 
 	const handlePreviewDemo = useCallback(() => {
 		const node = videoSectionRef.current;
-		if (node && typeof node.scrollIntoView === 'function') {
-			node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		if (node && typeof node.scrollIntoView === "function") {
+			node.scrollIntoView({ behavior: "smooth", block: "center" });
 		}
 
 		const playVideo = () => {
 			videoPreviewRef.current?.play();
 		};
 
-		if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+		if (
+			typeof window !== "undefined" &&
+			typeof window.requestAnimationFrame === "function"
+		) {
 			window.requestAnimationFrame(playVideo);
 		} else {
 			playVideo();
@@ -148,10 +159,15 @@ export default function DynamicHeroDemoPage(): JSX.Element {
 							primaryLoading={isTrialLoading}
 						/>
 						<p className="max-w-xl text-center text-muted-foreground text-sm">
-							Trusted by builders rolling out Quick Start experiences across the DealScale platform.
+							Trusted by builders rolling out Quick Start experiences across the
+							DealScale platform.
 						</p>
 
-						<div ref={videoSectionRef} className="w-full max-w-5xl" data-beam-collider="true">
+						<div
+							ref={videoSectionRef}
+							className="w-full max-w-5xl"
+							data-beam-collider="true"
+						>
 							<HeroVideoPreview
 								ref={videoPreviewRef}
 								video={MOCK_VIDEO}
@@ -171,9 +187,12 @@ export default function DynamicHeroDemoPage(): JSX.Element {
 									className="-space-x-3"
 								/>
 								<div className="text-left">
-									<p className="font-semibold text-foreground text-sm">{socialProof.caption}</p>
+									<p className="font-semibold text-foreground text-sm">
+										{socialProof.caption}
+									</p>
 									<p className="text-muted-foreground text-xs">
-										Reusable modules, theme-aware tokens, guided demos out of the box.
+										Reusable modules, theme-aware tokens, guided demos out of
+										the box.
 									</p>
 								</div>
 							</div>
@@ -183,12 +202,13 @@ export default function DynamicHeroDemoPage(): JSX.Element {
 
 					<section className="mt-6 max-w-4xl rounded-3xl border border-border/40 bg-muted/40 px-6 py-6 text-muted-foreground text-sm lg:px-10 lg:py-8">
 						<p className="leading-relaxed">
-							This showcase renders the hero entirely through{' '}
+							This showcase renders the hero entirely through{" "}
 							<code className="rounded bg-muted px-2 py-[3px] text-foreground text-xs">
 								@external/dynamic-hero
-							</code>{' '}
-							utility exports and supporting UI primitives. Clone the layout, swap the copy, and
-							plug in your own video to replicate the Quick Start hero in any Next.js surface.
+							</code>{" "}
+							utility exports and supporting UI primitives. Clone the layout,
+							swap the copy, and plug in your own video to replicate the Quick
+							Start hero in any Next.js surface.
 						</p>
 					</section>
 				</div>

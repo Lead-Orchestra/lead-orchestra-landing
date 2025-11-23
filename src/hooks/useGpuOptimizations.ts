@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const FIREFOX_REGEX = /firefox|gecko\/\d+/i;
 
@@ -13,14 +13,14 @@ export function useGpuOptimizations(): boolean {
 	const [enableGpu, setEnableGpu] = useState(false);
 
 	useEffect(() => {
-		if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+		if (typeof window === "undefined" || typeof navigator === "undefined") {
 			return;
 		}
 
 		const isFirefox = FIREFOX_REGEX.test(navigator.userAgent);
 		const motionQuery =
-			typeof window.matchMedia === 'function'
-				? window.matchMedia('(prefers-reduced-motion: reduce)')
+			typeof window.matchMedia === "function"
+				? window.matchMedia("(prefers-reduced-motion: reduce)")
 				: undefined;
 
 		const evaluate = () => {
@@ -36,12 +36,12 @@ export function useGpuOptimizations(): boolean {
 
 		const listener = () => evaluate();
 
-		if (typeof motionQuery.addEventListener === 'function') {
-			motionQuery.addEventListener('change', listener);
-			return () => motionQuery.removeEventListener('change', listener);
+		if (typeof motionQuery.addEventListener === "function") {
+			motionQuery.addEventListener("change", listener);
+			return () => motionQuery.removeEventListener("change", listener);
 		}
 
-		if (typeof motionQuery.addListener === 'function') {
+		if (typeof motionQuery.addListener === "function") {
 			motionQuery.addListener(listener);
 			return () => motionQuery.removeListener(listener);
 		}

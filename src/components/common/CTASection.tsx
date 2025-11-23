@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 type SecondaryButtonConfig = {
 	label: string;
 	href: string;
 	target?: string;
 	rel?: string;
-	variant?: 'default' | 'outline' | 'secondary' | 'ghost';
+	variant?: "default" | "outline" | "secondary" | "ghost";
 	className?: string;
 };
 
@@ -26,7 +26,7 @@ type CTASectionProps = {
 export const CTASection = ({
 	title,
 	description,
-	buttonText = 'Get Started',
+	buttonText = "Get Started",
 	href,
 	className,
 	secondaryButton,
@@ -37,15 +37,15 @@ export const CTASection = ({
 	};
 
 	const secondaryRel =
-		secondaryButton?.target === '_blank' && !secondaryButton.rel
-			? 'noopener noreferrer'
+		secondaryButton?.target === "_blank" && !secondaryButton.rel
+			? "noopener noreferrer"
 			: secondaryButton?.rel;
 
 	return (
 		<section
 			className={cn(
-				'glow relative border border-border/20 bg-background-dark/80 px-6 py-24 text-foreground backdrop-blur-sm lg:px-8',
-				className
+				"glow relative border border-border/20 bg-background-dark/80 px-6 py-24 text-foreground backdrop-blur-sm lg:px-8",
+				className,
 			)}
 		>
 			<div className="relative z-10 mx-auto max-w-4xl text-center">
@@ -76,11 +76,11 @@ export const CTASection = ({
 								prefetch={false}
 							>
 								<Button
-									variant={secondaryButton.variant ?? 'outline'}
+									variant={secondaryButton.variant ?? "outline"}
 									className={cn(
-										'px-8 py-6 text-lg',
+										"px-8 py-6 text-lg",
 										secondaryButton.className ??
-											'border-primary/40 bg-background/80 text-primary hover:bg-primary/10'
+											"border-primary/40 bg-background/80 text-primary hover:bg-primary/10",
 									)}
 								>
 									{secondaryButton.label}

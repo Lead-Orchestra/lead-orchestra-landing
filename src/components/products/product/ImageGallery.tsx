@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Lens } from '@/components/magicui/lens';
-import { useTheme } from '@/contexts/theme-context';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { useState } from 'react';
+import { Lens } from "@/components/magicui/lens";
+import { useTheme } from "@/contexts/theme-context";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useState } from "react";
 
 import {
 	Carousel,
@@ -11,9 +11,9 @@ import {
 	CarouselItem,
 	CarouselNext,
 	CarouselPrevious,
-} from '@/components/ui/carousel';
-import type { ProductType } from '@/types/products';
-import { v4 as uuid } from 'uuid';
+} from "@/components/ui/carousel";
+import type { ProductType } from "@/types/products";
+import { v4 as uuid } from "uuid";
 
 interface ImageGalleryProps {
 	images: ReadonlyArray<string>;
@@ -27,9 +27,9 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
 
 	// Theme-aware carousel button classes
 	const carouselBtnClass =
-		resolvedTheme === 'dark'
-			? 'bg-gray-900 text-white hover:bg-gray-800 border-gray-700'
-			: 'bg-white text-gray-900 hover:bg-gray-100 border-gray-200';
+		resolvedTheme === "dark"
+			? "bg-gray-900 text-white hover:bg-gray-800 border-gray-700"
+			: "bg-white text-gray-900 hover:bg-gray-100 border-gray-200";
 
 	if (isMobile) {
 		return (
@@ -63,7 +63,9 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
 							key={uuid()}
 							type="button"
 							className={`relative h-16 w-16 flex-shrink-0 cursor-pointer overflow-hidden rounded-md ${
-								index === selectedImage ? 'ring-2 ring-indigo-500' : 'ring-1 ring-gray-200'
+								index === selectedImage
+									? "ring-2 ring-indigo-500"
+									: "ring-1 ring-gray-200"
 							}`}
 							onClick={() => setSelectedImage(index)}
 						>
@@ -92,7 +94,9 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
 							key={uuid()}
 							type="button"
 							className={`relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white font-medium text-gray-900 text-sm uppercase hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4 ${
-								index === selectedImage ? 'ring-2 ring-indigo-500' : 'ring-1 ring-gray-200'
+								index === selectedImage
+									? "ring-2 ring-indigo-500"
+									: "ring-1 ring-gray-200"
 							}`}
 							onClick={() => setSelectedImage(index)}
 						>

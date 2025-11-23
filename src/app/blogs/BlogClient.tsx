@@ -1,17 +1,17 @@
-'use client';
-import BlogGrid from '@/components/blog/BlogGrid';
-import BlogSidebar from '@/components/blog/BlogSidebar';
-import { CTASection } from '@/components/common/CTASection';
-import { NewsletterEmailInput } from '@/components/contact/newsletter/NewsletterEmailInput';
-import Hero from '@/components/home/heros/Hero';
-import { toast } from '@/components/ui/use-toast';
-import { useBlogSearch } from '@/hooks/beehiiv/use-blog-search';
-import { useCategoryFilter } from '@/hooks/use-category-filter';
-import type { BeehiivPost } from '@/types/behiiv';
-import { Loader2 } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useMemo, useState } from 'react';
-import { offerImg } from '../newsletter/NewsletterClient';
+"use client";
+import BlogGrid from "@/components/blog/BlogGrid";
+import BlogSidebar from "@/components/blog/BlogSidebar";
+import { CTASection } from "@/components/common/CTASection";
+import { NewsletterEmailInput } from "@/components/contact/newsletter/NewsletterEmailInput";
+import Hero from "@/components/home/heros/Hero";
+import { toast } from "@/components/ui/use-toast";
+import { useBlogSearch } from "@/hooks/beehiiv/use-blog-search";
+import { useCategoryFilter } from "@/hooks/use-category-filter";
+import type { BeehiivPost } from "@/types/behiiv";
+import { Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { offerImg } from "../newsletter/NewsletterClient";
 
 const DEFAULT_PAGE_SIZE = 12;
 
@@ -27,16 +27,20 @@ function BlogContent() {
 			setLoading(true);
 			setError(null);
 			try {
-				const { getLatestBeehiivPosts } = await import('@/lib/beehiiv/getPosts');
+				const { getLatestBeehiivPosts } = await import(
+					"@/lib/beehiiv/getPosts"
+				);
 				// Read pagination flags from URL
-				const per_page = searchParams?.get('per_page');
-				const page = searchParams?.get('page');
-				const limit = searchParams?.get('limit');
+				const per_page = searchParams?.get("per_page");
+				const page = searchParams?.get("page");
+				const limit = searchParams?.get("limit");
 
 				// Default per_page when missing or invalid
 				const parsedPerPage = per_page ? Number(per_page) : Number.NaN;
 				const inferredPerPage =
-					Number.isFinite(parsedPerPage) && parsedPerPage > 0 ? parsedPerPage : DEFAULT_PAGE_SIZE;
+					Number.isFinite(parsedPerPage) && parsedPerPage > 0
+						? parsedPerPage
+						: DEFAULT_PAGE_SIZE;
 				const parsedPage = page ? Number(page) : Number.NaN;
 
 				const posts = await getLatestBeehiivPosts({
@@ -46,8 +50,8 @@ function BlogContent() {
 				});
 				setArticles(posts.slice(0, inferredPerPage));
 			} catch (err: unknown) {
-				console.error('Failed to load posts:', err);
-				setError(err instanceof Error ? err.message : 'Unknown error');
+				console.error("Failed to load posts:", err);
+				setError(err instanceof Error ? err.message : "Unknown error");
 			} finally {
 				setLoading(false);
 			}
@@ -57,15 +61,17 @@ function BlogContent() {
 
 	const categories = useMemo(() => {
 		return [
-			{ id: 'all', name: 'All Posts' },
+			{ id: "all", name: "All Posts" },
 			...Array.from(
 				new Set(
 					articles.flatMap((article) =>
 						Array.isArray(article.content_tags)
-							? article.content_tags.filter((tag): tag is string => typeof tag === 'string')
-							: []
-					)
-				)
+							? article.content_tags.filter(
+									(tag): tag is string => typeof tag === "string",
+								)
+							: [],
+					),
+				),
 			).map((category) => ({
 				id: category,
 				name: category,
@@ -76,12 +82,15 @@ function BlogContent() {
 	const { activeCategory, CategoryFilter } = useCategoryFilter(categories);
 
 	// Add searchParams to dependencies to trigger re-filter when URL changes
-	const searchParamKey = useMemo(() => searchParams?.toString() ?? '', [searchParams]);
+	const searchParamKey = useMemo(
+		() => searchParams?.toString() ?? "",
+		[searchParams],
+	);
 
 	const { searchQuery, setSearchQuery, filteredPosts } = useBlogSearch(
 		articles,
 		activeCategory,
-		searchParamKey
+		searchParamKey,
 	);
 
 	if (loading) {
@@ -94,11 +103,15 @@ function BlogContent() {
 
 	if (error) {
 		toast({
-			title: 'Failed to load blog posts',
-			description: 'An error occurred while fetching articles',
-			variant: 'destructive',
+			title: "Failed to load blog posts",
+			description: "An error occurred while fetching articles",
+			variant: "destructive",
 		});
-		return <div className="p-4 text-red-500">Error loading posts. Please try again later.</div>;
+		return (
+			<div className="p-4 text-red-500">
+				Error loading posts. Please try again later.
+			</div>
+		);
 	}
 
 	return (
@@ -121,7 +134,9 @@ function BlogContent() {
 					<CategoryFilter />
 					<div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
 						<div className="lg:col-span-8">
-							<BlogGrid posts={filteredPosts.length > 0 ? filteredPosts : articles} />
+							<BlogGrid
+								posts={filteredPosts.length > 0 ? filteredPosts : articles}
+							/>
 						</div>
 						<div className="lg:col-span-4">
 							<BlogSidebar posts={articles} />
@@ -136,9 +151,9 @@ function BlogContent() {
 					buttonText="Contact Us"
 					href="/contact"
 					secondaryButton={{
-						label: 'Join Community',
-						href: 'https://discord.gg/BNrsYRPtFN',
-						target: '_blank',
+						label: "Join Community",
+						href: "https://discord.gg/BNrsYRPtFN",
+						target: "_blank",
 					}}
 				/>
 			</div>

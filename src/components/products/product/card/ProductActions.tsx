@@ -1,15 +1,15 @@
-import { Loader2, MessageSquare, UserPlus } from 'lucide-react';
-import { useState } from 'react';
+import { Loader2, MessageSquare, UserPlus } from "lucide-react";
+import { useState } from "react";
 
-import type { ProductActionsProps } from './types';
+import type { ProductActionsProps } from "./types";
 
 const ProductActions = ({
 	onAddToCart,
 	onPurchase,
 	isLoading,
 	onBeforePurchase,
-	addToCartLabel = 'Add to Cart',
-	purchaseLabel = 'Purchase',
+	addToCartLabel = "Add to Cart",
+	purchaseLabel = "Purchase",
 	addToCartIcon,
 	purchaseIcon,
 }: ProductActionsProps) => {
@@ -50,7 +50,11 @@ const ProductActions = ({
 						aria-labelledby="addToCartTitle"
 					>
 						<title id="addToCartTitle">{addToCartLabel}</title>
-						<path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+						/>
 					</svg>
 				)}
 				<span>{addToCartLabel}</span>

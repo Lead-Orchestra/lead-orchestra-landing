@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
 	Carousel,
 	type CarouselApi,
@@ -8,18 +8,18 @@ import {
 	CarouselItem,
 	CarouselNext,
 	CarouselPrevious,
-} from '@/components/ui/carousel';
-import { SectionHeading } from '@/components/ui/section-heading';
-import { categories } from '@/data/categories';
-import { projects } from '@/data/projects';
-import { useCategoryFilter } from '@/hooks/use-category-filter';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { useHasMounted } from '@/hooks/useHasMounted';
-import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Link } from 'lucide-react';
-import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+} from "@/components/ui/carousel";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { categories } from "@/data/categories";
+import { projects } from "@/data/projects";
+import { useCategoryFilter } from "@/hooks/use-category-filter";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useHasMounted } from "@/hooks/useHasMounted";
+import { motion } from "framer-motion";
+import { ArrowLeft, ArrowRight, Link } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 const Projects = () => {
 	// All hooks at the top
 	const hasMounted = useHasMounted();
@@ -30,7 +30,8 @@ const Projects = () => {
 	const [showAllTags, setShowAllTags] = useState(false);
 
 	// Category filter logic
-	const { activeCategory, setActiveCategory, CategoryFilter } = useCategoryFilter(categories);
+	const { activeCategory, setActiveCategory, CategoryFilter } =
+		useCategoryFilter(categories);
 
 	useEffect(() => {
 		if (!api) return;
@@ -40,16 +41,16 @@ const Projects = () => {
 			setActiveDot(api.selectedScrollSnap());
 		};
 
-		api.on('select', handleSelect);
+		api.on("select", handleSelect);
 		handleSelect();
 
 		return () => {
-			api.off('select', handleSelect);
+			api.off("select", handleSelect);
 		};
 	}, [api]);
 
 	useEffect(() => {
-		if (typeof window === 'undefined') return;
+		if (typeof window === "undefined") return;
 
 		const updateVisibleItems = () => {
 			const width = window.innerWidth;
@@ -63,10 +64,10 @@ const Projects = () => {
 		};
 
 		updateVisibleItems();
-		window.addEventListener('resize', updateVisibleItems);
+		window.addEventListener("resize", updateVisibleItems);
 
 		return () => {
-			window.removeEventListener('resize', updateVisibleItems);
+			window.removeEventListener("resize", updateVisibleItems);
 		};
 	}, []);
 
@@ -77,10 +78,12 @@ const Projects = () => {
 
 	// Filter projects by active category (except 'all')
 	const filteredProjects =
-		activeCategory === 'all'
+		activeCategory === "all"
 			? projects
 			: projects.filter((p) =>
-					p.tags.map((t) => t.toLowerCase()).includes(activeCategory.toLowerCase())
+					p.tags
+						.map((t) => t.toLowerCase())
+						.includes(activeCategory.toLowerCase()),
 				);
 
 	return (
@@ -101,7 +104,7 @@ const Projects = () => {
 				<div className="relative mt-4 min-w-0 overflow-x-visible">
 					<Carousel
 						opts={{
-							align: 'start',
+							align: "start",
 							loop: false,
 						}}
 						className="my-2 w-full touch-pan-x"
@@ -132,7 +135,9 @@ const Projects = () => {
 													</span>
 												))}
 											</div>
-											<h3 className="mb-2 font-semibold text-lg md:text-xl">{project.title}</h3>
+											<h3 className="mb-2 font-semibold text-lg md:text-xl">
+												{project.title}
+											</h3>
 											<p className="mb-3 line-clamp-3 text-black text-xs md:mb-4 md:text-sm dark:text-white/70">
 												{project.description}
 											</p>
@@ -154,7 +159,10 @@ const Projects = () => {
 
 					<div className="relative z-10 mt-4 flex justify-center md:hidden">
 						<div className="flex space-x-2">
-							<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+							<motion.div
+								whileHover={{ scale: 1.05 }}
+								whileTap={{ scale: 0.95 }}
+							>
 								<Button
 									variant="outline"
 									size="default"
@@ -166,7 +174,10 @@ const Projects = () => {
 									<ArrowLeft className="h-4 w-4 min-w-[1rem] text-primary" />
 								</Button>
 							</motion.div>
-							<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+							<motion.div
+								whileHover={{ scale: 1.05 }}
+								whileTap={{ scale: 0.95 }}
+							>
 								<Button
 									variant="outline"
 									size="default"
@@ -188,8 +199,8 @@ const Projects = () => {
 							type="button"
 							className={`h-2 w-2 rounded-full border border-neutral-200 transition-all duration-300 md:h-3 md:w-3 dark:border-neutral-700 ${
 								activeDot === index
-									? 'w-4 bg-primary md:w-6'
-									: 'bg-black/20 hover:bg-black/40 dark:bg-white/20 dark:hover:bg-white/40'
+									? "w-4 bg-primary md:w-6"
+									: "bg-black/20 hover:bg-black/40 dark:bg-white/20 dark:hover:bg-white/40"
 							}`}
 							onClick={() => api?.scrollTo(index)}
 							aria-label={`Go to slide ${index + 1}`}

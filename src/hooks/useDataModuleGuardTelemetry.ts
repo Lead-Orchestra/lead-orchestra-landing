@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-import type { DataModuleKey } from '@/data/__generated__/manifest';
-import type { DataModuleStatus } from '@/stores/useDataModuleStore';
-import { reportDataModuleGuard } from '@/utils/observability/dataModuleGuards';
+import type { DataModuleKey } from "@/data/__generated__/manifest";
+import type { DataModuleStatus } from "@/stores/useDataModuleStore";
+import { reportDataModuleGuard } from "@/utils/observability/dataModuleGuards";
 
 interface GuardDetail {
 	readonly [key: string]: unknown;
@@ -26,7 +26,7 @@ function toErrorMessage(error: unknown): string | undefined {
 		return error.message;
 	}
 
-	if (typeof error === 'string') {
+	if (typeof error === "string") {
 		return error;
 	}
 
@@ -48,8 +48,10 @@ function createSignature({
 	errorMessage?: string;
 	detail?: GuardDetail;
 }): string {
-	const detailString = detail ? JSON.stringify(detail) : '';
-	return [status, hasData ? '1' : '0', errorMessage ?? '', detailString].join('|');
+	const detailString = detail ? JSON.stringify(detail) : "";
+	return [status, hasData ? "1" : "0", errorMessage ?? "", detailString].join(
+		"|",
+	);
 }
 
 export function useDataModuleGuardTelemetry({
@@ -61,23 +63,26 @@ export function useDataModuleGuardTelemetry({
 	detail,
 }: GuardOptions): void {
 	console.log(
-		`[useDataModuleGuardTelemetry] Hook starting for key: "${key}", surface: "${surface}"`
+		`[useDataModuleGuardTelemetry] Hook starting for key: "${key}", surface: "${surface}"`,
 	);
 	console.log(`[useDataModuleGuardTelemetry] Hook 1: useRef(lastSignature)`);
 	const lastSignature = useRef<string | null>(null);
 
 	console.log(`[useDataModuleGuardTelemetry] Hook 2: useEffect`);
 	useEffect(() => {
-		console.log(`[useDataModuleGuardTelemetry] useEffect executing for key: "${key}"`, {
-			status,
-			hasData,
-		});
+		console.log(
+			`[useDataModuleGuardTelemetry] useEffect executing for key: "${key}"`,
+			{
+				status,
+				hasData,
+			},
+		);
 		const errorMessage = toErrorMessage(error);
 		const shouldReport =
-			status === 'error' ||
-			status === 'loading' ||
-			status === 'idle' ||
-			(status === 'ready' && !hasData);
+			status === "error" ||
+			status === "loading" ||
+			status === "idle" ||
+			(status === "ready" && !hasData);
 
 		const signature = createSignature({
 			status,
@@ -88,7 +93,7 @@ export function useDataModuleGuardTelemetry({
 
 		if (!shouldReport) {
 			console.log(
-				`[useDataModuleGuardTelemetry] Skipping report for key: "${key}" (shouldReport=false)`
+				`[useDataModuleGuardTelemetry] Skipping report for key: "${key}" (shouldReport=false)`,
 			);
 			lastSignature.current = signature;
 			return;
@@ -96,12 +101,15 @@ export function useDataModuleGuardTelemetry({
 
 		if (lastSignature.current === signature) {
 			console.log(
-				`[useDataModuleGuardTelemetry] Skipping report for key: "${key}" (signature unchanged)`
+				`[useDataModuleGuardTelemetry] Skipping report for key: "${key}" (signature unchanged)`,
 			);
 			return;
 		}
 
-		console.log(`[useDataModuleGuardTelemetry] Reporting guard for key: "${key}"`, { signature });
+		console.log(
+			`[useDataModuleGuardTelemetry] Reporting guard for key: "${key}"`,
+			{ signature },
+		);
 		reportDataModuleGuard({
 			key,
 			surface,

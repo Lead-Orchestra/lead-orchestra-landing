@@ -1,7 +1,7 @@
-import type { HeroGridItem } from '@/data/products/hero';
-import { toast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
-import type { ProductCategory } from '@/types/products';
+import type { HeroGridItem } from "@/data/products/hero";
+import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import type { ProductCategory } from "@/types/products";
 
 interface ProductGridItemProps {
 	item: HeroGridItem;
@@ -26,9 +26,9 @@ export const ProductGridItem = ({
 			onCategorySelect(categoryId);
 		} else {
 			toast({
-				title: 'Category not available',
+				title: "Category not available",
 				description: `The category "${label}" is not currently available.`,
-				variant: 'destructive',
+				variant: "destructive",
 			});
 		}
 	};
@@ -38,10 +38,10 @@ export const ProductGridItem = ({
 			type="button"
 			onClick={handleClick}
 			className={cn(
-				'group relative overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus',
-				isLarge ? 'col-span-2 row-span-2' : 'col-span-1 row-span-1',
-				'glow glow-hover cursor-pointer',
-				className
+				"group relative overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+				isLarge ? "col-span-2 row-span-2" : "col-span-1 row-span-1",
+				"glow glow-hover cursor-pointer",
+				className,
 			)}
 			aria-label={ariaLabel || label}
 			disabled={!categoryExists}
@@ -58,12 +58,14 @@ export const ProductGridItem = ({
 				<div className="text-left">
 					<h3
 						className={cn(
-							'mb-1 font-bold text-xl',
+							"mb-1 font-bold text-xl",
 							categoryExists
-								? 'underline [text-shadow:1px_1px_0_black,0_1px_0_black,1px_0_0_black] hover:text-accent'
-								: 'text-muted-foreground'
+								? "underline [text-shadow:1px_1px_0_black,0_1px_0_black,1px_0_0_black] hover:text-accent"
+								: "text-muted-foreground",
 						)}
-						title={categoryExists ? `Filter by ${label}` : `Coming soon: ${label}`}
+						title={
+							categoryExists ? `Filter by ${label}` : `Coming soon: ${label}`
+						}
 					>
 						{label}
 					</h3>

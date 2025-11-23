@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { default_cal_slug } from '@/data/constants/booking';
-import { useCal } from '@/hooks/use-calendly';
-import { motion } from 'framer-motion';
-import { Calendar, Info, Loader2 } from 'lucide-react';
-import * as React from 'react';
+import { Button } from "@/components/ui/button";
+import { default_cal_slug } from "@/data/constants/booking";
+import { useCal } from "@/hooks/use-calendly";
+import { motion } from "framer-motion";
+import { Calendar, Info, Loader2 } from "lucide-react";
+import * as React from "react";
 // * For accessibility and animation
 
 interface ScheduleMeetingProps {
@@ -13,13 +13,15 @@ interface ScheduleMeetingProps {
 }
 
 const tourBenefits = [
-	'Personalized walkthrough of Deal Scale ',
-	'See real use cases tailored to your business',
-	'Live Q&A with a product expert',
-	'Shape Deal Scale To Your Needs',
+	"Personalized walkthrough of Deal Scale ",
+	"See real use cases tailored to your business",
+	"Live Q&A with a product expert",
+	"Shape Deal Scale To Your Needs",
 ];
 
-export function ScheduleMeeting({ calendarLink = default_cal_slug }: ScheduleMeetingProps) {
+export function ScheduleMeeting({
+	calendarLink = default_cal_slug,
+}: ScheduleMeetingProps) {
 	useCal();
 	const [loading, setLoading] = React.useState(false);
 	const [showBenefits, setShowBenefits] = React.useState(false);
@@ -37,9 +39,12 @@ export function ScheduleMeeting({ calendarLink = default_cal_slug }: ScheduleMee
 				<div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/20">
 					<Calendar className="h-6 w-6 text-primary" aria-hidden="true" />
 				</div>
-				<h2 className="font-bold text-2xl text-black dark:text-white">Schedule Product Tour</h2>
+				<h2 className="font-bold text-2xl text-black dark:text-white">
+					Schedule Product Tour
+				</h2>
 				<p className="text-black dark:text-white">
-					Book a tour of our platform to see how it can help you scale your business.
+					Book a tour of our platform to see how it can help you scale your
+					business.
 				</p>
 			</div>
 			{/* * Collapsible: What to expect on your tour */}
@@ -87,7 +92,7 @@ export function ScheduleMeeting({ calendarLink = default_cal_slug }: ScheduleMee
 							Booking...
 						</span>
 					) : (
-						'Book a Tour'
+						"Book a Tour"
 					)}
 				</Button>
 			</motion.div>

@@ -1,6 +1,14 @@
 # Cloudflare Pages Build Dockerfile
 # Optimized for Cloudflare Pages deployment using next-on-pages
 # This builds the Next.js app and converts it to Cloudflare Pages format
+# 
+# Build context: Project root
+# Usage: docker build -f landing/Dockerfile.pages -t dealscale-pages .
+#
+# This Dockerfile expects:
+# - Root level: package.json, pnpm-lock.yaml, pnpm-workspace.yaml (optional)
+# - landing/package.json, landing/pnpm-lock.yaml
+# - packages/ directory (if monorepo)
 
 FROM node:20-alpine AS base
 
@@ -9,26 +17,47 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat git
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml* ./
-COPY pnpm-workspace.yaml ./
-COPY landing/package.json ./landing/
-COPY packages ./packages
-
-# Install pnpm
+# Install pnpm first
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
+# Copy landing package files (required)
+COPY landing/package.json ./landing/
+COPY landing/pnpm-lock.yaml* ./landing/
+COPY landing/pnpm-workspace.yaml* ./landing/
+
+# Copy root package files if they exist (for monorepo)
+# Note: These may not exist - Docker will fail if they don't
+# Use Dockerfile.pages.standalone if root files don't exist
+COPY package.json* ./
+COPY pnpm-lock.yaml* ./
+COPY pnpm-workspace.yaml* ./
+
+# Copy packages directory (for monorepo)
+COPY packages ./packages/
+
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+# If root package.json exists, install from root (monorepo)
+# Otherwise, install from landing directory
+RUN if [ -f "package.json" ] && [ -f "pnpm-workspace.yaml" ]; then \
+        echo "Installing monorepo dependencies..." && \
+        pnpm install --frozen-lockfile; \
+    else \
+        echo "Installing landing dependencies..." && \
+        cd landing && pnpm install --frozen-lockfile; \
+    fi
 
 # Build stage
 FROM base AS builder
 WORKDIR /app
 
-# Copy dependencies
-COPY --from=deps /app/node_modules ./node_modules
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Copy source code
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules/
+COPY --from=deps /app/landing/node_modules ./landing/node_modules/
+
+# Copy all source code
 COPY . .
 
 # Build for Cloudflare Pages

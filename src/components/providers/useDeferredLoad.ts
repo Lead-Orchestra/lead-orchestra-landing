@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const DEFAULT_MAX_WAIT_MS = 5000;
 const DEFAULT_IDLE_TIMEOUT_MS = 2000;
@@ -25,7 +25,7 @@ type DeferredOptions =
 
 export function useDeferredLoad(options?: DeferredOptions) {
 	const resolvedOptions =
-		typeof options === 'number'
+		typeof options === "number"
 			? { timeout: options }
 			: (options ?? { timeout: DEFAULT_MAX_WAIT_MS });
 	const {
@@ -37,7 +37,7 @@ export function useDeferredLoad(options?: DeferredOptions) {
 	const [shouldLoad, setShouldLoad] = useState(false);
 
 	useEffect(() => {
-		if (!enabled || shouldLoad || typeof window === 'undefined') {
+		if (!enabled || shouldLoad || typeof window === "undefined") {
 			return;
 		}
 
@@ -67,20 +67,20 @@ export function useDeferredLoad(options?: DeferredOptions) {
 			cleanupFns.push(() => document.removeEventListener(eventName, handler));
 		};
 
-		registerWindowEvent('pointerdown');
-		registerWindowEvent('pointermove');
-		registerWindowEvent('scroll');
-		registerWindowEvent('keydown');
-		registerWindowEvent('pageshow');
-		registerDocumentEvent('visibilitychange');
+		registerWindowEvent("pointerdown");
+		registerWindowEvent("pointermove");
+		registerWindowEvent("scroll");
+		registerWindowEvent("keydown");
+		registerWindowEvent("pageshow");
+		registerDocumentEvent("visibilitychange");
 
 		if (!requireInteraction) {
 			const scheduleIdle = () => {
-				if (typeof window === 'undefined') {
+				if (typeof window === "undefined") {
 					return;
 				}
 
-				if ('requestIdleCallback' in window) {
+				if ("requestIdleCallback" in window) {
 					const idleId = window.requestIdleCallback(() => enable(), {
 						timeout: idleTimeout,
 					});
@@ -90,12 +90,12 @@ export function useDeferredLoad(options?: DeferredOptions) {
 				}
 			};
 
-			if (document.readyState === 'complete') {
+			if (document.readyState === "complete") {
 				scheduleIdle();
 			} else {
 				const handleLoad = () => scheduleIdle();
-				window.addEventListener('load', handleLoad, { once: true });
-				cleanupFns.push(() => window.removeEventListener('load', handleLoad));
+				window.addEventListener("load", handleLoad, { once: true });
+				cleanupFns.push(() => window.removeEventListener("load", handleLoad));
 			}
 		}
 

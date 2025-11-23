@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { motion } from "framer-motion";
+import { Search } from "lucide-react";
 
 interface BlogHeroProps {
 	searchQuery: string;
@@ -25,8 +25,8 @@ const BlogHero = ({ searchQuery, setSearchQuery }: BlogHeroProps) => {
 						CyberOni <span className="text-primary">Blog</span>
 					</h1>
 					<p className="mx-auto mb-8 max-w-3xl text-black text-lg md:text-xl dark:text-white/70">
-						Latest insights, tutorials, and news on AI, software development, and digital
-						transformation.
+						Latest insights, tutorials, and news on AI, software development,
+						and digital transformation.
 					</p>
 
 					<div className="relative mx-auto max-w-2xl">

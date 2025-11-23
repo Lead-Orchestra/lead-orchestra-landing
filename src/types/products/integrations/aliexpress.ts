@@ -1,4 +1,4 @@
-import type { DropshippingIntegration } from './index';
+import type { DropshippingIntegration } from "./index";
 
 export interface AliexpressDropshippingItem {
 	id: string;

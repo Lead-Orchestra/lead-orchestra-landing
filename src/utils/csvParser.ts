@@ -1,5 +1,5 @@
-import Papa from 'papaparse';
-import * as XLSX from 'xlsx';
+import Papa from "papaparse";
+import * as XLSX from "xlsx";
 
 export interface ContactData {
 	email?: string;
@@ -27,14 +27,16 @@ export async function parseCSV(file: File): Promise<ParseResult> {
 			skipEmptyLines: true,
 			complete: (results) => {
 				if (results.errors.length > 0) {
-					errors.push(...results.errors.map((err) => err.message || 'Parse error'));
+					errors.push(
+						...results.errors.map((err) => err.message || "Parse error"),
+					);
 				}
 
 				for (const row of results.data) {
 					const contact = normalizeContactData(row as Record<string, string>);
 					// Accept any row that has at least one field with data
 					const hasData = Object.values(contact).some(
-						(value) => value && value.toString().trim().length > 0
+						(value) => value && value.toString().trim().length > 0,
 					);
 					if (hasData) {
 						contacts.push(contact);
@@ -46,7 +48,7 @@ export async function parseCSV(file: File): Promise<ParseResult> {
 				resolve({ contacts, errors });
 			},
 			error: (error) => {
-				errors.push(error.message || 'Failed to parse CSV file');
+				errors.push(error.message || "Failed to parse CSV file");
 				resolve({ contacts, errors });
 			},
 		});
@@ -66,24 +68,27 @@ export async function parseExcel(file: File): Promise<ParseResult> {
 		reader.onload = (e) => {
 			try {
 				const data = new Uint8Array(e.target?.result as ArrayBuffer);
-				const workbook = XLSX.read(data, { type: 'array' });
+				const workbook = XLSX.read(data, { type: "array" });
 
 				// Get the first sheet
 				const firstSheetName = workbook.SheetNames[0];
 				if (!firstSheetName) {
-					errors.push('Excel file has no sheets');
+					errors.push("Excel file has no sheets");
 					resolve({ contacts, errors });
 					return;
 				}
 
 				const worksheet = workbook.Sheets[firstSheetName];
-				const jsonData = XLSX.utils.sheet_to_json(worksheet) as Record<string, string>[];
+				const jsonData = XLSX.utils.sheet_to_json(worksheet) as Record<
+					string,
+					string
+				>[];
 
 				for (const row of jsonData) {
 					const contact = normalizeContactData(row);
 					// Accept any row that has at least one field with data
 					const hasData = Object.values(contact).some(
-						(value) => value && value.toString().trim().length > 0
+						(value) => value && value.toString().trim().length > 0,
 					);
 					if (hasData) {
 						contacts.push(contact);
@@ -94,13 +99,15 @@ export async function parseExcel(file: File): Promise<ParseResult> {
 
 				resolve({ contacts, errors });
 			} catch (error) {
-				errors.push(error instanceof Error ? error.message : 'Failed to parse Excel file');
+				errors.push(
+					error instanceof Error ? error.message : "Failed to parse Excel file",
+				);
 				resolve({ contacts, errors });
 			}
 		};
 
 		reader.onerror = () => {
-			errors.push('Failed to read Excel file');
+			errors.push("Failed to read Excel file");
 			resolve({ contacts, errors });
 		};
 
@@ -113,19 +120,21 @@ export async function parseExcel(file: File): Promise<ParseResult> {
  */
 export async function parseContactFile(file: File): Promise<ParseResult> {
 	const fileName = file.name.toLowerCase();
-	const fileExtension = fileName.split('.').pop();
+	const fileExtension = fileName.split(".").pop();
 
-	if (fileExtension === 'csv') {
+	if (fileExtension === "csv") {
 		return parseCSV(file);
 	}
 
-	if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+	if (fileExtension === "xlsx" || fileExtension === "xls") {
 		return parseExcel(file);
 	}
 
 	return {
 		contacts: [],
-		errors: [`Unsupported file type: ${fileExtension}. Please use CSV or Excel files.`],
+		errors: [
+			`Unsupported file type: ${fileExtension}. Please use CSV or Excel files.`,
+		],
 	};
 }
 
@@ -136,7 +145,7 @@ function normalizeContactData(row: Record<string, string>): ContactData {
 	const normalized: ContactData = {};
 
 	// Normalize email
-	const emailKeys = ['email', 'e-mail', 'email address', 'e_mail', 'mail'];
+	const emailKeys = ["email", "e-mail", "email address", "e_mail", "mail"];
 	for (const key of emailKeys) {
 		const value = findCaseInsensitiveKey(row, key);
 		if (value && isValidEmail(value)) {
@@ -146,7 +155,14 @@ function normalizeContactData(row: Record<string, string>): ContactData {
 	}
 
 	// Normalize name
-	const nameKeys = ['name', 'full name', 'fullname', 'contact name', 'first name', 'last name'];
+	const nameKeys = [
+		"name",
+		"full name",
+		"fullname",
+		"contact name",
+		"first name",
+		"last name",
+	];
 	for (const key of nameKeys) {
 		const value = findCaseInsensitiveKey(row, key);
 		if (value) {
@@ -156,7 +172,14 @@ function normalizeContactData(row: Record<string, string>): ContactData {
 	}
 
 	// Normalize phone
-	const phoneKeys = ['phone', 'telephone', 'phone number', 'mobile', 'cell', 'contact'];
+	const phoneKeys = [
+		"phone",
+		"telephone",
+		"phone number",
+		"mobile",
+		"cell",
+		"contact",
+	];
 	for (const key of phoneKeys) {
 		const value = findCaseInsensitiveKey(row, key);
 		if (value) {
@@ -166,7 +189,7 @@ function normalizeContactData(row: Record<string, string>): ContactData {
 	}
 
 	// Normalize address
-	const addressKeys = ['address', 'street', 'street address'];
+	const addressKeys = ["address", "street", "street address"];
 	for (const key of addressKeys) {
 		const value = findCaseInsensitiveKey(row, key);
 		if (value) {
@@ -195,7 +218,7 @@ function normalizeContactData(row: Record<string, string>): ContactData {
  */
 function findCaseInsensitiveKey(
 	obj: Record<string, string>,
-	targetKey: string
+	targetKey: string,
 ): string | undefined {
 	const lowerTarget = targetKey.toLowerCase();
 	for (const [key, value] of Object.entries(obj)) {
@@ -218,5 +241,5 @@ function isValidEmail(email: string): boolean {
  * Normalize phone number (remove non-digit characters except +)
  */
 function normalizePhoneNumber(phone: string): string {
-	return phone.replace(/[^\d+]/g, '');
+	return phone.replace(/[^\d+]/g, "");
 }

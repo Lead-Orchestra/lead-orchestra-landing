@@ -1,42 +1,52 @@
-'use client';
+"use client";
 
-import { PERSONA_LABELS, type PersonaKey } from '@/data/personas/catalog';
-import type { BeehiivPost } from '@/types/behiiv';
-import { motion } from 'framer-motion';
-import { ArrowUpRight, Calendar, Clock, Eye, MousePointerClick } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import type React from 'react';
-import { Suspense } from 'react';
-import { truncateSubtitle, truncateTitle } from './BlogGrid';
+import { PERSONA_LABELS, type PersonaKey } from "@/data/personas/catalog";
+import type { BeehiivPost } from "@/types/behiiv";
+import { motion } from "framer-motion";
+import {
+	ArrowUpRight,
+	Calendar,
+	Clock,
+	Eye,
+	MousePointerClick,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import type React from "react";
+import { Suspense } from "react";
+import { truncateSubtitle, truncateTitle } from "./BlogGrid";
 
-type FreshnessBadge = '7-day' | '30-day' | 'all' | undefined;
+type FreshnessBadge = "7-day" | "30-day" | "all" | undefined;
 
 const FRESHNESS_LABELS: Record<
 	Exclude<FreshnessBadge, undefined>,
 	{ label: string; className: string }
 > = {
-	'7-day': {
-		label: 'New · 7 Days',
-		className: 'bg-emerald-400/90 text-emerald-950',
+	"7-day": {
+		label: "New · 7 Days",
+		className: "bg-emerald-400/90 text-emerald-950",
 	},
-	'30-day': {
-		label: 'Trending · 30 Days',
-		className: 'bg-amber-300/90 text-amber-900',
+	"30-day": {
+		label: "Trending · 30 Days",
+		className: "bg-amber-300/90 text-amber-900",
 	},
 	all: {
-		label: 'Reader Favorite',
-		className: 'bg-slate-200/90 text-slate-900',
+		label: "Reader Favorite",
+		className: "bg-slate-200/90 text-slate-900",
 	},
 };
 
 const formatPublishedDate = (post: BeehiivPost): string => {
-	const raw = post.published_at ?? post.publish_date ?? post.displayed_date ?? post.created;
-	if (typeof raw === 'number') {
+	const raw =
+		post.published_at ??
+		post.publish_date ??
+		post.displayed_date ??
+		post.created;
+	if (typeof raw === "number") {
 		const ms = raw < 1_000_000_000_000 ? raw * 1000 : raw;
 		return new Date(ms).toLocaleDateString();
 	}
-	if (typeof raw === 'string') {
+	if (typeof raw === "string") {
 		const numeric = Number(raw);
 		if (!Number.isNaN(numeric)) {
 			const ms = numeric < 1_000_000_000_000 ? numeric * 1000 : numeric;
@@ -50,7 +60,7 @@ const formatPublishedDate = (post: BeehiivPost): string => {
 	if (raw instanceof Date && !Number.isNaN(raw.getTime())) {
 		return raw.toLocaleDateString();
 	}
-	return 'Unknown date';
+	return "Unknown date";
 };
 
 interface FeaturedBlogCardProps {
@@ -62,7 +72,7 @@ interface FeaturedBlogCardProps {
 
 const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 	featuredPost,
-	freshnessBadge = 'all',
+	freshnessBadge = "all",
 	persona,
 	personaGoal,
 }) => {
@@ -77,35 +87,46 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 		  }
 		| undefined;
 	const featuredViews =
-		typeof featuredWebStats?.views === 'number' ? featuredWebStats.views : undefined;
+		typeof featuredWebStats?.views === "number"
+			? featuredWebStats.views
+			: undefined;
 	const featuredClicks =
-		typeof featuredWebStats?.clicks === 'number' ? featuredWebStats.clicks : undefined;
+		typeof featuredWebStats?.clicks === "number"
+			? featuredWebStats.clicks
+			: undefined;
 	const featuredUniqueOpens =
-		typeof featuredEmailStats?.unique_opens === 'number'
+		typeof featuredEmailStats?.unique_opens === "number"
 			? featuredEmailStats.unique_opens
 			: undefined;
 	const featuredUniqueClicks =
-		typeof featuredEmailStats?.unique_clicks === 'number'
+		typeof featuredEmailStats?.unique_clicks === "number"
 			? featuredEmailStats.unique_clicks
 			: undefined;
 	const featuredOpenRate =
-		typeof featuredEmailStats?.open_rate === 'number' ? featuredEmailStats.open_rate : undefined;
+		typeof featuredEmailStats?.open_rate === "number"
+			? featuredEmailStats.open_rate
+			: undefined;
 	const featuredClickRate =
-		typeof featuredEmailStats?.click_rate === 'number' ? featuredEmailStats.click_rate : undefined;
+		typeof featuredEmailStats?.click_rate === "number"
+			? featuredEmailStats.click_rate
+			: undefined;
 
 	// Safely extract content string for reading time
 	const contentString =
-		typeof featuredPost.content === 'string'
+		typeof featuredPost.content === "string"
 			? featuredPost.content
-			: typeof featuredPost.content === 'object' && featuredPost.content?.free?.web
+			: typeof featuredPost.content === "object" &&
+					featuredPost.content?.free?.web
 				? featuredPost.content.free.web
-				: '';
-	const readingTime = contentString ? Math.ceil(contentString.split(' ').length / 200) : 0;
+				: "";
+	const readingTime = contentString
+		? Math.ceil(contentString.split(" ").length / 200)
+		: 0;
 
 	const personaLabel = persona ? PERSONA_LABELS[persona] : undefined;
 	const authors =
 		Array.isArray(featuredPost.authors) && featuredPost.authors.length > 0
-			? featuredPost.authors.join(', ')
+			? featuredPost.authors.join(", ")
 			: undefined;
 	const freshnessLabelMeta = freshnessBadge && FRESHNESS_LABELS[freshnessBadge];
 
@@ -120,18 +141,18 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 				<div className="relative h-72 w-full overflow-hidden">
 					<Image
 						src={
-							typeof featuredPost.thumbnail_url === 'string'
+							typeof featuredPost.thumbnail_url === "string"
 								? featuredPost.thumbnail_url
-								: 'https://via.placeholder.com/800x450'
+								: "https://via.placeholder.com/800x450"
 						}
 						alt={featuredPost.title}
 						className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 						style={{
 							objectFit:
-								typeof featuredPost.thumbnail_url === 'string' &&
-								featuredPost.thumbnail_url.endsWith('.gif')
-									? 'contain'
-									: 'cover',
+								typeof featuredPost.thumbnail_url === "string" &&
+								featuredPost.thumbnail_url.endsWith(".gif")
+									? "contain"
+									: "cover",
 						}}
 						fill
 					/>
@@ -160,33 +181,40 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 							{formatPublishedDate(featuredPost)}
 						</span>
 						<span className="inline-flex items-center text-black dark:text-white/60">
-							<Clock className="mr-1 h-3 w-3 text-secondary" /> {readingTime} min read
+							<Clock className="mr-1 h-3 w-3 text-secondary" /> {readingTime}{" "}
+							min read
 						</span>
-						{typeof featuredViews === 'number' && featuredViews > 0 && (
+						{typeof featuredViews === "number" && featuredViews > 0 && (
 							<span className="inline-flex items-center gap-1">
 								<Eye className="h-4 w-4 text-secondary" /> {featuredViews} views
 							</span>
 						)}
-						{typeof featuredClicks === 'number' && featuredClicks > 0 && (
+						{typeof featuredClicks === "number" && featuredClicks > 0 && (
 							<span className="inline-flex items-center gap-1">
-								<MousePointerClick className="h-4 w-4 text-secondary" /> {featuredClicks} clicks
+								<MousePointerClick className="h-4 w-4 text-secondary" />{" "}
+								{featuredClicks} clicks
 							</span>
 						)}
-						{typeof featuredUniqueOpens === 'number' && featuredUniqueOpens > 0 && (
+						{typeof featuredUniqueOpens === "number" &&
+							featuredUniqueOpens > 0 && (
+								<span className="inline-flex items-center gap-1">
+									<Eye className="h-4 w-4 text-secondary" />{" "}
+									{featuredUniqueOpens} unique opens
+								</span>
+							)}
+						{typeof featuredUniqueClicks === "number" &&
+							featuredUniqueClicks > 0 && (
+								<span className="inline-flex items-center gap-1">
+									<MousePointerClick className="h-4 w-4 text-secondary" />{" "}
+									{featuredUniqueClicks} unique clicks
+								</span>
+							)}
+						{typeof featuredOpenRate === "number" && featuredOpenRate > 0 && (
 							<span className="inline-flex items-center gap-1">
-								<Eye className="h-4 w-4 text-secondary" /> {featuredUniqueOpens} unique opens
+								{featuredOpenRate}% open rate
 							</span>
 						)}
-						{typeof featuredUniqueClicks === 'number' && featuredUniqueClicks > 0 && (
-							<span className="inline-flex items-center gap-1">
-								<MousePointerClick className="h-4 w-4 text-secondary" /> {featuredUniqueClicks}{' '}
-								unique clicks
-							</span>
-						)}
-						{typeof featuredOpenRate === 'number' && featuredOpenRate > 0 && (
-							<span className="inline-flex items-center gap-1">{featuredOpenRate}% open rate</span>
-						)}
-						{typeof featuredClickRate === 'number' && featuredClickRate > 0 && (
+						{typeof featuredClickRate === "number" && featuredClickRate > 0 && (
 							<span className="inline-flex items-center gap-1">
 								{featuredClickRate}% click rate
 							</span>
@@ -194,7 +222,7 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 					</div>
 					<div className="mb-4 flex flex-col items-center space-y-1">
 						<Link
-							href={featuredPost.web_url || '#'}
+							href={featuredPost.web_url || "#"}
 							className="line-clamp-2 text-center font-semibold text-xl transition-colors hover:text-primary"
 						>
 							{truncateTitle(featuredPost.title)}
@@ -212,9 +240,10 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 						{/* Vital web stats for featured post */}
 					</div>
 					<div className="mb-6 flex flex-wrap justify-center gap-2 md:justify-start">
-						{Array.isArray(featuredPost.content_tags) && featuredPost.content_tags.length > 0 ? (
+						{Array.isArray(featuredPost.content_tags) &&
+						featuredPost.content_tags.length > 0 ? (
 							featuredPost.content_tags
-								.filter((tag): tag is string => typeof tag === 'string')
+								.filter((tag): tag is string => typeof tag === "string")
 								.map((tag) => (
 									<Link
 										key={tag}
@@ -231,13 +260,17 @@ const FeaturedBlogCard: React.FC<FeaturedBlogCardProps> = ({
 					<div className="flex w-full flex-col items-center justify-between gap-2 md:flex-row">
 						<div className="flex w-full items-center justify-center md:w-auto md:justify-start">
 							{authors ? (
-								<span className="text-black text-sm dark:text-white/80">{authors}</span>
+								<span className="text-black text-sm dark:text-white/80">
+									{authors}
+								</span>
 							) : (
-								<span className="text-muted-foreground text-sm">DealScale Editorial Team</span>
+								<span className="text-muted-foreground text-sm">
+									DealScale Editorial Team
+								</span>
 							)}
 						</div>
 						<Link
-							href={featuredPost.web_url || '#'}
+							href={featuredPost.web_url || "#"}
 							className="inline-flex items-center text-primary text-sm transition-colors hover:text-tertiary"
 						>
 							Read Article <ArrowUpRight className="ml-1 h-3 w-3" />

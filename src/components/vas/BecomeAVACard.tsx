@@ -1,4 +1,4 @@
-import type React from 'react';
+import type React from "react";
 
 interface BecomeAVACardProps {
 	onClick?: () => void;
@@ -10,10 +10,10 @@ interface BecomeAVACardProps {
 
 const BecomeAVACard: React.FC<BecomeAVACardProps> = ({
 	onClick,
-	className = '',
-	ariaLabel = 'Apply to become a Virtual Assistant',
-	title = 'Apply to Become a Virtual Assistant',
-	subtitle = 'Join our marketplace of professional VAs. Help businesses scale their lead orchestration and earn revenue remotely.',
+	className = "",
+	ariaLabel = "Apply to become a Virtual Assistant",
+	title = "Apply to Become a Virtual Assistant",
+	subtitle = "Join our marketplace of professional VAs. Help businesses scale their lead orchestration and earn revenue remotely.",
 }) => {
 	return (
 		<div
@@ -23,15 +23,19 @@ const BecomeAVACard: React.FC<BecomeAVACardProps> = ({
 			role="button"
 			aria-label={ariaLabel}
 			onKeyPress={(event) => {
-				if (event.key === 'Enter' || event.key === ' ') {
+				if (event.key === "Enter" || event.key === " ") {
 					event.preventDefault();
 					onClick?.();
 				}
 			}}
 		>
 			<span className="mb-2 text-5xl text-primary dark:text-primary">+</span>
-			<span className="mb-1 font-semibold text-gray-900 text-lg dark:text-white">{title}</span>
-			<span className="text-gray-600 text-sm dark:text-gray-300">{subtitle}</span>
+			<span className="mb-1 font-semibold text-gray-900 text-lg dark:text-white">
+				{title}
+			</span>
+			<span className="text-gray-600 text-sm dark:text-gray-300">
+				{subtitle}
+			</span>
 		</div>
 	);
 };

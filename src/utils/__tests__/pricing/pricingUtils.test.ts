@@ -2,16 +2,18 @@ import {
 	PLAN_TYPES,
 	computeAnnualDiscountSummary,
 	hasDisplayablePricing,
-} from '@/components/home/pricing/pricingUtils';
-import type { DiscountCode } from '@/types/discount/discountCode';
-import type { Plan } from '@/types/service/plans';
+} from "@/components/home/pricing/pricingUtils";
+import type { DiscountCode } from "@/types/discount/discountCode";
+import type { Plan } from "@/types/service/plans";
 
-function createDiscountCode(overrides: Partial<DiscountCode> = {}): DiscountCode {
+function createDiscountCode(
+	overrides: Partial<DiscountCode> = {},
+): DiscountCode {
 	const now = new Date();
 
 	return {
-		code: overrides.code ?? 'TEST',
-		id: overrides.id ?? 'test-id',
+		code: overrides.code ?? "TEST",
+		id: overrides.id ?? "test-id",
 		expires: overrides.expires ?? new Date(now.getTime() + 86_400_000),
 		created: overrides.created ?? now,
 		isActive: overrides.isActive ?? true,
@@ -21,26 +23,26 @@ function createDiscountCode(overrides: Partial<DiscountCode> = {}): DiscountCode
 
 function createPlan(overrides: Partial<Plan> = {}): Plan {
 	const base: Plan = {
-		id: 'base-plan',
-		name: 'Base Plan',
+		id: "base-plan",
+		name: "Base Plan",
 		price: {
 			monthly: {
 				amount: 1000,
-				description: 'per month',
-				features: ['Support'],
+				description: "per month",
+				features: ["Support"],
 			},
 			annual: {
 				amount: 10_000,
-				description: 'per year',
-				features: ['Support'],
+				description: "per year",
+				features: ["Support"],
 			},
 			oneTime: {
 				amount: 1500,
-				description: 'one time',
-				features: ['Support'],
+				description: "one time",
+				features: ["Support"],
 			},
 		},
-		cta: { text: 'Choose Plan', type: 'checkout' },
+		cta: { text: "Choose Plan", type: "checkout" },
 	};
 
 	return {
@@ -65,63 +67,63 @@ function createPlan(overrides: Partial<Plan> = {}): Plan {
 	};
 }
 
-describe('pricingUtils', () => {
-	describe('hasDisplayablePricing', () => {
-		it('returns false when price data is missing', () => {
+describe("pricingUtils", () => {
+	describe("hasDisplayablePricing", () => {
+		it("returns false when price data is missing", () => {
 			expect(hasDisplayablePricing(undefined)).toBe(false);
 		});
 
-		it('returns false when amount is zero and there are no features', () => {
+		it("returns false when amount is zero and there are no features", () => {
 			expect(
 				hasDisplayablePricing({
 					amount: 0,
-					description: 'n/a',
+					description: "n/a",
 					features: [],
-				})
+				}),
 			).toBe(false);
 		});
 
-		it('returns true when features are present even if amount is zero', () => {
+		it("returns true when features are present even if amount is zero", () => {
 			expect(
 				hasDisplayablePricing({
 					amount: 0,
-					description: 'n/a',
-					features: ['Included'],
-				})
+					description: "n/a",
+					features: ["Included"],
+				}),
 			).toBe(true);
 		});
 
-		it('returns true for percentage-based pricing strings', () => {
+		it("returns true for percentage-based pricing strings", () => {
 			expect(
 				hasDisplayablePricing({
-					amount: '35%',
-					description: 'percentage',
+					amount: "35%",
+					description: "percentage",
 					features: [],
-				})
+				}),
 			).toBe(true);
 		});
 
-		it('returns true for positive numeric amounts', () => {
+		it("returns true for positive numeric amounts", () => {
 			expect(
 				hasDisplayablePricing({
 					amount: 500,
-					description: 'price',
+					description: "price",
 					features: [],
-				})
+				}),
 			).toBe(true);
 		});
 	});
 
-	describe('computeAnnualDiscountSummary', () => {
-		it('returns undefined when no plans include discounts', () => {
+	describe("computeAnnualDiscountSummary", () => {
+		it("returns undefined when no plans include discounts", () => {
 			const result = computeAnnualDiscountSummary([createPlan()]);
 			expect(result).toBeUndefined();
 		});
 
-		it('captures the maximum percentage and amount across plans', () => {
+		it("captures the maximum percentage and amount across plans", () => {
 			const plans: Plan[] = [
 				createPlan({
-					id: 'percent',
+					id: "percent",
 					price: {
 						annual: {
 							discount: {
@@ -132,7 +134,7 @@ describe('pricingUtils', () => {
 					},
 				}),
 				createPlan({
-					id: 'amount',
+					id: "amount",
 					price: {
 						annual: {
 							discount: {
@@ -148,10 +150,10 @@ describe('pricingUtils', () => {
 			expect(result).toEqual({ percent: 20, amount: 750 });
 		});
 
-		it('handles plans where later entries override smaller discounts', () => {
+		it("handles plans where later entries override smaller discounts", () => {
 			const plans: Plan[] = [
 				createPlan({
-					id: 'smaller',
+					id: "smaller",
 					price: {
 						annual: {
 							discount: {
@@ -165,7 +167,7 @@ describe('pricingUtils', () => {
 					},
 				}),
 				createPlan({
-					id: 'larger',
+					id: "larger",
 					price: {
 						annual: {
 							discount: {
@@ -185,7 +187,7 @@ describe('pricingUtils', () => {
 		});
 	});
 
-	it('exposes plan types for downstream selectors', () => {
-		expect(PLAN_TYPES).toEqual(['monthly', 'annual', 'oneTime']);
+	it("exposes plan types for downstream selectors", () => {
+		expect(PLAN_TYPES).toEqual(["monthly", "annual", "oneTime"]);
 	});
 });

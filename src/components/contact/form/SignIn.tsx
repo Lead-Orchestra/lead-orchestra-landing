@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useAuthModal } from '@/components/auth/use-auth-store';
-import { Button } from '@/components/ui/button';
+import { useAuthModal } from "@/components/auth/use-auth-store";
+import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -9,19 +9,19 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
 	type SignInFormValues,
 	signInFormFields,
 	signInSchema,
-} from '@/data/contact/authFormFields';
-import { fetchUserDisplayName } from '@/lib/auth/user-display-name';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
-import { createFieldProps, renderFormField } from './formFieldHelpers';
+} from "@/data/contact/authFormFields";
+import { fetchUserDisplayName } from "@/lib/auth/user-display-name";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { createFieldProps, renderFormField } from "./formFieldHelpers";
 
 /**
  * SignInForm component for user authentication.
@@ -34,15 +34,15 @@ export function SignInForm({ callbackUrl }: { callbackUrl?: string }) {
 	const form = useForm<SignInFormValues>({
 		resolver: zodResolver(signInSchema),
 		defaultValues: {
-			email: '',
-			password: '',
+			email: "",
+			password: "",
 		},
 	});
 
 	async function onSubmit(values: SignInFormValues) {
 		setIsLoading(true);
 		try {
-			const result = await signIn('credentials', {
+			const result = await signIn("credentials", {
 				...values,
 				redirect: false,
 				...(callbackUrl ? { callbackUrl } : {}),
@@ -50,7 +50,9 @@ export function SignInForm({ callbackUrl }: { callbackUrl?: string }) {
 
 			if (result?.ok) {
 				const fullName = await fetchUserDisplayName();
-				toast.success(fullName ? `Welcome ${fullName}!` : 'Logged in successfully!');
+				toast.success(
+					fullName ? `Welcome ${fullName}!` : "Logged in successfully!",
+				);
 				if (callbackUrl) {
 					// Securely redirect to callbackUrl
 					window.location.href = callbackUrl;
@@ -62,25 +64,25 @@ export function SignInForm({ callbackUrl }: { callbackUrl?: string }) {
 				close();
 			} else {
 				// Handle authentication errors with field-level display
-				const errorMessage = result?.error || 'An unknown error occurred.';
+				const errorMessage = result?.error || "An unknown error occurred.";
 
 				// Try to parse field-specific errors (if any)
-				if (errorMessage.includes('Invalid credentials')) {
-					form.setError('email', {
-						type: 'server',
-						message: 'Invalid email or password',
+				if (errorMessage.includes("Invalid credentials")) {
+					form.setError("email", {
+						type: "server",
+						message: "Invalid email or password",
 					});
-					form.setError('password', {
-						type: 'server',
-						message: 'Invalid email or password',
+					form.setError("password", {
+						type: "server",
+						message: "Invalid email or password",
 					});
 				} else {
 					toast.error(errorMessage);
 				}
 			}
 		} catch (error) {
-			toast.error('An unexpected error occurred.');
-			console.error('Sign-in submission error:', error);
+			toast.error("An unexpected error occurred.");
+			console.error("Sign-in submission error:", error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -97,14 +99,16 @@ export function SignInForm({ callbackUrl }: { callbackUrl?: string }) {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{fieldConfig.label}</FormLabel>
-								<FormControl>{renderFormField(createFieldProps(fieldConfig, field))}</FormControl>
+								<FormControl>
+									{renderFormField(createFieldProps(fieldConfig, field))}
+								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 				))}
 				<Button type="submit" className="w-full" disabled={isLoading}>
-					{isLoading ? 'Signing In...' : 'Sign In'}
+					{isLoading ? "Signing In..." : "Sign In"}
 				</Button>
 			</form>
 		</Form>

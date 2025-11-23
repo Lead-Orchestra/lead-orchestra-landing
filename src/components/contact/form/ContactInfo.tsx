@@ -1,33 +1,35 @@
-'use client';
+"use client";
 
-import { useDataModule } from '@/stores/useDataModuleStore';
-import { Mail, Phone } from 'lucide-react';
+import { useDataModule } from "@/stores/useDataModuleStore";
+import { Mail, Phone } from "lucide-react";
 
 export function ContactInfo() {
 	const { status, company, error } = useDataModule(
-		'company',
+		"company",
 		({ status: moduleStatus, data, error: moduleError }) => ({
 			status: moduleStatus,
 			company: data?.companyData,
 			error: moduleError,
-		})
+		}),
 	);
 
-	const isLoading = status === 'idle' || status === 'loading';
-	const isError = status === 'error';
+	const isLoading = status === "idle" || status === "loading";
+	const isError = status === "error";
 	const hasCompany = Boolean(company);
 
 	if (isLoading) {
 		return (
 			<div className="my-12 rounded-xl border border-white/10 bg-background-dark/90 p-6 backdrop-blur-sm">
-				<div className="py-6 text-center text-muted-foreground">Loading contact details…</div>
+				<div className="py-6 text-center text-muted-foreground">
+					Loading contact details…
+				</div>
 			</div>
 		);
 	}
 
 	if (!hasCompany) {
 		if (isError) {
-			console.error('[ContactInfo] Failed to load company contact info', error);
+			console.error("[ContactInfo] Failed to load company contact info", error);
 		}
 
 		return (
@@ -48,7 +50,7 @@ export function ContactInfo() {
 						href={`mailto:${company.contactInfo.email}`}
 						className="text-black transition-colors hover:text-primary dark:text-white"
 					>
-						{company.contactInfo.email}{' '}
+						{company.contactInfo.email}{" "}
 					</a>
 				</div>
 

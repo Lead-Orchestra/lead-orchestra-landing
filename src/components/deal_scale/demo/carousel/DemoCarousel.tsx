@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import useEmblaCarousel from 'embla-carousel-react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import React from 'react';
-import AiCallingDemo from '../AiCallingDemo';
-import { VoiceCloningDemo } from '../VoiceCloningDemo';
+import { Button } from "@/components/ui/button";
+import useEmblaCarousel from "embla-carousel-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import React from "react";
+import AiCallingDemo from "../AiCallingDemo";
+import { VoiceCloningDemo } from "../VoiceCloningDemo";
 
 const demos = [
 	{
-		title: 'AI Calling Demo',
+		title: "AI Calling Demo",
 		component: <AiCallingDemo />,
 	},
 	{
-		title: 'Voice Cloning Demo',
+		title: "Voice Cloning Demo",
 		component: <VoiceCloningDemo />,
 	},
 ];

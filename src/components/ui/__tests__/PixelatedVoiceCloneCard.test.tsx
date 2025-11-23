@@ -1,12 +1,12 @@
-import '@testing-library/jest-dom/vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import type { ComponentProps, ReactNode } from 'react';
-import React from 'react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import "@testing-library/jest-dom/vitest";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import type { ComponentProps, ReactNode } from "react";
+import React from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { PixelatedVoiceCloneCard } from '../pixelated-voice-clone-card';
-import type * as textRevealCardModule from '../text-reveal-card';
+import { PixelatedVoiceCloneCard } from "../pixelated-voice-clone-card";
+import type * as textRevealCardModule from "../text-reveal-card";
 
 const mockPixelatedCanvas = vi.fn((props: Record<string, unknown>) => (
 	<div data-testid="pixelated-canvas" />
@@ -25,7 +25,7 @@ class ImmediateFileReader {
 
 	readAsDataURL(): void {
 		this.onload?.({
-			target: { result: 'data:mock' },
+			target: { result: "data:mock" },
 		} as unknown as ProgressEvent<FileReader>);
 	}
 }
@@ -48,16 +48,17 @@ const createObserverEntry = (width: number): ResizeObserverEntry => {
 		contentBoxSize: [size],
 		devicePixelContentBoxSize: [],
 		contentRect: new DOMRectReadOnly(0, 0, width, height),
-		target: document.createElement('div'),
+		target: document.createElement("div"),
 	} as ResizeObserverEntry;
 };
 
-vi.mock('@/components/ui/pixelated-canvas', () => ({
+vi.mock("@/components/ui/pixelated-canvas", () => ({
 	__esModule: true,
-	PixelatedCanvas: (props: Record<string, unknown>) => mockPixelatedCanvas(props),
+	PixelatedCanvas: (props: Record<string, unknown>) =>
+		mockPixelatedCanvas(props),
 }));
 
-vi.mock('@/components/ui/text-reveal-card', () => ({
+vi.mock("@/components/ui/text-reveal-card", () => ({
 	__esModule: true,
 	TextRevealCard: ({
 		children,
@@ -79,7 +80,7 @@ vi.mock('@/components/ui/text-reveal-card', () => ({
 	),
 }));
 
-describe('PixelatedVoiceCloneCard', () => {
+describe("PixelatedVoiceCloneCard", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		textRevealSpies.props = undefined;
@@ -98,8 +99,9 @@ describe('PixelatedVoiceCloneCard', () => {
 				removeEventListener: vi.fn(),
 				dispatchEvent: vi.fn(() => false),
 			}))
-			.mockName('matchMedia');
-		globalThis.matchMedia = mockMatchMedia as unknown as typeof globalThis.matchMedia;
+			.mockName("matchMedia");
+		globalThis.matchMedia =
+			mockMatchMedia as unknown as typeof globalThis.matchMedia;
 
 		class MockResizeObserver implements ResizeObserver {
 			private readonly callback: ResizeObserverCallback;
@@ -132,7 +134,7 @@ describe('PixelatedVoiceCloneCard', () => {
 		globalThis.matchMedia = originalMatchMedia;
 	});
 
-	it('renders the pixelated canvas with the expected defaults', async () => {
+	it("renders the pixelated canvas with the expected defaults", async () => {
 		render(<PixelatedVoiceCloneCard />);
 
 		await waitFor(() => {
@@ -141,49 +143,53 @@ describe('PixelatedVoiceCloneCard', () => {
 
 		expect(mockPixelatedCanvas).toHaveBeenCalledWith(
 			expect.objectContaining({
-				src: 'https://assets.aceternity.com/manu-red.png',
-				distortionMode: 'swirl',
+				src: "https://assets.aceternity.com/manu-red.png",
+				distortionMode: "swirl",
 				interactive: false,
-				className: expect.stringContaining('rounded-3xl'),
-			})
+				className: expect.stringContaining("rounded-3xl"),
+			}),
 		);
 	});
 
-	it('shows before and after voice cloning messaging', () => {
+	it("shows before and after voice cloning messaging", () => {
 		render(<PixelatedVoiceCloneCard />);
 
 		expect(
-			screen.getByText(/Flat, robotic delivery that breaks connection\./i)
+			screen.getByText(/Flat, robotic delivery that breaks connection\./i),
 		).toBeInTheDocument();
 		expect(
-			screen.getByText(/Expressive, human tone that builds trust instantly\./i)
+			screen.getByText(/Expressive, human tone that builds trust instantly\./i),
 		).toBeInTheDocument();
 		expect(
-			screen.getByRole('heading', {
-				name: 'Your AI Clone: Authentic, Expressive, Unmistakably You',
-			})
+			screen.getByRole("heading", {
+				name: "Your AI Clone: Authentic, Expressive, Unmistakably You",
+			}),
 		).toBeInTheDocument();
 		expect(screen.getByLabelText(/upload a png/i)).toBeInTheDocument();
-		expect(screen.getByText(/Photo-to-video avatar tooling coming soon/i)).toBeInTheDocument();
+		expect(
+			screen.getByText(/Photo-to-video avatar tooling coming soon/i),
+		).toBeInTheDocument();
 	});
 
-	it('uses TextRevealCard to describe the cloning experience', () => {
+	it("uses TextRevealCard to describe the cloning experience", () => {
 		render(<PixelatedVoiceCloneCard />);
 
-		expect(screen.getByTestId('text-reveal-card')).toBeInTheDocument();
+		expect(screen.getByTestId("text-reveal-card")).toBeInTheDocument();
 		expect(textRevealSpies.props).toMatchObject({
-			text: 'Clone your voice in minutes',
-			revealText: 'Sound unmistakably like you.',
+			text: "Clone your voice in minutes",
+			revealText: "Sound unmistakably like you.",
 		});
 		expect(
-			screen.getByText(/Hover to see how we build authenticity at scale\./i)
+			screen.getByText(/Hover to see how we build authenticity at scale\./i),
 		).toBeInTheDocument();
 		expect(
-			screen.getByText(/Track the shift from robotic to expressive delivery in real time\./i)
+			screen.getByText(
+				/Track the shift from robotic to expressive delivery in real time\./i,
+			),
 		).toBeInTheDocument();
 	});
 
-	it('resizes the canvas when the container width changes', async () => {
+	it("resizes the canvas when the container width changes", async () => {
 		render(<PixelatedVoiceCloneCard />);
 
 		await waitFor(() => {
@@ -201,16 +207,18 @@ describe('PixelatedVoiceCloneCard', () => {
 					width: 600,
 					height: 350,
 					responsive: true,
-				})
+				}),
 			);
 		});
 	});
 
-	it('enables auto animation when the user interacts with the clone', async () => {
+	it("enables auto animation when the user interacts with the clone", async () => {
 		const user = userEvent.setup();
 		render(<PixelatedVoiceCloneCard />);
 
-		await user.click(screen.getByRole('button', { name: /interact with clone/i }));
+		await user.click(
+			screen.getByRole("button", { name: /interact with clone/i }),
+		);
 
 		await waitFor(() => {
 			const lastCall = mockPixelatedCanvas.mock.calls.at(-1)?.[0] as
@@ -221,12 +229,14 @@ describe('PixelatedVoiceCloneCard', () => {
 		});
 	});
 
-	it('auto animates the canvas after a successful image upload', async () => {
+	it("auto animates the canvas after a successful image upload", async () => {
 		const user = userEvent.setup();
 		render(<PixelatedVoiceCloneCard />);
 
-		const fileInput = screen.getByLabelText(/Upload a PNG of your portrait/i) as HTMLInputElement;
-		const file = new File(['mock'], 'portrait.png', { type: 'image/png' });
+		const fileInput = screen.getByLabelText(
+			/Upload a PNG of your portrait/i,
+		) as HTMLInputElement;
+		const file = new File(["mock"], "portrait.png", { type: "image/png" });
 
 		await user.upload(fileInput, file);
 
@@ -239,7 +249,7 @@ describe('PixelatedVoiceCloneCard', () => {
 		});
 	});
 
-	it('fits the pixelated canvas inside the mobile container', async () => {
+	it("fits the pixelated canvas inside the mobile container", async () => {
 		render(<PixelatedVoiceCloneCard />);
 
 		await waitFor(() => {

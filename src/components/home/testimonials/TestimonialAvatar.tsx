@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface TestimonialAvatarProps {
 	name: string;
@@ -10,10 +10,10 @@ interface TestimonialAvatarProps {
 
 function getInitials(name: string) {
 	return name
-		.split(' ')
+		.split(" ")
 		.filter(Boolean)
 		.map((part) => part[0])
-		.join('')
+		.join("")
 		.slice(0, 2)
 		.toUpperCase();
 }
@@ -35,10 +35,10 @@ export function TestimonialAvatar({ name, image }: TestimonialAvatarProps) {
 	return (
 		<div
 			className={cn(
-				'mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary/30',
-				'bg-gradient-to-br from-primary/80 to-secondary/80 text-primary-foreground',
-				'dark:from-primary/90 dark:to-secondary/90 dark:text-primary-foreground',
-				'font-bold text-lg sm:mr-4 sm:mb-0 sm:h-12 sm:w-12 sm:text-base'
+				"mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary/30",
+				"bg-gradient-to-br from-primary/80 to-secondary/80 text-primary-foreground",
+				"dark:from-primary/90 dark:to-secondary/90 dark:text-primary-foreground",
+				"font-bold text-lg sm:mr-4 sm:mb-0 sm:h-12 sm:w-12 sm:text-base",
 			)}
 		>
 			{getInitials(name)}

@@ -1,16 +1,16 @@
-import { type NextRequest, NextResponse } from 'next/server';
-import { getTweet } from 'react-tweet/api';
-
+import { type NextRequest, NextResponse } from "next/server";
+import { getTweet } from "react-tweet/api";
+export const runtime = 'edge';
 export async function GET(req: NextRequest) {
 	const { searchParams } = new URL(req.url);
-	const id = searchParams.get('id');
+	const id = searchParams.get("id");
 
-	console.log('[API/twitter] Request received.');
-	console.log('[API/twitter] Tweet ID:', id);
+	console.log("[API/twitter] Request received.");
+	console.log("[API/twitter] Tweet ID:", id);
 
 	if (!id) {
-		console.log('[API/twitter] No tweet ID provided.');
-		return NextResponse.json({ error: 'Missing tweet id' }, { status: 400 });
+		console.log("[API/twitter] No tweet ID provided.");
+		return NextResponse.json({ error: "Missing tweet id" }, { status: 400 });
 	}
 
 	try {
@@ -20,6 +20,6 @@ export async function GET(req: NextRequest) {
 		return NextResponse.json(tweet);
 	} catch (e: unknown) {
 		console.error(`[API/twitter] Error fetching tweet for ID: ${id}`, e);
-		return NextResponse.json({ error: 'Not found' }, { status: 404 });
+		return NextResponse.json({ error: "Not found" }, { status: 404 });
 	}
 }

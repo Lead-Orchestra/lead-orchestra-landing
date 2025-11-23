@@ -1,27 +1,31 @@
-import { AuroraText } from '@/components/magicui/aurora-text';
-import { BlurFade } from '@/components/magicui/blur-fade';
-import { useDataModule } from '@/stores/useDataModuleStore';
-import React from 'react';
+import { AuroraText } from "@/components/magicui/aurora-text";
+import { BlurFade } from "@/components/magicui/blur-fade";
+import { useDataModule } from "@/stores/useDataModuleStore";
+import React from "react";
 // * Accepts title and subtitle as props for reusability
 
 // * Magic UI: BlurFade, AuroraText, GridBackground
 // * Framer Motion for extra animation if needed
 // ! This component is the hero section for the About page
 
-export default function AboutHero({ title, subtitle }: { title?: string; subtitle?: string }) {
+export default function AboutHero({
+	title,
+	subtitle,
+}: { title?: string; subtitle?: string }) {
 	const { status, hero, error } = useDataModule(
-		'about/hero',
+		"about/hero",
 		({ status: heroStatus, data, error: heroError }) => ({
 			status: heroStatus,
 			hero: data?.hero,
 			error: heroError,
-		})
+		}),
 	);
 
-	const resolvedTitle = title ?? hero?.title ?? 'About Deal Scale';
-	const resolvedSubtitle = subtitle ?? hero?.subtitle ?? '';
+	const resolvedTitle = title ?? hero?.title ?? "About Deal Scale";
+	const resolvedSubtitle = subtitle ?? hero?.subtitle ?? "";
 
-	const isStoreLoading = !title && !hero && (status === 'idle' || status === 'loading');
+	const isStoreLoading =
+		!title && !hero && (status === "idle" || status === "loading");
 
 	if (isStoreLoading) {
 		return (
@@ -31,8 +35,8 @@ export default function AboutHero({ title, subtitle }: { title?: string; subtitl
 		);
 	}
 
-	if (!title && !hero && status === 'error') {
-		console.error('[AboutHero] Failed to load hero copy', error);
+	if (!title && !hero && status === "error") {
+		console.error("[AboutHero] Failed to load hero copy", error);
 	}
 
 	return (
@@ -43,7 +47,7 @@ export default function AboutHero({ title, subtitle }: { title?: string; subtitl
 					<div
 						className="h-full w-full"
 						style={{
-							background: 'linear-gradient(135deg, #7f5af0 0%, #2cb67d 100%)',
+							background: "linear-gradient(135deg, #7f5af0 0%, #2cb67d 100%)",
 						}}
 					/>
 				</BlurFade>
@@ -53,7 +57,9 @@ export default function AboutHero({ title, subtitle }: { title?: string; subtitl
 				<AuroraText className="font-bold text-4xl tracking-tight md:text-6xl">
 					{resolvedTitle}
 				</AuroraText>
-				<p className="text-lg text-muted-foreground md:text-2xl">{resolvedSubtitle}</p>
+				<p className="text-lg text-muted-foreground md:text-2xl">
+					{resolvedSubtitle}
+				</p>
 			</div>
 		</section>
 	);

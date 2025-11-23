@@ -1,7 +1,7 @@
-import { TechStackSection } from '@/components/common/TechStackSection';
-import type { CaseStudy } from '@/types/case-study';
-import { motion } from 'framer-motion';
-import { SectionHeading } from '../ui/section-heading';
+import { TechStackSection } from "@/components/common/TechStackSection";
+import type { CaseStudy } from "@/types/case-study";
+import { motion } from "framer-motion";
+import { SectionHeading } from "../ui/section-heading";
 
 interface CaseStudyContentProps {
 	caseStudy: CaseStudy;
@@ -41,7 +41,9 @@ const CaseStudyContent = ({ caseStudy }: CaseStudyContentProps) => {
 						className="mb-6"
 					/>
 					<div className="glass-card rounded-xl p-8">
-						<p className="text-black dark:text-white/80">{caseStudy.description}</p>
+						<p className="text-black dark:text-white/80">
+							{caseStudy.description}
+						</p>
 					</div>
 				</motion.div>
 
@@ -67,7 +69,9 @@ const CaseStudyContent = ({ caseStudy }: CaseStudyContentProps) => {
 									className="glass-card flex items-start rounded-lg p-4"
 								>
 									<div className="mt-0.5 mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/20">
-										<span className="font-semibold text-primary text-sm">{index + 1}</span>
+										<span className="font-semibold text-primary text-sm">
+											{index + 1}
+										</span>
 									</div>
 									<p className="text-black dark:text-white/80">{challenge}</p>
 								</motion.li>
@@ -96,7 +100,9 @@ const CaseStudyContent = ({ caseStudy }: CaseStudyContentProps) => {
 									className="glass-card flex items-start rounded-lg p-4"
 								>
 									<div className="mt-0.5 mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/20">
-										<span className="font-semibold text-primary text-sm">{index + 1}</span>
+										<span className="font-semibold text-primary text-sm">
+											{index + 1}
+										</span>
 									</div>
 									<p className="text-black dark:text-white/80">{solution}</p>
 								</motion.li>

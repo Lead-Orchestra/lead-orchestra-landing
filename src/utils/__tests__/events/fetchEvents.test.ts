@@ -1,17 +1,17 @@
-import type { Event } from '@/types/event';
-import { Response } from 'node-fetch';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Event } from "@/types/event";
+import { Response } from "node-fetch";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 type FetchMock = ReturnType<typeof vi.fn>;
 
-describe('fetchEvents', () => {
+describe("fetchEvents", () => {
 	const originalEnv = process.env;
 	const originalFetch = global.fetch;
 
 	beforeEach(() => {
 		vi.resetModules();
 		process.env = { ...originalEnv };
-		process.env.DEALSCALE_API_BASE = 'https://api.example.com';
+		process.env.DEALSCALE_API_BASE = "https://api.example.com";
 		global.fetch = vi.fn() as unknown as typeof fetch;
 	});
 
@@ -21,75 +21,75 @@ describe('fetchEvents', () => {
 		vi.clearAllMocks();
 	});
 
-	it('returns normalized events from the API when the response is valid', async () => {
+	it("returns normalized events from the API when the response is valid", async () => {
 		const apiEvents: Event[] = [
 			{
-				id: 'remote-1',
-				title: 'Remote Event',
-				date: '2025-01-01',
-				time: '09:00',
-				description: 'An event pulled from the API feed.',
-				externalUrl: 'https://events.example.com/remote',
-				category: 'conference',
-				location: 'Remote',
-				accessType: 'external',
-				attendanceType: 'webinar',
+				id: "remote-1",
+				title: "Remote Event",
+				date: "2025-01-01",
+				time: "09:00",
+				description: "An event pulled from the API feed.",
+				externalUrl: "https://events.example.com/remote",
+				category: "conference",
+				location: "Remote",
+				accessType: "external",
+				attendanceType: "webinar",
 			},
 		];
 
 		(global.fetch as FetchMock).mockResolvedValue(
 			new Response(JSON.stringify({ events: apiEvents }), {
 				status: 200,
-				headers: { 'Content-Type': 'application/json' },
-			})
+				headers: { "Content-Type": "application/json" },
+			}),
 		);
 
-		const { fetchEvents } = await import('@/lib/events/fetchEvents');
+		const { fetchEvents } = await import("@/lib/events/fetchEvents");
 		const result = await fetchEvents();
 
 		expect(global.fetch).toHaveBeenCalledWith(
-			'https://api.example.com/api/v1/events',
+			"https://api.example.com/api/v1/events",
 			expect.objectContaining({
 				next: { revalidate: 1800 },
-			})
+			}),
 		);
 
 		expect(result).toEqual([
 			expect.objectContaining({
-				id: 'remote-1',
-				slug: 'remote-event',
+				id: "remote-1",
+				slug: "remote-event",
 			}),
 		]);
 	});
 
-	it('falls back to static events when the API request fails', async () => {
-		vi.doMock('@/data/events', () => ({
+	it("falls back to static events when the API request fails", async () => {
+		vi.doMock("@/data/events", () => ({
 			events: [
 				{
-					id: 'fallback',
-					title: 'Fallback Event',
-					date: '2025-02-01',
-					time: '10:00',
-					description: 'A locally sourced fallback event.',
-					externalUrl: 'https://events.example.com/fallback',
-					category: 'meetup',
-					location: 'Chicago, IL',
-					accessType: 'external',
-					attendanceType: 'in-person',
+					id: "fallback",
+					title: "Fallback Event",
+					date: "2025-02-01",
+					time: "10:00",
+					description: "A locally sourced fallback event.",
+					externalUrl: "https://events.example.com/fallback",
+					category: "meetup",
+					location: "Chicago, IL",
+					accessType: "external",
+					attendanceType: "in-person",
 				},
 			],
 		}));
 
-		(global.fetch as FetchMock).mockRejectedValue(new Error('network error'));
+		(global.fetch as FetchMock).mockRejectedValue(new Error("network error"));
 
-		const { fetchEvents } = await import('@/lib/events/fetchEvents');
+		const { fetchEvents } = await import("@/lib/events/fetchEvents");
 		const result = await fetchEvents();
 
 		expect(result).toEqual([
 			expect.objectContaining({
-				id: 'fallback',
-				slug: 'fallback-event',
-				location: 'Chicago, IL',
+				id: "fallback",
+				slug: "fallback-event",
+				location: "Chicago, IL",
 			}),
 		]);
 	});

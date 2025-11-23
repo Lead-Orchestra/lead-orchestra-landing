@@ -1,5 +1,5 @@
-import { v4 as uuid } from 'uuid';
-import type { ProductMetadataProps } from './types';
+import { v4 as uuid } from "uuid";
+import type { ProductMetadataProps } from "./types";
 
 const ProductMetadata = ({ price, reviews = [] }: ProductMetadataProps) => {
 	const hasReviews = reviews.length > 0;
@@ -17,7 +17,7 @@ const ProductMetadata = ({ price, reviews = [] }: ProductMetadataProps) => {
 								key={uuid()}
 								width="16"
 								height="16"
-								fill={i < Math.round(averageRating) ? '#facc15' : '#e5e7eb'}
+								fill={i < Math.round(averageRating) ? "#facc15" : "#e5e7eb"}
 								viewBox="0 0 20 20"
 								role="img"
 								aria-label={`${i + 1} out of 5 stars`}

@@ -4,14 +4,14 @@
 
 @layer base {
 	:root {
-		font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-			"Segoe UI", sans-serif;
+		font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+			BlinkMacSystemFont, "Segoe UI", sans-serif;
 	}
 
 	code,
 	pre {
-		font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-			"Liberation Mono", "Courier New", monospace;
+		font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
+			Consolas, "Liberation Mono", "Courier New", monospace;
 	}
 
 	.theme-cyberoni {
@@ -44,7 +44,11 @@
 		--radius: 0.75rem;
 		--focus: 262 83% 60%; /* neon purple for focus */
 		--background: 222 100% 99%; /* soft blue-white */
-		--background-gradient: linear-gradient(135deg, hsl(222, 100%, 99%) 0%, hsl(210, 60%, 97%) 100%);
+		--background-gradient: linear-gradient(
+			135deg,
+			hsl(222, 100%, 99%) 0%,
+			hsl(210, 60%, 97%) 100%
+		);
 		--background-dark: 220 20% 95%; /* for cards/surfaces */
 		--card: 0 0% 100% / 0.8; /* glassy white */
 		--card-foreground: 224 71% 8%; /* dark for contrast */
@@ -226,11 +230,19 @@
 	}
 
 	.dark body {
-		background: linear-gradient(180deg, rgba(15, 23, 42, 1) 0%, rgba(8, 15, 31, 1) 100%);
+		background: linear-gradient(
+			180deg,
+			rgba(15, 23, 42, 1) 0%,
+			rgba(8, 15, 31, 1) 100%
+		);
 	}
 
 	.light body {
-		background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(240, 240, 240, 1) 100%);
+		background: linear-gradient(
+			180deg,
+			rgba(255, 255, 255, 1) 0%,
+			rgba(240, 240, 240, 1) 100%
+		);
 	}
 
 	/* Lead Orchestra theme gradients (from Notion Brand Guidelines) */
@@ -275,7 +287,11 @@
 	}
 	.dark .glass-card {
 		@apply border border-black/20 bg-black/30 shadow-lg backdrop-blur-2xl;
-		background-image: linear-gradient(135deg, rgba(30, 30, 40, 0.4) 0%, rgba(30, 30, 40, 0.1) 100%);
+		background-image: linear-gradient(
+			135deg,
+			rgba(30, 30, 40, 0.4) 0%,
+			rgba(30, 30, 40, 0.1) 100%
+		);
 	}
 	.neo-blur {
 		@apply border border-black/10 bg-white/40 backdrop-blur-2xl dark:border-white/10 dark:bg-black/40;

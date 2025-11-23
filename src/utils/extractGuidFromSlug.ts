@@ -8,18 +8,18 @@
 export function extractGuidFromSlug(slug: string | string[]): string {
 	// * Debug logging for troubleshooting slug extraction
 	// eslint-disable-next-line no-console
-	console.log('[extractGuidFromSlug] input:', slug);
-	const normalized = Array.isArray(slug) ? slug.join('/') : slug;
-	const lastSegment = normalized.split('/').pop() ?? normalized;
-	const guid = lastSegment.split('-').pop() ?? lastSegment;
+	console.log("[extractGuidFromSlug] input:", slug);
+	const normalized = Array.isArray(slug) ? slug.join("/") : slug;
+	const lastSegment = normalized.split("/").pop() ?? normalized;
+	const guid = lastSegment.split("-").pop() ?? lastSegment;
 	// eslint-disable-next-line no-console
 	console.log(
-		'[extractGuidFromSlug] normalized:',
+		"[extractGuidFromSlug] normalized:",
 		normalized,
-		'lastSegment:',
+		"lastSegment:",
 		lastSegment,
-		'guid:',
-		guid
+		"guid:",
+		guid,
 	);
 	return guid;
 }

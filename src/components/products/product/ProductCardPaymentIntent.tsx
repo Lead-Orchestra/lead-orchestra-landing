@@ -2,20 +2,20 @@
 // ! ProductCard component: Card for displaying product info, modeled after ServiceCard but without icons.
 // * Follows DRY, SOLID, and type-safe best practices (see user rules)
 
-'use client';
-import { cn } from '@/lib/utils';
-import type { ProductCategory, ProductType } from '@/types/products';
-import { motion, useReducedMotion } from 'framer-motion';
-import Link from 'next/link';
-import type React from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { v4 as uuid } from 'uuid';
+"use client";
+import { cn } from "@/lib/utils";
+import type { ProductCategory, ProductType } from "@/types/products";
+import { motion, useReducedMotion } from "framer-motion";
+import Link from "next/link";
+import type React from "react";
+import { v4 as uuidv4 } from "uuid";
+import { v4 as uuid } from "uuid";
 
 /**
  * Props for ProductCard component.
  * Extends ProductType but omits fields not needed for card display.
  */
-export interface ProductCardProps extends Omit<ProductType, 'categories'> {
+export interface ProductCardProps extends Omit<ProductType, "categories"> {
 	categories?: string[];
 	className?: string;
 	showBanner?: boolean;
@@ -28,42 +28,48 @@ export interface ProductCardProps extends Omit<ProductType, 'categories'> {
 /**
  * Validate required ProductCard props.
  */
-const validateProductProps = (props: Omit<ProductCardProps, 'className'>): boolean => {
+const validateProductProps = (
+	props: Omit<ProductCardProps, "className">,
+): boolean => {
 	return !!(
 		props?.name &&
-		typeof props.name === 'string' &&
+		typeof props.name === "string" &&
 		props.description &&
-		typeof props.description === 'string' &&
-		typeof props.price === 'number' &&
+		typeof props.description === "string" &&
+		typeof props.price === "number" &&
 		Array.isArray(props.images)
 	);
 };
 
-import CheckoutForm from '@/components/checkout/CheckoutForm';
-import { ProductCheckoutForm } from '@/components/checkout/product/ProductCheckoutForm';
-import { Button } from '@/components/ui/button';
+import CheckoutForm from "@/components/checkout/CheckoutForm";
+import { ProductCheckoutForm } from "@/components/checkout/product/ProductCheckoutForm";
+import { Button } from "@/components/ui/button";
 /**
  * ProductCard - displays product info in a styled card (no icon)
  * @param props ProductCardProps
  */
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { CircleDollarSign, Gem } from 'lucide-react';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { CircleDollarSign, Gem } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 	? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 	: null;
 
 if (!stripePromise) {
-	console.error('Stripe publishable key is not set. Checkout will not function.');
+	console.error(
+		"Stripe publishable key is not set. Checkout will not function.",
+	);
 }
 
 const ProductCard = (props: ProductCardProps) => {
 	const shouldReduceMotion = useReducedMotion();
 	// State for Stripe checkout modal
-	const [clientSecretForModal, setClientSecretForModal] = useState<string | null>(null);
+	const [clientSecretForModal, setClientSecretForModal] = useState<
+		string | null
+	>(null);
 	const [priceForCheckout, setPriceForCheckout] = useState<number>(0);
 	const [checkoutLoading, setCheckoutLoading] = useState(false);
 
@@ -73,18 +79,18 @@ const ProductCard = (props: ProductCardProps) => {
 		description: string;
 		metadata: object;
 	}) => {
-		console.log('1. Starting checkout with details:', checkoutDetails);
+		console.log("1. Starting checkout with details:", checkoutDetails);
 
 		// Validate required fields
 		if (!checkoutDetails.price) {
-			console.error('Price is required');
-			toast.error('Price is required');
+			console.error("Price is required");
+			toast.error("Price is required");
 			return;
 		}
 
 		if (!checkoutDetails.description) {
-			console.error('Description is required');
-			toast.error('Product description is required');
+			console.error("Description is required");
+			toast.error("Product description is required");
 			return;
 		}
 
@@ -92,15 +98,15 @@ const ProductCard = (props: ProductCardProps) => {
 		try {
 			const priceInCents = Math.round(checkoutDetails.price * 100);
 			console.log(
-				'2. Making API call to create payment intent with price (in cents):',
-				priceInCents
+				"2. Making API call to create payment intent with price (in cents):",
+				priceInCents,
 			);
 
-			const response = await fetch('/api/stripe', {
-				method: 'POST',
+			const response = await fetch("/api/stripe", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/json',
+					"Content-Type": "application/json",
+					Accept: "application/json",
 				},
 				body: JSON.stringify({
 					price: priceInCents,
@@ -112,42 +118,45 @@ const ProductCard = (props: ProductCardProps) => {
 				}),
 			});
 
-			console.log('3. Response status:', response.status);
+			console.log("3. Response status:", response.status);
 			const responseData = await response.json();
-			console.log('4. Response data:', responseData);
+			console.log("4. Response data:", responseData);
 
 			if (!response.ok) {
-				throw new Error(responseData.error || 'Failed to create payment intent');
+				throw new Error(
+					responseData.error || "Failed to create payment intent",
+				);
 			}
 
 			if (!responseData.clientSecret) {
-				throw new Error('Unable to initialize checkout. Please try again.');
+				throw new Error("Unable to initialize checkout. Please try again.");
 			}
 
-			console.log('5. Setting client secret...');
+			console.log("5. Setting client secret...");
 			setClientSecretForModal(responseData.clientSecret);
 		} catch (error) {
-			console.error('Error in handleInitiateCheckout:', {
+			console.error("Error in handleInitiateCheckout:", {
 				error,
 				message: error.message,
 				stack: error.stack,
 			});
-			toast.error('Unable to start checkout. Please try again.');
+			toast.error("Unable to start checkout. Please try again.");
 		} finally {
 			setCheckoutLoading(false);
 		}
 	};
 
 	if (!validateProductProps(props)) {
-		console.error('Invalid ProductCard core props:', props);
+		console.error("Invalid ProductCard core props:", props);
 		return (
 			<div
 				className={cn(
-					'rounded-xl border border-red-500 bg-red-500/10 p-4 text-red-400',
-					props.className
+					"rounded-xl border border-red-500 bg-red-500/10 p-4 text-red-400",
+					props.className,
 				)}
 			>
-				Unable to display product information. Please refresh the page or contact support.
+				Unable to display product information. Please refresh the page or
+				contact support.
 			</div>
 		);
 	}
@@ -160,8 +169,8 @@ const ProductCard = (props: ProductCardProps) => {
 		salesIncentive,
 		className,
 		showBanner = false,
-		bannerText = 'Featured',
-		bannerColor = 'bg-gradient-to-r from-primary to-focus',
+		bannerText = "Featured",
+		bannerColor = "bg-gradient-to-r from-primary to-focus",
 		onSale = false,
 		slug,
 		types,
@@ -170,19 +179,20 @@ const ProductCard = (props: ProductCardProps) => {
 	} = props;
 
 	// todo: Replace with actual product image or fallback
-	const imageUrl = images && images.length > 0 ? images[0] : '/placeholder-product.png';
+	const imageUrl =
+		images && images.length > 0 ? images[0] : "/placeholder-product.png";
 
 	return (
 		<motion.div
 			layout
 			className={cn(
 				// Card background, border, text
-				'relative flex h-full flex-col rounded-xl border border-gray-200 bg-white p-6 text-black shadow transition-all duration-200',
-				'dark:border-gray-700 dark:bg-gray-900 dark:text-white',
-				className
+				"relative flex h-full flex-col rounded-xl border border-gray-200 bg-white p-6 text-black shadow transition-all duration-200",
+				"dark:border-gray-700 dark:bg-gray-900 dark:text-white",
+				className,
 			)}
 			whileHover={{ scale: shouldReduceMotion ? 1 : 1.03 }}
-			transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+			transition={{ type: "spring", stiffness: 300, damping: 20 }}
 		>
 			{/* Discount Tag */}
 			{salesIncentive?.discountPercent && (
@@ -196,7 +206,7 @@ const ProductCard = (props: ProductCardProps) => {
 			{/* Eye and Heart Icons */}
 			<div className="absolute top-6 right-6 flex gap-2">
 				<Link
-					href={props.slug ? `/products/${props.slug}` : '#'}
+					href={props.slug ? `/products/${props.slug}` : "#"}
 					aria-label={props.slug ? `View details for ${props.name}` : undefined}
 					className="rounded-full bg-gray-100 p-2 text-gray-500 transition-colors hover:bg-gray-200 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-blue-400"
 					tabIndex={props.slug ? 0 : -1}
@@ -214,7 +224,7 @@ const ProductCard = (props: ProductCardProps) => {
 						<circle cx="12" cy="12" r="3" />
 					</svg>
 				</Link>
-				{process.env.APP_MODE === 'hybrid' && (
+				{process.env.APP_MODE === "hybrid" && (
 					<button
 						type="button"
 						className="rounded-full bg-gray-100 p-2 text-gray-500 transition-colors hover:bg-gray-200 hover:text-pink-500 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-pink-400"
@@ -238,7 +248,7 @@ const ProductCard = (props: ProductCardProps) => {
 			{/* Product Image */}
 			<div className="w-full pt-2">
 				<Link
-					href={slug ? `/products/${slug}` : '#'}
+					href={slug ? `/products/${slug}` : "#"}
 					tabIndex={0}
 					aria-label={`View details for ${name}`}
 					className="mb-4 block h-40 w-full rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-800"
@@ -270,10 +280,11 @@ const ProductCard = (props: ProductCardProps) => {
 								fill={
 									i <
 									Math.round(
-										props.reviews.reduce((sum, r) => sum + r.rating, 0) / props.reviews.length
+										props.reviews.reduce((sum, r) => sum + r.rating, 0) /
+											props.reviews.length,
 									)
-										? '#facc15'
-										: '#e5e7eb'
+										? "#facc15"
+										: "#e5e7eb"
 								}
 								viewBox="0 0 20 20"
 							>
@@ -283,9 +294,10 @@ const ProductCard = (props: ProductCardProps) => {
 						))}
 					</span>
 					<span className="ml-1 font-semibold text-black dark:text-white">
-						{(props.reviews.reduce((sum, r) => sum + r.rating, 0) / props.reviews.length).toFixed(
-							1
-						)}
+						{(
+							props.reviews.reduce((sum, r) => sum + r.rating, 0) /
+							props.reviews.length
+						).toFixed(1)}
 					</span>
 					<span className="text-gray-500 text-sm dark:text-gray-300">
 						({props.reviews.length.toLocaleString()})
@@ -339,14 +351,17 @@ const ProductCard = (props: ProductCardProps) => {
 						<circle cx="20" cy="21" r="1" />
 						<path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
 					</svg>
-					<span>{checkoutLoading ? 'Processing...' : 'Purchase'}</span>
+					<span>{checkoutLoading ? "Processing..." : "Purchase"}</span>
 				</button>
 			</div>
 			{/* Payment Intent Modal */}
 			{clientSecretForModal && stripePromise && (
 				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
 					<div className="mx-auto w-full max-w-md rounded-lg bg-background p-6 shadow-xl dark:bg-background-darker">
-						<Elements stripe={stripePromise} options={{ clientSecret: clientSecretForModal }}>
+						<Elements
+							stripe={stripePromise}
+							options={{ clientSecret: clientSecretForModal }}
+						>
 							<ProductCheckoutForm
 								product={{
 									...props, // This spreads all the existing props
@@ -359,13 +374,13 @@ const ProductCard = (props: ProductCardProps) => {
 									colors: props.colors || [],
 									sizes: props.sizes || [],
 									categories: (props.categories || []) as ProductCategory[], // This was missing
-									description: props.description || '', // This was missing
+									description: props.description || "", // This was missing
 									reviews: props.reviews || [], // This was missing
 									// Add other required fields from ProductType if any
 								}}
 								onClose={() => {
 									setClientSecretForModal(null);
-									toast.success('Payment successful!');
+									toast.success("Payment successful!");
 								}}
 								clientSecret={clientSecretForModal}
 							/>

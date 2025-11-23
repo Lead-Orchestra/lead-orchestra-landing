@@ -11,7 +11,7 @@ export interface UserProfileSummary {
  */
 export async function fetchUserDisplayName(): Promise<string | null> {
 	try {
-		const response = await fetch('/api/auth/me', { method: 'GET' });
+		const response = await fetch("/api/auth/me", { method: "GET" });
 
 		if (!response.ok) {
 			return null;
@@ -22,7 +22,7 @@ export async function fetchUserDisplayName(): Promise<string | null> {
 		const last = data.last_name?.trim();
 		const full = data.full_name?.trim();
 
-		const combined = [first, last].filter(Boolean).join(' ').trim();
+		const combined = [first, last].filter(Boolean).join(" ").trim();
 		if (combined.length > 0) {
 			return combined;
 		}
@@ -33,7 +33,7 @@ export async function fetchUserDisplayName(): Promise<string | null> {
 
 		return null;
 	} catch (error) {
-		console.warn('fetchUserDisplayName failed', error);
+		console.warn("fetchUserDisplayName failed", error);
 		return null;
 	}
 }

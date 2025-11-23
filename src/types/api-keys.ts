@@ -2,17 +2,17 @@
  * API keys management type definitions
  */
 
-export type CreditType = 'lead' | 'ai' | 'skip_trace' | 'custom';
+export type CreditType = "lead" | "ai" | "skip_trace" | "custom";
 
 export type CreditAdjustmentReason =
-	| 'refund'
-	| 'grant'
-	| 'purchase'
-	| 'usage'
-	| 'admin_adjustment'
-	| 'promotional'
-	| 'system'
-	| 'other';
+	| "refund"
+	| "grant"
+	| "purchase"
+	| "usage"
+	| "admin_adjustment"
+	| "promotional"
+	| "system"
+	| "other";
 
 export interface ApiKeyScopesResponse {
 	scopes: Record<string, unknown>;

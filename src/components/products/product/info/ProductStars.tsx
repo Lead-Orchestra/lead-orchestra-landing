@@ -1,7 +1,7 @@
-import { cn } from '@/lib/utils';
-import type { Review } from '@/types/products';
-import { Star } from 'lucide-react';
-import { v4 as uuidv4 } from 'uuid';
+import { cn } from "@/lib/utils";
+import type { Review } from "@/types/products";
+import { Star } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * * ProductStars: Renders star rating and review count
@@ -14,7 +14,11 @@ interface ProductStarsProps {
 	setActiveTab?: (tab: string) => void;
 }
 
-export default function ProductStars({ rating, reviewCount, setActiveTab }: ProductStarsProps) {
+export default function ProductStars({
+	rating,
+	reviewCount,
+	setActiveTab,
+}: ProductStarsProps) {
 	return (
 		<div className="mt-3">
 			<h3 className="sr-only">Reviews</h3>
@@ -24,10 +28,10 @@ export default function ProductStars({ rating, reviewCount, setActiveTab }: Prod
 						<Star
 							key={uuidv4()}
 							className={cn(
-								'h-5 w-5',
+								"h-5 w-5",
 								i < Math.round(rating)
-									? 'fill-current text-yellow-400 dark:text-yellow-300'
-									: 'text-muted'
+									? "fill-current text-yellow-400 dark:text-yellow-300"
+									: "text-muted",
 							)}
 						/>
 					))}
@@ -38,9 +42,9 @@ export default function ProductStars({ rating, reviewCount, setActiveTab }: Prod
 						type="button"
 						className="ml-3 font-medium text-primary text-sm hover:text-primary/80 dark:text-primary dark:hover:text-primary/70"
 						aria-label="Show reviews tab"
-						onClick={() => setActiveTab?.('reviews')}
+						onClick={() => setActiveTab?.("reviews")}
 					>
-						{reviewCount} review{reviewCount === 1 ? '' : 's'}
+						{reviewCount} review{reviewCount === 1 ? "" : "s"}
 					</button>
 				)}
 			</div>

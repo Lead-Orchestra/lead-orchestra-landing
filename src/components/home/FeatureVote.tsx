@@ -1,11 +1,12 @@
-'use client';
-import { type MutableRefObject, useRef } from 'react';
-import Header from '../common/Header';
-import FeaturesList from '../features/FeaturesList';
-import { useFeatures } from '../features/useFeatures';
+"use client";
+import { type MutableRefObject, useRef } from "react";
+import Header from "../common/Header";
+import FeaturesList from "../features/FeaturesList";
+import { useFeatures } from "../features/useFeatures";
 
 const UpcomingFeatures = () => {
-	const { features, loading, handleVote, isVotingInProgress, CategoryFilter } = useFeatures();
+	const { features, loading, handleVote, isVotingInProgress, CategoryFilter } =
+		useFeatures();
 	const scrollRef = useRef<HTMLDivElement>(null);
 	const pausedRef: MutableRefObject<boolean> = useRef(false);
 

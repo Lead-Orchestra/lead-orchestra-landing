@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useAuthModal } from '@/components/auth/use-auth-store';
-import { Icons } from '@/components/icons';
-import { useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { useAuthModal } from "@/components/auth/use-auth-store";
+import { Icons } from "@/components/icons";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 interface AuthGuardProps {
 	children: React.ReactNode;
@@ -14,12 +14,12 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 	const { open } = useAuthModal();
 
 	useEffect(() => {
-		if (status === 'unauthenticated') {
-			open('signin');
+		if (status === "unauthenticated") {
+			open("signin");
 		}
 	}, [status, open]);
 
-	if (status === 'loading') {
+	if (status === "loading") {
 		return (
 			<div className="flex h-screen w-full items-center justify-center">
 				<Icons.spinner className="h-8 w-8 animate-spin" />
@@ -27,7 +27,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 		);
 	}
 
-	if (status === 'unauthenticated') {
+	if (status === "unauthenticated") {
 		// Render nothing, as the modal will be open
 		return null;
 	}

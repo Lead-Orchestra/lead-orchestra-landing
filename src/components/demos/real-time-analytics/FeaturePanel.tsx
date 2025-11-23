@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { motion } from 'motion/react';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { motion } from "motion/react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
-import { NumberTicker } from '@/components/magicui/number-ticker';
-import { cn } from '@/lib/utils';
+import { NumberTicker } from "@/components/magicui/number-ticker";
+import { cn } from "@/lib/utils";
 
-import type { RealTimeFeature } from './feature-config';
+import type { RealTimeFeature } from "./feature-config";
 
-const FeatureChart = dynamic(() => import('./FeatureChart'), {
+const FeatureChart = dynamic(() => import("./FeatureChart"), {
 	ssr: false,
 	loading: () => <ChartSkeleton />,
 });
 
 const iconClasses =
-	'inline-flex min-h-[2.25rem] items-center justify-center whitespace-nowrap rounded-xl border px-3 text-xs font-semibold tracking-wide transition-colors';
+	"inline-flex min-h-[2.25rem] items-center justify-center whitespace-nowrap rounded-xl border px-3 text-xs font-semibold tracking-wide transition-colors";
 
 type FeaturePanelProps = {
 	feature: RealTimeFeature;
@@ -40,14 +40,16 @@ function extractNumericValueParts(input: string): NumericValueParts | null {
 	}
 
 	const numberPart = match[1];
-	const suffix = match[2] ?? '';
+	const suffix = match[2] ?? "";
 	const numericValue = Number.parseFloat(numberPart);
 
 	if (Number.isNaN(numericValue)) {
 		return null;
 	}
 
-	const decimalPlaces = numberPart.includes('.') ? numberPart.split('.')[1].length : 0;
+	const decimalPlaces = numberPart.includes(".")
+		? numberPart.split(".")[1].length
+		: 0;
 
 	return {
 		value: numericValue,
@@ -86,7 +88,7 @@ export function FeaturePanel({
 			return;
 		}
 
-		if (typeof IntersectionObserver === 'undefined') {
+		if (typeof IntersectionObserver === "undefined") {
 			setChartVisible(true);
 			return;
 		}
@@ -98,7 +100,7 @@ export function FeaturePanel({
 					observer.disconnect();
 				}
 			},
-			{ rootMargin: '200px' }
+			{ rootMargin: "200px" },
 		);
 
 		observer.observe(node);
@@ -115,14 +117,18 @@ export function FeaturePanel({
 			initial={{ opacity: 0, y: 24 }}
 			animate={{ opacity: 1, y: 0 }}
 			exit={{ opacity: 0, y: -24 }}
-			transition={{ duration: 0.45, ease: 'easeOut' }}
+			transition={{ duration: 0.45, ease: "easeOut" }}
 		>
 			{feature.chart ? (
 				<div
 					ref={chartContainerRef}
 					className="flex flex-col gap-4 rounded-2xl border border-border/50 bg-background/75 p-4 shadow-[0_18px_60px_-40px_rgba(59,130,246,0.45)] sm:p-6"
 				>
-					{chartVisible ? <FeatureChart chart={feature.chart} /> : <ChartSkeleton />}
+					{chartVisible ? (
+						<FeatureChart chart={feature.chart} />
+					) : (
+						<ChartSkeleton />
+					)}
 				</div>
 			) : null}
 
@@ -146,16 +152,20 @@ export function FeaturePanel({
 						) : null}
 						<div className="flex flex-col gap-3 p-4">
 							<div className="flex items-start justify-between gap-3">
-								<h3 className="font-semibold text-base text-foreground">{highlight.title}</h3>
+								<h3 className="font-semibold text-base text-foreground">
+									{highlight.title}
+								</h3>
 								{highlight.metric ? (
 									<span
 										className={cn(
 											iconClasses,
-											'border-blue-500/25 bg-blue-500/10 text-blue-700 dark:border-blue-400/50 dark:bg-blue-500/15 dark:text-blue-100'
+											"border-blue-500/25 bg-blue-500/10 text-blue-700 dark:border-blue-400/50 dark:bg-blue-500/15 dark:text-blue-100",
 										)}
 									>
 										{(() => {
-											const parts = extractNumericValueParts(highlight.metric?.value ?? '');
+											const parts = extractNumericValueParts(
+												highlight.metric?.value ?? "",
+											);
 
 											if (!parts) {
 												return highlight.metric?.value;
@@ -170,14 +180,18 @@ export function FeaturePanel({
 														value={parts.value}
 														decimalPlaces={parts.decimalPlaces}
 													/>
-													{parts.suffix ? <span>{parts.suffix.trimStart()}</span> : null}
+													{parts.suffix ? (
+														<span>{parts.suffix.trimStart()}</span>
+													) : null}
 												</span>
 											);
 										})()}
 									</span>
 								) : null}
 							</div>
-							<p className="text-muted-foreground text-sm">{highlight.description}</p>
+							<p className="text-muted-foreground text-sm">
+								{highlight.description}
+							</p>
 							{highlight.metric ? (
 								<span className="text-muted-foreground/80 text-xs uppercase tracking-wide">
 									{highlight.metric.label}
@@ -215,7 +229,9 @@ export function FeaturePanel({
 												value={parts.value}
 												decimalPlaces={parts.decimalPlaces}
 											/>
-											{parts.suffix ? <span>{parts.suffix.trimStart()}</span> : null}
+											{parts.suffix ? (
+												<span>{parts.suffix.trimStart()}</span>
+											) : null}
 										</span>
 									);
 								})()}

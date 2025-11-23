@@ -121,7 +121,8 @@ h3 {
 
 :root {
 	--animate-marquee: marquee var(--duration, 40s) infinite linear;
-	--animate-marquee-vertical: marquee-vertical var(--duration, 40s) linear infinite;
+	--animate-marquee-vertical: marquee-vertical var(--duration, 40s) linear
+		infinite;
 }
 
 @keyframes marquee {

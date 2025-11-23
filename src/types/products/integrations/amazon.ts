@@ -1,4 +1,4 @@
-import type { DropshippingIntegration } from '.';
+import type { DropshippingIntegration } from ".";
 
 export interface AmazonDropshippingItem {
 	asin: string; // Amazon Standard Identification Number

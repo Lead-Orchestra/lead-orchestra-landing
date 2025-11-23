@@ -1,16 +1,19 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from "next";
 
 const YOUTUBE_FEED = process.env.YOUTUBE_CHANNEL_ID
 	? `https://www.youtube.com/feeds/videos.xml?channel_id=${process.env.YOUTUBE_CHANNEL_ID}`
-	: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ-A';
-const CACHE_CONTROL = 's-maxage=900, stale-while-revalidate=3600';
+	: "https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ-A";
+const CACHE_CONTROL = "s-maxage=900, stale-while-revalidate=3600";
 
-export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+	_req: NextApiRequest,
+	res: NextApiResponse,
+) {
 	try {
 		const response = await fetch(YOUTUBE_FEED, {
 			headers: {
-				'User-Agent': 'DealScaleYouTubeRSSProxy/1.0 (+https://dealscale.io)',
-				Accept: 'application/atom+xml, application/xml;q=0.9, */*;q=0.8',
+				"User-Agent": "DealScaleYouTubeRSSProxy/1.0 (+https://dealscale.io)",
+				Accept: "application/atom+xml, application/xml;q=0.9, */*;q=0.8",
 			},
 		});
 
@@ -20,15 +23,15 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
 
 		const xml = await response.text();
 
-		res.setHeader('Content-Type', 'application/atom+xml; charset=utf-8');
-		res.setHeader('Cache-Control', CACHE_CONTROL);
+		res.setHeader("Content-Type", "application/atom+xml; charset=utf-8");
+		res.setHeader("Cache-Control", CACHE_CONTROL);
 		res.status(200).send(xml);
 	} catch (error) {
-		console.error('Error fetching YouTube RSS feed:', error);
+		console.error("Error fetching YouTube RSS feed:", error);
 		res
 			.status(502)
 			.send(
-				'<?xml version="1.0" encoding="UTF-8"?><feed><title>DealScale YouTube Feed Error</title><subtitle>YouTube RSS temporarily unavailable.</subtitle></feed>'
+				'<?xml version="1.0" encoding="UTF-8"?><feed><title>DealScale YouTube Feed Error</title><subtitle>YouTube RSS temporarily unavailable.</subtitle></feed>',
 			);
 	}
 }

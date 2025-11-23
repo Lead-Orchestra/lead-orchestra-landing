@@ -1,17 +1,21 @@
-import { DEFAULT_SEO } from '@/data/constants/seo';
-import type { LegalDocument } from '@/data/legal/legalDocuments';
-import { legalDocuments } from '@/data/legal/legalDocuments';
-import type { SeoMeta } from './seo';
+import { DEFAULT_SEO } from "@/data/constants/seo";
+import type { LegalDocument } from "@/data/legal/legalDocuments";
+import { legalDocuments } from "@/data/legal/legalDocuments";
+import type { SeoMeta } from "./seo";
 
 function resolveSiteOrigin(): string {
-	const fallback = DEFAULT_SEO.canonical ?? 'https://dealscale.io';
-	const candidates = [process.env.NEXT_PUBLIC_SITE_URL, fallback, 'https://dealscale.io'];
+	const fallback = DEFAULT_SEO.canonical ?? "https://dealscale.io";
+	const candidates = [
+		process.env.NEXT_PUBLIC_SITE_URL,
+		fallback,
+		"https://dealscale.io",
+	];
 
 	for (const candidate of candidates) {
 		if (!candidate) continue;
 		try {
 			const parsed = new URL(candidate);
-			if (parsed.protocol === 'https:') {
+			if (parsed.protocol === "https:") {
 				return parsed.origin;
 			}
 		} catch {
@@ -29,16 +33,16 @@ function resolveSiteOrigin(): string {
 		}
 	}
 
-	return 'https://dealscale.io';
+	return "https://dealscale.io";
 }
 
 const SITE_ORIGIN = resolveSiteOrigin();
 
 function normalizePath(path: string | undefined, slug: string): string {
-	if (!path || typeof path !== 'string' || path.trim().length === 0) {
+	if (!path || typeof path !== "string" || path.trim().length === 0) {
 		return `/legal/${slug}`;
 	}
-	return path.startsWith('/') ? path : `/${path}`;
+	return path.startsWith("/") ? path : `/${path}`;
 }
 
 export function resolveLegalDocumentPath(doc: LegalDocument): string {
@@ -51,7 +55,7 @@ export function resolveLegalDocumentCanonical(doc: LegalDocument): string {
 		if (/^https?:\/\//i.test(explicitUrl)) {
 			return explicitUrl;
 		}
-		return `${SITE_ORIGIN}${explicitUrl.startsWith('/') ? '' : '/'}${explicitUrl}`;
+		return `${SITE_ORIGIN}${explicitUrl.startsWith("/") ? "" : "/"}${explicitUrl}`;
 	}
 
 	const path = resolveLegalDocumentPath(doc);
@@ -76,7 +80,7 @@ export function buildLegalSeoMeta(doc: LegalDocument): SeoMeta {
 	const lastUpdatedIso = toIso8601(doc.lastUpdated);
 
 	const keywords = Array.from(
-		new Set([doc.title, 'Deal Scale Legal Document', ...DEFAULT_SEO.keywords])
+		new Set([doc.title, "Deal Scale Legal Document", ...DEFAULT_SEO.keywords]),
 	);
 
 	return {
@@ -85,10 +89,10 @@ export function buildLegalSeoMeta(doc: LegalDocument): SeoMeta {
 		canonical,
 		keywords,
 		image: DEFAULT_SEO.image,
-		type: 'article',
+		type: "article",
 		dateModified: lastUpdatedIso,
 		priority: 0.3,
-		changeFrequency: 'yearly',
+		changeFrequency: "yearly",
 	};
 }
 
@@ -97,35 +101,36 @@ export function buildLegalJsonLd(doc: LegalDocument): Record<string, unknown> {
 	const lastUpdatedIso = toIso8601(doc.lastUpdated);
 
 	const policyType: Record<string, string> = {
-		'privacy-policy': 'PrivacyPolicy',
-		'terms-of-service': 'Legislation',
-		'cookie-policy': 'WebPage',
-		'tcpa-compliance': 'Legislation',
-		'gdpr-policy': 'Legislation',
-		'hipaa-policy': 'Legislation',
-		'pii-handling-policy': 'Legislation',
+		"privacy-policy": "PrivacyPolicy",
+		"terms-of-service": "Legislation",
+		"cookie-policy": "WebPage",
+		"tcpa-compliance": "Legislation",
+		"gdpr-policy": "Legislation",
+		"hipaa-policy": "Legislation",
+		"pii-handling-policy": "Legislation",
 	};
 
-	const schemaType = policyType[doc.slug as keyof typeof policyType] ?? 'WebPage';
+	const schemaType =
+		policyType[doc.slug as keyof typeof policyType] ?? "WebPage";
 
 	return {
-		'@context': 'https://schema.org',
-		'@type': schemaType,
+		"@context": "https://schema.org",
+		"@type": schemaType,
 		name: doc.title,
 		description: doc.description,
 		url: canonical,
 		dateModified: lastUpdatedIso,
 		isPartOf: {
-			'@type': 'WebSite',
+			"@type": "WebSite",
 			name: DEFAULT_SEO.siteName,
 			url: DEFAULT_SEO.canonical,
 		},
 		publisher: {
-			'@type': 'Organization',
-			name: 'Deal Scale',
+			"@type": "Organization",
+			name: "Deal Scale",
 			url: DEFAULT_SEO.canonical,
 			logo: {
-				'@type': 'ImageObject',
+				"@type": "ImageObject",
 				url: resolveLogoUrl(DEFAULT_SEO.image),
 			},
 		},
@@ -134,8 +139,8 @@ export function buildLegalJsonLd(doc: LegalDocument): Record<string, unknown> {
 
 function resolveLogoUrl(imagePath: string | undefined): string | undefined {
 	if (!imagePath) return undefined;
-	if (imagePath.startsWith('http')) return imagePath;
-	return `${SITE_ORIGIN}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+	if (imagePath.startsWith("http")) return imagePath;
+	return `${SITE_ORIGIN}${imagePath.startsWith("/") ? "" : "/"}${imagePath}`;
 }
 
 const legalDocumentsByPath = new Map<string, LegalDocument>();
@@ -147,12 +152,16 @@ for (const doc of legalDocuments) {
 	legalDocumentsBySlug.set(doc.slug, doc);
 }
 
-export function getLegalDocumentByPath(path: string): LegalDocument | undefined {
-	const normalized = normalizePath(path, path.replace(/^\//, ''));
+export function getLegalDocumentByPath(
+	path: string,
+): LegalDocument | undefined {
+	const normalized = normalizePath(path, path.replace(/^\//, ""));
 	return legalDocumentsByPath.get(normalized);
 }
 
-export function getLegalDocumentBySlug(slug: string): LegalDocument | undefined {
+export function getLegalDocumentBySlug(
+	slug: string,
+): LegalDocument | undefined {
 	return legalDocumentsBySlug.get(slug);
 }
 
@@ -167,7 +176,9 @@ export function buildLegalSeoMetaMap(): Record<string, SeoMeta> {
 	return entries;
 }
 
-export function buildLegalJsonLdFromPath(path: string): Record<string, unknown> | undefined {
+export function buildLegalJsonLdFromPath(
+	path: string,
+): Record<string, unknown> | undefined {
 	const doc = getLegalDocumentByPath(path);
 	return doc ? buildLegalJsonLd(doc) : undefined;
 }

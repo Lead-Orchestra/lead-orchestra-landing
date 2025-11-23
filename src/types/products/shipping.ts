@@ -2,12 +2,12 @@ export type ShippingDimensions = {
 	length: number; // in cm
 	width: number; // in cm
 	height: number; // in cm
-	unit?: 'cm' | 'in';
+	unit?: "cm" | "in";
 };
 
 export type ShippingWeight = {
 	value: number;
-	unit: 'kg' | 'g' | 'lb' | 'oz';
+	unit: "kg" | "g" | "lb" | "oz";
 };
 
 export type ShippingTimeEstimate = {
@@ -52,7 +52,7 @@ export type ShippingOption = {
 	estimatedTime: ShippingTimeEstimate;
 	weightLimit?: ShippingWeight;
 	dimensionLimit?: ShippingDimensions;
-	additionalServices?: Array<'signature' | 'insurance' | 'fragile' | string>;
+	additionalServices?: Array<"signature" | "insurance" | "fragile" | string>;
 	isAvailable: boolean;
 	notes?: string;
 };

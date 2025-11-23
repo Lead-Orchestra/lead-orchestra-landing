@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type { ComponentType } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import type { ComponentType } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import type { AnalyticsConfig } from '@/lib/analytics/config';
+import type { AnalyticsConfig } from "@/lib/analytics/config";
 
 type ClientExperiencePortalProps = {
 	clarityProjectId?: string;
@@ -21,25 +21,32 @@ type ClientExperiencePortalProps = {
  */
 export function ClientExperiencePortal(props: ClientExperiencePortalProps) {
 	const [isLoaded, setIsLoaded] = useState(false);
-	const componentRef = useRef<ComponentType<ClientExperiencePortalProps> | null>(null);
+	const componentRef =
+		useRef<ComponentType<ClientExperiencePortalProps> | null>(null);
 
 	useEffect(() => {
 		// This only runs on client
-		if (typeof window === 'undefined') {
-			if (process.env.NODE_ENV === 'development') {
-				console.warn('[ClientExperiencePortal PRERENDER ERROR] Should never render during SSR!');
+		if (typeof window === "undefined") {
+			if (process.env.NODE_ENV === "development") {
+				console.warn(
+					"[ClientExperiencePortal PRERENDER ERROR] Should never render during SSR!",
+				);
 			}
 			return;
 		}
 
-		if (process.env.NODE_ENV === 'development') {
-			console.log('[ClientExperiencePortal CLIENT] Loading component with native import...');
+		if (process.env.NODE_ENV === "development") {
+			console.log(
+				"[ClientExperiencePortal CLIENT] Loading component with native import...",
+			);
 		}
 		// Use native import() instead of dynamic() - this avoids creating component objects
-		import('./ClientExperienceLoader')
+		import("./ClientExperienceLoader")
 			.then((mod) => {
-				if (process.env.NODE_ENV === 'development') {
-					console.log('[ClientExperiencePortal CLIENT] Component loaded, storing in ref');
+				if (process.env.NODE_ENV === "development") {
+					console.log(
+						"[ClientExperiencePortal CLIENT] Component loaded, storing in ref",
+					);
 				}
 				// Store the actual component, not a dynamic wrapper
 				componentRef.current = mod.ClientExperienceLoader;
@@ -47,7 +54,7 @@ export function ClientExperiencePortal(props: ClientExperiencePortalProps) {
 				setIsLoaded(true);
 			})
 			.catch((error) => {
-				console.error('[ClientExperiencePortal] Failed to load:', error);
+				console.error("[ClientExperiencePortal] Failed to load:", error);
 			});
 	}, []);
 

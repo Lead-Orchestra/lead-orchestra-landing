@@ -1,37 +1,42 @@
-import { getServerSession } from 'next-auth';
-import { cookies } from 'next/headers';
-import { type NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from "next-auth";
+import { cookies } from "next/headers";
+import { type NextRequest, NextResponse } from "next/server";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { authOptions } from "@/lib/authOptions";
+import { encryptOAuthToken } from "@/lib/security";
+import type { Database } from "@/types/_postgresql/supabase";
 
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-
-import { authOptions } from '@/lib/authOptions';
-import { encryptOAuthToken } from '@/lib/security';
-import type { Database } from '@/types/_postgresql/supabase';
-
-const DEALSCALE_API_BASE = process.env.DEALSCALE_API_BASE || 'https://api.dealscale.io';
+const DEALSCALE_API_BASE =
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 function resolveRedirect(target?: string | null) {
 	if (!target) {
-		return '/settings/integrations';
+		return "/settings/integrations";
 	}
 
 	try {
-		const url = new URL(target, process.env.NEXTAUTH_URL ?? 'http://localhost:3000');
+		const url = new URL(
+			target,
+			process.env.NEXTAUTH_URL ?? "http://localhost:3000",
+		);
 		return url.pathname + url.search + url.hash;
 	} catch (error) {
-		console.warn('Invalid redirectTo provided, falling back to integrations page', error);
-		return '/settings/integrations';
+		console.warn(
+			"Invalid redirectTo provided, falling back to integrations page",
+			error,
+		);
+		return "/settings/integrations";
 	}
 }
 
 function redirectWithParams(
 	origin: string,
 	destination: string,
-	params: Record<string, string | null | undefined>
+	params: Record<string, string | null | undefined>,
 ) {
 	const url = new URL(destination, origin);
 	for (const [key, value] of Object.entries(params)) {
-		if (typeof value === 'string' && value.length > 0) {
+		if (typeof value === "string" && value.length > 0) {
 			url.searchParams.set(key, value);
 		}
 	}
@@ -40,23 +45,23 @@ function redirectWithParams(
 
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
-	const supabaseError = searchParams.get('error');
-	const supabaseErrorDescription = searchParams.get('error_description');
-	const code = searchParams.get('code');
-	const providerParam = searchParams.get('provider');
-	const redirectTo = searchParams.get('redirectTo');
+	const supabaseError = searchParams.get("error");
+	const supabaseErrorDescription = searchParams.get("error_description");
+	const code = searchParams.get("code");
+	const providerParam = searchParams.get("provider");
+	const redirectTo = searchParams.get("redirectTo");
 
 	const redirectDestination = resolveRedirect(redirectTo);
 	const origin = request.nextUrl.origin;
 
 	if (supabaseError) {
-		console.error('Supabase OAuth provider error', {
+		console.error("Supabase OAuth provider error", {
 			supabaseError,
 			supabaseErrorDescription,
 		});
 
 		return redirectWithParams(origin, redirectDestination, {
-			status: 'error',
+			status: "error",
 			message: `supabase_${supabaseError}`,
 			detail: supabaseErrorDescription ?? undefined,
 		});
@@ -64,8 +69,8 @@ export async function GET(request: NextRequest) {
 
 	if (!code) {
 		return redirectWithParams(origin, redirectDestination, {
-			status: 'error',
-			message: 'missing_code',
+			status: "error",
+			message: "missing_code",
 		});
 	}
 
@@ -73,8 +78,8 @@ export async function GET(request: NextRequest) {
 
 	if (!provider) {
 		return redirectWithParams(origin, redirectDestination, {
-			status: 'error',
-			message: 'missing_provider',
+			status: "error",
+			message: "missing_provider",
 		});
 	}
 
@@ -91,9 +96,9 @@ export async function GET(request: NextRequest) {
 			}
 
 			try {
-				return new URL(supabaseUrl).host.split('.')[0] ?? null;
+				return new URL(supabaseUrl).host.split(".")[0] ?? null;
 			} catch (error) {
-				console.warn('Failed to derive Supabase project ref', {
+				console.warn("Failed to derive Supabase project ref", {
 					supabaseUrl,
 					error,
 				});
@@ -102,37 +107,40 @@ export async function GET(request: NextRequest) {
 		})();
 
 		const codeVerifierCookieNames = projectRef
-			? [`sb-${projectRef}-auth-token-code-verifier`, `sb-${projectRef}-auth-token-code-verifier.0`]
+			? [
+					`sb-${projectRef}-auth-token-code-verifier`,
+					`sb-${projectRef}-auth-token-code-verifier.0`,
+				]
 			: [];
 
 		const codeVerifier = codeVerifierCookieNames
 			.map((name) => cookieStore.get(name)?.value)
 			.find((value) => value);
 
-		console.debug('Supabase OAuth PKCE cookies', {
+		console.debug("Supabase OAuth PKCE cookies", {
 			projectRef,
 			codeVerifierCookieNames,
 			codeVerifierPresent: Boolean(codeVerifier),
 		});
 
 		if (!codeVerifier) {
-			console.error('Supabase PKCE code verifier missing from cookies');
+			console.error("Supabase PKCE code verifier missing from cookies");
 			return redirectWithParams(origin, redirectDestination, {
-				status: 'error',
-				message: 'missing_code_verifier',
+				status: "error",
+				message: "missing_code_verifier",
 			});
 		}
 		const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
 		if (error || !data.session) {
-			console.error('Supabase exchangeCodeForSession error', {
+			console.error("Supabase exchangeCodeForSession error", {
 				message: error?.message,
 				details: error,
 				code,
 			});
 			return redirectWithParams(origin, redirectDestination, {
-				status: 'error',
-				message: 'supabase_exchange_failed',
+				status: "error",
+				message: "supabase_exchange_failed",
 				detail: error?.message,
 			});
 		}
@@ -143,8 +151,8 @@ export async function GET(request: NextRequest) {
 
 		if (!providerAccessToken) {
 			return redirectWithParams(origin, redirectDestination, {
-				status: 'error',
-				message: 'missing_provider_token',
+				status: "error",
+				message: "missing_provider_token",
 			});
 		}
 
@@ -152,8 +160,8 @@ export async function GET(request: NextRequest) {
 
 		if (!session?.dsTokens?.access_token || !session.user?.id) {
 			return redirectWithParams(origin, redirectDestination, {
-				status: 'error',
-				message: 'session_required',
+				status: "error",
+				message: "session_required",
 			});
 		}
 
@@ -163,20 +171,23 @@ export async function GET(request: NextRequest) {
 				(data.session.user?.user_metadata?.sub as string | undefined) ??
 				data.session.user?.id ??
 				null;
-			const scope = (data.session.user?.user_metadata?.scope as string | undefined) ?? null;
+			const scope =
+				(data.session.user?.user_metadata?.scope as string | undefined) ?? null;
 			const expiresIn = data.session.expires_in ?? null;
 
 			const response = await fetch(`${DEALSCALE_API_BASE}/api/v1/auth/social`, {
-				method: 'POST',
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 					Authorization: `Bearer ${session.dsTokens.access_token}`,
 				},
 				body: JSON.stringify({
 					provider,
 					provider_user_id: providerUserId,
 					access_token: encryptOAuthToken(providerAccessToken),
-					refresh_token: providerRefreshToken ? encryptOAuthToken(providerRefreshToken) : null,
+					refresh_token: providerRefreshToken
+						? encryptOAuthToken(providerRefreshToken)
+						: null,
 					expires_in: expiresIn ?? 3600,
 					scope,
 					username: session.user.name ?? null,
@@ -189,33 +200,33 @@ export async function GET(request: NextRequest) {
 
 			if (!response.ok) {
 				const payload = await response.text();
-				console.error('Failed to persist social credentials', {
+				console.error("Failed to persist social credentials", {
 					status: response.status,
 					payload,
 				});
 				return redirectWithParams(origin, redirectDestination, {
-					status: 'error',
-					message: 'credential_sync_failed',
+					status: "error",
+					message: "credential_sync_failed",
 					detail: response.statusText,
 				});
 			}
 		} catch (error) {
-			console.error('Error syncing social credentials', error);
+			console.error("Error syncing social credentials", error);
 			return redirectWithParams(origin, redirectDestination, {
-				status: 'error',
-				message: 'credential_sync_exception',
+				status: "error",
+				message: "credential_sync_exception",
 			});
 		}
 
 		return redirectWithParams(origin, redirectDestination, {
-			status: 'success',
+			status: "success",
 			provider: provider.toLowerCase(),
 		});
 	} catch (error) {
-		console.error('Supabase callback unexpected error', error);
+		console.error("Supabase callback unexpected error", error);
 		return redirectWithParams(origin, redirectDestination, {
-			status: 'error',
-			message: 'unexpected_error',
+			status: "error",
+			message: "unexpected_error",
 		});
 	}
 }

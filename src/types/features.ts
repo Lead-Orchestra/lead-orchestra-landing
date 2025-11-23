@@ -3,13 +3,13 @@
  */
 
 export type FeatureStatus =
-	| 'planned'
-	| 'under_review'
-	| 'in_development'
-	| 'testing'
-	| 'released'
-	| 'cancelled';
-export type VoteSource = 'beta_program' | 'pilot_program' | 'admin' | 'user';
+	| "planned"
+	| "under_review"
+	| "in_development"
+	| "testing"
+	| "released"
+	| "cancelled";
+export type VoteSource = "beta_program" | "pilot_program" | "admin" | "user";
 
 export interface Feature {
 	id: string;

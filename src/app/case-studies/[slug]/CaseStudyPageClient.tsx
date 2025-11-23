@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import BentoPage from '@/components/bento/page';
-import { CaseStudyBusinessOutcome } from '@/components/case-studies/CaseStudyBusinessOutcome';
-import CaseStudyContent from '@/components/case-studies/CaseStudyContent';
-import CaseStudyDetailHeader from '@/components/case-studies/CaseStudyDetailHeader';
-import RelatedCaseStudies from '@/components/case-studies/RelatedCaseStudies';
-import { CTASection } from '@/components/common/CTASection';
-import { SEOWrapper } from '@/components/common/SEOWrapper';
-import Testimonials from '@/components/home/Testimonials';
-import { SectionHeading } from '@/components/ui/section-heading';
-import { Separator } from '@/components/ui/separator';
-import { useDataModuleGuardTelemetry } from '@/hooks/useDataModuleGuardTelemetry';
-import { useDataModule } from '@/stores/useDataModuleStore';
-import { getCaseStudySeo } from '@/utils/seo/seo';
-import { useEffect, useMemo, useState } from 'react';
+import BentoPage from "@/components/bento/page";
+import { CaseStudyBusinessOutcome } from "@/components/case-studies/CaseStudyBusinessOutcome";
+import CaseStudyContent from "@/components/case-studies/CaseStudyContent";
+import CaseStudyDetailHeader from "@/components/case-studies/CaseStudyDetailHeader";
+import RelatedCaseStudies from "@/components/case-studies/RelatedCaseStudies";
+import { CTASection } from "@/components/common/CTASection";
+import { SEOWrapper } from "@/components/common/SEOWrapper";
+import Testimonials from "@/components/home/Testimonials";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { Separator } from "@/components/ui/separator";
+import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
+import { useDataModule } from "@/stores/useDataModuleStore";
+import { getCaseStudySeo } from "@/utils/seo/seo";
+import { useEffect, useMemo, useState } from "react";
 
-import HeroSessionMonitor from '@/components/home/heros/HeroSessionMonitor';
-import HowItWorksCarousel from '@/components/services/HowItWorksCarousel';
-import type { CaseStudy } from '@/lib/caseStudies/case-studies';
-import type { BentoFeature } from '@/types/bento/features';
-import type { Testimonial } from '@/types/testimonial';
+import HeroSessionMonitor from "@/components/home/heros/HeroSessionMonitor";
+import HowItWorksCarousel from "@/components/services/HowItWorksCarousel";
+import type { CaseStudy } from "@/lib/caseStudies/case-studies";
+import type { BentoFeature } from "@/types/bento/features";
+import type { Testimonial } from "@/types/testimonial";
 
 interface CaseStudyPageClientProps {
 	caseStudy: CaseStudy | null;
@@ -30,10 +30,12 @@ export default function CaseStudyPageClient({
 	caseStudy,
 	relatedCaseStudies,
 }: CaseStudyPageClientProps): JSX.Element {
-	const [canonicalUrl, setCanonicalUrl] = useState<string | undefined>(undefined);
+	const [canonicalUrl, setCanonicalUrl] = useState<string | undefined>(
+		undefined,
+	);
 
 	useEffect(() => {
-		if (typeof window !== 'undefined') {
+		if (typeof window !== "undefined") {
 			setCanonicalUrl(window.location.href);
 		}
 	}, []);
@@ -54,7 +56,7 @@ export default function CaseStudyPageClient({
 		status: featureStatus,
 		features: bentoFeatures,
 		error: featureError,
-	} = useDataModule('bento/main', ({ status, data, error }) => ({
+	} = useDataModule("bento/main", ({ status, data, error }) => ({
 		status,
 		features: (data?.MainBentoFeatures ?? []) as BentoFeature[],
 		error,
@@ -63,27 +65,30 @@ export default function CaseStudyPageClient({
 		status: testimonialStatus,
 		testimonials: moduleTestimonials,
 		error: testimonialError,
-	} = useDataModule('service/slug_data/testimonials', ({ status, data, error }) => ({
-		status,
-		testimonials: (data?.generalDealScaleTestimonials ?? []) as Testimonial[],
-		error,
-	}));
+	} = useDataModule(
+		"service/slug_data/testimonials",
+		({ status, data, error }) => ({
+			status,
+			testimonials: (data?.generalDealScaleTestimonials ?? []) as Testimonial[],
+			error,
+		}),
+	);
 
 	const hasBentoFeatures = bentoFeatures.length > 0;
 	const hasTestimonials = moduleTestimonials.length > 0;
 
 	const featureDetail = useMemo(
-		() => ({ segment: 'bento', slug: caseStudy.slug }),
-		[caseStudy.slug]
+		() => ({ segment: "bento", slug: caseStudy.slug }),
+		[caseStudy.slug],
 	);
 	const testimonialDetail = useMemo(
-		() => ({ segment: 'testimonials', slug: caseStudy.slug }),
-		[caseStudy.slug]
+		() => ({ segment: "testimonials", slug: caseStudy.slug }),
+		[caseStudy.slug],
 	);
 
 	useDataModuleGuardTelemetry({
-		key: 'bento/main',
-		surface: 'CaseStudyPageClient',
+		key: "bento/main",
+		surface: "CaseStudyPageClient",
 		status: featureStatus,
 		hasData: hasBentoFeatures,
 		error: featureError,
@@ -91,8 +96,8 @@ export default function CaseStudyPageClient({
 	});
 
 	useDataModuleGuardTelemetry({
-		key: 'service/slug_data/testimonials',
-		surface: 'CaseStudyPageClient',
+		key: "service/slug_data/testimonials",
+		surface: "CaseStudyPageClient",
 		status: testimonialStatus,
 		hasData: hasTestimonials,
 		error: testimonialError,
@@ -100,27 +105,35 @@ export default function CaseStudyPageClient({
 	});
 
 	useEffect(() => {
-		if (featureStatus === 'error') {
-			console.error('[CaseStudyPageClient] Failed to load highlights', featureError);
+		if (featureStatus === "error") {
+			console.error(
+				"[CaseStudyPageClient] Failed to load highlights",
+				featureError,
+			);
 		}
 	}, [featureError, featureStatus]);
 
 	useEffect(() => {
-		if (testimonialStatus === 'error') {
-			console.error('[CaseStudyPageClient] Failed to load testimonials', testimonialError);
+		if (testimonialStatus === "error") {
+			console.error(
+				"[CaseStudyPageClient] Failed to load testimonials",
+				testimonialError,
+			);
 		}
 	}, [testimonialStatus, testimonialError]);
 
-	const isFeatureLoading = featureStatus === 'idle' || featureStatus === 'loading';
-	const isFeatureError = featureStatus === 'error';
-	const isTestimonialLoading = testimonialStatus === 'idle' || testimonialStatus === 'loading';
-	const isTestimonialError = testimonialStatus === 'error';
+	const isFeatureLoading =
+		featureStatus === "idle" || featureStatus === "loading";
+	const isFeatureError = featureStatus === "error";
+	const isTestimonialLoading =
+		testimonialStatus === "idle" || testimonialStatus === "loading";
+	const isTestimonialError = testimonialStatus === "error";
 
 	// Defensive utility to ensure only strings are rendered
 	function safeText(val: unknown): string {
-		if (typeof val === 'string') return val;
+		if (typeof val === "string") return val;
 		if (val instanceof Error) return val.message;
-		return String(val ?? '');
+		return String(val ?? "");
 	}
 
 	return (
@@ -150,9 +163,9 @@ export default function CaseStudyPageClient({
 				) : hasBentoFeatures ? (
 					<BentoPage
 						features={bentoFeatures}
-						title={'Why Developers & Agencies Choose Lead Orchestra'}
+						title={"Why Developers & Agencies Choose Lead Orchestra"}
 						subtitle={
-							'Open-source scraping that plugs into anything. Scrape any website, normalize data, and export to your stack—no vendor lock-in.'
+							"Open-source scraping that plugs into anything. Scrape any website, normalize data, and export to your stack—no vendor lock-in."
 						}
 					/>
 				) : (
@@ -160,7 +173,9 @@ export default function CaseStudyPageClient({
 						Highlights coming soon.
 					</div>
 				)}
-				{relatedCaseStudies.length > 0 && <RelatedCaseStudies studies={relatedCaseStudies} />}
+				{relatedCaseStudies.length > 0 && (
+					<RelatedCaseStudies studies={relatedCaseStudies} />
+				)}
 				<Separator className="mx-auto my-8 max-w-7xl border-white/10" />
 				{/* <TechStackSection
           title="Technologies Used"
@@ -178,8 +193,10 @@ export default function CaseStudyPageClient({
 				) : hasTestimonials ? (
 					<Testimonials
 						testimonials={moduleTestimonials}
-						title={'What Our Clients Say'}
-						subtitle={'Hear from our clients about their experiences with our services'}
+						title={"What Our Clients Say"}
+						subtitle={
+							"Hear from our clients about their experiences with our services"
+						}
 					/>
 				) : (
 					<div className="my-12 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">

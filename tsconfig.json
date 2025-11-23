@@ -15,7 +15,9 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
-			"@external/dynamic-hero": ["./src/components/dynamic-hero/src/index.ts"],
+			"@external/dynamic-hero": [
+				"./src/components/dynamic-hero/src/index.ts"
+			],
 			"@external/dynamic-hero/*": ["./src/components/dynamic-hero/src/*"],
 			"shared": [
 				"./external/use-exit-intent-remastered/apps/web/src/shared/index.ts"
@@ -38,7 +40,9 @@
 			"hooks": [
 				"./external/use-exit-intent-remastered/apps/web/src/hooks/index.ts"
 			],
-			"hooks/*": ["./external/use-exit-intent-remastered/apps/web/src/hooks/*"],
+			"hooks/*": [
+				"./external/use-exit-intent-remastered/apps/web/src/hooks/*"
+			],
 			"modules": [
 				"./external/use-exit-intent-remastered/apps/web/src/modules/index.ts"
 			],
@@ -100,5 +104,12 @@
 		"scripts",
 		"scripts/**/*"
 	],
-	"include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx", "src/types/**/*.d.ts", "src/types/svg.d.ts"]
+	"include": [
+		"next-env.d.ts",
+		".next/types/**/*.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"src/types/**/*.d.ts",
+		"src/types/svg.d.ts"
+	]
 }

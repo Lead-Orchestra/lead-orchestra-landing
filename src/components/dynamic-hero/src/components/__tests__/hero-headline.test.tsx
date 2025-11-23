@@ -1,61 +1,66 @@
-import { render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import '@testing-library/jest-dom/vitest';
-import { act } from 'react';
+import { render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import "@testing-library/jest-dom/vitest";
+import { act } from "react";
 
-import type { ResolvedHeroCopy } from '../../utils/copy';
-import * as HeroHeadlineModule from '../hero-headline';
+import type { ResolvedHeroCopy } from "../../utils/copy";
+import * as HeroHeadlineModule from "../hero-headline";
 
-vi.mock('@/components/ui/avatar-circles', () => ({
+vi.mock("@/components/ui/avatar-circles", () => ({
 	AvatarCircles: () => null,
 }));
 
-vi.mock('@/components/ui/globe', () => ({
+vi.mock("@/components/ui/globe", () => ({
 	Globe: () => null,
 }));
 
-vi.mock('motion/react', async () => {
-	const React = await vi.importActual<typeof import('react')>('react');
+vi.mock("motion/react", async () => {
+	const React = await vi.importActual<typeof import("react")>("react");
 
 	return {
 		__esModule: true,
-		AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+		AnimatePresence: ({ children }: { children: React.ReactNode }) => (
+			<>{children}</>
+		),
 		motion: new Proxy(
 			{},
 			{
 				get: (_, key: string) => {
-					const Component = (props: React.ComponentPropsWithoutRef<'div'>) => (
+					const Component = (props: React.ComponentPropsWithoutRef<"div">) => (
 						<div data-motion-component={key} {...props} />
 					);
 					Component.displayName = `motion.${key}`;
 					return Component;
 				},
-			}
+			},
 		),
 	};
 });
 
 const MOCK_COPY: ResolvedHeroCopy = {
-	title: 'Stop manually auditing deals — before the next opportunity slips.',
-	subtitle: 'Investors scale their deal flow in under 5 minutes.',
+	title: "Stop manually auditing deals — before the next opportunity slips.",
+	subtitle: "Investors scale their deal flow in under 5 minutes.",
 	values: {
-		problem: 'manually auditing deals',
-		solution: 'automating investor follow-up',
-		fear: 'missing the next flip',
-		socialProof: 'Investors trust DealScale',
-		benefit: 'to automate lead nurturing',
-		time: '5',
-		hope: 'your next deal books itself',
+		problem: "manually auditing deals",
+		solution: "automating investor follow-up",
+		fear: "missing the next flip",
+		socialProof: "Investors trust DealScale",
+		benefit: "to automate lead nurturing",
+		time: "5",
+		hope: "your next deal books itself",
 	},
 	rotations: {
-		problems: ['manually auditing deals', 'chasing spreadsheets all night'],
-		solutions: ['automating investor follow-up', 'rolling out AI sales coworkers'],
-		fears: ['missing the next flip', 'watching the pipeline dry up'],
+		problems: ["manually auditing deals", "chasing spreadsheets all night"],
+		solutions: [
+			"automating investor follow-up",
+			"rolling out AI sales coworkers",
+		],
+		fears: ["missing the next flip", "watching the pipeline dry up"],
 	},
 	chips: {},
 };
 
-describe('useRotatingIndex', () => {
+describe("useRotatingIndex", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
 	});
@@ -64,8 +69,8 @@ describe('useRotatingIndex', () => {
 		vi.useRealTimers();
 	});
 
-	it('pauses and resumes rotation when toggling isActive', () => {
-		const values = ['first', 'second'];
+	it("pauses and resumes rotation when toggling isActive", () => {
+		const values = ["first", "second"];
 
 		const Harness = ({ isActive }: { isActive: boolean }) => {
 			const index = HeroHeadlineModule.useRotatingIndex(values, 1000, isActive);
@@ -74,15 +79,15 @@ describe('useRotatingIndex', () => {
 
 		const { rerender } = render(<Harness isActive={false} />);
 
-		const value = () => screen.getByTestId('active-value');
+		const value = () => screen.getByTestId("active-value");
 
-		expect(value().textContent).toBe('first');
+		expect(value().textContent).toBe("first");
 
 		act(() => {
 			vi.advanceTimersByTime(5000);
 		});
 
-		expect(value().textContent).toBe('first');
+		expect(value().textContent).toBe("first");
 
 		rerender(<Harness isActive={true} />);
 
@@ -90,12 +95,12 @@ describe('useRotatingIndex', () => {
 			vi.advanceTimersByTime(1000);
 		});
 
-		expect(value().textContent).toBe('second');
+		expect(value().textContent).toBe("second");
 
 		act(() => {
 			vi.advanceTimersByTime(1000);
 		});
 
-		expect(value().textContent).toBe('first');
+		expect(value().textContent).toBe("first");
 	});
 });

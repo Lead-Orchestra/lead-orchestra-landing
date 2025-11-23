@@ -1,66 +1,66 @@
-'use client';
+"use client";
 
-import { PhoneLoginForm } from '@/components/contact/form/PhoneLogin';
-import { SignInForm } from '@/components/contact/form/SignIn';
-import { Icons } from '@/components/icons';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from '@/components/ui/use-toast';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import { PhoneLoginForm } from "@/components/contact/form/PhoneLogin";
+import { SignInForm } from "@/components/contact/form/SignIn";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/components/ui/use-toast";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
 export default function SignInPage() {
 	const searchParams = useSearchParams();
-	const callbackUrl = searchParams.get('callbackUrl') || undefined;
+	const callbackUrl = searchParams.get("callbackUrl") || undefined;
 	const supabase = createClientComponentClient();
 
 	const buildRedirectTo = useCallback(
-		(provider: 'linkedin' | 'facebook') => {
-			if (typeof window === 'undefined') {
+		(provider: "linkedin" | "facebook") => {
+			if (typeof window === "undefined") {
 				return undefined;
 			}
 
 			const search = new URLSearchParams({ provider });
 			if (callbackUrl) {
-				search.set('redirectTo', callbackUrl);
+				search.set("redirectTo", callbackUrl);
 			}
 
 			return `${window.location.origin}/api/auth/supabase/callback?${search.toString()}`;
 		},
-		[callbackUrl]
+		[callbackUrl],
 	);
 
 	const handleLinkedIn = useCallback(async () => {
-		const destination = buildRedirectTo('linkedin');
+		const destination = buildRedirectTo("linkedin");
 		if (!destination) {
 			return;
 		}
 
 		await supabase.auth.signInWithOAuth({
-			provider: 'linkedin_oidc',
+			provider: "linkedin_oidc",
 			options: { redirectTo: destination },
 		});
 		toast({
-			title: 'LinkedIn OAuth',
-			description: 'LinkedIn account connected. Finishing sign-in...',
+			title: "LinkedIn OAuth",
+			description: "LinkedIn account connected. Finishing sign-in...",
 		});
 	}, [buildRedirectTo, supabase]);
 
 	const handleFacebook = useCallback(async () => {
-		const destination = buildRedirectTo('facebook');
+		const destination = buildRedirectTo("facebook");
 		if (!destination) {
 			return;
 		}
 
 		await supabase.auth.signInWithOAuth({
-			provider: 'facebook',
+			provider: "facebook",
 			options: { redirectTo: destination },
 		});
 		toast({
-			title: 'Facebook OAuth',
-			description: 'Facebook account connected. Finishing sign-in...',
+			title: "Facebook OAuth",
+			description: "Facebook account connected. Finishing sign-in...",
 		});
 	}, [buildRedirectTo, supabase]);
 	return (
@@ -92,21 +92,36 @@ export default function SignInPage() {
 								<span className="w-full border-t" />
 							</div>
 							<div className="relative flex justify-center text-xs uppercase">
-								<span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+								<span className="bg-background px-2 text-muted-foreground">
+									Or continue with
+								</span>
 							</div>
 						</div>
 						<div className="grid gap-2">
-							<Button variant="outline" type="button" onClick={() => void handleLinkedIn()}>
-								<Icons.linkedIn className="mr-2 h-4 w-4" /> Continue with LinkedIn
+							<Button
+								variant="outline"
+								type="button"
+								onClick={() => void handleLinkedIn()}
+							>
+								<Icons.linkedIn className="mr-2 h-4 w-4" /> Continue with
+								LinkedIn
 							</Button>
-							<Button variant="outline" type="button" onClick={() => void handleFacebook()}>
-								<Icons.facebook className="mr-2 h-4 w-4" /> Continue with Facebook
+							<Button
+								variant="outline"
+								type="button"
+								onClick={() => void handleFacebook()}
+							>
+								<Icons.facebook className="mr-2 h-4 w-4" /> Continue with
+								Facebook
 							</Button>
 						</div>
 					</div>
 					<p className="px-8 text-center text-muted-foreground text-sm">
-						Don't have an account?{' '}
-						<Link href="/signUp" className="underline underline-offset-4 hover:text-brand">
+						Don't have an account?{" "}
+						<Link
+							href="/signUp"
+							className="underline underline-offset-4 hover:text-brand"
+						>
 							Sign up
 						</Link>
 					</p>

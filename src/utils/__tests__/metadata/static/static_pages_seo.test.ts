@@ -1,5 +1,5 @@
-import { DEFAULT_SEO } from '@/data/constants/seo';
-import { staticSeoMeta } from '@/utils/seo/staticSeo';
+import { DEFAULT_SEO } from "@/data/constants/seo";
+import { staticSeoMeta } from "@/utils/seo/staticSeo";
 
 type StaticSeoExpectation = {
 	title: string;
@@ -13,133 +13,145 @@ type StaticSeoExpectation = {
 
 const cases: Array<[string, StaticSeoExpectation]> = [
 	[
-		'/blogs',
+		"/blogs",
 		{
-			title: 'Blogs | Deal Scale',
+			title: "Blogs | Deal Scale",
 			description:
-				'See the latest insights, stories, and updates for real estate investors and wholesalers from the Deal Scale team.',
-			canonical: 'https://dealscale.io/blogs',
+				"See the latest insights, stories, and updates for real estate investors and wholesalers from the Deal Scale team.",
+			canonical: "https://dealscale.io/blogs",
 			image: DEFAULT_SEO.image,
 			keywords: DEFAULT_SEO.keywords,
 			priority: 0.8,
-			changeFrequency: 'weekly',
+			changeFrequency: "weekly",
 		},
 	],
 	[
-		'/contact',
+		"/contact",
 		{
-			title: 'Beta Test Sign Up | Deal Scale',
+			title: "Beta Test Sign Up | Deal Scale",
 			description:
-				'Get in touch with Deal Scale for expert AI-powered real estate solutions and support.',
-			canonical: 'https://dealscale.io/contact',
+				"Get in touch with Deal Scale for expert AI-powered real estate solutions and support.",
+			canonical: "https://dealscale.io/contact",
 			image: DEFAULT_SEO.image,
 			keywords: DEFAULT_SEO.keywords,
 			priority: 0.7,
-			changeFrequency: 'monthly',
+			changeFrequency: "monthly",
 		},
 	],
 	[
-		'/case-studies',
+		"/case-studies",
 		{
-			title: 'Case Studies | Deal Scale',
+			title: "Case Studies | Deal Scale",
 			description:
-				'Check out real-world solutions and success stories from real estate professionals using Deal Scale and its Technologies.',
-			canonical: 'https://dealscale.io/case-studies',
-			image: '/banners/CaseStudy2.png',
+				"Check out real-world solutions and success stories from real estate professionals using Deal Scale and its Technologies.",
+			canonical: "https://dealscale.io/case-studies",
+			image: "/banners/CaseStudy2.png",
 			keywords: DEFAULT_SEO.keywords,
 			priority: 0.8,
-			changeFrequency: 'weekly',
+			changeFrequency: "weekly",
 		},
 	],
 	[
-		'/cookies',
+		"/cookies",
 		{
-			title: 'Cookie Policy | Deal Scale',
-			description: 'How we use cookies and similar technologies.',
-			canonical: 'https://dealscale.io/cookies',
+			title: "Cookie Policy | Deal Scale",
+			description: "How we use cookies and similar technologies.",
+			canonical: "https://dealscale.io/cookies",
 			image: DEFAULT_SEO.image,
-			keywords: ['Cookie Policy', 'Deal Scale Legal Document', ...DEFAULT_SEO.keywords],
+			keywords: [
+				"Cookie Policy",
+				"Deal Scale Legal Document",
+				...DEFAULT_SEO.keywords,
+			],
 			priority: 0.3,
-			changeFrequency: 'yearly',
+			changeFrequency: "yearly",
 		},
 	],
 	[
-		'/events',
+		"/events",
 		{
-			title: 'Events | Deal Scale',
+			title: "Events | Deal Scale",
 			description:
-				'Stay updated on upcoming Deal Scale events, webinars, and real estate industry opportunities powered by AI.',
-			canonical: 'https://dealscale.io/events',
+				"Stay updated on upcoming Deal Scale events, webinars, and real estate industry opportunities powered by AI.",
+			canonical: "https://dealscale.io/events",
 			image: DEFAULT_SEO.image,
 			keywords: DEFAULT_SEO.keywords,
 		},
 	],
 	[
-		'/faqs',
+		"/faqs",
 		{
 			title:
-				'DealScale FAQ | AI Voice, SMS, and Skip Tracing Automation for Real Estate Agents & Investors',
+				"DealScale FAQ | AI Voice, SMS, and Skip Tracing Automation for Real Estate Agents & Investors",
 			description:
-				'Learn how DealScale automates skip tracing, AI voice outreach, SMS, and social lead qualification while staying TCPA and GDPR compliant. Discover ROI examples, voice cloning, CRM syncs, and compliance with the 2026 Colorado AI Act.',
-			canonical: 'https://dealscale.io/faq',
+				"Learn how DealScale automates skip tracing, AI voice outreach, SMS, and social lead qualification while staying TCPA and GDPR compliant. Discover ROI examples, voice cloning, CRM syncs, and compliance with the 2026 Colorado AI Act.",
+			canonical: "https://dealscale.io/faq",
 			image: DEFAULT_SEO.image,
 			keywords: DEFAULT_SEO.keywords,
 		},
 	],
 	[
-		'/portfolio',
+		"/portfolio",
 		{
-			title: 'Portfolio | Deal Scale',
+			title: "Portfolio | Deal Scale",
 			description:
 				"Browse Deal Scale's portfolio to see AI-powered real estate solutions in action.",
-			canonical: 'https://dealscale.io/portfolio',
+			canonical: "https://dealscale.io/portfolio",
 			image: DEFAULT_SEO.image,
 			keywords: DEFAULT_SEO.keywords,
 		},
 	],
 	[
-		'/privacy',
+		"/privacy",
 		{
-			title: 'Privacy Policy | Deal Scale',
-			description: 'How we collect, use, and protect your data.',
-			canonical: 'https://dealscale.io/privacy',
+			title: "Privacy Policy | Deal Scale",
+			description: "How we collect, use, and protect your data.",
+			canonical: "https://dealscale.io/privacy",
 			image: DEFAULT_SEO.image,
-			keywords: ['Privacy Policy', 'Deal Scale Legal Document', ...DEFAULT_SEO.keywords],
+			keywords: [
+				"Privacy Policy",
+				"Deal Scale Legal Document",
+				...DEFAULT_SEO.keywords,
+			],
 			priority: 0.3,
-			changeFrequency: 'yearly',
+			changeFrequency: "yearly",
 		},
 	],
 	[
-		'/tos',
+		"/tos",
 		{
-			title: 'Terms of Service | Deal Scale',
-			description: 'Your legal agreement for using Deal Scale.',
-			canonical: 'https://dealscale.io/tos',
+			title: "Terms of Service | Deal Scale",
+			description: "Your legal agreement for using Deal Scale.",
+			canonical: "https://dealscale.io/tos",
 			image: DEFAULT_SEO.image,
-			keywords: ['Terms of Service', 'Deal Scale Legal Document', ...DEFAULT_SEO.keywords],
+			keywords: [
+				"Terms of Service",
+				"Deal Scale Legal Document",
+				...DEFAULT_SEO.keywords,
+			],
 		},
 	],
 	[
-		'/features',
+		"/features",
 		{
-			title: 'Features | Deal Scale',
+			title: "Features | Deal Scale",
 			description:
 				"Check out powerful features of Deal Scale's AI, including automated lead nurturing, outreach, and our AI Caller.",
-			canonical: 'https://dealscale.io/features',
-			image: '/banners/Feature.png',
+			canonical: "https://dealscale.io/features",
+			image: "/banners/Feature.png",
 			keywords: [...DEFAULT_SEO.keywords],
 		},
 	],
 ];
 
-describe('Static SEO metadata', () => {
-	it('provides entries for every expected static path', () => {
+describe("Static SEO metadata", () => {
+	it("provides entries for every expected static path", () => {
 		cases.forEach(([path]) => {
 			expect(staticSeoMeta[path]).toBeDefined();
 		});
 	});
 
-	it.each(cases)('matches configured metadata for %s', (path, expected) => {
+	it.each(cases)("matches configured metadata for %s", (path, expected) => {
 		const seo = staticSeoMeta[path];
 		expect(seo).toMatchObject(expected);
 		expect(Array.isArray(seo.keywords)).toBe(true);

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { FOUNDERS_CIRCLE_DEADLINE } from '@/constants/foundersCircleDeadline';
-import { useCountdown } from '@/hooks/useCountdown';
-import Link from 'next/link';
+import { FOUNDERS_CIRCLE_DEADLINE } from "@/constants/foundersCircleDeadline";
+import { useCountdown } from "@/hooks/useCountdown";
+import Link from "next/link";
 
 /**
  * BetaStickyBanner renders the Founders Circle beta CTA with a live countdown.
@@ -21,7 +21,7 @@ export function BetaStickyBanner() {
 	return (
 		<div
 			className="flex w-full flex-col items-center gap-2 overflow-visible text-center text-xs sm:text-sm md:flex-row md:items-center md:justify-between md:gap-4 md:text-left"
-			style={{ minHeight: 'auto', height: 'auto' }}
+			style={{ minHeight: "auto", height: "auto" }}
 		>
 			<div className="flex flex-col items-center gap-1 overflow-visible text-center md:flex-row md:items-center md:gap-3 md:text-left">
 				<span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 font-semibold text-white tracking-wide backdrop-blur-sm dark:bg-white/15">
@@ -42,7 +42,9 @@ export function BetaStickyBanner() {
 					className="inline-flex items-center rounded-full bg-emerald-500/20 px-3 py-1 font-mono font-semibold text-[0.7rem] text-emerald-100 uppercase tracking-[0.18em] shadow-sm md:text-[0.68rem] md:leading-none lg:text-xs"
 					aria-live="polite"
 				>
-					{isClosed ? 'Applications closed' : `Closes in ${countdown.formatted}`}
+					{isClosed
+						? "Applications closed"
+						: `Closes in ${countdown.formatted}`}
 				</span>
 				<Link
 					className="inline-flex w-full min-w-[10rem] items-center justify-center rounded-full bg-white px-4 py-2 font-semibold text-black text-xs transition hover:bg-white/90 sm:w-auto sm:px-5 sm:text-sm md:text-xs lg:text-sm"

@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import VideoModal from '@/components/common/VideoModal'; // * Reusable modal for video embeds
-import { CardBody, CardContainer, CardItem } from '@/components/ui/3d-card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { MetallicHoverCard } from '@/components/ui/metallic-hover-card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
-import type { Event } from '@/types/event';
-import { formatDate } from '@/utils/date-formatter';
-import { motion, useReducedMotion } from 'framer-motion';
+import VideoModal from "@/components/common/VideoModal"; // * Reusable modal for video embeds
+import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { MetallicHoverCard } from "@/components/ui/metallic-hover-card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import type { Event } from "@/types/event";
+import { formatDate } from "@/utils/date-formatter";
+import { motion, useReducedMotion } from "framer-motion";
 import {
 	ArrowRight,
 	Calendar,
@@ -22,17 +22,18 @@ import {
 	Share2,
 	ShieldCheck,
 	Users,
-} from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
 
 interface EventCardProps {
 	event: Event;
 	index: number;
 }
 
-const isEventCard3DEnabled = process.env.NEXT_PUBLIC_ENABLE_EVENT_CARD_3D === 'true';
+const isEventCard3DEnabled =
+	process.env.NEXT_PUBLIC_ENABLE_EVENT_CARD_3D === "true";
 
 const EventCard = ({ event, index }: EventCardProps) => {
 	const isPastEvent = new Date(event.date) < new Date();
@@ -43,43 +44,47 @@ const EventCard = ({ event, index }: EventCardProps) => {
 	const [imageLoaded, setImageLoaded] = useState(false);
 	const hasLoadedRef = useRef(false);
 	const prefersReducedMotion = useReducedMotion();
-	const accessType = event.accessType ?? 'external';
-	const attendanceType = event.attendanceType ?? 'in-person';
+	const accessType = event.accessType ?? "external";
+	const attendanceType = event.attendanceType ?? "in-person";
 
 	const accessMeta = {
 		internal: {
-			label: 'Internal Event',
+			label: "Internal Event",
 			icon: ShieldCheck,
-			variant: 'secondary' as const,
+			variant: "secondary" as const,
 		},
 		external: {
-			label: 'External Event',
+			label: "External Event",
 			icon: Globe2,
-			variant: 'outline' as const,
+			variant: "outline" as const,
 		},
 	} as const;
 
 	const attendanceMeta = {
-		'in-person': {
-			label: 'In Person',
+		"in-person": {
+			label: "In Person",
 			icon: Users,
 		},
 		webinar: {
-			label: 'Webinar',
+			label: "Webinar",
 			icon: Monitor,
 		},
 		hybrid: {
-			label: 'Hybrid',
+			label: "Hybrid",
 			icon: Share2,
 		},
 	} as const;
 
 	const AccessIcon = accessMeta[accessType].icon;
 	const AttendanceIcon = attendanceMeta[attendanceType].icon;
-	const fallbackInternalPath = event.internalPath ?? (event.slug ? `/events/${event.slug}` : '#');
+	const fallbackInternalPath =
+		event.internalPath ?? (event.slug ? `/events/${event.slug}` : "#");
 	const ctaHref =
-		accessType === 'external' ? (event.externalUrl ?? fallbackInternalPath) : fallbackInternalPath;
-	const imageSizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px';
+		accessType === "external"
+			? (event.externalUrl ?? fallbackInternalPath)
+			: fallbackInternalPath;
+	const imageSizes =
+		"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px";
 
 	useEffect(() => {
 		setIsClient(true);
@@ -90,15 +95,17 @@ const EventCard = ({ event, index }: EventCardProps) => {
 			return;
 		}
 
-		const mediaQuery = window.matchMedia('(pointer: coarse)');
-		const updatePointerState = (event: MediaQueryListEvent | MediaQueryList) => {
+		const mediaQuery = window.matchMedia("(pointer: coarse)");
+		const updatePointerState = (
+			event: MediaQueryListEvent | MediaQueryList,
+		) => {
 			setIsCoarsePointer(event.matches);
 		};
 
 		updatePointerState(mediaQuery);
 		if (mediaQuery.addEventListener) {
-			mediaQuery.addEventListener('change', updatePointerState);
-			return () => mediaQuery.removeEventListener('change', updatePointerState);
+			mediaQuery.addEventListener("change", updatePointerState);
+			return () => mediaQuery.removeEventListener("change", updatePointerState);
 		}
 
 		// Safari fallback
@@ -107,7 +114,11 @@ const EventCard = ({ event, index }: EventCardProps) => {
 	}, [isClient]);
 
 	const enableThreeD =
-		isEventCard3DEnabled && isClient && !prefersReducedMotion && !isCoarsePointer && imageLoaded;
+		isEventCard3DEnabled &&
+		isClient &&
+		!prefersReducedMotion &&
+		!isCoarsePointer &&
+		imageLoaded;
 
 	const handleImageLoad = () => {
 		hasLoadedRef.current = true;
@@ -146,17 +157,26 @@ const EventCard = ({ event, index }: EventCardProps) => {
 				className="h-full"
 			>
 				{enableThreeD ? (
-					<CardContainer containerClassName="w-full py-0" className="h-full w-full">
+					<CardContainer
+						containerClassName="w-full py-0"
+						className="h-full w-full"
+					>
 						<CardBody className="h-full w-full">
 							<MetallicHoverCard
 								disableTilt
-								className={cn('rounded-3xl', isPastEvent ? 'opacity-80' : 'hover:shadow-2xl')}
+								className={cn(
+									"rounded-3xl",
+									isPastEvent ? "opacity-80" : "hover:shadow-2xl",
+								)}
 								innerClassName={cn(
-									'relative h-full overflow-hidden rounded-[calc(1.5rem-4px)] border border-white/40 bg-gradient-to-br from-white/98 via-white/92 to-white/82 text-slate-900 transition-colors duration-300 dark:border-white/10 dark:bg-gradient-to-br dark:from-slate-950/85 dark:via-slate-950/70 dark:to-slate-950/60 dark:text-white',
-									isPastEvent && 'opacity-80'
+									"relative h-full overflow-hidden rounded-[calc(1.5rem-4px)] border border-white/40 bg-gradient-to-br from-white/98 via-white/92 to-white/82 text-slate-900 transition-colors duration-300 dark:border-white/10 dark:bg-gradient-to-br dark:from-slate-950/85 dark:via-slate-950/70 dark:to-slate-950/60 dark:text-white",
+									isPastEvent && "opacity-80",
 								)}
 							>
-								<CardItem translateZ={36} className="group/card flex h-full flex-col">
+								<CardItem
+									translateZ={36}
+									className="group/card flex h-full flex-col"
+								>
 									<CardItem
 										translateZ={96}
 										className="relative h-48 overflow-hidden rounded-[calc(1.5rem-4px)] bg-gradient-to-br from-white/70 via-white/45 to-white/20 dark:from-slate-900/70 dark:via-slate-900/40 dark:to-slate-900/25"
@@ -256,14 +276,22 @@ const EventCard = ({ event, index }: EventCardProps) => {
 										</CardItem>
 
 										<div className="mt-auto flex flex-col items-center gap-3">
-											<CardItem translateZ={28} as="div" className="w-full max-w-xs">
+											<CardItem
+												translateZ={28}
+												as="div"
+												className="w-full max-w-xs"
+											>
 												<Button
 													variant="default"
 													className="w-full gap-2 transition-colors group-hover/card:bg-primary"
 													asChild
 												>
-													{accessType === 'external' ? (
-														<a href={ctaHref} target="_blank" rel="noopener noreferrer">
+													{accessType === "external" ? (
+														<a
+															href={ctaHref}
+															target="_blank"
+															rel="noopener noreferrer"
+														>
 															View Event <ExternalLink className="h-4 w-4" />
 														</a>
 													) : (
@@ -273,7 +301,11 @@ const EventCard = ({ event, index }: EventCardProps) => {
 													)}
 												</Button>
 											</CardItem>
-											<CardItem translateZ={20} as="div" className="w-full max-w-xs">
+											<CardItem
+												translateZ={20}
+												as="div"
+												className="w-full max-w-xs"
+											>
 												<Button
 													variant="secondary"
 													className="w-full gap-2 border border-primary/30 bg-white/70 text-primary transition-colors hover:border-primary hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white"
@@ -297,10 +329,13 @@ const EventCard = ({ event, index }: EventCardProps) => {
 				) : (
 					<MetallicHoverCard
 						disableTilt
-						className={cn('rounded-3xl', isPastEvent ? 'opacity-80' : 'hover:shadow-2xl')}
+						className={cn(
+							"rounded-3xl",
+							isPastEvent ? "opacity-80" : "hover:shadow-2xl",
+						)}
 						innerClassName={cn(
-							'relative h-full overflow-hidden rounded-[calc(1.5rem-4px)] border border-white/40 bg-gradient-to-br from-white/98 via-white/92 to-white/82 text-slate-900 transition-colors duration-300 dark:border-white/10 dark:bg-gradient-to-br dark:from-slate-950/85 dark:via-slate-950/70 dark:to-slate-950/60 dark:text-white',
-							isPastEvent && 'opacity-80'
+							"relative h-full overflow-hidden rounded-[calc(1.5rem-4px)] border border-white/40 bg-gradient-to-br from-white/98 via-white/92 to-white/82 text-slate-900 transition-colors duration-300 dark:border-white/10 dark:bg-gradient-to-br dark:from-slate-950/85 dark:via-slate-950/70 dark:to-slate-950/60 dark:text-white",
+							isPastEvent && "opacity-80",
 						)}
 					>
 						<div className="flex h-full flex-col">
@@ -397,8 +432,12 @@ const EventCard = ({ event, index }: EventCardProps) => {
 										className="w-full max-w-xs gap-2 transition-colors group-hover:bg-primary"
 										asChild
 									>
-										{accessType === 'external' ? (
-											<a href={ctaHref} target="_blank" rel="noopener noreferrer">
+										{accessType === "external" ? (
+											<a
+												href={ctaHref}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
 												View Event <ExternalLink className="h-4 w-4" />
 											</a>
 										) : (

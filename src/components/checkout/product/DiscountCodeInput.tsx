@@ -1,5 +1,5 @@
-import type { DiscountCodeInputProps } from '@/types/checkout';
-import { Loader2 } from 'lucide-react';
+import type { DiscountCodeInputProps } from "@/types/checkout";
+import { Loader2 } from "lucide-react";
 
 export function DiscountCodeInput({
 	discountCode,
@@ -11,7 +11,10 @@ export function DiscountCodeInput({
 }: DiscountCodeInputProps) {
 	return (
 		<div className="space-y-2 pb-2">
-			<label htmlFor="discount" className="block font-semibold text-black dark:text-zinc-100">
+			<label
+				htmlFor="discount"
+				className="block font-semibold text-black dark:text-zinc-100"
+			>
 				Discount Code
 			</label>
 			<div className="flex gap-2">
@@ -32,28 +35,36 @@ export function DiscountCodeInput({
 					disabled={checkingDiscount || !!discountApplied || !discountCode}
 				>
 					{discountApplied ? (
-						'Applied'
+						"Applied"
 					) : checkingDiscount ? (
 						<Loader2 className="h-4 w-4 animate-spin" />
 					) : (
-						'Apply'
+						"Apply"
 					)}
 				</button>
 			</div>
 			{discountError && (
-				<p className="mt-1 text-red-600 text-xs dark:text-red-400">{discountError}</p>
+				<p className="mt-1 text-red-600 text-xs dark:text-red-400">
+					{discountError}
+				</p>
 			)}
 			{discountApplied && (
 				<div className="mt-1 flex items-center gap-2 text-green-600 text-xs dark:text-green-400">
 					<span>
 						Discount <b>{discountApplied.code}</b> applied!
 					</span>
-					{discountApplied.discountPercent && <span>({discountApplied.discountPercent}% off)</span>}
+					{discountApplied.discountPercent && (
+						<span>({discountApplied.discountPercent}% off)</span>
+					)}
 					{discountApplied.discountAmount && (
-						<span>(${(discountApplied.discountAmount / 100).toFixed(2)} off)</span>
+						<span>
+							(${(discountApplied.discountAmount / 100).toFixed(2)} off)
+						</span>
 					)}
 					{discountApplied.expires && (
-						<span>Expires: {new Date(discountApplied.expires).toLocaleDateString()}</span>
+						<span>
+							Expires: {new Date(discountApplied.expires).toLocaleDateString()}
+						</span>
 					)}
 				</div>
 			)}

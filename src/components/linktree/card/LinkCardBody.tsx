@@ -1,5 +1,5 @@
-'use client';
-import * as React from 'react';
+"use client";
+import * as React from "react";
 
 export type LinkCardBodyProps = {
 	title: string;
@@ -7,8 +7,14 @@ export type LinkCardBodyProps = {
 	details?: string;
 };
 
-export function LinkCardBody({ title, description, details }: LinkCardBodyProps) {
-	const needsToggle = Boolean(details && (details.length > 80 || /\n/.test(details)));
+export function LinkCardBody({
+	title,
+	description,
+	details,
+}: LinkCardBodyProps) {
+	const needsToggle = Boolean(
+		details && (details.length > 80 || /\n/.test(details)),
+	);
 	const [expanded, setExpanded] = React.useState(false);
 
 	return (
@@ -25,20 +31,26 @@ export function LinkCardBody({ title, description, details }: LinkCardBodyProps)
 						setExpanded((v) => !v);
 					}}
 				>
-					{expanded ? 'Hide details' : (description ?? 'Show details')}
+					{expanded ? "Hide details" : (description ?? "Show details")}
 				</button>
 			) : (
 				<>
 					{description ? (
-						<div className="truncate text-muted-foreground text-sm">{description}</div>
+						<div className="truncate text-muted-foreground text-sm">
+							{description}
+						</div>
 					) : null}
 					{details ? (
-						<div className="mt-0.5 truncate text-muted-foreground text-sm">{details}</div>
+						<div className="mt-0.5 truncate text-muted-foreground text-sm">
+							{details}
+						</div>
 					) : null}
 				</>
 			)}
 			{details && expanded ? (
-				<div className="mt-1 whitespace-pre-wrap text-muted-foreground text-xs">{details}</div>
+				<div className="mt-1 whitespace-pre-wrap text-muted-foreground text-xs">
+					{details}
+				</div>
 			) : null}
 		</div>
 	);

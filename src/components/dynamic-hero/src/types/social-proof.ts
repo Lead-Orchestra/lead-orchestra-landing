@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 export interface HeroSocialProofAvatar {
 	readonly imageUrl: string;

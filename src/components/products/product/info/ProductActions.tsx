@@ -1,5 +1,5 @@
-import { SocialShare } from '@/components/common/social/SocialShare';
-import { Button } from '@/components/ui/button';
+import { SocialShare } from "@/components/common/social/SocialShare";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -7,13 +7,13 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
-import { useCartStore } from '@/stores/useCartStore';
-import { ProductCategory, type ProductType } from '@/types/products';
-import { Heart, Loader2, ShoppingCart } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
+} from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+import { useCartStore } from "@/stores/useCartStore";
+import { ProductCategory, type ProductType } from "@/types/products";
+import { Heart, Loader2, ShoppingCart } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 /**
  * * ProductActions: Purchase, add to cart, favorite, and share buttons
@@ -50,14 +50,16 @@ export default function ProductActions({
 
 	// Get the first variant's AB test copy if available, otherwise use a default
 	const abTestCopy =
-		product.abTest?.variants[0]?.copy?.whatsInItForMe || `Check out this ${product.name}`;
+		product.abTest?.variants[0]?.copy?.whatsInItForMe ||
+		`Check out this ${product.name}`;
 
 	const resource = product.resource;
 	const isFreeResource =
-		Boolean(resource) && product.categories?.includes(ProductCategory.FreeResources);
+		Boolean(resource) &&
+		product.categories?.includes(ProductCategory.FreeResources);
 
 	const getPrimaryCtaLabel = () =>
-		resource?.type === 'external' ? 'Visit Resource' : 'Download Resource';
+		resource?.type === "external" ? "Visit Resource" : "Download Resource";
 
 	const handleAddToCart = async () => {
 		try {
@@ -79,16 +81,17 @@ export default function ProductActions({
 							price: selectedType.price,
 							requiresShipping: true,
 						}
-					: undefined
+					: undefined,
 			);
 
-			toast.success('Added to cart', {
-				description: `${product.name}${selectedType ? ` (${selectedType.name})` : ''} has been added to your cart.`,
+			toast.success("Added to cart", {
+				description: `${product.name}${selectedType ? ` (${selectedType.name})` : ""} has been added to your cart.`,
 			});
 		} catch (error) {
-			console.error('Error adding to cart:', error);
-			toast.error('Failed to add to cart', {
-				description: 'There was an error adding this item to your cart. Please try again.',
+			console.error("Error adding to cart:", error);
+			toast.error("Failed to add to cart", {
+				description:
+					"There was an error adding this item to your cart. Please try again.",
 			});
 		} finally {
 			setIsAddingToCart(false);
@@ -119,7 +122,9 @@ export default function ProductActions({
 								href={resource.url}
 								target="_blank"
 								rel="noopener noreferrer"
-								{...(resource.type === 'download' ? { download: resource.fileName ?? true } : {})}
+								{...(resource.type === "download"
+									? { download: resource.fileName ?? true }
+									: {})}
 							>
 								{getPrimaryCtaLabel()}
 							</a>
@@ -135,7 +140,8 @@ export default function ProductActions({
 									<DialogHeader>
 										<DialogTitle>{product.name} Demo</DialogTitle>
 										<DialogDescription>
-											See how to get the most value from this resource in just a couple of minutes.
+											See how to get the most value from this resource in just a
+											couple of minutes.
 										</DialogDescription>
 									</DialogHeader>
 									<div className="aspect-video w-full overflow-hidden rounded-xl">
@@ -157,12 +163,14 @@ export default function ProductActions({
 							<Button
 								size="lg"
 								className={cn(
-									'flex-1 items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 font-medium text-base text-primary-foreground',
-									'hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background',
-									'transition-colors duration-200'
+									"flex-1 items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 font-medium text-base text-primary-foreground",
+									"hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background",
+									"transition-colors duration-200",
 								)}
 								onClick={handleCheckoutIntent}
-								disabled={checkoutLoading || isCheckoutIntentPending || !stripeLoaded}
+								disabled={
+									checkoutLoading || isCheckoutIntentPending || !stripeLoaded
+								}
 							>
 								{checkoutLoading || isCheckoutIntentPending ? (
 									<>
@@ -170,7 +178,7 @@ export default function ProductActions({
 										Processing...
 									</>
 								) : (
-									ctaText || 'Checkout'
+									ctaText || "Checkout"
 								)}
 							</Button>
 
@@ -178,9 +186,9 @@ export default function ProductActions({
 								variant="secondary"
 								size="lg"
 								className={cn(
-									'flex-1 items-center justify-center rounded-md px-8 py-3 font-normal text-base',
-									'border border-input bg-secondary text-secondary-foreground hover:bg-secondary/80',
-									'transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background'
+									"flex-1 items-center justify-center rounded-md px-8 py-3 font-normal text-base",
+									"border border-input bg-secondary text-secondary-foreground hover:bg-secondary/80",
+									"transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background",
 								)}
 								onClick={handleAddToCart}
 								disabled={isAddingToCart}
@@ -198,13 +206,13 @@ export default function ProductActions({
 								)}
 							</Button>
 
-							{process.env.NEXT_PUBLIC_APP_MODE === 'hybrid' && (
+							{process.env.NEXT_PUBLIC_APP_MODE === "hybrid" && (
 								<Button
 									variant="outline"
 									size="lg"
 									className={cn(
-										'flex items-center justify-center rounded-md border border-input bg-background px-3 py-3 text-muted-foreground transition-colors hover:bg-muted/60',
-										'dark:border-card dark:bg-card dark:text-muted-foreground dark:hover:bg-muted/50'
+										"flex items-center justify-center rounded-md border border-input bg-background px-3 py-3 text-muted-foreground transition-colors hover:bg-muted/60",
+										"dark:border-card dark:bg-card dark:text-muted-foreground dark:hover:bg-muted/50",
 									)}
 								>
 									<Heart className="h-6 w-6" />
@@ -218,13 +226,13 @@ export default function ProductActions({
 				{!isFreeResource && !enableAddToCart && (
 					<Button
 						size="lg"
-						variant={enableAddToCart ? 'outline' : 'default'}
+						variant={enableAddToCart ? "outline" : "default"}
 						className={cn(
-							'flex w-full items-center justify-center rounded-md border font-medium',
+							"flex w-full items-center justify-center rounded-md border font-medium",
 							enableAddToCart
-								? 'border-input bg-background text-foreground hover:bg-muted/60'
-								: 'border-transparent bg-primary text-primary-foreground hover:bg-primary/90',
-							'px-8 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background'
+								? "border-input bg-background text-foreground hover:bg-muted/60"
+								: "border-transparent bg-primary text-primary-foreground hover:bg-primary/90",
+							"px-8 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background",
 						)}
 						onClick={onCheckout}
 						disabled={checkoutLoading || !stripeLoaded}
@@ -235,7 +243,7 @@ export default function ProductActions({
 								Processing...
 							</>
 						) : (
-							ctaText || 'Checkout'
+							ctaText || "Checkout"
 						)}
 					</Button>
 				)}

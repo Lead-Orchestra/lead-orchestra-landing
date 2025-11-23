@@ -14,32 +14,32 @@ export interface BaseField {
 }
 
 export type TextInputField = BaseField & {
-	type: 'text' | 'email' | 'tel' | 'url' | 'password';
+	type: "text" | "email" | "tel" | "url" | "password";
 	value?: string;
 	onChange?: (value: string) => void;
 };
 
 export type SelectField = BaseField & {
-	type: 'select';
+	type: "select";
 	options: { value: string; label: string }[];
 	value?: string;
 	onChange?: (value: string) => void;
 };
 
 export type TextAreaField = BaseField & {
-	type: 'textarea';
+	type: "textarea";
 	value?: string;
 	onChange?: (value: string) => void;
 };
 
 export type CheckboxField = BaseField & {
-	type: 'checkbox';
+	type: "checkbox";
 	value?: boolean;
 	onChange?: (checked: boolean) => void;
 };
 
 export interface FileField extends BaseField {
-	type: 'file';
+	type: "file";
 	accept?: string;
 	multiple?: boolean;
 	value: File[];
@@ -47,7 +47,7 @@ export interface FileField extends BaseField {
 }
 
 export type MultiselectField = BaseField & {
-	type: 'multiselect';
+	type: "multiselect";
 	options: { value: string; label: string; description?: string }[];
 	value: string[];
 	onChange: (value: string[]) => void;

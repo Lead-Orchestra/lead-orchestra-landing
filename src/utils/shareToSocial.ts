@@ -1,23 +1,25 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
-import { platformConfigs } from '@/data/social/share';
+import { platformConfigs } from "@/data/social/share";
 
 /**
  * Format text for sharing based on platform configuration
  */
 const formatShareText = (
-	platform: 'facebook' | 'twitter' | 'linkedin',
+	platform: "facebook" | "twitter" | "linkedin",
 	text: string,
 	url: string,
-	title?: string
+	title?: string,
 ): string => {
 	// Ensure text is always a string
-	const safeText = text || '';
+	const safeText = text || "";
 	const config = platformConfigs[platform];
 	if (!config.text) return text;
 
 	// Use the platform's template if available, otherwise use the raw text
-	let formattedText = config.text.template ? config.text.template(safeText, url) : safeText;
+	let formattedText = config.text.template
+		? config.text.template(safeText, url)
+		: safeText;
 
 	// Apply max length if specified
 	if (config.text.maxLength) {
@@ -38,13 +40,13 @@ export const shareToFacebook = (url: string, text?: string) => {
 	const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
 
 	// Debug output
-	console.group('Facebook Share Debug');
-	console.log('Sharing URL:', url);
-	console.log('Share text:', text || '(none)');
-	console.log('Generated share URL:', shareUrl);
+	console.group("Facebook Share Debug");
+	console.log("Sharing URL:", url);
+	console.log("Share text:", text || "(none)");
+	console.log("Generated share URL:", shareUrl);
 	console.groupEnd();
 
-	window.open(shareUrl, '_blank', 'width=600,height=400');
+	window.open(shareUrl, "_blank", "width=600,height=400");
 };
 
 /**
@@ -63,15 +65,15 @@ export const shareToX = (url: string, text?: string) => {
 	const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
 
 	// Debug output
-	console.group('X (Twitter) Share Debug');
-	console.log('Sharing URL:', url);
-	console.log('Original text:', text || '(none)');
-	console.log('Final tweet text:', tweetText);
-	console.log('Generated share URL:', shareUrl);
-	console.log('Tweet length:', tweetText.length, 'characters');
+	console.group("X (Twitter) Share Debug");
+	console.log("Sharing URL:", url);
+	console.log("Original text:", text || "(none)");
+	console.log("Final tweet text:", tweetText);
+	console.log("Generated share URL:", shareUrl);
+	console.log("Tweet length:", tweetText.length, "characters");
 	console.groupEnd();
 
-	window.open(shareUrl, '_blank', 'width=600,height=400');
+	window.open(shareUrl, "_blank", "width=600,height=400");
 };
 
 /**
@@ -80,20 +82,24 @@ export const shareToX = (url: string, text?: string) => {
  * @param title Optional title for the shared content
  * @param summary Optional summary/description for the shared content
  */
-export const shareToLinkedIn = (url: string, title?: string, summary?: string) => {
+export const shareToLinkedIn = (
+	url: string,
+	title?: string,
+	summary?: string,
+) => {
 	// LinkedIn's share URL will automatically include the URL
 	// We just need to pass the URL as the main parameter
 	const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
 
 	// Debug output
-	console.group('LinkedIn Share Debug');
-	console.log('Sharing URL:', url);
-	console.log('Title:', title || '(none)');
-	console.log('Summary:', summary || '(none)');
-	console.log('Generated share URL:', shareUrl);
+	console.group("LinkedIn Share Debug");
+	console.log("Sharing URL:", url);
+	console.log("Title:", title || "(none)");
+	console.log("Summary:", summary || "(none)");
+	console.log("Generated share URL:", shareUrl);
 	console.groupEnd();
 
-	window.open(shareUrl, '_blank', 'width=600,height=400');
+	window.open(shareUrl, "_blank", "width=600,height=400");
 };
 
 /**
@@ -108,9 +114,12 @@ export function useShareToSocial() {
 		shareToX(url, text);
 	}, []);
 
-	const shareLi = useCallback((url: string, title?: string, summary?: string) => {
-		shareToLinkedIn(url, title, summary);
-	}, []);
+	const shareLi = useCallback(
+		(url: string, title?: string, summary?: string) => {
+			shareToLinkedIn(url, title, summary);
+		},
+		[],
+	);
 
 	return {
 		shareToFacebook: shareFb,

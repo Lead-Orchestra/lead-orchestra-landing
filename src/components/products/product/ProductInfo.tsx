@@ -1,15 +1,15 @@
-import { ProductCategory, type ProductType } from '@/types/products';
-import toast from 'react-hot-toast';
-import TrustedBySection from './TrustedBySection';
-import ProductActions from './info/ProductActions';
-import ProductColorPicker from './info/ProductColorPicker';
-import ProductQuantityPicker from './info/ProductQuantitySelect';
-import ProductSizePicker from './info/ProductSizePicker';
-import ProductStars from './info/ProductStars';
+import { ProductCategory, type ProductType } from "@/types/products";
+import toast from "react-hot-toast";
+import TrustedBySection from "./TrustedBySection";
+import ProductActions from "./info/ProductActions";
+import ProductColorPicker from "./info/ProductColorPicker";
+import ProductQuantityPicker from "./info/ProductQuantitySelect";
+import ProductSizePicker from "./info/ProductSizePicker";
+import ProductStars from "./info/ProductStars";
 // ! ProductInfo Orchestrator (modular, clean, DRY)
-import ProductTitle from './info/ProductTitle';
-import ProductTypePicker from './info/ProductTypePicker';
-import getAverageRating from './utils/getAverageRating';
+import ProductTitle from "./info/ProductTitle";
+import ProductTypePicker from "./info/ProductTypePicker";
+import getAverageRating from "./utils/getAverageRating";
 
 interface ProductInfoProps {
 	ctaText?: string;
@@ -45,7 +45,9 @@ export default function ProductInfo({
 	onBeforeCheckout,
 }: ProductInfoProps) {
 	// * Find selected type data for price
-	const selectedTypeData = product.types.find((type) => type.value === product.types?.[0].value);
+	const selectedTypeData = product.types.find(
+		(type) => type.value === product.types?.[0].value,
+	);
 	const currentPrice = selectedTypeData?.price || product.price;
 	const averageRating = getAverageRating(product.reviews);
 	const reviewCount = product.reviews?.length ?? 0;
@@ -54,22 +56,23 @@ export default function ProductInfo({
 	const handleCheckoutClick = () => {
 		try {
 			// Debug log the product data
-			console.group('Product Checkout Debug');
-			console.log('Product:', product);
-			console.log('Selected Type Data:', selectedTypeData);
-			console.log('Product Types:', product.types);
-			console.log('Product Colors:', product.colors);
-			console.log('Product Sizes:', product.sizes);
+			console.group("Product Checkout Debug");
+			console.log("Product:", product);
+			console.log("Selected Type Data:", selectedTypeData);
+			console.log("Product Types:", product.types);
+			console.log("Product Colors:", product.colors);
+			console.log("Product Sizes:", product.sizes);
 
 			// Safely build description with fallbacks
-			const typeName = selectedTypeData?.name || (product.types?.[0]?.name ?? 'Standard');
-			const colorName = product.colors?.[0]?.name ?? 'Default';
-			const sizeName = product.sizes?.[0]?.name ?? 'One Size';
+			const typeName =
+				selectedTypeData?.name || (product.types?.[0]?.name ?? "Standard");
+			const colorName = product.colors?.[0]?.name ?? "Default";
+			const sizeName = product.sizes?.[0]?.name ?? "One Size";
 
 			const description = `${product.name} (${typeName}, ${colorName}, ${sizeName})`;
 
 			// Log the computed values
-			console.log('Computed Description:', description);
+			console.log("Computed Description:", description);
 			console.groupEnd();
 
 			onInitiateCheckout({
@@ -84,21 +87,26 @@ export default function ProductInfo({
 				},
 			});
 		} catch (error) {
-			console.error('Error in handleCheckoutClick:', error);
+			console.error("Error in handleCheckoutClick:", error);
 			// Optionally show an error toast to the user
-			toast.error('Failed to process checkout. Please try again.');
+			toast.error("Failed to process checkout. Please try again.");
 		}
 	};
 
 	const isFreeResource =
-		product.categories?.includes(ProductCategory.FreeResources) && Boolean(product.resource);
+		product.categories?.includes(ProductCategory.FreeResources) &&
+		Boolean(product.resource);
 
 	return (
 		<div>
 			{/* Product title and price */}
 			<ProductTitle product={product} currentPrice={currentPrice} />
 			{/* Star rating and reviews */}
-			<ProductStars rating={averageRating} reviewCount={reviewCount} setActiveTab={setActiveTab} />
+			<ProductStars
+				rating={averageRating}
+				reviewCount={reviewCount}
+				setActiveTab={setActiveTab}
+			/>
 			<div className="mt-6">
 				{!isFreeResource && (
 					<>

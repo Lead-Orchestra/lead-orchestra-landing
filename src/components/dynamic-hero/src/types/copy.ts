@@ -1,6 +1,10 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-export const heroChipVariantSchema = z.enum(['default', 'secondary', 'outline']);
+export const heroChipVariantSchema = z.enum([
+	"default",
+	"secondary",
+	"outline",
+]);
 
 export const heroChipSchema = z
 	.object({
@@ -10,7 +14,7 @@ export const heroChipSchema = z
 	})
 	.refine(
 		(chip) => chip.label.trim().split(/\s+/).length <= 6,
-		'Chip label must not exceed six words.'
+		"Chip label must not exceed six words.",
 	);
 
 export const heroCopyRotationsSchema = z.object({

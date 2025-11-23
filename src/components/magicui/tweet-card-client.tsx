@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import type { TweetProps } from 'react-tweet';
-import type { Tweet } from 'react-tweet/api';
-import { MagicTweet, TweetNotFound, TweetSkeleton } from './tweet-card-server';
+import { useEffect, useState } from "react";
+import type { TweetProps } from "react-tweet";
+import type { Tweet } from "react-tweet/api";
+import { MagicTweet, TweetNotFound, TweetSkeleton } from "./tweet-card-server";
 
 export const ClientTweetCard = ({
 	id,
@@ -23,7 +23,7 @@ export const ClientTweetCard = ({
 		setData(null);
 		fetch(`/api/twitter?id=${id}`)
 			.then(async (res) => {
-				if (!res.ok) throw new Error('Not found');
+				if (!res.ok) throw new Error("Not found");
 				return res.json();
 			})
 			.then((tweet) => setData(tweet))

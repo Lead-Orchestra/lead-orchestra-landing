@@ -3,15 +3,15 @@
 // * Modeled after ServiceFilter, but for products
 // * Follows DRY, SOLID, and type-safe best practices (see user rules)
 
-'use client';
+"use client";
 
-import { Input } from '@/components/ui/input';
-import { useCategoryFilter } from '@/hooks/use-category-filter';
-import React from 'react';
+import { Input } from "@/components/ui/input";
+import { useCategoryFilter } from "@/hooks/use-category-filter";
+import React from "react";
 
 // todo: Move to shared types if needed elsewhere
 // ! ProductCategory is now an enum in @/types/products
-import type { ProductCategory } from '@/types/products';
+import type { ProductCategory } from "@/types/products";
 
 export interface ProductCategoryOption {
 	id: ProductCategory;
@@ -58,22 +58,32 @@ export default function ProductFilter({
 	showSearch = true,
 	showCategories = true,
 }: ProductFilterProps) {
-	const { CategoryFilter } = useCategoryFilter(categories, activeCategory, (cat) => {
-		// Update URL to include /category={cat}
-		if (cat && cat !== 'all') {
-			window.location.hash = `category=${cat}`;
-		} else {
-			window.location.hash = '';
-		}
-		onCategoryChange(cat);
-	});
+	const { CategoryFilter } = useCategoryFilter(
+		categories,
+		activeCategory,
+		(cat) => {
+			// Update URL to include /category={cat}
+			if (cat && cat !== "all") {
+				window.location.hash = `category=${cat}`;
+			} else {
+				window.location.hash = "";
+			}
+			onCategoryChange(cat);
+		},
+	);
 
 	return (
 		<div className="mb-8 flex w-full flex-col gap-4">
 			{showSearch && (
 				<div className="relative mx-auto w-full max-w-xs md:max-w-sm">
 					<span className="-translate-y-1/2 absolute top-1/2 left-3 text-purple-400">
-						<svg aria-label="Search" width={18} height={18} fill="none" viewBox="0 0 24 24">
+						<svg
+							aria-label="Search"
+							width={18}
+							height={18}
+							fill="none"
+							viewBox="0 0 24 24"
+						>
 							<title>Search</title>
 							<path
 								stroke="currentColor"

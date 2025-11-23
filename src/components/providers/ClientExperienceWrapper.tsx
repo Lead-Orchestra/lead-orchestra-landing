@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type { ComponentType } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import type { ComponentType } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import type { AnalyticsConfig } from '@/lib/analytics/config';
+import type { AnalyticsConfig } from "@/lib/analytics/config";
 
 type ClientExperienceProps = {
 	clarityProjectId?: string;
@@ -31,19 +31,21 @@ type ClientExperienceProps = {
 export function ClientExperienceWrapper(props: ClientExperienceProps) {
 	// Extra safety: return null immediately if window is undefined
 	// This should never happen with dynamic() ssr: false, but provides defense in depth
-	if (typeof window === 'undefined') {
+	if (typeof window === "undefined") {
 		console.error(
-			'[ClientExperienceWrapper PRERENDER ERROR] Component rendered during SSR! This should never happen.'
+			"[ClientExperienceWrapper PRERENDER ERROR] Component rendered during SSR! This should never happen.",
 		);
 		return null;
 	}
 
 	const [shouldRender, setShouldRender] = useState(false);
-	const componentRef = useRef<ComponentType<ClientExperienceProps> | null>(null);
+	const componentRef = useRef<ComponentType<ClientExperienceProps> | null>(
+		null,
+	);
 
 	useEffect(() => {
 		// Use native dynamic import - NOT evaluated during build
-		import('./ClientExperience')
+		import("./ClientExperience")
 			.then((mod) => {
 				// Store in ref (not state) to avoid React serialization
 				componentRef.current = mod.ClientExperience;
@@ -51,8 +53,8 @@ export function ClientExperienceWrapper(props: ClientExperienceProps) {
 				setShouldRender(true);
 			})
 			.catch((error) => {
-				if (process.env.NODE_ENV !== 'production') {
-					console.error('Failed to load ClientExperience:', error);
+				if (process.env.NODE_ENV !== "production") {
+					console.error("Failed to load ClientExperience:", error);
 				}
 			});
 	}, []);

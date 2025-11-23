@@ -1,12 +1,12 @@
-import type { DiscountCode } from '../discount/discountCode';
-import type { ProductCategory } from '../products';
-import type { Feature } from './services';
+import type { DiscountCode } from "../discount/discountCode";
+import type { ProductCategory } from "../products";
+import type { Feature } from "./services";
 
-export type PricingInterval = 'monthly' | 'annual';
-export type PricingUnit = 'month' | 'year';
-export type UnlimitedValue = number | 'unlimited';
+export type PricingInterval = "monthly" | "annual";
+export type PricingUnit = "month" | "year";
+export type UnlimitedValue = number | "unlimited";
 
-export type RoiTierKind = 'selfHosted' | 'subscription';
+export type RoiTierKind = "selfHosted" | "subscription";
 
 export interface RoiEstimatorTier {
 	label: string;
@@ -157,15 +157,16 @@ export interface PricingCatalog {
 
 // ---- Legacy plan model (still used by service detail pages & checkout) ----
 
-export type LegacyPlanType = 'monthly' | 'annual' | 'oneTime';
+export type LegacyPlanType = "monthly" | "annual" | "oneTime";
 export type PercentageString = `${number}%`;
 
 export const PRICING_CATEGORIES = {
-	LEAD_GENERATION: 'lead_generation_plan',
+	LEAD_GENERATION: "lead_generation_plan",
 } as const;
 
 export type PricingCategoryKey = keyof typeof PRICING_CATEGORIES;
-export type PricingCategoryValue = (typeof PRICING_CATEGORIES)[PricingCategoryKey];
+export type PricingCategoryValue =
+	(typeof PRICING_CATEGORIES)[PricingCategoryKey];
 
 interface BasePlanPrice {
 	amount: number | PercentageString;
@@ -186,7 +187,7 @@ export interface LegacyPlan {
 		annual: BasePlanPrice & { amount: number; bannerText?: string };
 	};
 	highlighted?: boolean;
-	cta: { text: string; type: 'checkout' | 'link'; href?: string };
+	cta: { text: string; type: "checkout" | "link"; href?: string };
 }
 
 export type Plan = LegacyPlan;

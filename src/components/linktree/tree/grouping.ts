@@ -1,4 +1,4 @@
-import type { LinkTreeItem } from '@/utils/linktree-redis';
+import type { LinkTreeItem } from "@/utils/linktree-redis";
 
 export type Grouped = {
 	highlightedLabeled: Array<[string, LinkTreeItem[]]>;
@@ -20,7 +20,7 @@ export function groupItems(items: LinkTreeItem[]): Grouped {
 	const normalMap = new Map<string, LinkTreeItem[]>();
 
 	for (const it of copy) {
-		const key = it.category || 'Other';
+		const key = it.category || "Other";
 		const target = it.highlighted ? highlightMap : normalMap;
 		const list = target.get(key);
 		if (list) list.push(it);
@@ -29,8 +29,8 @@ export function groupItems(items: LinkTreeItem[]): Grouped {
 
 	const sortCats = (entries: Array<[string, LinkTreeItem[]]>) => {
 		entries.sort(([a], [b]) => {
-			const aIsOther = a.toLowerCase() === 'other';
-			const bIsOther = b.toLowerCase() === 'other';
+			const aIsOther = a.toLowerCase() === "other";
+			const bIsOther = b.toLowerCase() === "other";
 			if (aIsOther && !bIsOther) return 1;
 			if (!aIsOther && bIsOther) return -1;
 			return a.localeCompare(b);
@@ -51,7 +51,7 @@ export function groupItems(items: LinkTreeItem[]): Grouped {
 	sortCats(normalEntries);
 
 	const highlightedLabeled = highlightedEntries.map(
-		([cat, list]) => [`Highlighted - ${cat}`, list] as [string, LinkTreeItem[]]
+		([cat, list]) => [`Highlighted - ${cat}`, list] as [string, LinkTreeItem[]],
 	);
 
 	return { highlightedLabeled, normalEntries };

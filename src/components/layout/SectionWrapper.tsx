@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import type { ReactNode } from 'react';
-import { Fragment, useEffect } from 'react';
+import type { ReactNode } from "react";
+import { Fragment, useEffect } from "react";
 
-import { ViewportLazy } from '@/components/common/ViewportLazy';
-import { cn } from '@/lib/utils';
+import { ViewportLazy } from "@/components/common/ViewportLazy";
+import { cn } from "@/lib/utils";
 
 const SectionSkeleton = ({ label }: { label?: string }) => (
 	<div
@@ -36,23 +36,24 @@ type SectionWrapperProps = {
 	fallbackLabel?: string;
 };
 
-const SECTION_WRAPPER_ENABLED = process.env.NEXT_PUBLIC_SECTION_WRAPPER_ENABLED !== 'false';
+const SECTION_WRAPPER_ENABLED =
+	process.env.NEXT_PUBLIC_SECTION_WRAPPER_ENABLED !== "false";
 
 export function SectionWrapper({
 	id,
 	className,
 	children,
 	lazy = true,
-	rootMargin = '1200px',
+	rootMargin = "1200px",
 	fallback,
 	fallbackLabel,
 }: SectionWrapperProps) {
 	useEffect(() => {
-		console.log('[SectionWrapper] mounted', id ?? 'unnamed-section');
+		console.log("[SectionWrapper] mounted", id ?? "unnamed-section");
 	}, [id]);
 
 	const shouldLazy = SECTION_WRAPPER_ENABLED && lazy;
-	const WrapperComponent = className || id ? 'section' : Fragment;
+	const WrapperComponent = className || id ? "section" : Fragment;
 	const wrapperProps =
 		WrapperComponent === Fragment
 			? {}
@@ -61,7 +62,9 @@ export function SectionWrapper({
 					className: cn(className),
 				};
 
-	const resolvedFallback = fallback ?? <SectionSkeleton label={fallbackLabel ?? id ?? undefined} />;
+	const resolvedFallback = fallback ?? (
+		<SectionSkeleton label={fallbackLabel ?? id ?? undefined} />
+	);
 
 	return (
 		<WrapperComponent {...wrapperProps}>

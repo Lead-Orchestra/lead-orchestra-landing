@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
-import { useEffect } from 'react';
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+import { useEffect } from "react";
 
-import type { AnalyticsConfig } from '@/lib/analytics/config';
+import type { AnalyticsConfig } from "@/lib/analytics/config";
 
 interface AnalyticsProps {
-	config: Pick<AnalyticsConfig, 'gaId' | 'gtmId'>;
+	config: Pick<AnalyticsConfig, "gaId" | "gtmId">;
 }
 
 /**
@@ -28,7 +28,7 @@ export function Analytics({ config }: AnalyticsProps) {
 	// Initialize dataLayer early to queue events before GTM loads
 	// This ensures events are captured even if GTM loads later
 	useEffect(() => {
-		if (!gtmId || typeof window === 'undefined') {
+		if (!gtmId || typeof window === "undefined") {
 			return;
 		}
 
@@ -39,8 +39,8 @@ export function Analytics({ config }: AnalyticsProps) {
 		// This queues events before GTM is fully loaded
 		if (window.dataLayer.length === 0) {
 			window.dataLayer.push({
-				event: 'gtm.js',
-				'gtm.start': new Date().getTime(),
+				event: "gtm.js",
+				"gtm.start": new Date().getTime(),
 			});
 		}
 	}, [gtmId]);

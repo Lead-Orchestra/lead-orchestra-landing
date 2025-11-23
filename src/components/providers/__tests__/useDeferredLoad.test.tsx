@@ -1,9 +1,9 @@
-import { act, renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useDeferredLoad } from '../useDeferredLoad';
+import { useDeferredLoad } from "../useDeferredLoad";
 
-describe('useDeferredLoad', () => {
+describe("useDeferredLoad", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
 	});
@@ -13,7 +13,7 @@ describe('useDeferredLoad', () => {
 		vi.useRealTimers();
 	});
 
-	it('enables loading after the maximum wait if idle callbacks are unavailable', () => {
+	it("enables loading after the maximum wait if idle callbacks are unavailable", () => {
 		const originalRequestIdleCallback = window.requestIdleCallback;
 		// Ensure the idle callback path is disabled so the timeout fallback is used.
 		delete (

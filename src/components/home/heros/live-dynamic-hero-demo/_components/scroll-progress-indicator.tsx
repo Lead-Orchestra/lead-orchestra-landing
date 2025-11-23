@@ -1,6 +1,6 @@
-import { memo } from 'react';
+import { memo } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 export interface ScrollProgressSection {
 	readonly id: string;
@@ -24,19 +24,19 @@ function ScrollProgressIndicatorComponent({
 					<div
 						key={section.id}
 						className="flex items-center gap-3"
-						aria-current={isActive ? 'step' : undefined}
+						aria-current={isActive ? "step" : undefined}
 					>
 						<div className="flex items-center gap-2">
 							<span
 								className={cn(
-									'size-2 rounded-full transition-colors',
-									isActive ? 'bg-primary' : 'bg-border/70'
+									"size-2 rounded-full transition-colors",
+									isActive ? "bg-primary" : "bg-border/70",
 								)}
 							/>
 							<span
 								className={cn(
-									'font-semibold transition-colors',
-									isActive ? 'text-foreground' : 'text-muted-foreground/80'
+									"font-semibold transition-colors",
+									isActive ? "text-foreground" : "text-muted-foreground/80",
 								)}
 							>
 								{section.label}

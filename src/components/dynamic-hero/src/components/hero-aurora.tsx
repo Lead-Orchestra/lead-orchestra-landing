@@ -1,43 +1,53 @@
-'use client';
+"use client";
 
-import { motion } from 'motion/react';
-import type { HTMLAttributes } from 'react';
+import { motion } from "motion/react";
+import type { HTMLAttributes } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 const LAYERS = [
 	{
-		id: 'aurora-blue',
+		id: "aurora-blue",
 		size: 720,
-		top: '-20%',
-		left: '-10%',
+		top: "-20%",
+		left: "-10%",
 		duration: 28,
-		background: 'radial-gradient(circle at 20% 20%, rgba(59,130,246,0.35), rgba(16,185,129,0))',
+		background:
+			"radial-gradient(circle at 20% 20%, rgba(59,130,246,0.35), rgba(16,185,129,0))",
 	},
 	{
-		id: 'aurora-violet',
+		id: "aurora-violet",
 		size: 680,
-		top: '45%',
-		left: '55%',
+		top: "45%",
+		left: "55%",
 		duration: 34,
-		background: 'radial-gradient(circle at 80% 20%, rgba(168,85,247,0.28), rgba(14,165,233,0))',
+		background:
+			"radial-gradient(circle at 80% 20%, rgba(168,85,247,0.28), rgba(14,165,233,0))",
 	},
 	{
-		id: 'aurora-rose',
+		id: "aurora-rose",
 		size: 760,
-		top: '10%',
-		left: '55%',
+		top: "10%",
+		left: "55%",
 		duration: 38,
-		background: 'radial-gradient(circle at 50% 80%, rgba(244,114,182,0.22), rgba(14,116,144,0))',
+		background:
+			"radial-gradient(circle at 50% 80%, rgba(244,114,182,0.22), rgba(14,116,144,0))",
 	},
 ];
 
 export interface HeroAuroraProps extends HTMLAttributes<HTMLDivElement> {}
 
-export function HeroAurora({ className, children, ...props }: HeroAuroraProps): JSX.Element {
+export function HeroAurora({
+	className,
+	children,
+	...props
+}: HeroAuroraProps): JSX.Element {
 	return (
 		<div
-			className={cn('pointer-events-none absolute inset-0 overflow-hidden blur-3xl', className)}
+			className={cn(
+				"pointer-events-none absolute inset-0 overflow-hidden blur-3xl",
+				className,
+			)}
 			{...props}
 		>
 			{LAYERS.map((layer) => (
@@ -50,7 +60,7 @@ export function HeroAurora({ className, children, ...props }: HeroAuroraProps): 
 						top: layer.top,
 						left: layer.left,
 						background: layer.background,
-						filter: 'blur(80px)',
+						filter: "blur(80px)",
 					}}
 					animate={{
 						rotate: [0, 18, -8, 0],
@@ -59,7 +69,7 @@ export function HeroAurora({ className, children, ...props }: HeroAuroraProps): 
 					transition={{
 						duration: layer.duration,
 						repeat: Number.POSITIVE_INFINITY,
-						ease: 'easeInOut',
+						ease: "easeInOut",
 					}}
 				/>
 			))}

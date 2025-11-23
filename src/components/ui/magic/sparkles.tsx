@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { Sparkles as LucideSparkles } from 'lucide-react';
+import { cn } from "@/lib/utils";
+import { Sparkles as LucideSparkles } from "lucide-react";
 
-export interface SparklesProps extends React.ComponentPropsWithoutRef<typeof LucideSparkles> {}
+export interface SparklesProps
+	extends React.ComponentPropsWithoutRef<typeof LucideSparkles> {}
 
 /**
  * Lightweight wrapper around lucide sparkles icon with optional glow styling.
@@ -13,8 +14,8 @@ export function Sparkles({ className, ...props }: SparklesProps) {
 		<LucideSparkles
 			aria-hidden="true"
 			className={cn(
-				'text-primary drop-shadow-[0_0_6px_rgba(56,189,248,0.6)] dark:text-emerald-200',
-				className
+				"text-primary drop-shadow-[0_0_6px_rgba(56,189,248,0.6)] dark:text-emerald-200",
+				className,
 			)}
 			{...props}
 		/>

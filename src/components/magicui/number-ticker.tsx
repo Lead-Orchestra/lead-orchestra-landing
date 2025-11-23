@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useInView, useMotionValue, useSpring } from 'motion/react';
-import { type ComponentPropsWithoutRef, useEffect, useRef } from 'react';
+import { useInView, useMotionValue, useSpring } from "motion/react";
+import { type ComponentPropsWithoutRef, useEffect, useRef } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-interface NumberTickerProps extends ComponentPropsWithoutRef<'span'> {
+interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
 	value: number;
 	startValue?: number;
-	direction?: 'up' | 'down';
+	direction?: "up" | "down";
 	delay?: number;
 	decimalPlaces?: number;
 }
@@ -21,7 +21,7 @@ declare global {
 export function NumberTicker({
 	value,
 	startValue = 0,
-	direction = 'up',
+	direction = "up",
 	delay = 0,
 	className,
 	decimalPlaces = 0,
@@ -29,37 +29,39 @@ export function NumberTicker({
 }: NumberTickerProps) {
 	const ref = useRef<HTMLSpanElement>(null);
 	if (
-		typeof window !== 'undefined' &&
-		typeof window.IntersectionObserver === 'undefined' &&
+		typeof window !== "undefined" &&
+		typeof window.IntersectionObserver === "undefined" &&
 		!globalThis.__DS_INTERSECTION_OBSERVER_POLYFILL__
 	) {
 		globalThis.__DS_INTERSECTION_OBSERVER_POLYFILL__ = true;
-		(window as unknown as Record<string, unknown>).IntersectionObserver = class {
-			constructor() {}
-			observe() {}
-			unobserve() {}
-			disconnect() {}
-		};
+		(window as unknown as Record<string, unknown>).IntersectionObserver =
+			class {
+				constructor() {}
+				observe() {}
+				unobserve() {}
+				disconnect() {}
+			};
 	}
 
-	const isServer = typeof window === 'undefined';
-	const fallbackInView = isServer || globalThis.__DS_INTERSECTION_OBSERVER_POLYFILL__ === true;
+	const isServer = typeof window === "undefined";
+	const fallbackInView =
+		isServer || globalThis.__DS_INTERSECTION_OBSERVER_POLYFILL__ === true;
 
-	const motionValue = useMotionValue(direction === 'down' ? value : startValue);
+	const motionValue = useMotionValue(direction === "down" ? value : startValue);
 	const springValue = useSpring(motionValue, {
 		damping: 60,
 		stiffness: 100,
 	});
 	const isInView = useInView(ref, {
 		once: true,
-		margin: '0px',
+		margin: "0px",
 		initial: fallbackInView,
 	});
 
 	useEffect(() => {
 		if (isInView) {
 			const timer = setTimeout(() => {
-				motionValue.set(direction === 'down' ? startValue : value);
+				motionValue.set(direction === "down" ? startValue : value);
 			}, delay * 1000);
 			return () => clearTimeout(timer);
 		}
@@ -67,23 +69,23 @@ export function NumberTicker({
 
 	useEffect(
 		() =>
-			springValue.on('change', (latest) => {
+			springValue.on("change", (latest) => {
 				if (ref.current) {
-					ref.current.textContent = Intl.NumberFormat('en-US', {
+					ref.current.textContent = Intl.NumberFormat("en-US", {
 						minimumFractionDigits: decimalPlaces,
 						maximumFractionDigits: decimalPlaces,
 					}).format(Number(latest.toFixed(decimalPlaces)));
 				}
 			}),
-		[springValue, decimalPlaces]
+		[springValue, decimalPlaces],
 	);
 
 	return (
 		<span
 			ref={ref}
 			className={cn(
-				'inline-block text-black tabular-nums tracking-wider dark:text-white',
-				className
+				"inline-block text-black tabular-nums tracking-wider dark:text-white",
+				className,
 			)}
 			{...props}
 		>

@@ -24,7 +24,8 @@
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	text-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
-	transition: opacity 0.4s ease, transform 0.4s ease, background 0.4s ease, color 0.4s ease;
+	transition: opacity 0.4s ease, transform 0.4s ease, background 0.4s ease,
+		color 0.4s ease;
 }
 
 .hero-headline__accent--persona {
@@ -35,7 +36,10 @@
 }
 
 .hero-headline__accent--action {
-	background: var(--hero-accent-action, linear-gradient(90deg, #3b82f6, #06b6d4));
+	background: var(
+		--hero-accent-action,
+		linear-gradient(90deg, #3b82f6, #06b6d4)
+	);
 }
 
 .hero-headline__accent--risk {

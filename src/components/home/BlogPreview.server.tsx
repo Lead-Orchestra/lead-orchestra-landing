@@ -1,6 +1,6 @@
-import { getLatestBeehiivPosts } from '@/lib/beehiiv/getPosts';
-import type { BeehiivPost } from '@/types/behiiv';
-import { BlogPreview } from './BlogPreview';
+import { getLatestBeehiivPosts } from "@/lib/beehiiv/getPosts";
+import type { BeehiivPost } from "@/types/behiiv";
+import { BlogPreview } from "./BlogPreview";
 
 export async function BlogPreviewServer() {
 	const posts = await getLatestBeehiivPosts();

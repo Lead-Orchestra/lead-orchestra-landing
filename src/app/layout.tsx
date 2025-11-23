@@ -1,11 +1,11 @@
-import '../index.css';
-import type { ReactNode } from 'react';
+import "../index.css";
+import type { ReactNode } from "react";
 
-import { AppProviders } from '@/components/providers/AppProviders';
-import type { AnalyticsConfig } from '@/lib/analytics/config';
-import { getAnalyticsConfig } from '@/lib/analytics/config';
-import { monoFont, sansFont } from '@/styles/fonts';
-import { SchemaInjector, buildKnowledgeGraphSchema } from '@/utils/seo/schema';
+import { AppProviders } from "@/components/providers/AppProviders";
+import type { AnalyticsConfig } from "@/lib/analytics/config";
+import { getAnalyticsConfig } from "@/lib/analytics/config";
+import { monoFont, sansFont } from "@/styles/fonts";
+import { SchemaInjector, buildKnowledgeGraphSchema } from "@/utils/seo/schema";
 
 const KNOWLEDGE_GRAPH_SCHEMA = buildKnowledgeGraphSchema();
 
@@ -13,7 +13,10 @@ const analyticsResult = getAnalyticsConfig();
 
 if (analyticsResult.warnings.length > 0) {
 	// * Surface configuration issues early in the server logs.
-	console.warn('[layout] Analytics configuration warnings', analyticsResult.warnings);
+	console.warn(
+		"[layout] Analytics configuration warnings",
+		analyticsResult.warnings,
+	);
 }
 
 const initialAnalyticsConfig: AnalyticsConfig = analyticsResult.config;

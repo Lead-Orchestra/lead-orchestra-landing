@@ -1,6 +1,6 @@
-'use client';
-import { useEffect, useRef, useState } from 'react';
-import { useDeferredGate } from './useDeferredGate';
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { useDeferredGate } from "./useDeferredGate";
 
 type Props = {
 	minHeight?: number;
@@ -34,7 +34,7 @@ export default function DeferredVisible({
 			(entries) => {
 				for (const e of entries) if (e.isIntersecting) setVisible(true);
 			},
-			{ rootMargin: '200px' }
+			{ rootMargin: "200px" },
 		);
 		io.observe(el);
 		return () => io.disconnect();

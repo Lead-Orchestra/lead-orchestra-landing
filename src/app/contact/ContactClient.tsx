@@ -1,33 +1,36 @@
-'use client';
+"use client";
 
-import AuthGuard from '@/components/auth/AuthGuard';
-import ContactForm from '@/components/contact/form/ContactForm';
-import { ContactInfo } from '@/components/contact/form/ContactInfo';
-import { type ContactStep, ContactSteps } from '@/components/contact/form/ContactSteps';
-import { Newsletter } from '@/components/contact/newsletter/Newsletter';
-import { ScheduleMeeting } from '@/components/contact/schedule/ScheduleMeeting';
-import TrustedByMarquee from '@/components/contact/utils/TrustedByScroller';
-import ExitIntentBoundary from '@/components/exit-intent/ExitIntentBoundary';
-import Testimonials from '@/components/home/Testimonials';
-import { betaTesterFormFields } from '@/data/contact/formFields';
-import type { BetaTesterFormValues } from '@/data/contact/formFields';
-import { exitIntentEnabled } from '@/lib/config/exitIntent';
-import { useDataModule } from '@/stores/useDataModuleStore';
-import type { MultiselectField } from '@/types/contact/formFields';
-import type { CompanyLogoDictType } from '@/types/service/trusted-companies';
-import type { Testimonial } from '@/types/testimonial';
-import { mapSeoMetaToMetadata } from '@/utils/seo/mapSeoMetaToMetadata';
-import { getStaticSeo } from '@/utils/seo/staticSeo';
-import type { Metadata } from 'next';
-import { useSession } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+import AuthGuard from "@/components/auth/AuthGuard";
+import ContactForm from "@/components/contact/form/ContactForm";
+import { ContactInfo } from "@/components/contact/form/ContactInfo";
+import {
+	type ContactStep,
+	ContactSteps,
+} from "@/components/contact/form/ContactSteps";
+import { Newsletter } from "@/components/contact/newsletter/Newsletter";
+import { ScheduleMeeting } from "@/components/contact/schedule/ScheduleMeeting";
+import TrustedByMarquee from "@/components/contact/utils/TrustedByScroller";
+import ExitIntentBoundary from "@/components/exit-intent/ExitIntentBoundary";
+import Testimonials from "@/components/home/Testimonials";
+import { betaTesterFormFields } from "@/data/contact/formFields";
+import type { BetaTesterFormValues } from "@/data/contact/formFields";
+import { exitIntentEnabled } from "@/lib/config/exitIntent";
+import { useDataModule } from "@/stores/useDataModuleStore";
+import type { MultiselectField } from "@/types/contact/formFields";
+import type { CompanyLogoDictType } from "@/types/service/trusted-companies";
+import type { Testimonial } from "@/types/testimonial";
+import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
+import { getStaticSeo } from "@/utils/seo/staticSeo";
+import type { Metadata } from "next";
+import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 
-import { useDataModuleGuardTelemetry } from '@/hooks/useDataModuleGuardTelemetry';
+import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
 
 // * Centralized SEO for /contact using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {
-	const seo = getStaticSeo('/contact');
+	const seo = getStaticSeo("/contact");
 	return mapSeoMetaToMetadata(seo);
 }
 
@@ -40,13 +43,13 @@ const Contact = () => {
 		if (!user) {
 			return {};
 		}
-		const name = user.name?.trim() ?? '';
+		const name = user.name?.trim() ?? "";
 		let firstName: string | undefined;
 		let lastName: string | undefined;
 		if (name.length > 0) {
 			const [first, ...rest] = name.split(/\s+/);
 			firstName = first || undefined;
-			lastName = rest.length > 0 ? rest.join(' ') : undefined;
+			lastName = rest.length > 0 ? rest.join(" ") : undefined;
 		}
 		const phone = (user as { phone?: string }).phone;
 		return {
@@ -65,11 +68,11 @@ const Contact = () => {
 		// Build option lists for fields that need title->value mapping
 		const featureVotesField = betaTesterFormFields.find(
 			(field): field is MultiselectField =>
-				field.name === 'featureVotes' && field.type === 'multiselect'
+				field.name === "featureVotes" && field.type === "multiselect",
 		);
 		const wantedFeaturesField = betaTesterFormFields.find(
 			(field): field is MultiselectField =>
-				field.name === 'wantedFeatures' && field.type === 'multiselect'
+				field.name === "wantedFeatures" && field.type === "multiselect",
 		);
 		const featureVotesOptions = featureVotesField?.options;
 		const wantedFeaturesOptions = wantedFeaturesField?.options;
@@ -77,20 +80,20 @@ const Contact = () => {
 		const normalize = (s: string) =>
 			s
 				.toLowerCase()
-				.replace(/[^a-z0-9]+/g, ' ')
+				.replace(/[^a-z0-9]+/g, " ")
 				.trim()
-				.replace(/\s+/g, ' ');
+				.replace(/\s+/g, " ");
 
 		if (featureVotesOptions) {
 			console.log(
-				'[ContactClient] featureVotes options:',
-				featureVotesOptions.map((o) => o.label)
+				"[ContactClient] featureVotes options:",
+				featureVotesOptions.map((o) => o.label),
 			);
 		}
 		if (wantedFeaturesOptions) {
 			console.log(
-				'[ContactClient] wantedFeatures options:',
-				wantedFeaturesOptions.map((o) => o.label)
+				"[ContactClient] wantedFeatures options:",
+				wantedFeaturesOptions.map((o) => o.label),
 			);
 		}
 
@@ -100,40 +103,52 @@ const Contact = () => {
 			if (raw == null) continue;
 
 			switch (field.type) {
-				case 'multiselect': {
+				case "multiselect": {
 					let tokens = raw
-						.split(',')
+						.split(",")
 						.map((s) => s.trim())
 						.filter((s) => s.length > 0);
-					if (field.name === 'featureVotes') {
-						console.log('[ContactClient] featureVotes raw:', raw, tokens);
+					if (field.name === "featureVotes") {
+						console.log("[ContactClient] featureVotes raw:", raw, tokens);
 					}
-					if (field.name === 'wantedFeatures') {
-						console.log('[ContactClient] wantedFeatures raw:', raw, tokens);
+					if (field.name === "wantedFeatures") {
+						console.log("[ContactClient] wantedFeatures raw:", raw, tokens);
 					}
 
-					const mapWithOptions = (arr: string[], options?: { value: string; label: string }[]) => {
+					const mapWithOptions = (
+						arr: string[],
+						options?: { value: string; label: string }[],
+					) => {
 						if (!options) return arr;
 						return arr
 							.map((t) => {
 								const direct = options.find((opt) => opt.value === t);
 								if (direct) return t;
 								const norm = normalize(t);
-								const byLabel = options.find((opt) => normalize(opt.label) === norm);
+								const byLabel = options.find(
+									(opt) => normalize(opt.label) === norm,
+								);
 								if (byLabel) return byLabel.value;
-								const byContains = options.find((opt) => normalize(opt.label).includes(norm));
+								const byContains = options.find((opt) =>
+									normalize(opt.label).includes(norm),
+								);
 								if (byContains) return byContains.value;
 								// fuzzy token-overlap
-								const normTokens = new Set(norm.split(' ').filter(Boolean));
+								const normTokens = new Set(norm.split(" ").filter(Boolean));
 								let best: { val: string; score: number } | null = null;
 								for (const opt of options) {
 									const labelNorm = normalize(opt.label);
-									const labelTokens = new Set(labelNorm.split(' ').filter(Boolean));
+									const labelTokens = new Set(
+										labelNorm.split(" ").filter(Boolean),
+									);
 									let overlap = 0;
-									for (const tk of normTokens) if (labelTokens.has(tk)) overlap++;
-									const denom = Math.max(normTokens.size, labelTokens.size) || 1;
+									for (const tk of normTokens)
+										if (labelTokens.has(tk)) overlap++;
+									const denom =
+										Math.max(normTokens.size, labelTokens.size) || 1;
 									const score = overlap / denom;
-									if (!best || score > best.score) best = { val: opt.value, score };
+									if (!best || score > best.score)
+										best = { val: opt.value, score };
 								}
 								if (best && best.score >= 0.5) return best.val;
 								return t;
@@ -141,24 +156,24 @@ const Contact = () => {
 							.filter((t) => t.length > 0);
 					};
 
-					if (field.name === 'featureVotes') {
+					if (field.name === "featureVotes") {
 						tokens = mapWithOptions(tokens, featureVotesOptions);
-						console.log('[ContactClient] featureVotes mapped:', tokens);
-					} else if (field.name === 'wantedFeatures') {
+						console.log("[ContactClient] featureVotes mapped:", tokens);
+					} else if (field.name === "wantedFeatures") {
 						tokens = mapWithOptions(tokens, wantedFeaturesOptions);
-						console.log('[ContactClient] wantedFeatures mapped:', tokens);
+						console.log("[ContactClient] wantedFeatures mapped:", tokens);
 					}
 
 					(result[name] as unknown) = tokens;
 					break;
 				}
-				case 'checkbox': {
+				case "checkbox": {
 					// Accept true/1/yes/on
 					const val = /^(true|1|yes|on)$/i.test(raw);
 					(result[name] as unknown) = val;
 					break;
 				}
-				case 'file': {
+				case "file": {
 					// Not supported via URL
 					break;
 				}
@@ -174,49 +189,59 @@ const Contact = () => {
 		status: logosStatus,
 		companyLogos,
 		error: logosError,
-	} = useDataModule('service/slug_data/trustedCompanies', ({ status, data, error }) => ({
-		status,
-		companyLogos: (data?.companyLogos ?? {}) as CompanyLogoDictType,
-		error,
-	}));
+	} = useDataModule(
+		"service/slug_data/trustedCompanies",
+		({ status, data, error }) => ({
+			status,
+			companyLogos: (data?.companyLogos ?? {}) as CompanyLogoDictType,
+			error,
+		}),
+	);
 	const {
 		status: testimonialsStatus,
 		testimonials,
 		error: testimonialsError,
-	} = useDataModule('service/slug_data/testimonials', ({ status, data, error }) => ({
-		status,
-		testimonials: (data?.generalDealScaleTestimonials ?? []) as Testimonial[],
-		error,
-	}));
+	} = useDataModule(
+		"service/slug_data/testimonials",
+		({ status, data, error }) => ({
+			status,
+			testimonials: (data?.generalDealScaleTestimonials ?? []) as Testimonial[],
+			error,
+		}),
+	);
 	const {
 		status: stepsStatus,
 		steps,
 		error: stepsError,
-	} = useDataModule('service/slug_data/consultationSteps', ({ status, data, error }) => ({
-		status,
-		steps: (data?.betaSignupSteps ?? []) as ContactStep[],
-		error,
-	}));
+	} = useDataModule(
+		"service/slug_data/consultationSteps",
+		({ status, data, error }) => ({
+			status,
+			steps: (data?.betaSignupSteps ?? []) as ContactStep[],
+			error,
+		}),
+	);
 
-	const logosDetail = useMemo(() => ({ segment: 'trusted-companies' }), []);
-	const testimonialsDetail = useMemo(() => ({ segment: 'testimonials' }), []);
-	const stepsDetail = useMemo(() => ({ segment: 'consultation-steps' }), []);
+	const logosDetail = useMemo(() => ({ segment: "trusted-companies" }), []);
+	const testimonialsDetail = useMemo(() => ({ segment: "testimonials" }), []);
+	const stepsDetail = useMemo(() => ({ segment: "consultation-steps" }), []);
 
-	const isLogosLoading = logosStatus === 'idle' || logosStatus === 'loading';
-	const isLogosError = logosStatus === 'error';
+	const isLogosLoading = logosStatus === "idle" || logosStatus === "loading";
+	const isLogosError = logosStatus === "error";
 	const hasLogos = Object.keys(companyLogos).length > 0;
 
-	const isTestimonialsLoading = testimonialsStatus === 'idle' || testimonialsStatus === 'loading';
-	const isTestimonialsError = testimonialsStatus === 'error';
+	const isTestimonialsLoading =
+		testimonialsStatus === "idle" || testimonialsStatus === "loading";
+	const isTestimonialsError = testimonialsStatus === "error";
 	const hasTestimonials = testimonials.length > 0;
 
-	const isStepsLoading = stepsStatus === 'idle' || stepsStatus === 'loading';
-	const isStepsError = stepsStatus === 'error';
+	const isStepsLoading = stepsStatus === "idle" || stepsStatus === "loading";
+	const isStepsError = stepsStatus === "error";
 	const hasSteps = steps.length > 0;
 
 	useDataModuleGuardTelemetry({
-		key: 'service/slug_data/trustedCompanies',
-		surface: 'ContactClient',
+		key: "service/slug_data/trustedCompanies",
+		surface: "ContactClient",
 		status: logosStatus,
 		hasData: hasLogos,
 		error: logosError,
@@ -224,8 +249,8 @@ const Contact = () => {
 	});
 
 	useDataModuleGuardTelemetry({
-		key: 'service/slug_data/testimonials',
-		surface: 'ContactClient',
+		key: "service/slug_data/testimonials",
+		surface: "ContactClient",
 		status: testimonialsStatus,
 		hasData: hasTestimonials,
 		error: testimonialsError,
@@ -233,8 +258,8 @@ const Contact = () => {
 	});
 
 	useDataModuleGuardTelemetry({
-		key: 'service/slug_data/consultationSteps',
-		surface: 'ContactClient',
+		key: "service/slug_data/consultationSteps",
+		surface: "ContactClient",
 		status: stepsStatus,
 		hasData: hasSteps,
 		error: stepsError,
@@ -242,15 +267,24 @@ const Contact = () => {
 	});
 
 	if (isLogosError) {
-		console.error('[ContactClient] Failed to load trusted companies', logosError);
+		console.error(
+			"[ContactClient] Failed to load trusted companies",
+			logosError,
+		);
 	}
 
 	if (isTestimonialsError) {
-		console.error('[ContactClient] Failed to load testimonials', testimonialsError);
+		console.error(
+			"[ContactClient] Failed to load testimonials",
+			testimonialsError,
+		);
 	}
 
 	if (isStepsError) {
-		console.error('[ContactClient] Failed to load consultation steps', stepsError);
+		console.error(
+			"[ContactClient] Failed to load consultation steps",
+			stepsError,
+		);
 	}
 
 	const shouldRenderExitIntent = exitIntentEnabled();
@@ -318,8 +352,10 @@ const Contact = () => {
 				) : hasTestimonials ? (
 					<Testimonials
 						testimonials={testimonials}
-						title={'What Our Clients Say'}
-						subtitle={'Hear from our clients about their experiences with our services'}
+						title={"What Our Clients Say"}
+						subtitle={
+							"Hear from our clients about their experiences with our services"
+						}
 					/>
 				) : (
 					<div className="my-12 rounded-xl border border-white/10 bg-background-dark/50 p-6 text-center text-muted-foreground">

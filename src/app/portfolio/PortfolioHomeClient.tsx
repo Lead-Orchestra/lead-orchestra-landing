@@ -1,21 +1,22 @@
-'use client';
-import { CTASection } from '@/components/common/CTASection';
-import Hero from '@/components/home/heros/Hero';
-import PortfolioFilter from '@/components/portfolio/PortfolioFilter';
-import PortfolioGrid from '@/components/portfolio/PortfolioGrid';
-import PortfolioHero from '@/components/portfolio/PortfolioHero';
-import { Separator } from '@/components/ui/separator';
-import { projects } from '@/data/portfolio';
-import { usePagination } from '@/hooks/use-pagination';
-import { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+"use client";
+import { CTASection } from "@/components/common/CTASection";
+import Hero from "@/components/home/heros/Hero";
+import PortfolioFilter from "@/components/portfolio/PortfolioFilter";
+import PortfolioGrid from "@/components/portfolio/PortfolioGrid";
+import PortfolioHero from "@/components/portfolio/PortfolioHero";
+import { Separator } from "@/components/ui/separator";
+import { projects } from "@/data/portfolio";
+import { usePagination } from "@/hooks/use-pagination";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function PortfolioHomeClient() {
-	const [searchTerm, setSearchTerm] = useState('');
-	const [activeCategory, setActiveCategory] = useState('all');
+	const [searchTerm, setSearchTerm] = useState("");
+	const [activeCategory, setActiveCategory] = useState("all");
 	// Filter projects by category and search term
 	const filteredProjects = projects.filter((project) => {
-		const matchesCategory = activeCategory === 'all' || project.category === activeCategory;
+		const matchesCategory =
+			activeCategory === "all" || project.category === activeCategory;
 		const matchesSearch =
 			project.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			project.description?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -48,7 +49,7 @@ export default function PortfolioHomeClient() {
 	}, [searchTerm, activeCategory]);
 
 	const categories = [
-		{ id: 'all', name: 'All Projects' },
+		{ id: "all", name: "All Projects" },
 		...Array.from(new Set(projects.map((project) => project.category)))
 			.filter(Boolean)
 			.map((category) => ({
@@ -92,8 +93,8 @@ export default function PortfolioHomeClient() {
 								key={uuidv4()}
 								className={`rounded-lg px-4 py-2 transition-colors ${
 									page === i + 1
-										? 'bg-primary text-primary-foreground'
-										: 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+										? "bg-primary text-primary-foreground"
+										: "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
 								}`}
 								onClick={() => setPage(i + 1)}
 								type="button"
@@ -130,12 +131,12 @@ export default function PortfolioHomeClient() {
 
 	// Debug logs for filtering
 	// ! Debug: Log activeCategory and filteredProjects
-	console.log('activeCategory', activeCategory);
+	console.log("activeCategory", activeCategory);
 	console.log(
-		'filteredProjects.length',
+		"filteredProjects.length",
 		filteredProjects.length,
-		'projects.length',
-		projects.length
+		"projects.length",
+		projects.length,
 	);
 
 	return (

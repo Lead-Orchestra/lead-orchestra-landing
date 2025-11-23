@@ -1,52 +1,52 @@
-import { type LucideIcon, ShieldCheck } from 'lucide-react';
-import type { Plan } from '../../types/service/plans';
-import type { FAQProps } from '../faq';
-import type { Testimonial } from '../testimonial';
-import type { FlowChartNode } from './howItWorks';
+import { type LucideIcon, ShieldCheck } from "lucide-react";
+import type { Plan } from "../../types/service/plans";
+import type { FAQProps } from "../faq";
+import type { Testimonial } from "../testimonial";
+import type { FlowChartNode } from "./howItWorks";
 
 export type IconName =
-	| 'Zap'
-	| 'Bolt'
-	| 'ChartBar'
-	| 'ShieldCheck'
-	| 'Network'
-	| 'RefreshCw'
-	| 'Puzzle'
-	| 'Palette'
-	| 'RocketLaunch'
-	| 'Lightbulb'
-	| 'Rocket'
-	| 'Brain'
-	| 'Smartphone'
-	| 'Users'
-	| 'Database'
-	| 'Globe'
-	| 'Search'
-	| 'Pencil'
-	| 'Code'
-	| 'Cloud'
-	| 'Share'
-	| 'Mail'
-	| 'MailCheck'
-	| 'Phone'
-	| 'AtSign'
-	| 'SlidersHorizontal'
-	| 'FileText'
-	| 'Fingerprint'
-	| 'User'
-	| 'FileCheck'
-	| 'DatabaseZap'
-	| 'CheckSquare'
-	| 'BarChartBig'
-	| 'MessageSquare'
-	| 'BrainCircuit'
-	| 'LayoutGrid'
-	| 'Sparkles'
-	| 'UploadCloud'
-	| 'Power'
-	| 'CalendarCheck'
-	| 'PieChart'
-	| 'BarChart';
+	| "Zap"
+	| "Bolt"
+	| "ChartBar"
+	| "ShieldCheck"
+	| "Network"
+	| "RefreshCw"
+	| "Puzzle"
+	| "Palette"
+	| "RocketLaunch"
+	| "Lightbulb"
+	| "Rocket"
+	| "Brain"
+	| "Smartphone"
+	| "Users"
+	| "Database"
+	| "Globe"
+	| "Search"
+	| "Pencil"
+	| "Code"
+	| "Cloud"
+	| "Share"
+	| "Mail"
+	| "MailCheck"
+	| "Phone"
+	| "AtSign"
+	| "SlidersHorizontal"
+	| "FileText"
+	| "Fingerprint"
+	| "User"
+	| "FileCheck"
+	| "DatabaseZap"
+	| "CheckSquare"
+	| "BarChartBig"
+	| "MessageSquare"
+	| "BrainCircuit"
+	| "LayoutGrid"
+	| "Sparkles"
+	| "UploadCloud"
+	| "Power"
+	| "CalendarCheck"
+	| "PieChart"
+	| "BarChart";
 
 // --- ServicesData Structure (remains the same conceptually) ---
 export type ServicesData = {
@@ -70,15 +70,16 @@ export type TechStack = {
 
 // --- Constants and Category Types (remain the same) ---
 export const SERVICE_CATEGORIES = {
-	LEAD_GENERATION: 'lead_generation',
-	LEAD_PREQUALIFICATION: 'lead_prequalification',
-	SKIP_TRACING: 'skip_tracing',
-	AI_FEATURES: 'ai_features',
-	REAL_ESTATE_TOOLS: 'real_estate_tools',
+	LEAD_GENERATION: "lead_generation",
+	LEAD_PREQUALIFICATION: "lead_prequalification",
+	SKIP_TRACING: "skip_tracing",
+	AI_FEATURES: "ai_features",
+	REAL_ESTATE_TOOLS: "real_estate_tools",
 } as const;
 
 export type ServiceCategoryKey = keyof typeof SERVICE_CATEGORIES;
-export type ServiceCategoryValue = (typeof SERVICE_CATEGORIES)[ServiceCategoryKey];
+export type ServiceCategoryValue =
+	(typeof SERVICE_CATEGORIES)[ServiceCategoryKey];
 
 // Service HowItWorks type
 export type ServiceHowItWorks = FlowChartNode & {
@@ -145,7 +146,7 @@ export type ServiceItemData = {
 	iconName: IconName;
 	title: string;
 	description: string;
-	features: Array<Feature['name']>;
+	features: Array<Feature["name"]>;
 	price?: number | string;
 	onSale?: boolean;
 	showBanner?: boolean;

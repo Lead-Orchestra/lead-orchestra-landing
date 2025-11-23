@@ -1,43 +1,44 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock('@/utils/seo/staticSeo', () => {
+vi.mock("@/utils/seo/staticSeo", () => {
 	const getStaticSeo = vi.fn();
 	return {
 		__esModule: true,
 		getStaticSeo,
 		defaultSeo: {
-			canonical: 'https://dealscale.io',
-			title: 'Deal Scale',
-			description: 'Default description',
+			canonical: "https://dealscale.io",
+			title: "Deal Scale",
+			description: "Default description",
 		},
 	};
 });
 
-vi.mock('@/utils/seo/mapSeoMetaToMetadata', () => ({
+vi.mock("@/utils/seo/mapSeoMetaToMetadata", () => ({
 	__esModule: true,
 	mapSeoMetaToMetadata: vi.fn((seo) => ({
-		title: seo.title || 'Deal Scale',
-		description: seo.description || 'Default description',
+		title: seo.title || "Deal Scale",
+		description: seo.description || "Default description",
 		alternates: {
-			canonical: seo.canonical || 'https://dealscale.io',
+			canonical: seo.canonical || "https://dealscale.io",
 		},
 	})),
 }));
 
-import { generateMetadata } from '@/app/linktree/page';
-import { getStaticSeo } from '@/utils/seo/staticSeo';
+import { generateMetadata } from "@/app/linktree/page";
+import { getStaticSeo } from "@/utils/seo/staticSeo";
 
 const mockedGetStaticSeo = vi.mocked(getStaticSeo);
 
-describe('LinkTree Page Metadata', () => {
+describe("LinkTree Page Metadata", () => {
 	const mockSeo = {
-		title: 'Link Tree | Deal Scale',
-		description: "Quick access to DealScale's most important links, resources, and pages.",
-		canonical: 'https://dealscale.io/linktree',
-		keywords: ['links', 'resources'],
-		image: '/banners/main.png',
-		siteName: 'Deal Scale',
-		type: 'website' as const,
+		title: "Link Tree | Deal Scale",
+		description:
+			"Quick access to DealScale's most important links, resources, and pages.",
+		canonical: "https://dealscale.io/linktree",
+		keywords: ["links", "resources"],
+		image: "/banners/main.png",
+		siteName: "Deal Scale",
+		type: "website" as const,
 	};
 
 	beforeEach(() => {
@@ -45,54 +46,61 @@ describe('LinkTree Page Metadata', () => {
 		mockedGetStaticSeo.mockReturnValue(mockSeo);
 	});
 
-	it('generates metadata with correct title', async () => {
+	it("generates metadata with correct title", async () => {
 		const metadata = await generateMetadata();
 
-		expect(metadata.title).toBe('Link Tree | DealScale - Quick Access to Resources');
+		expect(metadata.title).toBe(
+			"Link Tree | DealScale - Quick Access to Resources",
+		);
 	});
 
-	it('generates metadata with correct description', async () => {
+	it("generates metadata with correct description", async () => {
 		const metadata = await generateMetadata();
 
-		expect(metadata.description).toContain("Explore DealScale's curated collection of links");
-		expect(metadata.description).toContain('products, services, blog posts, events, case studies');
+		expect(metadata.description).toContain(
+			"Explore DealScale's curated collection of links",
+		);
+		expect(metadata.description).toContain(
+			"products, services, blog posts, events, case studies",
+		);
 	});
 
-	it('includes OpenGraph metadata', async () => {
+	it("includes OpenGraph metadata", async () => {
 		const metadata = await generateMetadata();
 
 		expect(metadata.openGraph).toEqual({
-			title: 'DealScale Link Tree',
-			description: "Quick access to DealScale's most important links, resources, and pages.",
-			url: 'https://dealscale.io/linktree',
-			type: 'website',
+			title: "DealScale Link Tree",
+			description:
+				"Quick access to DealScale's most important links, resources, and pages.",
+			url: "https://dealscale.io/linktree",
+			type: "website",
 		});
 	});
 
-	it('includes Twitter Card metadata', async () => {
+	it("includes Twitter Card metadata", async () => {
 		const metadata = await generateMetadata();
 
 		expect(metadata.twitter).toEqual({
-			card: 'summary_large_image',
-			title: 'DealScale Link Tree',
+			card: "summary_large_image",
+			title: "DealScale Link Tree",
 			description: "Quick access to DealScale's resources and pages.",
 		});
 	});
 
-	it('uses canonical URL from static SEO', async () => {
+	it("uses canonical URL from static SEO", async () => {
 		const metadata = await generateMetadata();
 
-		expect(mockedGetStaticSeo).toHaveBeenCalledWith('/linktree');
-		expect(metadata.openGraph?.url).toBe('https://dealscale.io/linktree');
+		expect(mockedGetStaticSeo).toHaveBeenCalledWith("/linktree");
+		expect(metadata.openGraph?.url).toBe("https://dealscale.io/linktree");
 	});
 
-	it('falls back to default URL if SEO not found', async () => {
+	it("falls back to default URL if SEO not found", async () => {
 		mockedGetStaticSeo.mockReturnValue({
 			canonical: undefined,
 		} as Partial<typeof mockSeo>);
 
 		const metadata = await generateMetadata();
 
-		expect(metadata.openGraph?.url).toBe('https://dealscale.io/linktree');
+		expect(metadata.openGraph?.url).toBe("https://dealscale.io/linktree");
 	});
 });

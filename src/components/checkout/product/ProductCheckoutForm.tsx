@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { useNavigationRouter } from '@/hooks/useNavigationRouter';
-import { startStripeToast } from '@/lib/ui/stripeToast';
-import { useElements, useStripe } from '@stripe/react-stripe-js';
-import type { StripeError } from '@stripe/stripe-js';
-import { Loader2 } from 'lucide-react';
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
+import { startStripeToast } from "@/lib/ui/stripeToast";
+import { useElements, useStripe } from "@stripe/react-stripe-js";
+import type { StripeError } from "@stripe/stripe-js";
+import { Loader2 } from "lucide-react";
 // External imports
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 // Internal imports
-import { Button } from '@/components/ui/button';
-import { useProductSelection } from '@/contexts/ProductSelectionContext';
-import { mockDiscountCodes } from '@/data/discount/mockDiscountCodes';
-import { calculateShippingCost, getShippingInfo } from '@/data/shipping';
-import { useWaitCursor } from '@/hooks/useWaitCursor';
-import { cn } from '@/lib/utils';
-import type { DiscountCode } from '@/types/discount/discountCode';
-import type { ProductType } from '@/types/products';
-import { type ShippingOption, TAX_RATE } from '@/types/products/shipping';
-import toast from 'react-hot-toast';
+import { Button } from "@/components/ui/button";
+import { useProductSelection } from "@/contexts/ProductSelectionContext";
+import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
+import { calculateShippingCost, getShippingInfo } from "@/data/shipping";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { cn } from "@/lib/utils";
+import type { DiscountCode } from "@/types/discount/discountCode";
+import type { ProductType } from "@/types/products";
+import { type ShippingOption, TAX_RATE } from "@/types/products/shipping";
+import toast from "react-hot-toast";
 
-import { CheckoutFooter } from './CheckoutFooter';
+import { CheckoutFooter } from "./CheckoutFooter";
 // Local component imports
-import { CheckoutHeader } from './CheckoutHeader';
-import { DiscountCodeInput } from './DiscountCodeInput';
-import { OrderSummary } from './OrderSummary';
-import { PaymentSection } from './PaymentSection';
-import { ShippingMethodSelector } from './ShippingMethodSelector';
+import { CheckoutHeader } from "./CheckoutHeader";
+import { DiscountCodeInput } from "./DiscountCodeInput";
+import { OrderSummary } from "./OrderSummary";
+import { PaymentSection } from "./PaymentSection";
+import { ShippingMethodSelector } from "./ShippingMethodSelector";
 
 interface ProductCheckoutFormProps {
 	product: ProductType;
@@ -51,9 +51,12 @@ export function ProductCheckoutForm({
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
-	const [selectedShipping, setSelectedShipping] = useState<ShippingOption | null>(null);
-	const [discountCode, setDiscountCode] = useState('');
-	const [discountApplied, setDiscountApplied] = useState<DiscountCode | null>(null);
+	const [selectedShipping, setSelectedShipping] =
+		useState<ShippingOption | null>(null);
+	const [discountCode, setDiscountCode] = useState("");
+	const [discountApplied, setDiscountApplied] = useState<DiscountCode | null>(
+		null,
+	);
 	const [discountError, setDiscountError] = useState<string | null>(null);
 	const [checkingDiscount, setCheckingDiscount] = useState(false);
 	useWaitCursor(isLoading || checkingDiscount);
@@ -65,7 +68,7 @@ export function ProductCheckoutForm({
 			setShippingOptions(productShipping.availableOptions);
 			// Set default shipping option
 			const defaultOption = productShipping.availableOptions.find(
-				(option) => option.id === productShipping.defaultOptionId
+				(option) => option.id === productShipping.defaultOptionId,
 			);
 			if (defaultOption) {
 				setSelectedShipping(defaultOption);
@@ -79,7 +82,7 @@ export function ProductCheckoutForm({
 	// Prefill or reset discount code when the modal opens with a provided coupon
 	useEffect(() => {
 		if (!prefilledDiscountCode) {
-			setDiscountCode('');
+			setDiscountCode("");
 			setDiscountApplied(null);
 			setDiscountError(null);
 			return;
@@ -89,7 +92,8 @@ export function ProductCheckoutForm({
 		setDiscountCode(normalized);
 
 		const prefilled =
-			prefilledDiscount ?? mockDiscountCodes.find((dc) => dc.code.toUpperCase() === normalized);
+			prefilledDiscount ??
+			mockDiscountCodes.find((dc) => dc.code.toUpperCase() === normalized);
 
 		if (prefilled) {
 			setDiscountApplied(prefilled);
@@ -104,7 +108,11 @@ export function ProductCheckoutForm({
 	const subtotal = itemPrice * quantity;
 	// Calculate shipping cost based on selected option and quantity
 	const shippingAmount = selectedShipping
-		? calculateShippingCost(product.id, selectedShipping.id, selection.quantity ?? 1)
+		? calculateShippingCost(
+				product.id,
+				selectedShipping.id,
+				selection.quantity ?? 1,
+			)
 		: 0;
 	const tax = (subtotal + shippingAmount) * TAX_RATE;
 
@@ -125,23 +133,25 @@ export function ProductCheckoutForm({
 		setDiscountError(null);
 		await new Promise((r) => setTimeout(r, 400));
 		const code = discountCode.trim().toUpperCase();
-		const found = mockDiscountCodes.find((dc) => dc.code.toUpperCase() === code);
+		const found = mockDiscountCodes.find(
+			(dc) => dc.code.toUpperCase() === code,
+		);
 
 		if (!found) {
 			setDiscountApplied(null);
-			setDiscountError('Discount code not found.');
+			setDiscountError("Discount code not found.");
 			setCheckingDiscount(false);
 			return;
 		}
 		if (!found.isActive) {
 			setDiscountApplied(null);
-			setDiscountError('This discount code is no longer active.');
+			setDiscountError("This discount code is no longer active.");
 			setCheckingDiscount(false);
 			return;
 		}
 		if (found.expires && new Date(found.expires) < new Date()) {
 			setDiscountApplied(null);
-			setDiscountError('This discount code has expired.');
+			setDiscountError("This discount code has expired.");
 			setCheckingDiscount(false);
 			return;
 		}
@@ -154,22 +164,24 @@ export function ProductCheckoutForm({
 		e.preventDefault();
 
 		if (!stripe || !elements) {
-			setError('Payment system is still loading. Please wait a moment and try again.');
+			setError(
+				"Payment system is still loading. Please wait a moment and try again.",
+			);
 			return;
 		}
 
 		setIsLoading(true);
 		setError(null);
-		const stripeToast = startStripeToast('Processing payment…');
+		const stripeToast = startStripeToast("Processing payment…");
 
 		try {
 			const { error: stripeError } = await stripe.confirmPayment({
 				elements,
 				confirmParams: {
 					return_url: `${window.location.origin}/success`,
-					receipt_email: 'customer@example.com', // TODO: Replace with actual email from form
+					receipt_email: "customer@example.com", // TODO: Replace with actual email from form
 				},
-				redirect: 'if_required',
+				redirect: "if_required",
 			});
 
 			if (stripeError) {
@@ -179,66 +191,73 @@ export function ProductCheckoutForm({
 			// If we get here, payment was successful
 			onClose();
 			const successUrl = new URL(`${window.location.origin}/success`);
-			successUrl.searchParams.append('title', 'Purchase Complete!');
+			successUrl.searchParams.append("title", "Purchase Complete!");
 			successUrl.searchParams.append(
-				'subtitle',
-				`Your order for ${product.name} has been processed.`
+				"subtitle",
+				`Your order for ${product.name} has been processed.`,
 			);
-			successUrl.searchParams.append('ctaText', 'View My Orders');
-			successUrl.searchParams.append('ctaHref', '/orders');
-			stripeToast.success('Payment successful!');
+			successUrl.searchParams.append("ctaText", "View My Orders");
+			successUrl.searchParams.append("ctaHref", "/orders");
+			stripeToast.success("Payment successful!");
 			router.push(successUrl.toString());
 		} catch (err) {
-			console.error('Payment error:', err);
-			let errorMessage = 'An unknown error occurred. Please try again.';
+			console.error("Payment error:", err);
+			let errorMessage = "An unknown error occurred. Please try again.";
 			const error = err as StripeError;
 
-			if (error.type === 'card_error' || error.type === 'validation_error') {
+			if (error.type === "card_error" || error.type === "validation_error") {
 				switch (error.code) {
-					case 'card_declined':
+					case "card_declined":
 						switch (error.decline_code) {
-							case 'insufficient_funds':
-								errorMessage = 'Your card has insufficient funds. Please use a different card.';
-								break;
-							case 'lost_card':
-								errorMessage = 'This card has been reported as lost. Please use a different card.';
-								break;
-							case 'stolen_card':
+							case "insufficient_funds":
 								errorMessage =
-									'This card has been reported as stolen. Please use a different card.';
+									"Your card has insufficient funds. Please use a different card.";
+								break;
+							case "lost_card":
+								errorMessage =
+									"This card has been reported as lost. Please use a different card.";
+								break;
+							case "stolen_card":
+								errorMessage =
+									"This card has been reported as stolen. Please use a different card.";
 								break;
 							default:
 								errorMessage =
-									'Your card was declined. Please check your card details or use a different card.';
+									"Your card was declined. Please check your card details or use a different card.";
 								break;
 						}
 						break;
-					case 'expired_card':
-						errorMessage = 'Your card has expired. Please use a different card.';
+					case "expired_card":
+						errorMessage =
+							"Your card has expired. Please use a different card.";
 						break;
-					case 'incorrect_cvc':
-						errorMessage = 'The CVC is incorrect. Please check and try again.';
+					case "incorrect_cvc":
+						errorMessage = "The CVC is incorrect. Please check and try again.";
 						break;
-					case 'processing_error':
-						errorMessage = 'There was a processing error. Please try again in a few moments.';
+					case "processing_error":
+						errorMessage =
+							"There was a processing error. Please try again in a few moments.";
 						break;
-					case 'incorrect_number':
-						errorMessage = 'The card number is incorrect. Please check the number and try again.';
+					case "incorrect_number":
+						errorMessage =
+							"The card number is incorrect. Please check the number and try again.";
 						break;
 					default:
-						errorMessage = error.message || 'An error occurred during payment. Please try again.';
+						errorMessage =
+							error.message ||
+							"An error occurred during payment. Please try again.";
 						break;
 				}
 			} else if (err instanceof Error) {
 				// Don't expose raw error messages - use generic fallback
-				errorMessage = 'An error occurred during payment. Please try again.';
+				errorMessage = "An error occurred during payment. Please try again.";
 			}
 
 			const failureUrl = new URL(`${window.location.origin}/failed`);
-			failureUrl.searchParams.append('title', 'Purchase Failed');
-			failureUrl.searchParams.append('subtitle', errorMessage);
-			failureUrl.searchParams.append('ctaText', 'Back to Products');
-			failureUrl.searchParams.append('ctaHref', '/products');
+			failureUrl.searchParams.append("title", "Purchase Failed");
+			failureUrl.searchParams.append("subtitle", errorMessage);
+			failureUrl.searchParams.append("ctaText", "Back to Products");
+			failureUrl.searchParams.append("ctaHref", "/products");
 			stripeToast.error(errorMessage);
 			router.push(failureUrl.toString());
 		} finally {
@@ -265,7 +284,11 @@ export function ProductCheckoutForm({
 							onCheckDiscount={handleCheckDiscount}
 						/>
 
-						<form id="payment-form" onSubmit={handleSubmit} className="space-y-6">
+						<form
+							id="payment-form"
+							onSubmit={handleSubmit}
+							className="space-y-6"
+						>
 							<PaymentSection error={error} setError={setError} />
 
 							{shippingOptions.length > 0 && (

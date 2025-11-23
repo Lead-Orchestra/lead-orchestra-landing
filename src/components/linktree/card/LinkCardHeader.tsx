@@ -1,5 +1,5 @@
-'use client';
-import * as React from 'react';
+"use client";
+import * as React from "react";
 
 export type LinkCardHeaderProps = {
 	thumbnailUrl?: string;
@@ -7,7 +7,11 @@ export type LinkCardHeaderProps = {
 	iconEmoji?: string;
 };
 
-export function LinkCardHeader({ thumbnailUrl, imageUrl, iconEmoji }: LinkCardHeaderProps) {
+export function LinkCardHeader({
+	thumbnailUrl,
+	imageUrl,
+	iconEmoji,
+}: LinkCardHeaderProps) {
 	return (
 		<div className="shrink-0">
 			{thumbnailUrl ? (
@@ -30,7 +34,7 @@ export function LinkCardHeader({ thumbnailUrl, imageUrl, iconEmoji }: LinkCardHe
 				/>
 			) : (
 				<div className="text-2xl" aria-hidden>
-					{iconEmoji ?? '🚀'}
+					{iconEmoji ?? "🚀"}
 				</div>
 			)}
 		</div>

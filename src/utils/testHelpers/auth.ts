@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
 
 type Session = {
 	user?: { id?: string; email?: string };
@@ -12,7 +12,9 @@ type MockFetchResponseOptions = {
 	headers?: Record<string, string>;
 };
 
-type FetchMock = ((...args: Parameters<typeof fetch>) => ReturnType<typeof fetch>) & {
+type FetchMock = ((
+	...args: Parameters<typeof fetch>
+) => ReturnType<typeof fetch>) & {
 	mockResolvedValueOnce: (value: unknown) => unknown;
 	mockRejectedValueOnce: (error: unknown) => unknown;
 	mockReset: () => unknown;
@@ -27,8 +29,8 @@ function getFetchMock() {
  */
 export function createSession(overrides: Partial<Session> = {}): Session {
 	return {
-		user: { id: 'user-123', email: 'user@example.com' },
-		dsTokens: { access_token: 'access-token', refresh_token: 'refresh-token' },
+		user: { id: "user-123", email: "user@example.com" },
+		dsTokens: { access_token: "access-token", refresh_token: "refresh-token" },
 		...overrides,
 	};
 }
@@ -43,7 +45,7 @@ export function mockFetchResponse({
 	headers = {},
 }: MockFetchResponseOptions) {
 	const bodyJson = json;
-	const bodyText = text ?? (json ? JSON.stringify(json) : '');
+	const bodyText = text ?? (json ? JSON.stringify(json) : "");
 
 	// Create a proper mock response with minimal required properties
 	const mockResponse = {
@@ -61,8 +63,8 @@ export function mockFetchResponse({
 		body: null,
 		bodyUsed: false,
 		formData: async () => new FormData(),
-		type: 'basic' as const,
-		url: '',
+		type: "basic" as const,
+		url: "",
 		redirected: false,
 	};
 

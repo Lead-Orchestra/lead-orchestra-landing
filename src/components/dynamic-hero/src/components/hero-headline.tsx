@@ -1,27 +1,35 @@
-'use client';
+"use client";
 
-import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useMemo, useState } from "react";
 
-import { AvatarCircles } from '@/components/ui/avatar-circles';
-import { Globe } from '@/components/ui/globe';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
+import { AvatarCircles } from "@/components/ui/avatar-circles";
+import { Globe } from "@/components/ui/globe";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
-import { DEFAULT_HERO_SOCIAL_PROOF } from '../fixtures/social-proof';
-import type { HeroSocialProof, HeroSocialProofReview } from '../types/social-proof';
-import type { ResolvedHeroCopy } from '../utils/copy';
+import { DEFAULT_HERO_SOCIAL_PROOF } from "../fixtures/social-proof";
+import type {
+	HeroSocialProof,
+	HeroSocialProofReview,
+} from "../types/social-proof";
+import type { ResolvedHeroCopy } from "../utils/copy";
 
-import styles from '../styles/hero-headline.module.css';
+import styles from "../styles/hero-headline.module.css";
 
 const PROBLEM_INTERVAL_MS = 8200;
 const SOLUTION_INTERVAL_MS = 10200;
 const FEAR_INTERVAL_MS = 9400;
 const baseSpanAnimation = {
-	initial: { opacity: 0, y: -10, filter: 'blur(6px)' },
-	animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
-	exit: { opacity: 0, y: 10, filter: 'blur(8px)' },
-	transition: { duration: 0.46, ease: 'easeInOut' as const },
+	initial: { opacity: 0, y: -10, filter: "blur(6px)" },
+	animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+	exit: { opacity: 0, y: 10, filter: "blur(8px)" },
+	transition: { duration: 0.46, ease: "easeInOut" as const },
 };
 
 interface HeroHeadlineProps {
@@ -55,14 +63,14 @@ export function HeroHeadline({
 		const cleaned = source
 			.map((phrase, index) => ({
 				index,
-				text: phrase?.trim() ?? '',
+				text: phrase?.trim() ?? "",
 			}))
 			.filter((entry, position, arr) => {
 				if (!entry.text.length) {
 					return false;
 				}
 				const firstMatch = arr.find(
-					(other) => other.text.toLowerCase() === entry.text.toLowerCase()
+					(other) => other.text.toLowerCase() === entry.text.toLowerCase(),
 				);
 				return firstMatch?.index === entry.index;
 			})
@@ -71,29 +79,39 @@ export function HeroHeadline({
 	}, [copy.rotations?.problems, copy.values.problem]);
 	const solutions = useMemo(
 		() => copy.rotations?.solutions ?? [copy.values.solution],
-		[copy.rotations?.solutions, copy.values.solution]
+		[copy.rotations?.solutions, copy.values.solution],
 	);
 	const fears = useMemo(
 		() => copy.rotations?.fears ?? [copy.values.fear],
-		[copy.rotations?.fears, copy.values.fear]
+		[copy.rotations?.fears, copy.values.fear],
 	);
 
-	const problemIndex = useRotatingIndex(problems, PROBLEM_INTERVAL_MS, isAnimating);
-	const solutionIndex = useRotatingIndex(solutions, SOLUTION_INTERVAL_MS, isAnimating);
+	const problemIndex = useRotatingIndex(
+		problems,
+		PROBLEM_INTERVAL_MS,
+		isAnimating,
+	);
+	const solutionIndex = useRotatingIndex(
+		solutions,
+		SOLUTION_INTERVAL_MS,
+		isAnimating,
+	);
 	const fearIndex = useRotatingIndex(fears, FEAR_INTERVAL_MS, isAnimating);
 
-	const problemText = problems[problemIndex]?.trim() ?? problems[0]?.trim() ?? '';
-	const solutionText = solutions[solutionIndex]?.trim() ?? solutions[0]?.trim() ?? '';
-	const fearText = fears[fearIndex]?.trim() ?? fears[0]?.trim() ?? '';
+	const problemText =
+		problems[problemIndex]?.trim() ?? problems[0]?.trim() ?? "";
+	const solutionText =
+		solutions[solutionIndex]?.trim() ?? solutions[0]?.trim() ?? "";
+	const fearText = fears[fearIndex]?.trim() ?? fears[0]?.trim() ?? "";
 	const problemDisplayText =
 		problemText.length > 0
-			? `${problemText[0]?.toUpperCase() ?? ''}${problemText.slice(1)}`
+			? `${problemText[0]?.toUpperCase() ?? ""}${problemText.slice(1)}`
 			: problemText;
 
-	if (process.env.NODE_ENV !== 'production') {
+	if (process.env.NODE_ENV !== "production") {
 		// eslint-disable-next-line no-console
-		console.debug('[HeroHeadline] flip state', {
-			problems: problems.join(' | '),
+		console.debug("[HeroHeadline] flip state", {
+			problems: problems.join(" | "),
 			problemIndex,
 			problemText,
 			solutionIndex,
@@ -107,14 +125,16 @@ export function HeroHeadline({
 	const primaryChip = copy.chips?.primary;
 	const secondaryChip = copy.chips?.secondary;
 
-	const personaChipLabel = personaLabel ?? copy.chips?.primary?.label ?? 'AI Sellers';
+	const personaChipLabel =
+		personaLabel ?? copy.chips?.primary?.label ?? "AI Sellers";
 	const personaChipTitle =
-		personaDescription ?? (personaChipLabel ? `${personaChipLabel} persona` : undefined);
+		personaDescription ??
+		(personaChipLabel ? `${personaChipLabel} persona` : undefined);
 	return (
 		<div
 			className={cn(
-				'relative mx-auto flex max-w-3xl flex-col items-center gap-6 text-center',
-				className
+				"relative mx-auto flex max-w-3xl flex-col items-center gap-6 text-center",
+				className,
 			)}
 		>
 			<div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden" />
@@ -158,7 +178,9 @@ export function HeroHeadline({
 						<div className={styles.personaWrapper}>
 							<Tooltip delayDuration={150}>
 								<TooltipTrigger asChild>
-									<span className={cn(styles.tag, styles.tagPersona)}>{personaChipLabel}</span>
+									<span className={cn(styles.tag, styles.tagPersona)}>
+										{personaChipLabel}
+									</span>
 								</TooltipTrigger>
 								{personaChipTitle ? (
 									<TooltipContent side="bottom" className="text-xs">
@@ -177,40 +199,49 @@ export function HeroHeadline({
 					transition={{ duration: 0.24 }}
 					className={cn(
 						styles.heroHeadline,
-						'text-balance font-semibold text-slate-900 dark:text-white'
+						"text-balance font-semibold text-slate-900 dark:text-white",
 					)}
 				>
 					<span className={styles.heroHeadlineBlock}>
-						Stop{' '}
+						Stop{" "}
 						<AnimatePresence mode="wait" initial={false}>
 							<motion.span
 								key={`${problemIndex}-${problemDisplayText}`}
 								{...baseSpanAnimation}
-								className={cn(styles.heroHeadlineAccent, styles.heroHeadlineAccentPersona)}
+								className={cn(
+									styles.heroHeadlineAccent,
+									styles.heroHeadlineAccentPersona,
+								)}
 							>
 								{problemDisplayText}
 							</motion.span>
 						</AnimatePresence>
 					</span>
 					<span className={styles.heroHeadlineBlock}>
-						Start{' '}
+						Start{" "}
 						<AnimatePresence mode="sync" initial={false}>
 							<motion.span
 								key={`${solutionIndex}-${solutionText}`}
 								{...baseSpanAnimation}
-								className={cn(styles.heroHeadlineAccent, styles.heroHeadlineAccentAction)}
+								className={cn(
+									styles.heroHeadlineAccent,
+									styles.heroHeadlineAccentAction,
+								)}
 							>
 								{solutionText}
 							</motion.span>
 						</AnimatePresence>
 					</span>
 					<span className={styles.heroHeadlineBlock}>
-						Before{' '}
+						Before{" "}
 						<AnimatePresence mode="sync" initial={false}>
 							<motion.span
 								key={`${fearIndex}-${fearText}`}
 								{...baseSpanAnimation}
-								className={cn(styles.heroHeadlineAccent, styles.heroHeadlineAccentRisk)}
+								className={cn(
+									styles.heroHeadlineAccent,
+									styles.heroHeadlineAccentRisk,
+								)}
 							>
 								{fearText}
 							</motion.span>
@@ -251,7 +282,7 @@ export function HeroHeadline({
 export function useRotatingIndex(
 	items: readonly string[],
 	interval: number,
-	isActive = true
+	isActive = true,
 ): number {
 	const [index, setIndex] = useState(0);
 	const length = items.length;
@@ -266,7 +297,10 @@ export function useRotatingIndex(
 		if (length <= 1 || !isActive) {
 			return;
 		}
-		const timer = setInterval(() => setIndex((current) => (current + 1) % length), interval);
+		const timer = setInterval(
+			() => setIndex((current) => (current + 1) % length),
+			interval,
+		);
 		return () => clearInterval(timer);
 	}, [interval, items, length, isActive]);
 

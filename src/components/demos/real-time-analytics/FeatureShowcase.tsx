@@ -1,55 +1,69 @@
-'use client';
+"use client";
 
-import { AnimatePresence, motion } from 'motion/react';
-import Link from 'next/link';
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion } from "motion/react";
+import Link from "next/link";
+import {
+	useCallback,
+	useEffect,
+	useId,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 
-import { MacbookScroll } from '@/components/ui/macbook-scroll';
-import { ShinyButton } from '@/components/ui/shiny-button';
-import { cn } from '@/lib/utils';
-import { FeaturePanel } from './FeaturePanel';
+import { MacbookScroll } from "@/components/ui/macbook-scroll";
+import { ShinyButton } from "@/components/ui/shiny-button";
+import { cn } from "@/lib/utils";
+import { FeaturePanel } from "./FeaturePanel";
 
-import type { RealTimeFeature } from './feature-config';
+import type { RealTimeFeature } from "./feature-config";
 
 export type FeatureShowcaseProps = {
 	features: RealTimeFeature[];
 };
 
 const indicatorPalette = [
-	{ from: 'rgba(96,165,250,0.95)', to: 'rgba(37,99,235,0.95)' },
-	{ from: 'rgba(74,222,128,0.95)', to: 'rgba(22,163,74,0.95)' },
-	{ from: 'rgba(192,132,252,0.95)', to: 'rgba(147,51,234,0.95)' },
+	{ from: "rgba(96,165,250,0.95)", to: "rgba(37,99,235,0.95)" },
+	{ from: "rgba(74,222,128,0.95)", to: "rgba(22,163,74,0.95)" },
+	{ from: "rgba(192,132,252,0.95)", to: "rgba(147,51,234,0.95)" },
 ] as const;
 
-const ROI_CALCULATOR_URL = 'https://app.dealscale.io/external-tools/calculators/roi';
+const ROI_CALCULATOR_URL =
+	"https://app.dealscale.io/external-tools/calculators/roi";
 
 /**
  * FeatureShowcase renders the Macbook demo with contextual copy and metrics.
  */
-export function FeatureShowcase({ features }: FeatureShowcaseProps): JSX.Element | null {
+export function FeatureShowcase({
+	features,
+}: FeatureShowcaseProps): JSX.Element | null {
 	const stableFeatures = useMemo(() => features.filter(Boolean), [features]);
-	const featureIds = useMemo(() => stableFeatures.map((feature) => feature.id), [stableFeatures]);
+	const featureIds = useMemo(
+		() => stableFeatures.map((feature) => feature.id),
+		[stableFeatures],
+	);
 
 	if (stableFeatures.length === 0) {
 		return null;
 	}
 
-	const fallbackId = stableFeatures[0]?.id ?? '';
+	const fallbackId = stableFeatures[0]?.id ?? "";
 	const generatedId = useId();
 	const [activeId, setActiveId] = useState(fallbackId);
 	const interactionRef = useRef(false);
 	const lastManualSelectionRef = useRef(Date.now());
 
 	const activeFeature =
-		stableFeatures.find((feature) => feature.id === activeId) ?? stableFeatures[0];
+		stableFeatures.find((feature) => feature.id === activeId) ??
+		stableFeatures[0];
 
 	const tablistId = `${generatedId}-tablist`;
 	const activeTabId = `${generatedId}-tab-${activeFeature.id}`;
 	const activePanelId = `${generatedId}-panel-${activeFeature.id}`;
 
 	const handleOpenRoi = useCallback(() => {
-		if (typeof window !== 'undefined') {
-			window.open(ROI_CALCULATOR_URL, '_blank', 'noopener,noreferrer');
+		if (typeof window !== "undefined") {
+			window.open(ROI_CALCULATOR_URL, "_blank", "noopener,noreferrer");
 		}
 	}, []);
 
@@ -70,7 +84,8 @@ export function FeatureShowcase({ features }: FeatureShowcaseProps): JSX.Element
 
 			setActiveId((currentId) => {
 				const currentIndex = featureIds.indexOf(currentId);
-				const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % featureIds.length;
+				const nextIndex =
+					currentIndex === -1 ? 0 : (currentIndex + 1) % featureIds.length;
 				const nextId = featureIds[nextIndex] ?? fallbackId;
 				return nextId;
 			});
@@ -110,7 +125,7 @@ export function FeatureShowcase({ features }: FeatureShowcaseProps): JSX.Element
 						initial={{ opacity: 0, y: 24 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -24 }}
-						transition={{ duration: 0.5, ease: 'easeOut' }}
+						transition={{ duration: 0.5, ease: "easeOut" }}
 					>
 						<div data-testid="realtime-analytics-chart">
 							<MacbookScroll
@@ -156,10 +171,10 @@ export function FeatureShowcase({ features }: FeatureShowcaseProps): JSX.Element
 								aria-controls={panelId}
 								data-selected={isSelected}
 								className={cn(
-									'group inline-flex items-center gap-2 rounded-full border px-4 py-2 font-medium text-sm transition',
+									"group inline-flex items-center gap-2 rounded-full border px-4 py-2 font-medium text-sm transition",
 									isSelected
-										? 'border-blue-500 bg-blue-500/10 text-blue-900 shadow-[0_8px_24px_-16px_rgba(59,130,246,0.75)] dark:text-blue-100'
-										: 'border-border/70 bg-background/50 text-muted-foreground hover:border-blue-400/70 hover:bg-blue-500/10 hover:text-blue-900 dark:hover:border-blue-400/60 dark:hover:text-blue-100'
+										? "border-blue-500 bg-blue-500/10 text-blue-900 shadow-[0_8px_24px_-16px_rgba(59,130,246,0.75)] dark:text-blue-100"
+										: "border-border/70 bg-background/50 text-muted-foreground hover:border-blue-400/70 hover:bg-blue-500/10 hover:text-blue-900 dark:hover:border-blue-400/60 dark:hover:text-blue-100",
 								)}
 								onClick={() => {
 									handleManualSelection(feature.id);
@@ -179,7 +194,7 @@ export function FeatureShowcase({ features }: FeatureShowcaseProps): JSX.Element
 											transition={{
 												duration: 2.4,
 												repeat: Number.POSITIVE_INFINITY,
-												ease: 'easeOut',
+												ease: "easeOut",
 											}}
 										/>
 									) : null}
@@ -196,8 +211,8 @@ export function FeatureShowcase({ features }: FeatureShowcaseProps): JSX.Element
 										transition={{
 											duration: isSelected ? 1.6 : 0.3,
 											repeat: isSelected ? Number.POSITIVE_INFINITY : 0,
-											repeatType: 'mirror',
-											ease: 'easeInOut',
+											repeatType: "mirror",
+											ease: "easeInOut",
 										}}
 									/>
 								</span>

@@ -13,7 +13,7 @@ export interface Commission {
 	id: string;
 	amount: number;
 	date: string;
-	status: 'pending' | 'paid' | 'cancelled';
+	status: "pending" | "paid" | "cancelled";
 }
 
 export interface Payout {

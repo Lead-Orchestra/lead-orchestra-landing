@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { PhoneLoginForm } from '@/components/contact/form/PhoneLogin';
-import { SignUpForm } from '@/components/contact/form/SignUp';
-import { Icons } from '@/components/icons';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from '@/components/ui/use-toast';
-import { signIn } from 'next-auth/react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { PhoneLoginForm } from "@/components/contact/form/PhoneLogin";
+import { SignUpForm } from "@/components/contact/form/SignUp";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/components/ui/use-toast";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function SignUpPage() {
 	const searchParams = useSearchParams();
-	const callbackUrl = searchParams.get('callbackUrl') || undefined;
+	const callbackUrl = searchParams.get("callbackUrl") || undefined;
 	return (
 		<div className="container grid min-h-screen w-screen flex-col items-center py-12 lg:max-w-none lg:grid-cols-2 lg:px-0 lg:py-20">
 			<div className="hidden h-full bg-muted lg:block" />
@@ -50,7 +50,9 @@ export default function SignUpPage() {
 								<span className="w-full border-t" />
 							</div>
 							<div className="relative flex justify-center text-xs uppercase">
-								<span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+								<span className="bg-background px-2 text-muted-foreground">
+									Or continue with
+								</span>
 							</div>
 						</div>
 						<div className="grid gap-2">
@@ -59,32 +61,45 @@ export default function SignUpPage() {
 								type="button"
 								onClick={async () => {
 									toast({
-										title: 'LinkedIn OAuth',
-										description: "LinkedIn account connected. We'll finish setting things up.",
+										title: "LinkedIn OAuth",
+										description:
+											"LinkedIn account connected. We'll finish setting things up.",
 									});
-									await signIn('linkedin', callbackUrl ? { callbackUrl } : undefined);
+									await signIn(
+										"linkedin",
+										callbackUrl ? { callbackUrl } : undefined,
+									);
 								}}
 							>
-								<Icons.linkedIn className="mr-2 h-4 w-4" /> Continue with LinkedIn
+								<Icons.linkedIn className="mr-2 h-4 w-4" /> Continue with
+								LinkedIn
 							</Button>
 							<Button
 								variant="outline"
 								type="button"
 								onClick={async () => {
 									toast({
-										title: 'Facebook OAuth',
-										description: "Facebook account connected. We'll finish setting things up.",
+										title: "Facebook OAuth",
+										description:
+											"Facebook account connected. We'll finish setting things up.",
 									});
-									await signIn('facebook', callbackUrl ? { callbackUrl } : undefined);
+									await signIn(
+										"facebook",
+										callbackUrl ? { callbackUrl } : undefined,
+									);
 								}}
 							>
-								<Icons.facebook className="mr-2 h-4 w-4" /> Continue with Facebook
+								<Icons.facebook className="mr-2 h-4 w-4" /> Continue with
+								Facebook
 							</Button>
 						</div>
 					</div>
 					<p className="px-8 text-center text-muted-foreground text-sm">
-						Already have an account?{' '}
-						<Link href="/signIn" className="underline underline-offset-4 hover:text-brand">
+						Already have an account?{" "}
+						<Link
+							href="/signIn"
+							className="underline underline-offset-4 hover:text-brand"
+						>
 							Sign in
 						</Link>
 					</p>

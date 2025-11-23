@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { NavigationLoader } from '@/components/ui/navigation-loader';
-import { ScrollDistanceIndicator } from '@/components/ui/scroll-distance-indicator';
-import type { AnalyticsConfig } from '@/lib/analytics/config';
-import { useEffect } from 'react';
+import { NavigationLoader } from "@/components/ui/navigation-loader";
+import { ScrollDistanceIndicator } from "@/components/ui/scroll-distance-indicator";
+import type { AnalyticsConfig } from "@/lib/analytics/config";
+import { useEffect } from "react";
 
-import { DeferredThirdParties } from './DeferredThirdParties';
-import { PerformanceMonitor } from './PerformanceMonitor';
+import { DeferredThirdParties } from "./DeferredThirdParties";
+import { PerformanceMonitor } from "./PerformanceMonitor";
 
 type ClientExperienceProps = {
 	clarityProjectId?: string;
@@ -26,7 +26,7 @@ export function ClientExperience({
 	initialAnalyticsConfig,
 }: ClientExperienceProps) {
 	useEffect(() => {
-		console.log('[ClientExperience] mounted');
+		console.log("[ClientExperience] mounted");
 	}, []);
 
 	return (

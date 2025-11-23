@@ -1,26 +1,30 @@
-import { NextResponse } from 'next/server';
-
-import { getAnalyticsConfig } from '@/lib/analytics/config';
+import { NextResponse } from "next/server";
+import { getAnalyticsConfig } from "@/lib/analytics/config";
+export const runtime = 'edge';
 
 export async function GET() {
-	const { config, warnings, fallbacksUsed, errors, hasErrors } = getAnalyticsConfig();
+	const { config, warnings, fallbacksUsed, errors, hasErrors } =
+		getAnalyticsConfig();
 
 	if (hasErrors) {
-		console.error('[init-providers] Analytics misconfiguration detected', errors);
+		console.error(
+			"[init-providers] Analytics misconfiguration detected",
+			errors,
+		);
 		return NextResponse.json(
 			{
-				error: 'Analytics providers are misconfigured.',
+				error: "Analytics providers are misconfigured.",
 				details: errors,
 			},
 			{
 				status: 503,
-				headers: { 'Cache-Control': 'no-store' },
-			}
+				headers: { "Cache-Control": "no-store" },
+			},
 		);
 	}
 
 	const sanitizedConfig = Object.fromEntries(
-		Object.entries(config).filter(([, value]) => Boolean(value))
+		Object.entries(config).filter(([, value]) => Boolean(value)),
 	);
 
 	return NextResponse.json(
@@ -31,7 +35,7 @@ export async function GET() {
 		},
 		{
 			status: 200,
-			headers: { 'Cache-Control': 'no-store' },
-		}
+			headers: { "Cache-Control": "no-store" },
+		},
 	);
 }

@@ -1,7 +1,7 @@
-'use client';
-import { motion } from 'framer-motion';
-import type React from 'react';
-import { v4 as uuidv4 } from 'uuid';
+"use client";
+import { motion } from "framer-motion";
+import type React from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export type ServiceProblemSolution = {
 	problem: string;
@@ -31,7 +31,9 @@ const itemVariants = {
 	},
 };
 
-export const BusinessChallenge: React.FC<BusinessChallengeProps> = ({ problemSolutions }) => {
+export const BusinessChallenge: React.FC<BusinessChallengeProps> = ({
+	problemSolutions,
+}) => {
 	return (
 		<div className="my-16 grid grid-cols-1 gap-12 md:grid-cols-2">
 			{/* Business Challenges section */}
@@ -52,7 +54,9 @@ export const BusinessChallenge: React.FC<BusinessChallengeProps> = ({ problemSol
 							className="glass-card flex items-start rounded-lg p-4"
 						>
 							<div className="mt-0.5 mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/20">
-								<span className="font-semibold text-primary text-sm">{index + 1}</span>
+								<span className="font-semibold text-primary text-sm">
+									{index + 1}
+								</span>
 							</div>
 							<p className="text-black dark:text-white/80">{item.problem}</p>
 						</motion.li>
@@ -78,7 +82,9 @@ export const BusinessChallenge: React.FC<BusinessChallengeProps> = ({ problemSol
 							className="glass-card flex items-start rounded-lg p-4"
 						>
 							<div className="mt-0.5 mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/20">
-								<span className="font-semibold text-primary text-sm">{index + 1}</span>
+								<span className="font-semibold text-primary text-sm">
+									{index + 1}
+								</span>
 							</div>
 							<p className="text-black dark:text-white/80">{item.solution}</p>
 						</motion.li>

@@ -1,26 +1,32 @@
-'use client';
+"use client";
 
 import {
 	type HeroVideoPreviewHandle,
 	resolveHeroThumbnailSrc,
 	useHeroVideoConfig,
-} from '@external/dynamic-hero';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
-import { useRef } from 'react';
+} from "@external/dynamic-hero";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useRef } from "react";
 
-import { LIVE_VIDEO } from './_config';
+import { LIVE_VIDEO } from "./_config";
 
-const HERO_POSTER_FALLBACK = resolveHeroThumbnailSrc(LIVE_VIDEO, LIVE_VIDEO.poster);
+const HERO_POSTER_FALLBACK = resolveHeroThumbnailSrc(
+	LIVE_VIDEO,
+	LIVE_VIDEO.poster,
+);
 
 const HeroVideoPreviewDynamic = dynamic(
-	() => import('@external/dynamic-hero').then((mod) => mod.HeroVideoPreview),
+	() => import("@external/dynamic-hero").then((mod) => mod.HeroVideoPreview),
 	{
 		ssr: false,
 		loading: () => (
-			<HeroVideoPreviewSkeleton posterSrc={HERO_POSTER_FALLBACK} alt="Product demo preview" />
+			<HeroVideoPreviewSkeleton
+				posterSrc={HERO_POSTER_FALLBACK}
+				alt="Product demo preview"
+			/>
 		),
-	}
+	},
 );
 
 function HeroVideoPreviewSkeleton({

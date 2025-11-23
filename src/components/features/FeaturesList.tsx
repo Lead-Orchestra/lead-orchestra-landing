@@ -1,26 +1,35 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Pause, Play } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import type { MutableRefObject } from 'react';
-import type React from 'react';
-import FeatureCard from './FeatureCard';
-import type { FeatureRequest } from './types';
-import { useAutoScrollFeatures } from './useAutoScrollFeatures';
-import { useDraggableScroll } from './utils/useDragableScroll'; // * Adds drag/swipe-to-scroll UX
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Pause, Play } from "lucide-react";
+import {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+	useSyncExternalStore,
+} from "react";
+import type { MutableRefObject } from "react";
+import type React from "react";
+import FeatureCard from "./FeatureCard";
+import type { FeatureRequest } from "./types";
+import { useAutoScrollFeatures } from "./useAutoScrollFeatures";
+import { useDraggableScroll } from "./utils/useDragableScroll"; // * Adds drag/swipe-to-scroll UX
 
 interface FeaturesListProps {
 	features: FeatureRequest[];
 	loading: boolean;
-	onVote: (featureId: string, voteType: 'up' | 'down') => Promise<boolean>;
+	onVote: (featureId: string, voteType: "up" | "down") => Promise<boolean>;
 	isVotingInProgress: (featureId: string) => boolean;
 	scrollRef: React.RefObject<HTMLDivElement>;
 	pausedRef: MutableRefObject<boolean>;
 }
 
 function isMobileDevice() {
-	if (typeof navigator === 'undefined') return false;
-	return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	if (typeof navigator === "undefined") return false;
+	return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+		navigator.userAgent,
+	);
 }
 
 const usePaused = (pausedRef: MutableRefObject<boolean>) => {
@@ -35,7 +44,7 @@ const usePaused = (pausedRef: MutableRefObject<boolean>) => {
 			return () => clearInterval(interval);
 		},
 		() => (mobile ? true : pausedRef.current),
-		() => true // Server snapshot: default paused
+		() => true, // Server snapshot: default paused
 	);
 };
 
@@ -55,20 +64,33 @@ const FeaturesList = ({
 	});
 
 	const manualHold = useMemo(
-		() => holdReasons.hover || holdReasons.pointer || holdReasons.touch || holdReasons.details,
-		[holdReasons]
+		() =>
+			holdReasons.hover ||
+			holdReasons.pointer ||
+			holdReasons.touch ||
+			holdReasons.details,
+		[holdReasons],
 	);
 
 	useAutoScrollFeatures(scrollRef, pausedRef, { manualHold });
 	useDraggableScroll(scrollRef, pausedRef); // * Enables swipe/drag-to-scroll for all users
 	// * If you need to customize drag UX, see useDraggableScroll.ts
 
-	const updateHoldReason = useCallback((reason: keyof typeof holdReasons, value: boolean) => {
-		setHoldReasons((prev) => (prev[reason] === value ? prev : { ...prev, [reason]: value }));
-	}, []);
+	const updateHoldReason = useCallback(
+		(reason: keyof typeof holdReasons, value: boolean) => {
+			setHoldReasons((prev) =>
+				prev[reason] === value ? prev : { ...prev, [reason]: value },
+			);
+		},
+		[],
+	);
 
 	useEffect(() => {
-		if (isMobileDevice() && pausedRef && typeof pausedRef.current !== 'undefined') {
+		if (
+			isMobileDevice() &&
+			pausedRef &&
+			typeof pausedRef.current !== "undefined"
+		) {
 			pausedRef.current = true;
 		}
 	}, [pausedRef]);
@@ -86,39 +108,39 @@ const FeaturesList = ({
 
 	const handleTouchStart = () => {
 		touchActiveRef.current = true;
-		updateHoldReason('touch', true);
+		updateHoldReason("touch", true);
 	};
 
 	const handleTouchEnd = () => {
 		touchActiveRef.current = false;
-		updateHoldReason('touch', false);
+		updateHoldReason("touch", false);
 	};
 
 	const handleTouchCancel = handleTouchEnd;
 
 	const handlePointerEnter = () => {
-		updateHoldReason('hover', true);
+		updateHoldReason("hover", true);
 	};
 
 	const handlePointerLeave = () => {
-		updateHoldReason('hover', false);
-		updateHoldReason('pointer', false);
+		updateHoldReason("hover", false);
+		updateHoldReason("pointer", false);
 	};
 
 	const handlePointerDown = () => {
-		updateHoldReason('pointer', true);
+		updateHoldReason("pointer", true);
 	};
 
 	const handlePointerUp = () => {
-		updateHoldReason('pointer', false);
+		updateHoldReason("pointer", false);
 	};
 
 	const pauseForDetails = useCallback(() => {
-		updateHoldReason('details', true);
+		updateHoldReason("details", true);
 	}, [updateHoldReason]);
 
 	const resumeFromDetails = useCallback(() => {
-		updateHoldReason('details', false);
+		updateHoldReason("details", false);
 	}, [updateHoldReason]);
 
 	// Visual indicator for pause/resume
@@ -132,7 +154,10 @@ const FeaturesList = ({
 				aria-label="Loading features list"
 			>
 				{[1, 2, 3, 4].map((i) => (
-					<Card key={i} className="min-w-[300px] max-w-[300px] flex-shrink-0 shadow-sm">
+					<Card
+						key={i}
+						className="min-w-[300px] max-w-[300px] flex-shrink-0 shadow-sm"
+					>
 						<CardHeader className="pb-2">
 							<Skeleton className="mb-2 h-6 w-3/4" />
 						</CardHeader>
@@ -153,7 +178,7 @@ const FeaturesList = ({
 			className="relative flex gap-4 overflow-x-auto scroll-smooth pb-4"
 			aria-label="Upcoming features list. Swipe or drag to scroll."
 			// ! Drag/swipe-to-scroll handled by useDraggableScroll
-			style={{ outline: 'none' }} // * Remove default focus outline
+			style={{ outline: "none" }} // * Remove default focus outline
 			onPointerEnter={handlePointerEnter}
 			onPointerLeave={handlePointerLeave}
 			onPointerDown={handlePointerDown}
@@ -186,7 +211,9 @@ const FeaturesList = ({
 						feature={feature}
 						onVote={onVote}
 						isVoting={isVotingInProgress(feature.id)}
-						isTopFeature={feature.upvotes === Math.max(...features.map((f) => f.upvotes))}
+						isTopFeature={
+							feature.upvotes === Math.max(...features.map((f) => f.upvotes))
+						}
 						iconIndex={feature.iconIndex}
 						onAutoScrollPause={pauseForDetails}
 						onAutoScrollResume={resumeFromDetails}

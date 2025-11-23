@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type { VAProfile } from '@/types/va';
-import { MessageCircle, Star } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import type { VAProfile } from "@/types/va";
+import { MessageCircle, Star } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 interface VAProductCardProps {
 	va: VAProfile;
@@ -18,7 +18,7 @@ export const VAProductCard: React.FC<VAProductCardProps> = ({
 	onClick,
 	onHire,
 	onMessage,
-	className = '',
+	className = "",
 }) => {
 	const router = useRouter();
 
@@ -48,7 +48,11 @@ export const VAProductCard: React.FC<VAProductCardProps> = ({
 			<div className="mb-4 flex items-center gap-4">
 				<div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
 					{va.image ? (
-						<img src={va.image} alt={va.name} className="h-full w-full object-cover" />
+						<img
+							src={va.image}
+							alt={va.name}
+							className="h-full w-full object-cover"
+						/>
 					) : (
 						<div className="flex h-full w-full items-center justify-center font-semibold text-2xl text-slate-500">
 							{va.name.charAt(0)}
@@ -56,11 +60,17 @@ export const VAProductCard: React.FC<VAProductCardProps> = ({
 					)}
 				</div>
 				<div className="flex-1">
-					<h3 className="font-semibold text-slate-900 dark:text-white">{va.name}</h3>
-					<p className="text-slate-600 text-sm dark:text-slate-400">{va.title}</p>
+					<h3 className="font-semibold text-slate-900 dark:text-white">
+						{va.name}
+					</h3>
+					<p className="text-slate-600 text-sm dark:text-slate-400">
+						{va.title}
+					</p>
 					<div className="mt-1 flex items-center gap-2">
 						<Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-						<span className="font-medium text-slate-900 text-sm dark:text-white">{va.rating}</span>
+						<span className="font-medium text-slate-900 text-sm dark:text-white">
+							{va.rating}
+						</span>
 						<span className="text-slate-500 text-xs dark:text-slate-400">
 							({va.reviews} reviews)
 						</span>
@@ -69,7 +79,9 @@ export const VAProductCard: React.FC<VAProductCardProps> = ({
 			</div>
 
 			{/* Bio Preview */}
-			<p className="mb-4 line-clamp-2 text-slate-700 text-sm dark:text-slate-300">{va.bio}</p>
+			<p className="mb-4 line-clamp-2 text-slate-700 text-sm dark:text-slate-300">
+				{va.bio}
+			</p>
 
 			{/* Specialties */}
 			<div className="mb-4">
@@ -93,18 +105,24 @@ export const VAProductCard: React.FC<VAProductCardProps> = ({
 			{/* Stats */}
 			<div className="mb-4 space-y-2 border-slate-200 border-t pt-4 text-sm dark:border-slate-700">
 				<div className="flex items-center justify-between">
-					<span className="text-slate-600 dark:text-slate-400">Leads Managed:</span>
+					<span className="text-slate-600 dark:text-slate-400">
+						Leads Managed:
+					</span>
 					<span className="font-semibold text-slate-900 dark:text-white">
 						{va.leadsManaged.toLocaleString()}
 					</span>
 				</div>
 				<div className="flex items-center justify-between">
 					<span className="text-slate-600 dark:text-slate-400">Rate:</span>
-					<span className="font-semibold text-slate-900 dark:text-white">${va.hourlyRate}/hr</span>
+					<span className="font-semibold text-slate-900 dark:text-white">
+						${va.hourlyRate}/hr
+					</span>
 				</div>
 				{va.commissionPercentage && (
 					<div className="flex items-center justify-between">
-						<span className="text-slate-600 dark:text-slate-400">Commission:</span>
+						<span className="text-slate-600 dark:text-slate-400">
+							Commission:
+						</span>
 						<span className="font-semibold text-green-600 dark:text-green-400">
 							{va.commissionPercentage}%
 						</span>
@@ -113,7 +131,9 @@ export const VAProductCard: React.FC<VAProductCardProps> = ({
 				{va.hybridSaaS && (
 					<div className="rounded-md bg-purple-50 p-2 dark:bg-purple-900/20">
 						<div className="flex items-center justify-between text-xs">
-							<span className="text-slate-600 dark:text-slate-400">Hybrid SaaS:</span>
+							<span className="text-slate-600 dark:text-slate-400">
+								Hybrid SaaS:
+							</span>
 							<span className="font-semibold text-purple-700 dark:text-purple-300">
 								{va.hybridSaaS.commissionPercentage}% ({va.hybridSaaS.split})
 							</span>
@@ -136,7 +156,7 @@ export const VAProductCard: React.FC<VAProductCardProps> = ({
 					onClick={handleHire}
 					className="flex-1 rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-sm text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
 				>
-					Hire {va.name.split(' ')[0]}
+					Hire {va.name.split(" ")[0]}
 				</button>
 				<button
 					type="button"

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useAuthModal } from '@/components/auth/use-auth-store';
-import { Button } from '@/components/ui/button';
+import { useAuthModal } from "@/components/auth/use-auth-store";
+import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -9,17 +9,17 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
 	type ResetPasswordFormValues,
 	resetPasswordFormFields,
 	resetPasswordSchema,
-} from '@/data/contact/authFormFields';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
-import { createFieldProps, renderFormField } from './formFieldHelpers';
+} from "@/data/contact/authFormFields";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { createFieldProps, renderFormField } from "./formFieldHelpers";
 
 /**
  * ForgotPasswordForm component for password reset requests.
@@ -32,7 +32,7 @@ export function ForgotPasswordForm({ callbackUrl }: { callbackUrl?: string }) {
 	const form = useForm<ResetPasswordFormValues>({
 		resolver: zodResolver(resetPasswordSchema),
 		defaultValues: {
-			email: '',
+			email: "",
 		},
 	});
 
@@ -40,9 +40,9 @@ export function ForgotPasswordForm({ callbackUrl }: { callbackUrl?: string }) {
 		setIsLoading(true);
 		try {
 			// todo: Create the /api/auth/reset-password endpoint
-			const res = await fetch('/api/auth/reset-password', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const res = await fetch("/api/auth/reset-password", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					...values,
 					...(callbackUrl ? { callbackUrl } : {}),
@@ -51,10 +51,10 @@ export function ForgotPasswordForm({ callbackUrl }: { callbackUrl?: string }) {
 
 			if (!res.ok) {
 				const errorData = await res.json();
-				throw new Error(errorData.message || 'Failed to send reset link.');
+				throw new Error(errorData.message || "Failed to send reset link.");
 			}
 
-			toast.success('Check your email or phone for the reset link.');
+			toast.success("Check your email or phone for the reset link.");
 			if (callbackUrl) {
 				// Redirect to the callback URL if provided
 				window.location.href = callbackUrl;
@@ -65,9 +65,12 @@ export function ForgotPasswordForm({ callbackUrl }: { callbackUrl?: string }) {
 			}
 			close();
 		} catch (error: unknown) {
-			const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+			const errorMessage =
+				error instanceof Error
+					? error.message
+					: "An unexpected error occurred.";
 			toast.error(errorMessage);
-			console.error('Password reset error:', error);
+			console.error("Password reset error:", error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -84,14 +87,16 @@ export function ForgotPasswordForm({ callbackUrl }: { callbackUrl?: string }) {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{fieldConfig.label}</FormLabel>
-								<FormControl>{renderFormField(createFieldProps(fieldConfig, field))}</FormControl>
+								<FormControl>
+									{renderFormField(createFieldProps(fieldConfig, field))}
+								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 				))}
 				<Button type="submit" className="w-full" disabled={isLoading}>
-					{isLoading ? 'Sending Link...' : 'Send Reset Link'}
+					{isLoading ? "Sending Link..." : "Send Reset Link"}
 				</Button>
 			</form>
 		</Form>

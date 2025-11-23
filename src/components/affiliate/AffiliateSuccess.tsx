@@ -1,18 +1,21 @@
-import Header from '@/components/common/Header';
-import { useEffect, useState } from 'react';
+import Header from "@/components/common/Header";
+import { useEffect, useState } from "react";
 // If you have a spinner or shimmer component, import here. Otherwise, use a simple fallback.
 
-import type { DiscountCode } from '@/types/discount/discountCode';
+import type { DiscountCode } from "@/types/discount/discountCode";
 
 interface AffiliateSuccessProps {
 	affiliateId: string;
 	discountCode: DiscountCode;
 }
 
-import { ContactSteps } from '@/components/contact/form/ContactSteps';
-import { affiliateProgramSteps } from '@/data/service/slug_data/consultationSteps';
+import { ContactSteps } from "@/components/contact/form/ContactSteps";
+import { affiliateProgramSteps } from "@/data/service/slug_data/consultationSteps";
 
-export default function AffiliateSuccess({ affiliateId, discountCode }: AffiliateSuccessProps) {
+export default function AffiliateSuccess({
+	affiliateId,
+	discountCode,
+}: AffiliateSuccessProps) {
 	const [processing, setProcessing] = useState(true);
 	const [copied, setCopied] = useState(false);
 
@@ -68,27 +71,33 @@ export default function AffiliateSuccess({ affiliateId, discountCode }: Affiliat
 								className="ml-2 rounded border border-primary/30 bg-primary/20 px-2 py-1 font-medium text-xs transition-colors hover:bg-primary/30"
 								type="button"
 							>
-								{copied ? 'Copied!' : 'Copy'}
+								{copied ? "Copied!" : "Copy"}
 							</button>
 							{discountCode.discountPercent && (
 								<span className="ml-4 text-base text-success">
 									({discountCode.discountPercent}% OFF
-									{typeof discountCode.maxUses === 'number' ? `, ${discountCode.maxUses} uses` : ''}
+									{typeof discountCode.maxUses === "number"
+										? `, ${discountCode.maxUses} uses`
+										: ""}
 									)
 								</span>
 							)}
-							{!discountCode.discountPercent && typeof discountCode.maxUses === 'number' && (
-								<span className="ml-4 text-base text-success">({discountCode.maxUses} uses)</span>
-							)}
+							{!discountCode.discountPercent &&
+								typeof discountCode.maxUses === "number" && (
+									<span className="ml-4 text-base text-success">
+										({discountCode.maxUses} uses)
+									</span>
+								)}
 						</div>
 						<div className="mt-2 text-muted-foreground text-sm">
-							This unique code has also been emailed to you. Share it to start earning 10%
-							commission (up to $4,500 per sale)!
+							This unique code has also been emailed to you. Share it to start
+							earning 10% commission (up to $4,500 per sale)!
 						</div>
 					</div>
 					<div className="mt-6">
 						<span className="text-base text-primary">
-							Check your email for next steps, SMS updates, and program resources.
+							Check your email for next steps, SMS updates, and program
+							resources.
 						</span>
 					</div>
 					{/* Next Steps Section */}

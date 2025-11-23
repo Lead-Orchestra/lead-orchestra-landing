@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef } from 'react';
-import type { MutableRefObject, RefObject } from 'react';
+import { useCallback, useEffect, useRef } from "react";
+import type { MutableRefObject, RefObject } from "react";
 
 /**
  * ! Custom hook for auto-scrolling feature lists with pause/resume support for mouse, touch, and keyboard.
@@ -9,8 +9,10 @@ import type { MutableRefObject, RefObject } from 'react';
  * @param options - Optional config: { scrollAmount, intervalMs }
  */
 function isMobileDevice() {
-	if (typeof navigator === 'undefined') return false;
-	return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	if (typeof navigator === "undefined") return false;
+	return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+		navigator.userAgent,
+	);
 }
 
 export function useAutoScrollFeatures(
@@ -20,7 +22,7 @@ export function useAutoScrollFeatures(
 		scrollAmount?: number;
 		intervalMs?: number;
 		manualHold?: boolean;
-	}
+	},
 ) {
 	if (isMobileDevice()) return; // No-op on mobile
 	const timerRef = useRef<number | null>(null);
@@ -34,7 +36,7 @@ export function useAutoScrollFeatures(
 		(value: boolean) => {
 			if (pausedRef.current !== value) pausedRef.current = value;
 		},
-		[pausedRef]
+		[pausedRef],
 	);
 
 	const pointerActiveRef = useRef(false);
@@ -88,16 +90,16 @@ export function useAutoScrollFeatures(
 		const node = scrollRef.current;
 		if (!node) return;
 		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === 'ArrowRight') {
-				node.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+			if (e.key === "ArrowRight") {
+				node.scrollBy({ left: scrollAmount, behavior: "smooth" });
 				setPaused(true);
-			} else if (e.key === 'ArrowLeft') {
-				node.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+			} else if (e.key === "ArrowLeft") {
+				node.scrollBy({ left: -scrollAmount, behavior: "smooth" });
 				setPaused(true);
 			}
 		};
-		node.addEventListener('keydown', handleKeyDown);
-		return () => node.removeEventListener('keydown', handleKeyDown);
+		node.addEventListener("keydown", handleKeyDown);
+		return () => node.removeEventListener("keydown", handleKeyDown);
 	}, [scrollRef, scrollAmount, setPaused]);
 
 	// Touch pause/resume is handled via React's onTouchStart/onTouchEnd props in FeaturesList.tsx for consistency and SSR safety.
@@ -116,7 +118,7 @@ export function useAutoScrollFeatures(
 		};
 
 		const handlePointerDown = (event: PointerEvent) => {
-			if (event.pointerType === 'mouse' && event.button !== 0) return;
+			if (event.pointerType === "mouse" && event.button !== 0) return;
 			pointerActiveRef.current = true;
 			setPaused(true);
 			clearResumeTimeout();
@@ -129,18 +131,18 @@ export function useAutoScrollFeatures(
 			}
 		};
 
-		node.addEventListener('wheel', handleManualScroll, { passive: true });
-		node.addEventListener('pointerdown', handlePointerDown);
-		node.addEventListener('pointerup', handlePointerUp);
-		node.addEventListener('pointercancel', handlePointerUp);
-		node.addEventListener('scroll', handleManualScroll, { passive: true });
+		node.addEventListener("wheel", handleManualScroll, { passive: true });
+		node.addEventListener("pointerdown", handlePointerDown);
+		node.addEventListener("pointerup", handlePointerUp);
+		node.addEventListener("pointercancel", handlePointerUp);
+		node.addEventListener("scroll", handleManualScroll, { passive: true });
 
 		return () => {
-			node.removeEventListener('wheel', handleManualScroll);
-			node.removeEventListener('pointerdown', handlePointerDown);
-			node.removeEventListener('pointerup', handlePointerUp);
-			node.removeEventListener('pointercancel', handlePointerUp);
-			node.removeEventListener('scroll', handleManualScroll);
+			node.removeEventListener("wheel", handleManualScroll);
+			node.removeEventListener("pointerdown", handlePointerDown);
+			node.removeEventListener("pointerup", handlePointerUp);
+			node.removeEventListener("pointercancel", handlePointerUp);
+			node.removeEventListener("scroll", handleManualScroll);
 		};
 	}, [clearResumeTimeout, manualHold, requestResume, scrollRef, setPaused]);
 
@@ -150,11 +152,11 @@ export function useAutoScrollFeatures(
 		if (!node) return;
 		const handleFocus = () => setPaused(true);
 		const handleBlur = () => setPaused(false);
-		node.addEventListener('focusin', handleFocus);
-		node.addEventListener('focusout', handleBlur);
+		node.addEventListener("focusin", handleFocus);
+		node.addEventListener("focusout", handleBlur);
 		return () => {
-			node.removeEventListener('focusin', handleFocus);
-			node.removeEventListener('focusout', handleBlur);
+			node.removeEventListener("focusin", handleFocus);
+			node.removeEventListener("focusout", handleBlur);
 		};
 	}, [scrollRef, setPaused]);
 
@@ -168,9 +170,9 @@ export function useAutoScrollFeatures(
 			if (!node || pausedRef.current || manualHold) return;
 			const { scrollLeft, scrollWidth, clientWidth } = node;
 			if (scrollLeft + clientWidth >= scrollWidth - 10) {
-				node.scrollTo({ left: 0, behavior: 'smooth' });
+				node.scrollTo({ left: 0, behavior: "smooth" });
 			} else {
-				node.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+				node.scrollBy({ left: scrollAmount, behavior: "smooth" });
 			}
 		}, intervalMs);
 		return () => {

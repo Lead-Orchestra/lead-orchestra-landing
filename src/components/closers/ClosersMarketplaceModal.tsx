@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { type CloserProfile, mockClosers } from '@/data/closers/mockClosers';
-import { usePagination } from '@/hooks/use-pagination';
-import { cn } from '@/lib/utils';
-import { AnimatePresence, motion } from 'framer-motion';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { type CloserProfile, mockClosers } from "@/data/closers/mockClosers";
+import { usePagination } from "@/hooks/use-pagination";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
 import {
 	CheckCircle2,
 	ChevronLeft,
@@ -16,10 +16,10 @@ import {
 	Star,
 	UserPlus,
 	X,
-} from 'lucide-react';
-import Image from 'next/image';
-import React, { useState, useMemo, useCallback } from 'react';
-import toast from 'react-hot-toast';
+} from "lucide-react";
+import Image from "next/image";
+import React, { useState, useMemo, useCallback } from "react";
+import toast from "react-hot-toast";
 
 interface ClosersMarketplaceModalProps {
 	isOpen: boolean;
@@ -33,7 +33,7 @@ const ClosersMarketplaceModal = ({
 	onApplyClick,
 }: ClosersMarketplaceModalProps) => {
 	const [selectedCloser, setSelectedCloser] = useState<string | null>(null);
-	const [viewMode, setViewMode] = useState<'featured' | 'all'>('featured');
+	const [viewMode, setViewMode] = useState<"featured" | "all">("featured");
 	const [isLoading, setIsLoading] = useState(false);
 
 	// Get featured closers (top 6 by rating/deals closed)
@@ -50,7 +50,7 @@ const ClosersMarketplaceModal = ({
 
 	// Get closers based on view mode
 	const displayedClosers = useMemo(() => {
-		return viewMode === 'featured' ? featuredClosers : mockClosers;
+		return viewMode === "featured" ? featuredClosers : mockClosers;
 	}, [viewMode, featuredClosers]);
 
 	// Pagination for closers grid (6 per page for optimal UX)
@@ -71,7 +71,10 @@ const ClosersMarketplaceModal = ({
 	// Debug: Log when modal opens and closers count
 	React.useEffect(() => {
 		if (isOpen) {
-			console.log('[ClosersMarketplaceModal] Modal opened, closers count:', mockClosers.length);
+			console.log(
+				"[ClosersMarketplaceModal] Modal opened, closers count:",
+				mockClosers.length,
+			);
 		}
 	}, [isOpen]);
 
@@ -83,34 +86,40 @@ const ClosersMarketplaceModal = ({
 	}, [isOpen, viewMode, setPage]);
 
 	// Handle hire closer
-	const handleHireCloser = useCallback((closer: CloserProfile, event?: React.MouseEvent) => {
-		event?.stopPropagation(); // Prevent card selection
-		setIsLoading(true);
-		// TODO: Open booking/hiring modal or redirect to booking page
-		setTimeout(() => {
-			toast.success(`Hiring ${closer.name}...`);
-			setIsLoading(false);
-			console.log('Hire closer:', closer.id);
-		}, 300);
-	}, []);
+	const handleHireCloser = useCallback(
+		(closer: CloserProfile, event?: React.MouseEvent) => {
+			event?.stopPropagation(); // Prevent card selection
+			setIsLoading(true);
+			// TODO: Open booking/hiring modal or redirect to booking page
+			setTimeout(() => {
+				toast.success(`Hiring ${closer.name}...`);
+				setIsLoading(false);
+				console.log("Hire closer:", closer.id);
+			}, 300);
+		},
+		[],
+	);
 
 	// Handle contact closer
-	const handleContactCloser = useCallback((closer: CloserProfile, event?: React.MouseEvent) => {
-		event?.stopPropagation(); // Prevent card selection
-		setIsLoading(true);
-		// TODO: Open messaging modal or redirect to messaging page
-		setTimeout(() => {
-			toast.success(`Messaging ${closer.name}...`);
-			setIsLoading(false);
-			console.log('Contact closer:', closer.id);
-		}, 300);
-	}, []);
+	const handleContactCloser = useCallback(
+		(closer: CloserProfile, event?: React.MouseEvent) => {
+			event?.stopPropagation(); // Prevent card selection
+			setIsLoading(true);
+			// TODO: Open messaging modal or redirect to messaging page
+			setTimeout(() => {
+				toast.success(`Messaging ${closer.name}...`);
+				setIsLoading(false);
+				console.log("Contact closer:", closer.id);
+			}, 300);
+		},
+		[],
+	);
 
 	const handleApplyAsCloser = () => {
 		if (onApplyClick) {
 			onApplyClick();
 		} else {
-			window.location.href = '/closers/apply';
+			window.location.href = "/closers/apply";
 		}
 		onClose();
 	};
@@ -139,7 +148,9 @@ const ClosersMarketplaceModal = ({
 							{/* Header */}
 							<div className="flex items-center justify-between border-slate-200 border-b bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 dark:border-slate-800">
 								<div>
-									<h2 className="font-bold text-2xl text-white">Remote Closers Marketplace</h2>
+									<h2 className="font-bold text-2xl text-white">
+										Remote Closers Marketplace
+									</h2>
 									<p className="mt-1 text-blue-100 text-sm">
 										Connect with professional closers or apply to become one
 									</p>
@@ -157,9 +168,9 @@ const ClosersMarketplaceModal = ({
 							<div
 								className="overflow-y-auto scroll-smooth p-6"
 								style={{
-									maxHeight: 'calc(90vh - 140px)',
-									scrollBehavior: 'smooth',
-									scrollPaddingTop: '24px',
+									maxHeight: "calc(90vh - 140px)",
+									scrollBehavior: "smooth",
+									scrollPaddingTop: "24px",
 								}}
 							>
 								{/* Monetize Card */}
@@ -169,7 +180,7 @@ const ClosersMarketplaceModal = ({
 									role="button"
 									tabIndex={0}
 									onKeyDown={(e) => {
-										if (e.key === 'Enter' || e.key === ' ') {
+										if (e.key === "Enter" || e.key === " ") {
 											e.preventDefault();
 											handleApplyAsCloser();
 										}
@@ -198,16 +209,21 @@ const ClosersMarketplaceModal = ({
 								<div className="mb-4">
 									<div className="mb-4 flex items-center justify-between">
 										<h3 className="font-semibold text-lg text-slate-900 dark:text-white">
-											{viewMode === 'featured'
+											{viewMode === "featured"
 												? `Featured Closers (${featuredClosers.length})`
 												: `All Closers (${mockClosers.length})`}
 										</h3>
 										<Tabs
 											value={viewMode}
-											onValueChange={(v) => setViewMode(v as 'featured' | 'all')}
+											onValueChange={(v) =>
+												setViewMode(v as "featured" | "all")
+											}
 										>
 											<TabsList className="h-8">
-												<TabsTrigger value="featured" className="px-3 py-1 text-xs">
+												<TabsTrigger
+													value="featured"
+													className="px-3 py-1 text-xs"
+												>
 													Featured
 												</TabsTrigger>
 												<TabsTrigger value="all" className="px-3 py-1 text-xs">
@@ -218,7 +234,8 @@ const ClosersMarketplaceModal = ({
 									</div>
 									{!displayedClosers || displayedClosers.length === 0 ? (
 										<p className="rounded-lg bg-yellow-50 p-4 text-center text-sm text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400">
-											⚠️ No closers available at this time. Check console for errors.
+											⚠️ No closers available at this time. Check console for
+											errors.
 										</p>
 									) : (
 										<>
@@ -230,8 +247,9 @@ const ClosersMarketplaceModal = ({
 														animate={{ opacity: 1, y: 0 }}
 														transition={{ delay: 0.1 }}
 														className={cn(
-															'group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-800',
-															selectedCloser === closer.id && 'border-blue-500 ring-2 ring-blue-500'
+															"group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-800",
+															selectedCloser === closer.id &&
+																"border-blue-500 ring-2 ring-blue-500",
 														)}
 													>
 														{/* Closer Image */}
@@ -245,11 +263,11 @@ const ClosersMarketplaceModal = ({
 																	sizes="64px"
 																	onError={(e) => {
 																		console.error(
-																			'[ClosersMarketplaceModal] Image failed to load:',
-																			closer.image
+																			"[ClosersMarketplaceModal] Image failed to load:",
+																			closer.image,
 																		);
 																		(e.target as HTMLImageElement).src =
-																			'https://via.placeholder.com/64x64?text=' +
+																			"https://via.placeholder.com/64x64?text=" +
 																			closer.name.charAt(0);
 																	}}
 																/>
@@ -275,7 +293,9 @@ const ClosersMarketplaceModal = ({
 															<span className="text-slate-500 text-xs dark:text-slate-400">
 																({closer.reviews} reviews)
 															</span>
-															<span className="text-slate-300 dark:text-slate-600">•</span>
+															<span className="text-slate-300 dark:text-slate-600">
+																•
+															</span>
 															<span className="text-slate-500 text-xs dark:text-slate-400">
 																{closer.dealsClosed} deals closed
 															</span>
@@ -294,14 +314,16 @@ const ClosersMarketplaceModal = ({
 
 														{/* Specialties */}
 														<div className="mb-3 flex flex-wrap gap-1.5">
-															{closer.specialties.slice(0, 2).map((specialty) => (
-																<span
-																	key={specialty}
-																	className="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700 text-xs dark:bg-blue-900/30 dark:text-blue-300"
-																>
-																	{specialty}
-																</span>
-															))}
+															{closer.specialties
+																.slice(0, 2)
+																.map((specialty) => (
+																	<span
+																		key={specialty}
+																		className="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700 text-xs dark:bg-blue-900/30 dark:text-blue-300"
+																	>
+																		{specialty}
+																	</span>
+																))}
 															{closer.specialties.length > 2 && (
 																<span className="rounded-full bg-slate-100 px-2 py-0.5 text-slate-600 text-xs dark:bg-slate-700 dark:text-slate-400">
 																	+{closer.specialties.length - 2}
@@ -322,7 +344,8 @@ const ClosersMarketplaceModal = ({
 																<div className="flex items-center gap-1.5 rounded-md bg-blue-50 px-2 py-1 text-blue-700 text-xs dark:bg-blue-900/20 dark:text-blue-300">
 																	<Percent className="h-3 w-3" />
 																	<span className="font-medium">
-																		{closer.commissionPercentage}% commission on deals
+																		{closer.commissionPercentage}% commission on
+																		deals
 																	</span>
 																</div>
 															)}
@@ -386,8 +409,8 @@ const ClosersMarketplaceModal = ({
 														onClick={prevPage}
 														disabled={page === 1}
 														className={cn(
-															'flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 font-medium text-slate-700 text-sm transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700',
-															page === 1 && 'cursor-not-allowed opacity-50'
+															"flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 font-medium text-slate-700 text-sm transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700",
+															page === 1 && "cursor-not-allowed opacity-50",
 														)}
 														aria-label="Previous page"
 													>
@@ -403,8 +426,9 @@ const ClosersMarketplaceModal = ({
 														onClick={nextPage}
 														disabled={page === totalPages}
 														className={cn(
-															'flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 font-medium text-slate-700 text-sm transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700',
-															page === totalPages && 'cursor-not-allowed opacity-50'
+															"flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 font-medium text-slate-700 text-sm transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700",
+															page === totalPages &&
+																"cursor-not-allowed opacity-50",
 														)}
 														aria-label="Next page"
 													>
@@ -424,7 +448,7 @@ const ClosersMarketplaceModal = ({
 									<p className="text-slate-600 text-sm dark:text-slate-400">
 										{selectedCloser
 											? `Selected: ${mockClosers.find((c) => c.id === selectedCloser)?.name}`
-											: 'Select a closer to book their services'}
+											: "Select a closer to book their services"}
 									</p>
 									<div className="flex gap-3">
 										<button
@@ -437,7 +461,7 @@ const ClosersMarketplaceModal = ({
 											<button
 												onClick={() => {
 													// Handle booking logic here
-													console.log('Booking closer:', selectedCloser);
+													console.log("Booking closer:", selectedCloser);
 												}}
 												className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-blue-700"
 											>

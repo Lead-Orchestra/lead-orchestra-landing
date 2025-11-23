@@ -1,14 +1,14 @@
-import { CTASection } from '@/components/common/CTASection';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { GlassCard } from '@/components/ui/glass-card';
-import { Separator } from '@/components/ui/separator';
-import type { NormalizedEvent } from '@/lib/events/eventSchemas';
-import { fetchEvents } from '@/lib/events/fetchEvents';
-import { type EventPageParams, resolveEventParams } from '@/lib/events/params';
-import { buildEventSchema, buildEventUrl } from '@/lib/events/schemaBuilders';
-import { formatDate } from '@/utils/date-formatter';
-import { SchemaInjector } from '@/utils/seo/schema/SchemaInjector';
+import { CTASection } from "@/components/common/CTASection";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { GlassCard } from "@/components/ui/glass-card";
+import { Separator } from "@/components/ui/separator";
+import type { NormalizedEvent } from "@/lib/events/eventSchemas";
+import { fetchEvents } from "@/lib/events/fetchEvents";
+import { type EventPageParams, resolveEventParams } from "@/lib/events/params";
+import { buildEventSchema, buildEventUrl } from "@/lib/events/schemaBuilders";
+import { formatDate } from "@/utils/date-formatter";
+import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
 import {
 	ArrowRight,
 	Calendar,
@@ -20,26 +20,30 @@ import {
 	Share2,
 	ShieldCheck,
 	Users,
-} from 'lucide-react';
-import type { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
+} from "lucide-react";
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export const revalidate = 1800;
 // ! Keep this value in sync with EVENTS_REVALIDATE_SECONDS in src/lib/events/constants.ts
 
-async function getEventBySlug(slug: string): Promise<NormalizedEvent | undefined> {
+async function getEventBySlug(
+	slug: string,
+): Promise<NormalizedEvent | undefined> {
 	const events = await fetchEvents();
 	return events.find((event) => event.slug === slug);
 }
 
 function handleResolveParamsError(error: unknown): never {
-	console.warn('[events] Unable to resolve route params', error);
+	console.warn("[events] Unable to resolve route params", error);
 	notFound();
 }
 
-async function resolveSlugOrNotFound(params: Promise<EventPageParams>): Promise<string> {
+async function resolveSlugOrNotFound(
+	params: Promise<EventPageParams>,
+): Promise<string> {
 	try {
 		const resolved = await resolveEventParams(params);
 		return resolved.slug;
@@ -68,7 +72,9 @@ type EventPageProps = {
 	params: Promise<EventPageParams>;
 };
 
-export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: EventPageProps): Promise<Metadata> {
 	const slug = await resolveSlugOrNotFound(params);
 	const event = await loadEventOrNotFound(slug);
 
@@ -83,11 +89,13 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
 			title: `${event.title} | DealScale Events`,
 			description: event.description,
 			url: canonical,
-			type: 'website',
-			images: event.thumbnailImage ? [{ url: event.thumbnailImage, alt: event.title }] : undefined,
+			type: "website",
+			images: event.thumbnailImage
+				? [{ url: event.thumbnailImage, alt: event.title }]
+				: undefined,
 		},
 		twitter: {
-			card: 'summary_large_image',
+			card: "summary_large_image",
 			title: `${event.title} | DealScale Events`,
 			description: event.description,
 			images: event.thumbnailImage ? [event.thumbnailImage] : undefined,
@@ -101,26 +109,29 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 
 	const eventSchema = buildEventSchema(event);
 	const isPastEvent = new Date(event.date) < new Date();
-	const accessType = event.accessType ?? 'external';
-	const attendanceType = event.attendanceType ?? 'in-person';
+	const accessType = event.accessType ?? "external";
+	const attendanceType = event.attendanceType ?? "in-person";
 	const accessBadge =
-		accessType === 'external'
-			? { label: 'External Event', icon: Globe2 }
-			: { label: 'Internal Event', icon: ShieldCheck };
+		accessType === "external"
+			? { label: "External Event", icon: Globe2 }
+			: { label: "Internal Event", icon: ShieldCheck };
 	const attendanceBadge = {
-		'in-person': { label: 'In Person', icon: Users },
-		webinar: { label: 'Webinar', icon: Monitor },
-		hybrid: { label: 'Hybrid', icon: Share2 },
+		"in-person": { label: "In Person", icon: Users },
+		webinar: { label: "Webinar", icon: Monitor },
+		hybrid: { label: "Hybrid", icon: Share2 },
 	}[attendanceType];
 	const AccessBadgeIcon = accessBadge.icon;
 	const AttendanceBadgeIcon = attendanceBadge.icon;
 	const registrationHref =
-		accessType === 'external'
+		accessType === "external"
 			? (event.externalUrl ?? buildEventUrl(event.slug))
 			: (event.internalPath ?? buildEventUrl(event.slug));
-	const RegistrationIcon = accessType === 'external' ? ExternalLink : ArrowRight;
+	const RegistrationIcon =
+		accessType === "external" ? ExternalLink : ArrowRight;
 	const registrationLinkProps =
-		accessType === 'external' ? { target: '_blank', rel: 'noopener noreferrer' as const } : {};
+		accessType === "external"
+			? { target: "_blank", rel: "noopener noreferrer" as const }
+			: {};
 
 	return (
 		<div className="container py-12">
@@ -145,7 +156,9 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 							</Badge>
 						</div>
 						<h1 className="font-heading text-3xl md:text-4xl">{event.title}</h1>
-						<p className="text-lg text-muted-foreground leading-relaxed">{event.description}</p>
+						<p className="text-lg text-muted-foreground leading-relaxed">
+							{event.description}
+						</p>
 						<div className="flex flex-wrap gap-6 text-muted-foreground text-sm">
 							<span className="flex items-center gap-2">
 								<Calendar className="h-4 w-4" />
@@ -175,7 +188,9 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 					)}
 					<GlassCard className="space-y-4 p-6">
 						<h2 className="font-semibold text-xl">Why attend?</h2>
-						<p className="text-muted-foreground leading-relaxed">{event.description}</p>
+						<p className="text-muted-foreground leading-relaxed">
+							{event.description}
+						</p>
 						<Button asChild size="lg">
 							<Link href={registrationHref} {...registrationLinkProps}>
 								Register now

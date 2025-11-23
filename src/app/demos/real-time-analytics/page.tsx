@@ -1,17 +1,22 @@
-import { Fragment } from 'react';
+import { Fragment } from "react";
 
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
-import { FeatureShowcase } from '@/components/demos/real-time-analytics/FeatureShowcase';
-import { REAL_TIME_FEATURES } from '@/components/demos/real-time-analytics/feature-config';
-import { mapSeoMetaToMetadata } from '@/utils/seo/mapSeoMetaToMetadata';
-import { SchemaInjector, type SchemaPayload, buildServiceSchema } from '@/utils/seo/schema';
-import { getStaticSeo } from '@/utils/seo/staticSeo';
+import { FeatureShowcase } from "@/components/demos/real-time-analytics/FeatureShowcase";
+import { REAL_TIME_FEATURES } from "@/components/demos/real-time-analytics/feature-config";
+import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
+import {
+	SchemaInjector,
+	type SchemaPayload,
+	buildServiceSchema,
+} from "@/utils/seo/schema";
+import { getStaticSeo } from "@/utils/seo/staticSeo";
 
-const REAL_TIME_ANALYTICS_PATH = '/demos/real-time-analytics';
+const REAL_TIME_ANALYTICS_PATH = "/demos/real-time-analytics";
 const REAL_TIME_ANALYTICS_SEO = getStaticSeo(REAL_TIME_ANALYTICS_PATH);
 const REAL_TIME_ANALYTICS_CANONICAL =
-	REAL_TIME_ANALYTICS_SEO.canonical ?? `https://dealscale.io${REAL_TIME_ANALYTICS_PATH}`;
+	REAL_TIME_ANALYTICS_SEO.canonical ??
+	`https://dealscale.io${REAL_TIME_ANALYTICS_PATH}`;
 
 const FEATURE_KEYWORDS = Array.from(
 	new Set(
@@ -21,22 +26,22 @@ const FEATURE_KEYWORDS = Array.from(
 			feature.description,
 			...feature.highlights.map((highlight) => highlight.title),
 			...feature.metrics.map((metric) => metric.label),
-		])
-	)
+		]),
+	),
 );
 
 const PRIMARY_SERVICE_SCHEMA = buildServiceSchema({
-	name: 'Deal Scale Real-Time Analytics Demo',
+	name: "Deal Scale Real-Time Analytics Demo",
 	description:
 		REAL_TIME_ANALYTICS_SEO.description ??
-		'Explore Deal Scale’s real-time analytics workspace to see live dashboards, experimentation workflows, and collaboration tools.',
+		"Explore Deal Scale’s real-time analytics workspace to see live dashboards, experimentation workflows, and collaboration tools.",
 	url: REAL_TIME_ANALYTICS_CANONICAL,
-	category: 'Analytics Software Demo',
-	serviceType: 'Interactive Real-Time Analytics Demo',
-	areaServed: ['United States'],
+	category: "Analytics Software Demo",
+	serviceType: "Interactive Real-Time Analytics Demo",
+	areaServed: ["United States"],
 	offers: {
-		price: '0',
-		priceCurrency: 'USD',
+		price: "0",
+		priceCurrency: "USD",
 		url: `${REAL_TIME_ANALYTICS_CANONICAL}?cta=request-access`,
 	},
 });
@@ -46,17 +51,17 @@ const FEATURE_SERVICE_SCHEMAS = REAL_TIME_FEATURES.map((feature) =>
 		name: feature.label,
 		description: `${feature.description} Highlights: ${feature.highlights
 			.map((highlight) => highlight.title)
-			.join(', ')}`,
+			.join(", ")}`,
 		url: `${REAL_TIME_ANALYTICS_CANONICAL}#${feature.id}`,
 		serviceType: feature.eyebrow,
-		category: 'Real-Time Analytics Feature',
-		areaServed: ['United States'],
+		category: "Real-Time Analytics Feature",
+		areaServed: ["United States"],
 		offers: {
-			price: '0',
-			priceCurrency: 'USD',
+			price: "0",
+			priceCurrency: "USD",
 			url: `${REAL_TIME_ANALYTICS_CANONICAL}?feature=${feature.id}`,
 		},
-	})
+	}),
 );
 
 const REAL_TIME_ANALYTICS_SCHEMAS: SchemaPayload = [
@@ -66,15 +71,16 @@ const REAL_TIME_ANALYTICS_SCHEMAS: SchemaPayload = [
 
 export async function generateMetadata(): Promise<Metadata> {
 	const keywords = Array.from(
-		new Set([...(REAL_TIME_ANALYTICS_SEO.keywords ?? []), ...FEATURE_KEYWORDS])
+		new Set([...(REAL_TIME_ANALYTICS_SEO.keywords ?? []), ...FEATURE_KEYWORDS]),
 	).slice(0, 32);
 
 	return mapSeoMetaToMetadata({
 		...REAL_TIME_ANALYTICS_SEO,
-		title: REAL_TIME_ANALYTICS_SEO.title ?? 'Real-Time Analytics Demo | Deal Scale',
+		title:
+			REAL_TIME_ANALYTICS_SEO.title ?? "Real-Time Analytics Demo | Deal Scale",
 		description:
 			REAL_TIME_ANALYTICS_SEO.description ??
-			'Explore Deal Scale’s real-time analytics workspace. Toggle between dashboards, experimentation, and collaboration demos inside an interactive MacBook showcase.',
+			"Explore Deal Scale’s real-time analytics workspace. Toggle between dashboards, experimentation, and collaboration demos inside an interactive MacBook showcase.",
 		canonical: REAL_TIME_ANALYTICS_CANONICAL,
 		keywords,
 	});
@@ -82,19 +88,19 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const HIGHLIGHT_COLUMNS = [
 	{
-		title: 'Unified telemetry',
+		title: "Unified telemetry",
 		description:
-			'Suck live product, marketing, and revenue data into a stateful workspace that every teammate can trust.',
+			"Suck live product, marketing, and revenue data into a stateful workspace that every teammate can trust.",
 	},
 	{
-		title: 'Collaboration native',
+		title: "Collaboration native",
 		description:
-			'Invite operators, analysts, and executives with role-aware guardrails so feedback loops stay tight.',
+			"Invite operators, analysts, and executives with role-aware guardrails so feedback loops stay tight.",
 	},
 	{
-		title: 'Decisions shipped',
+		title: "Decisions shipped",
 		description:
-			'Pair AI-generated readouts with calculators and playbooks so every experiment or forecast ends in action.',
+			"Pair AI-generated readouts with calculators and playbooks so every experiment or forecast ends in action.",
 	},
 ] as const;
 
@@ -110,12 +116,13 @@ export default function RealTimeAnalyticsDemoPage(): JSX.Element {
 							Interactive product tour
 						</span>
 						<h1 className="text-balance font-semibold text-4xl tracking-tight sm:text-5xl">
-							See your analytics, experiments, and team rituals in one Macbook command center
+							See your analytics, experiments, and team rituals in one Macbook
+							command center
 						</h1>
 						<p className="mx-auto max-w-3xl text-pretty text-base text-muted-foreground sm:text-lg">
-							Swap between dashboards, experimentation, and team collaboration demos. Each scenario
-							streams real Deal Scale UI captures rendered inside an interactive Macbook so
-							stakeholders can align quickly.
+							Swap between dashboards, experimentation, and team collaboration
+							demos. Each scenario streams real Deal Scale UI captures rendered
+							inside an interactive Macbook so stakeholders can align quickly.
 						</p>
 					</header>
 
@@ -125,8 +132,12 @@ export default function RealTimeAnalyticsDemoPage(): JSX.Element {
 						{HIGHLIGHT_COLUMNS.map((highlight) => (
 							<Fragment key={highlight.title}>
 								<div className="flex flex-col gap-3 rounded-3xl border border-border/40 bg-background/70 p-5">
-									<h3 className="font-semibold text-foreground text-lg">{highlight.title}</h3>
-									<p className="text-muted-foreground text-sm">{highlight.description}</p>
+									<h3 className="font-semibold text-foreground text-lg">
+										{highlight.title}
+									</h3>
+									<p className="text-muted-foreground text-sm">
+										{highlight.description}
+									</p>
 								</div>
 							</Fragment>
 						))}

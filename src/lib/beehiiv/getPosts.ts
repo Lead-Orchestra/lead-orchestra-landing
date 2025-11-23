@@ -1,14 +1,15 @@
-import type { BeehiivPost } from '@/types/behiiv';
+import type { BeehiivPost } from "@/types/behiiv";
 
 // Helper to get the base URL safely
 function getBaseUrl() {
-	if (typeof window !== 'undefined') return ''; // browser should use relative url
+	if (typeof window !== "undefined") return ""; // browser should use relative url
 	// * Use NEXT_PUBLIC_SITE_URL if set (canonical domain)
 	if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
 	// * Fallback to VERCEL_URL (preview/auto-generated domains)
 	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
 	// * Fallback to RENDER_EXTERNAL_URL (render.com)
-	if (process.env.RENDER_EXTERNAL_URL) return `https://${process.env.RENDER_EXTERNAL_URL}`;
+	if (process.env.RENDER_EXTERNAL_URL)
+		return `https://${process.env.RENDER_EXTERNAL_URL}`;
 	// * Final fallback: localhost
 	return `http://localhost:${process.env.PORT ?? 3000}`;
 }
@@ -26,54 +27,59 @@ export type BeehiivPostsOptions = {
 
 // Backward compatible signature: either a number (legacy limit) or options
 export async function getLatestBeehiivPosts(
-	opts?: number | BeehiivPostsOptions
+	opts?: number | BeehiivPostsOptions,
 ): Promise<BeehiivPost[]> {
 	try {
 		const shouldLogDebug =
-			process.env.NODE_ENV !== 'production' && process.env.BEEHIIV_DEBUG !== 'false';
-		const isServer = typeof window === 'undefined';
+			process.env.NODE_ENV !== "production" &&
+			process.env.BEEHIIV_DEBUG !== "false";
+		const isServer = typeof window === "undefined";
 		const baseUrl = getBaseUrl();
-		const apiPath = '/api/beehiiv/posts';
+		const apiPath = "/api/beehiiv/posts";
 
 		// Normalize options
-		const options: BeehiivPostsOptions = typeof opts === 'number' ? { limit: opts } : opts || {};
+		const options: BeehiivPostsOptions =
+			typeof opts === "number" ? { limit: opts } : opts || {};
 
 		const params = new URLSearchParams();
-		if (options.perPage) params.set('per_page', String(options.perPage));
-		if (options.page) params.set('page', String(options.page));
-		if (options.all) params.set('all', 'true');
-		if (options.limit) params.set('limit', String(options.limit));
+		if (options.perPage) params.set("per_page", String(options.perPage));
+		if (options.page) params.set("page", String(options.page));
+		if (options.all) params.set("all", "true");
+		if (options.limit) params.set("limit", String(options.limit));
 		// By default, exclude scheduled posts for paginated grid fetches (all=false)
 		// API defaults to include all; we opt-out here unless explicitly overridden.
-		if (typeof options.includeScheduled === 'boolean') {
-			params.set('include_scheduled', String(options.includeScheduled));
+		if (typeof options.includeScheduled === "boolean") {
+			params.set("include_scheduled", String(options.includeScheduled));
 		} else if (!options.all) {
-			params.set('include_scheduled', 'false');
+			params.set("include_scheduled", "false");
 		}
 
 		const qs = params.toString();
 		const url = isServer
-			? `${baseUrl}${apiPath}${qs ? `?${qs}` : ''}`
-			: `${apiPath}${qs ? `?${qs}` : ''}`;
+			? `${baseUrl}${apiPath}${qs ? `?${qs}` : ""}`
+			: `${apiPath}${qs ? `?${qs}` : ""}`;
 
 		if (shouldLogDebug) {
 			// eslint-disable-next-line no-console
-			console.log('[getLatestBeehiivPosts] Fetching from:', url);
+			console.log("[getLatestBeehiivPosts] Fetching from:", url);
 		}
 
 		const res = await fetch(url, {
 			// Let Next.js cache per unique query using route's revalidate
 			next: { revalidate: 300 },
 			headers: {
-				'Content-Type': 'application/json',
+				"Content-Type": "application/json",
 			},
 		});
 
 		if (!res.ok) {
-			const errorText = await res.text().catch(() => 'No error details');
+			const errorText = await res.text().catch(() => "No error details");
 			if (shouldLogDebug) {
 				// eslint-disable-next-line no-console
-				console.error(`[getLatestBeehiivPosts] Failed to fetch posts (${res.status}):`, errorText);
+				console.error(
+					`[getLatestBeehiivPosts] Failed to fetch posts (${res.status}):`,
+					errorText,
+				);
 			}
 			return [];
 		}
@@ -81,7 +87,10 @@ export async function getLatestBeehiivPosts(
 		const data = await res.json().catch((err) => {
 			if (shouldLogDebug) {
 				// eslint-disable-next-line no-console
-				console.error('[getLatestBeehiivPosts] Failed to parse JSON response:', err);
+				console.error(
+					"[getLatestBeehiivPosts] Failed to parse JSON response:",
+					err,
+				);
 			}
 			return { data: [] };
 		});
@@ -94,33 +103,39 @@ export async function getLatestBeehiivPosts(
 				const summary = posts.map((p: any) => ({
 					id: p?.id,
 					title: p?.title,
-					published_at: p?.published_at ?? p?.publish_date ?? p?.displayed_date ?? null,
+					published_at:
+						p?.published_at ?? p?.publish_date ?? p?.displayed_date ?? null,
 				}));
 				// eslint-disable-next-line no-console
 				console.log(
 					`[getLatestBeehiivPosts] Received ${posts.length} post(s). Full summary:`,
-					summary
+					summary,
 				);
 			} catch (logErr) {
 				// eslint-disable-next-line no-console
-				console.warn('[getLatestBeehiivPosts] Failed to log posts summary:', logErr);
+				console.warn(
+					"[getLatestBeehiivPosts] Failed to log posts summary:",
+					logErr,
+				);
 			}
 		}
 		// If legacy numeric limit was supplied, slice on client as a fallback
-		if (typeof opts === 'number' && Number.isFinite(opts)) {
+		if (typeof opts === "number" && Number.isFinite(opts)) {
 			return posts.slice(0, opts);
 		}
 		return posts;
 	} catch (err) {
-		if (process.env.NODE_ENV !== 'production') {
+		if (process.env.NODE_ENV !== "production") {
 			// eslint-disable-next-line no-console
-			console.error('[getLatestBeehiivPosts] Unexpected error:', err);
+			console.error("[getLatestBeehiivPosts] Unexpected error:", err);
 		}
 		return [];
 	}
 }
 
 // Convenience helper to fetch all posts with optional cap
-export async function getAllBeehiivPosts(limit?: number): Promise<BeehiivPost[]> {
+export async function getAllBeehiivPosts(
+	limit?: number,
+): Promise<BeehiivPost[]> {
 	return getLatestBeehiivPosts({ all: true, limit });
 }

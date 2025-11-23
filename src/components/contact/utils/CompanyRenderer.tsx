@@ -1,8 +1,8 @@
-'use client';
-import { useDataModule } from '@/stores/useDataModuleStore';
-import type { CompanyLogoDictType } from '@/types/service/trusted-companies';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+"use client";
+import { useDataModule } from "@/stores/useDataModuleStore";
+import type { CompanyLogoDictType } from "@/types/service/trusted-companies";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface Props {
 	company: string;
@@ -10,19 +10,23 @@ interface Props {
 	width?: number;
 }
 
-export const CompanyRenderer = ({ company, height = 50, width = 50 }: Props) => {
+export const CompanyRenderer = ({
+	company,
+	height = 50,
+	width = 50,
+}: Props) => {
 	const [isClient, setIsClient] = useState(false);
 	const { status, logos, error } = useDataModule(
-		'service/slug_data/trustedCompanies',
+		"service/slug_data/trustedCompanies",
 		({ status: moduleStatus, data, error: moduleError }) => ({
 			status: moduleStatus,
 			logos: (data?.companyLogos ?? {}) as CompanyLogoDictType,
 			error: moduleError,
-		})
+		}),
 	);
 
-	const isLoading = status === 'idle' || status === 'loading';
-	const isError = status === 'error';
+	const isLoading = status === "idle" || status === "loading";
+	const isError = status === "error";
 
 	useEffect(() => {
 		setIsClient(true);
@@ -42,7 +46,7 @@ export const CompanyRenderer = ({ company, height = 50, width = 50 }: Props) => 
 	}
 
 	if (isError) {
-		console.error('[CompanyRenderer] Failed to load company logos', error);
+		console.error("[CompanyRenderer] Failed to load company logos", error);
 	}
 
 	const normalizedKey = company.trim().toLowerCase();
@@ -53,10 +57,15 @@ export const CompanyRenderer = ({ company, height = 50, width = 50 }: Props) => 
 				style={{
 					width: `${width * 2.5}px`,
 					height: `${height * 2.5}px`,
-					position: 'relative',
+					position: "relative",
 				}}
 			>
-				<Image src={logoEntry.logo} alt={`${company} Logo`} fill className="object-contain" />
+				<Image
+					src={logoEntry.logo}
+					alt={`${company} Logo`}
+					fill
+					className="object-contain"
+				/>
 			</div>
 		);
 	}
@@ -66,11 +75,11 @@ export const CompanyRenderer = ({ company, height = 50, width = 50 }: Props) => 
 			style={{
 				width,
 				height,
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				backgroundColor: '#f0f0f0',
-				borderRadius: '4px',
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				backgroundColor: "#f0f0f0",
+				borderRadius: "4px",
 			}}
 		>
 			{company.charAt(0).toUpperCase()}

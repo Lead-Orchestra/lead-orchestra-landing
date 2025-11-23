@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import dynamic from 'next/dynamic';
-import type { ReactNode } from 'react';
-import { Suspense, useMemo, useState } from 'react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
+import type { ReactNode } from "react";
+import { Suspense, useMemo, useState } from "react";
 
-import { PageLayout } from '@/components/layout/PageLayout';
-import { Toaster } from '@/components/ui/toaster';
-import BodyThemeSync from '@/contexts/BodyThemeSync';
-import { AnalyticsConsentProvider } from '@/contexts/analytics-consent-context';
-import { ThemeProvider } from '@/contexts/theme-context';
+import { PageLayout } from "@/components/layout/PageLayout";
+import { Toaster } from "@/components/ui/toaster";
+import BodyThemeSync from "@/contexts/BodyThemeSync";
+import { AnalyticsConsentProvider } from "@/contexts/analytics-consent-context";
+import { ThemeProvider } from "@/contexts/theme-context";
 
-import type { AnalyticsConfig } from '@/lib/analytics/config';
+import type { AnalyticsConfig } from "@/lib/analytics/config";
 
-import { ChunkErrorHandler } from './ChunkErrorHandler';
-import NextAuthProvider from './NextAuthProvider';
+import { ChunkErrorHandler } from "./ChunkErrorHandler";
+import NextAuthProvider from "./NextAuthProvider";
 
 const SuspenseFallback = () => (
 	<div className="min-h-screen w-full bg-slate-950 text-white">
@@ -39,10 +39,10 @@ interface AppProvidersProps {
 
 const ClientExperience = dynamic(
 	() =>
-		import('./ClientExperience').then((mod) => ({
+		import("./ClientExperience").then((mod) => ({
 			default: mod.ClientExperience,
 		})),
-	{ ssr: false, loading: () => null }
+	{ ssr: false, loading: () => null },
 );
 
 export function AppProviders({
@@ -55,7 +55,8 @@ export function AppProviders({
 	initialAnalyticsConfig,
 }: AppProvidersProps) {
 	const [queryClient] = useState(() => new QueryClient());
-	const defaultAnalyticsConsent = process.env.NEXT_PUBLIC_ANALYTICS_AUTOLOAD === 'true';
+	const defaultAnalyticsConsent =
+		process.env.NEXT_PUBLIC_ANALYTICS_AUTOLOAD === "true";
 	const analyticsProps = useMemo(
 		() => ({
 			clarityProjectId,
@@ -72,7 +73,7 @@ export function AppProviders({
 			plausibleDomain,
 			plausibleEndpoint,
 			zohoWidgetCode,
-		]
+		],
 	);
 
 	return (

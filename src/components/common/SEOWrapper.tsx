@@ -1,7 +1,7 @@
-import type { SeoMeta } from '@/utils/seo/seo';
-import { defaultSeo } from '@/utils/seo/staticSeo';
+import type { SeoMeta } from "@/utils/seo/seo";
+import { defaultSeo } from "@/utils/seo/staticSeo";
 // src/components/common/SEO.tsx
-import Head from 'next/head';
+import Head from "next/head";
 
 /**
  * SEO component for injecting dynamic meta tags into the page head.
@@ -12,7 +12,9 @@ import Head from 'next/head';
  * All props are documented in the SeoMeta interface.
  * @param renderCanonical - If true, renders the canonical <link> tag. Default: true. For Next.js app directory pages using generateMetadata, set to false to avoid duplicate canonical tags.
  */
-export function SEOWrapper(meta: Partial<SeoMeta> & { renderCanonical?: boolean }) {
+export function SEOWrapper(
+	meta: Partial<SeoMeta> & { renderCanonical?: boolean },
+) {
 	const {
 		title,
 		description,
@@ -30,10 +32,12 @@ export function SEOWrapper(meta: Partial<SeoMeta> & { renderCanonical?: boolean 
 			<title>{title}</title>
 			<meta name="description" content={description} />
 			{/* ! Only render canonical tag if renderCanonical is true (default: true) */}
-			{canonical && renderCanonical && <link rel="canonical" href={canonical} />}
+			{canonical && renderCanonical && (
+				<link rel="canonical" href={canonical} />
+			)}
 			<meta property="og:title" content={title} />
 			<meta property="og:description" content={description} />
-			<meta property="og:type" content={type || 'website'} />
+			<meta property="og:type" content={type || "website"} />
 			{image && <meta property="og:image" content={image} />}
 			{canonical && <meta property="og:url" content={canonical} />}
 			{/* Twitter Card */}
@@ -42,8 +46,12 @@ export function SEOWrapper(meta: Partial<SeoMeta> & { renderCanonical?: boolean 
 			<meta name="twitter:description" content={description} />
 			{image && <meta name="twitter:image" content={image} />}
 			{/* Article meta */}
-			{datePublished && <meta property="article:published_time" content={datePublished} />}
-			{dateModified && <meta property="article:modified_time" content={dateModified} />}
+			{datePublished && (
+				<meta property="article:published_time" content={datePublished} />
+			)}
+			{dateModified && (
+				<meta property="article:modified_time" content={dateModified} />
+			)}
 
 			{/* Additional custom meta tags */}
 			{Object.entries(rest).map(([key, value]) => (

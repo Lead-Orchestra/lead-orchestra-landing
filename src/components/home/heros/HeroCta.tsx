@@ -1,8 +1,8 @@
 // Usage: For mobile-first image/text ordering, use this in a parent flex container with flex-col (mobile) and flex-row (desktop), placing the visual before <HeroCta /> for mobile.
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
-import type React from 'react';
-import { toast } from 'sonner';
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import type React from "react";
+import { toast } from "sonner";
 
 export interface HeroCtaProps {
 	badgeLeft?: string;
@@ -12,7 +12,7 @@ export interface HeroCtaProps {
 	highlight?: string;
 	ctaLabel?: string;
 	ctaOnClick?: () => void;
-	ctaVariant?: 'button' | 'form';
+	ctaVariant?: "button" | "form";
 	ctaForm?: React.ReactNode;
 	showLearnMore?: boolean;
 	children?: React.ReactNode;
@@ -24,14 +24,14 @@ export interface HeroCtaProps {
  * No visual/3D/animated offering. Modular, DRY, and reusable.
  */
 export const HeroCta: React.FC<HeroCtaProps> = ({
-	badgeLeft = 'AI Driven',
-	badgeRight = 'Future Proof MVPs',
-	headline = 'Launch with Confidence',
+	badgeLeft = "AI Driven",
+	badgeRight = "Future Proof MVPs",
+	headline = "Launch with Confidence",
 	subheadline = "Don't risk becoming another startup that loses $22,500-$48,000 on an MVP that breaks and bounces users. Instead, Scale Confidently and convert your investment into market dominance.",
-	highlight = 'Scale Seamlessly',
-	ctaLabel = 'Talk to Sales',
+	highlight = "Scale Seamlessly",
+	ctaLabel = "Talk to Sales",
 	ctaOnClick,
-	ctaVariant = 'button',
+	ctaVariant = "button",
 	ctaForm,
 	showLearnMore = true,
 	children,
@@ -45,17 +45,21 @@ export const HeroCta: React.FC<HeroCtaProps> = ({
 	return (
 		<div
 			className={[
-				'flex flex-col items-center justify-center md:pr-8 lg:items-start lg:pr-0',
+				"flex flex-col items-center justify-center md:pr-8 lg:items-start lg:pr-0",
 				className,
 			]
 				.filter(Boolean)
-				.join(' ')}
+				.join(" ")}
 		>
 			{/* Badge */}
 			<div className="mb-6 inline-flex w-fit items-center justify-center rounded-full border border-border/50 bg-background/80 px-4 py-1.5 backdrop-blur-md">
-				<span className="mr-2 font-medium text-foreground text-sm lg:text-base">{badgeLeft}</span>
+				<span className="mr-2 font-medium text-foreground text-sm lg:text-base">
+					{badgeLeft}
+				</span>
 				<div className="mx-1 h-0.5 w-2 rounded-full bg-border" />
-				<span className="ml-1 font-medium text-foreground text-sm lg:text-base">{badgeRight}</span>
+				<span className="ml-1 font-medium text-foreground text-sm lg:text-base">
+					{badgeRight}
+				</span>
 			</div>
 
 			{/* Headline */}
@@ -73,7 +77,7 @@ export const HeroCta: React.FC<HeroCtaProps> = ({
 
 			{/* CTA: Button(s) or custom form */}
 			<div className="my-5 flex w-full max-w-md flex-col gap-4 sm:flex-row lg:max-w-xl">
-				{ctaVariant === 'form' && ctaForm ? (
+				{ctaVariant === "form" && ctaForm ? (
 					<div className="w-full">{ctaForm}</div>
 				) : (
 					<>

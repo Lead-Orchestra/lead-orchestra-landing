@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { Spinner } from '@/components/ui/spinner';
-import { cn } from '@/lib/utils';
+import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 
 type LoadingAnimationProps = {
-	ariaLive?: 'assertive' | 'polite' | 'off';
+	ariaLive?: "assertive" | "polite" | "off";
 	className?: string;
 	label?: string;
 	spinnerClassName?: string;
-	spinnerSize?: 'sm' | 'md' | 'lg';
+	spinnerSize?: "sm" | "md" | "lg";
 };
 
 export default function LoadingAnimation({
-	ariaLive = 'assertive',
+	ariaLive = "assertive",
 	className,
-	label = 'Loading',
+	label = "Loading",
 	spinnerClassName,
-	spinnerSize = 'lg',
+	spinnerSize = "lg",
 }: LoadingAnimationProps = {}) {
 	return (
 		<div
 			aria-live={ariaLive}
-			className={cn('flex w-full items-center justify-center py-20', className)}
+			className={cn("flex w-full items-center justify-center py-20", className)}
 			data-testid="loading-animation"
 		>
 			<Spinner
 				size={spinnerSize}
-				className={cn('text-primary', spinnerClassName)}
+				className={cn("text-primary", spinnerClassName)}
 				aria-label={label}
 			/>
 		</div>

@@ -7,15 +7,15 @@
  * Env variable: NEXT_PUBLIC_ZOHO_SALESIQ_WIDGET_CODE
  */
 
-import * as React from 'react';
+import * as React from "react";
 
 /**
  * Zoho SalesIQ widget configuration
  */
 export const ZOHO_SALESIQ_CONFIG = {
-	WIDGET_CODE: process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE || '',
+	WIDGET_CODE: process.env.NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE || "",
 	// Use the public CDN host per Zoho embed snippet
-	WIDGET_URL: 'https://salesiq.zohopublic.com/widget',
+	WIDGET_URL: "https://salesiq.zohopublic.com/widget",
 } as const;
 
 /**
@@ -23,11 +23,11 @@ export const ZOHO_SALESIQ_CONFIG = {
  * This function should be called in the browser environment
  */
 export const initializeZohoSalesIQ = () => {
-	if (typeof window === 'undefined') return;
+	if (typeof window === "undefined") return;
 	// Guard: must have widget code
 	if (!ZOHO_SALESIQ_CONFIG.WIDGET_CODE) {
 		console.warn(
-			'Zoho SalesIQ: NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE is missing; widget will not load.'
+			"Zoho SalesIQ: NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE is missing; widget will not load.",
 		);
 		return;
 	}
@@ -37,15 +37,15 @@ export const initializeZohoSalesIQ = () => {
 		values: {},
 		ready: () => {},
 	};
-	if (!document.getElementById('zsiqscript')) {
-		const script = document.createElement('script');
-		script.type = 'text/javascript';
-		script.id = 'zsiqscript';
+	if (!document.getElementById("zsiqscript")) {
+		const script = document.createElement("script");
+		script.type = "text/javascript";
+		script.id = "zsiqscript";
 		script.defer = true;
 		script.src = `${ZOHO_SALESIQ_CONFIG.WIDGET_URL}?wc=${encodeURIComponent(
-			ZOHO_SALESIQ_CONFIG.WIDGET_CODE
+			ZOHO_SALESIQ_CONFIG.WIDGET_CODE,
 		)}`;
-		const firstScript = document.getElementsByTagName('script')[0];
+		const firstScript = document.getElementsByTagName("script")[0];
 		if (firstScript?.parentNode) {
 			firstScript.parentNode.insertBefore(script, firstScript);
 		}

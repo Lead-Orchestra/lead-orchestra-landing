@@ -1,22 +1,23 @@
-import { cn } from '@/lib/utils';
-import { X } from 'lucide-react';
-import * as React from 'react';
-import { Button } from './button';
+import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
+import * as React from "react";
+import { Button } from "./button";
 
 // * StickyBanner Props
-export interface StickyBannerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface StickyBannerProps
+	extends React.HTMLAttributes<HTMLDivElement> {
 	open: boolean; // ! Controls visibility (external logic)
 	onClose: () => void; // ! Close handler (external logic)
-	variant?: 'default' | 'success' | 'warning' | 'danger';
+	variant?: "default" | "success" | "warning" | "danger";
 	children: React.ReactNode;
 }
 
 // * Banner color variants
 const _variantClasses = {
-	default: 'bg-primary text-primary-foreground border-primary',
-	success: 'bg-green-500 text-white border-green-600',
-	warning: 'bg-yellow-400 text-black border-yellow-500',
-	danger: 'bg-red-500 text-white border-red-600',
+	default: "bg-primary text-primary-foreground border-primary",
+	success: "bg-green-500 text-white border-green-600",
+	warning: "bg-yellow-400 text-black border-yellow-500",
+	danger: "bg-red-500 text-white border-red-600",
 };
 
 /**
@@ -24,7 +25,10 @@ const _variantClasses = {
  * @param {StickyBannerProps} props
  */
 export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
-	({ open, onClose, variant = 'default', children, className, ...props }, ref) => {
+	(
+		{ open, onClose, variant = "default", children, className, ...props },
+		ref,
+	) => {
 		if (!open) return null;
 		return (
 			<div
@@ -32,36 +36,36 @@ export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
 				role="alert"
 				aria-live="assertive"
 				style={{
-					overflow: 'visible',
-					minHeight: 'auto',
-					height: 'auto',
-					maxHeight: 'none',
+					overflow: "visible",
+					minHeight: "auto",
+					height: "auto",
+					maxHeight: "none",
 				}}
 				className={cn(
 					// * Sticky/Fixed, full-width, glassy, with gradient and neon/aurora highlight
-					'fade-in slide-in-from-top-2 z-[55] flex w-full animate-in flex-col gap-3 px-4 py-3 shadow-lg backdrop-blur-2xl transition-all md:flex-row md:items-center md:justify-between md:gap-4',
+					"fade-in slide-in-from-top-2 z-[55] flex w-full animate-in flex-col gap-3 px-4 py-3 shadow-lg backdrop-blur-2xl transition-all md:flex-row md:items-center md:justify-between md:gap-4",
 					// Ensure content is not clipped - allow banner to expand to fit content
-					'min-h-fit overflow-visible',
+					"min-h-fit overflow-visible",
 					// Position is controlled by className prop - don't override here
 					// * Glass/gradient background for default and success
-					variant === 'default'
-						? 'border border-border bg-[linear-gradient(90deg,_hsl(var(--primary)/0.90)_0%,_hsl(var(--accent)/0.85)_100%)] text-glow text-primary-foreground'
-						: variant === 'success'
-							? 'border border-[hsl(var(--primary))] bg-[linear-gradient(90deg,_hsl(var(--tertiary)/0.9)_0%,_hsl(var(--primary)/0.8)_100%)] text-[hsl(var(--primary-foreground))]'
-							: variant === 'warning'
-								? 'border-yellow-500 bg-yellow-400/90 text-black'
-								: variant === 'danger'
-									? 'border border-[hsl(var(--destructive))] bg-[linear-gradient(90deg,_hsl(var(--destructive)/0.93)_0%,_hsl(var(--accent)/0.8)_100%)] text-[hsl(var(--destructive-foreground))]'
-									: '',
+					variant === "default"
+						? "border border-border bg-[linear-gradient(90deg,_hsl(var(--primary)/0.90)_0%,_hsl(var(--accent)/0.85)_100%)] text-glow text-primary-foreground"
+						: variant === "success"
+							? "border border-[hsl(var(--primary))] bg-[linear-gradient(90deg,_hsl(var(--tertiary)/0.9)_0%,_hsl(var(--primary)/0.8)_100%)] text-[hsl(var(--primary-foreground))]"
+							: variant === "warning"
+								? "border-yellow-500 bg-yellow-400/90 text-black"
+								: variant === "danger"
+									? "border border-[hsl(var(--destructive))] bg-[linear-gradient(90deg,_hsl(var(--destructive)/0.93)_0%,_hsl(var(--accent)/0.8)_100%)] text-[hsl(var(--destructive-foreground))]"
+									: "",
 					// * Neon/aurora highlight for default (optional) - ensure it doesn't clip content
-					variant === 'default'
+					variant === "default"
 						? "before:pointer-events-none before:absolute before:inset-0 before:overflow-visible before:bg-[radial-gradient(ellipse_at_top_left,_rgba(78,234,255,0.15)_0%,_transparent_70%)] before:content-['']"
-						: '',
+						: "",
 					// * Glassy effect
-					'glass-card',
+					"glass-card",
 					// * Focus ring for accessibility
-					'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--focus))] focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-					className
+					"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--focus))] focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+					className,
 				)}
 				{...props}
 			>
@@ -79,9 +83,9 @@ export const StickyBanner = React.forwardRef<HTMLDivElement, StickyBannerProps>(
 				</Button>
 			</div>
 		);
-	}
+	},
 );
-StickyBanner.displayName = 'StickyBanner';
+StickyBanner.displayName = "StickyBanner";
 
 // * Usage Example (logic handled by parent):
 // <StickyBanner open={show} onClose={() => setShow(false)} variant="success">Update successful!</StickyBanner>

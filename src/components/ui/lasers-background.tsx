@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { motion } from 'motion/react';
-import type React from 'react';
+import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
+import type React from "react";
 
 interface LasersBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
 	children: React.ReactNode;
@@ -13,7 +13,7 @@ interface LasersBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const beamBaseClasses =
-	'pointer-events-none absolute inset-y-[-10%] w-[45%] bg-gradient-to-r from-transparent via-primary/60 to-transparent blur-2xl';
+	"pointer-events-none absolute inset-y-[-10%] w-[45%] bg-gradient-to-r from-transparent via-primary/60 to-transparent blur-2xl";
 
 export function LasersBackground({
 	children,
@@ -31,13 +31,13 @@ export function LasersBackground({
 	return (
 		<div
 			className={cn(
-				'relative flex h-full w-full items-center justify-center overflow-hidden bg-gradient-to-b from-background/70 via-background to-background/90',
-				className
+				"relative flex h-full w-full items-center justify-center overflow-hidden bg-gradient-to-b from-background/70 via-background to-background/90",
+				className,
 			)}
 			{...props}
 		>
 			<motion.div
-				className={cn(beamBaseClasses, 'left-[-25%]')}
+				className={cn(beamBaseClasses, "left-[-25%]")}
 				animate={{
 					opacity: opacityStops,
 					scaleX: [0.85, 1.1, 0.9],
@@ -45,12 +45,12 @@ export function LasersBackground({
 				transition={{
 					repeat: Number.POSITIVE_INFINITY,
 					duration: pulseDuration,
-					ease: 'easeInOut',
+					ease: "easeInOut",
 				}}
 			/>
 
 			<motion.div
-				className={cn(beamBaseClasses, 'right-[-25%] rotate-180')}
+				className={cn(beamBaseClasses, "right-[-25%] rotate-180")}
 				animate={{
 					opacity: opacityStops,
 					scaleX: [1, 0.85, 1.1],
@@ -58,7 +58,7 @@ export function LasersBackground({
 				transition={{
 					repeat: Number.POSITIVE_INFINITY,
 					duration: pulseDuration * 1.1,
-					ease: 'easeInOut',
+					ease: "easeInOut",
 				}}
 			/>
 
@@ -70,7 +70,7 @@ export function LasersBackground({
 				transition={{
 					repeat: Number.POSITIVE_INFINITY,
 					duration: pulseDuration * 1.5,
-					ease: 'easeInOut',
+					ease: "easeInOut",
 				}}
 			/>
 

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from "react";
 
-import type { ActivityEvent } from '@/data/activity/activityStream';
+import type { ActivityEvent } from "@/data/activity/activityStream";
 
 const DEFAULT_INTERVAL_MS = 3200;
-const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 type UseActivityRollerOptions = {
 	events: ActivityEvent[];
@@ -23,7 +23,7 @@ type ActivityRollerState = {
 };
 
 const getPrefersReducedMotion = (): boolean => {
-	if (typeof window === 'undefined' || !window.matchMedia) {
+	if (typeof window === "undefined" || !window.matchMedia) {
 		return false;
 	}
 
@@ -35,10 +35,12 @@ const getPrefersReducedMotion = (): boolean => {
 };
 
 const usePrefersReducedMotion = (): boolean => {
-	const [prefersReducedMotion, setPrefersReducedMotion] = useState(getPrefersReducedMotion());
+	const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+		getPrefersReducedMotion(),
+	);
 
 	useEffect(() => {
-		if (typeof window === 'undefined' || !window.matchMedia) {
+		if (typeof window === "undefined" || !window.matchMedia) {
 			return;
 		}
 
@@ -49,7 +51,7 @@ const usePrefersReducedMotion = (): boolean => {
 
 		// addEventListener is the modern API, but we fall back to addListener
 		if (mediaQuery.addEventListener) {
-			mediaQuery.addEventListener('change', handleChange);
+			mediaQuery.addEventListener("change", handleChange);
 		} else {
 			// eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
 			mediaQuery.addListener?.(handleChange);
@@ -57,7 +59,7 @@ const usePrefersReducedMotion = (): boolean => {
 
 		return () => {
 			if (mediaQuery.removeEventListener) {
-				mediaQuery.removeEventListener('change', handleChange);
+				mediaQuery.removeEventListener("change", handleChange);
 			} else {
 				mediaQuery.removeListener?.(handleChange);
 			}
@@ -100,7 +102,9 @@ export const useActivityRoller = ({
 	}, [intervalMs, prefersReducedMotion, normalizedEvents.length, active]);
 
 	const activeEvent =
-		normalizedEvents.length === 0 ? null : normalizedEvents[activeIndex % normalizedEvents.length];
+		normalizedEvents.length === 0
+			? null
+			: normalizedEvents[activeIndex % normalizedEvents.length];
 
 	return {
 		activeEvent,

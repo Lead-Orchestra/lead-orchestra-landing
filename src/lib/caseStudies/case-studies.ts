@@ -1,4 +1,4 @@
-import { caseStudies } from '@/data/caseStudy/caseStudies';
+import { caseStudies } from "@/data/caseStudy/caseStudies";
 
 export type CaseStudy = (typeof caseStudies)[number];
 

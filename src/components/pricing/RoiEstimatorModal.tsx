@@ -1,28 +1,33 @@
-'use client';
+"use client";
 
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Switch } from '@/components/ui/switch';
+} from "@/components/ui/accordion";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
 import {
 	coerceInputs,
 	computeTierResult,
 	getDefaultTierKey,
 	resolveTierConfigs,
-} from '@/lib/roi/calculator';
-import type { RoiInputs } from '@/lib/roi/types';
-import { cn } from '@/lib/utils';
-import type { ROIEstimator } from '@/types/service/plans';
-import { useEffect, useMemo, useState } from 'react';
-import { RoiCalculatorInputs } from './roi/RoiCalculatorInputs';
-import { RoiMetricsGrid } from './roi/RoiMetricsGrid';
-import { RoiResultTabs } from './roi/RoiResultTabs';
-import { RoiSnapshot } from './roi/RoiSnapshot';
-import { RoiTierSelector } from './roi/RoiTierSelector';
+} from "@/lib/roi/calculator";
+import type { RoiInputs } from "@/lib/roi/types";
+import { cn } from "@/lib/utils";
+import type { ROIEstimator } from "@/types/service/plans";
+import { useEffect, useMemo, useState } from "react";
+import { RoiCalculatorInputs } from "./roi/RoiCalculatorInputs";
+import { RoiMetricsGrid } from "./roi/RoiMetricsGrid";
+import { RoiResultTabs } from "./roi/RoiResultTabs";
+import { RoiSnapshot } from "./roi/RoiSnapshot";
+import { RoiTierSelector } from "./roi/RoiTierSelector";
 
 interface RoiEstimatorModalProps {
 	open: boolean;
@@ -30,10 +35,19 @@ interface RoiEstimatorModalProps {
 	estimator: ROIEstimator;
 }
 
-export const RoiEstimatorModal = ({ open, onOpenChange, estimator }: RoiEstimatorModalProps) => {
+export const RoiEstimatorModal = ({
+	open,
+	onOpenChange,
+	estimator,
+}: RoiEstimatorModalProps) => {
 	const tiers = useMemo(() => resolveTierConfigs(estimator), [estimator]);
-	const defaultTierKey = useMemo(() => getDefaultTierKey(estimator), [estimator]);
-	const [inputs, setInputs] = useState<RoiInputs>(() => coerceInputs(estimator));
+	const defaultTierKey = useMemo(
+		() => getDefaultTierKey(estimator),
+		[estimator],
+	);
+	const [inputs, setInputs] = useState<RoiInputs>(() =>
+		coerceInputs(estimator),
+	);
 	const [activeTier, setActiveTier] = useState<string>(defaultTierKey);
 	const [interactiveView, setInteractiveView] = useState(true);
 
@@ -49,27 +63,35 @@ export const RoiEstimatorModal = ({ open, onOpenChange, estimator }: RoiEstimato
 				inputs,
 				tierKey: activeTier,
 			}),
-		[estimator, inputs, activeTier]
+		[estimator, inputs, activeTier],
 	);
 
-	const [showSetupInvestment, setShowSetupInvestment] = useState(result.showSetupDefault);
+	const [showSetupInvestment, setShowSetupInvestment] = useState(
+		result.showSetupDefault,
+	);
 
 	useEffect(() => {
 		setShowSetupInvestment(result.showSetupDefault);
 	}, [result.showSetupDefault]);
 
-	const handleInputChange = (field: keyof RoiInputs, value: number | string) => {
+	const handleInputChange = (
+		field: keyof RoiInputs,
+		value: number | string,
+	) => {
 		setInputs((prev) => ({
 			...prev,
-			[field]: field === 'industry' ? String(value) : Number(value),
+			[field]: field === "industry" ? String(value) : Number(value),
 		}));
 	};
 
 	const canToggleSetup = Boolean(result.costs.setupRange);
 
-	const factor = estimator.industryFactors[inputs.industry] ?? estimator.industryFactors.Other ?? 1;
+	const factor =
+		estimator.industryFactors[inputs.industry] ??
+		estimator.industryFactors.Other ??
+		1;
 
-	const [inputsAccordionValue, setInputsAccordionValue] = useState('form');
+	const [inputsAccordionValue, setInputsAccordionValue] = useState("form");
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -81,23 +103,23 @@ export const RoiEstimatorModal = ({ open, onOpenChange, estimator }: RoiEstimato
 								Estimate ROI & Setup Cost
 							</DialogTitle>
 							<p className="text-muted-foreground text-sm">
-								Adjust the assumptions to project new revenue, setup ranges, and long-term profit
-								across deployment models.
+								Adjust the assumptions to project new revenue, setup ranges, and
+								long-term profit across deployment models.
 							</p>
 						</div>
 						<div
 							className={cn(
-								'flex items-center gap-2 px-3 py-2',
-								'border border-border/60',
-								'bg-muted/20',
-								'rounded-full',
-								'font-semibold text-xs uppercase tracking-[0.25em]'
+								"flex items-center gap-2 px-3 py-2",
+								"border border-border/60",
+								"bg-muted/20",
+								"rounded-full",
+								"font-semibold text-xs uppercase tracking-[0.25em]",
 							)}
 						>
 							<span
 								className={cn(
-									'transition-colors',
-									interactiveView ? 'text-foreground' : 'text-muted-foreground'
+									"transition-colors",
+									interactiveView ? "text-foreground" : "text-muted-foreground",
 								)}
 							>
 								Interactive
@@ -109,8 +131,10 @@ export const RoiEstimatorModal = ({ open, onOpenChange, estimator }: RoiEstimato
 							/>
 							<span
 								className={cn(
-									'transition-colors',
-									!interactiveView ? 'text-foreground' : 'text-muted-foreground'
+									"transition-colors",
+									!interactiveView
+										? "text-foreground"
+										: "text-muted-foreground",
 								)}
 							>
 								Snapshot
@@ -122,24 +146,24 @@ export const RoiEstimatorModal = ({ open, onOpenChange, estimator }: RoiEstimato
 					<div className="grid items-start gap-6 lg:grid-cols-1 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.2fr)]">
 						<section
 							className={cn(
-								'flex flex-col gap-6',
-								'rounded-xl border border-border/70',
-								'bg-muted/20 p-5',
-								'shadow-sm'
+								"flex flex-col gap-6",
+								"rounded-xl border border-border/70",
+								"bg-muted/20 p-5",
+								"shadow-sm",
 							)}
 						>
 							<Accordion
 								type="single"
 								collapsible
 								value={inputsAccordionValue}
-								onValueChange={(value) => setInputsAccordionValue(value ?? '')}
+								onValueChange={(value) => setInputsAccordionValue(value ?? "")}
 								className="w-full"
 							>
 								<AccordionItem value="form" className="border-none">
 									<AccordionTrigger
 										className={cn(
-											'rounded-lg bg-transparent px-0 py-0 text-left font-semibold text-sm uppercase tracking-[0.25em]',
-											'flex items-start justify-between gap-3'
+											"rounded-lg bg-transparent px-0 py-0 text-left font-semibold text-sm uppercase tracking-[0.25em]",
+											"flex items-start justify-between gap-3",
 										)}
 									>
 										<div>
@@ -161,9 +185,12 @@ export const RoiEstimatorModal = ({ open, onOpenChange, estimator }: RoiEstimato
 											onChange={handleInputChange}
 										/>
 										<footer className="rounded-lg border border-border/60 bg-background/70 p-4 text-muted-foreground text-xs">
-											<span className="font-semibold text-foreground">How this works:</span> We
-											bound the inputs to realistic ranges, then apply your industry multiplier to
-											determine revenue lift, setup scope, and overtime savings.
+											<span className="font-semibold text-foreground">
+												How this works:
+											</span>{" "}
+											We bound the inputs to realistic ranges, then apply your
+											industry multiplier to determine revenue lift, setup
+											scope, and overtime savings.
 										</footer>
 									</AccordionContent>
 								</AccordionItem>
@@ -178,17 +205,26 @@ export const RoiEstimatorModal = ({ open, onOpenChange, estimator }: RoiEstimato
 								onToggleSetup={setShowSetupInvestment}
 								canToggleSetup={canToggleSetup}
 							/>
-							<RoiMetricsGrid result={result} showSetupInvestment={showSetupInvestment} />
-							<RoiResultTabs result={result} summaryPoints={estimator.summaryOutput.points} />
+							<RoiMetricsGrid
+								result={result}
+								showSetupInvestment={showSetupInvestment}
+							/>
+							<RoiResultTabs
+								result={result}
+								summaryPoints={estimator.summaryOutput.points}
+							/>
 							<div className="rounded-xl border border-border/70 bg-muted/20 p-5 shadow-sm">
 								<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
 									Industry Factor
 								</p>
 								<div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-									<p className="font-semibold text-3xl text-foreground">× {factor.toFixed(1)}</p>
+									<p className="font-semibold text-3xl text-foreground">
+										× {factor.toFixed(1)}
+									</p>
 									<p className="max-w-sm text-muted-foreground text-xs leading-relaxed">
-										Adjusts AI workload, workflow design, and compliance footprint for your
-										vertical. Higher multipliers indicate deeper go-to-market orchestration.
+										Adjusts AI workload, workflow design, and compliance
+										footprint for your vertical. Higher multipliers indicate
+										deeper go-to-market orchestration.
 									</p>
 								</div>
 							</div>

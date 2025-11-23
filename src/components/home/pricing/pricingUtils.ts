@@ -1,9 +1,9 @@
-import type { Plan, PlanType } from '@/types/service/plans';
-import type { AnnualDiscountSummary } from './PlanTypeToggle';
+import type { Plan, PlanType } from "@/types/service/plans";
+import type { AnnualDiscountSummary } from "./PlanTypeToggle";
 
-export const PLAN_TYPES: PlanType[] = ['monthly', 'annual', 'oneTime'];
+export const PLAN_TYPES: PlanType[] = ["monthly", "annual", "oneTime"];
 
-type PlanPricing = Plan['price'][PlanType];
+type PlanPricing = Plan["price"][PlanType];
 
 export function hasDisplayablePricing(price: PlanPricing | undefined) {
 	if (!price) {
@@ -16,14 +16,16 @@ export function hasDisplayablePricing(price: PlanPricing | undefined) {
 
 	const { amount } = price;
 
-	if (typeof amount === 'string') {
+	if (typeof amount === "string") {
 		return amount.trim().length > 0;
 	}
 
 	return Number.isFinite(amount) && amount > 0;
 }
 
-export function computeAnnualDiscountSummary(plans: Plan[]): AnnualDiscountSummary | undefined {
+export function computeAnnualDiscountSummary(
+	plans: Plan[],
+): AnnualDiscountSummary | undefined {
 	let percent: number | undefined;
 	let amount: number | undefined;
 
@@ -33,11 +35,11 @@ export function computeAnnualDiscountSummary(plans: Plan[]): AnnualDiscountSumma
 			continue;
 		}
 
-		if (typeof discount.discountPercent === 'number') {
+		if (typeof discount.discountPercent === "number") {
 			percent = Math.max(percent ?? 0, discount.discountPercent);
 		}
 
-		if (typeof discount.discountAmount === 'number') {
+		if (typeof discount.discountAmount === "number") {
 			amount = Math.max(amount ?? 0, discount.discountAmount);
 		}
 	}

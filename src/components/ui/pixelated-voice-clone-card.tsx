@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
-import { PixelatedCanvas } from '@/components/ui/pixelated-canvas';
-import { PixelatedVoiceOverlay } from '@/components/ui/pixelated-voice-overlay';
+import { PixelatedCanvas } from "@/components/ui/pixelated-canvas";
+import { PixelatedVoiceOverlay } from "@/components/ui/pixelated-voice-overlay";
 import {
 	TextRevealCard,
 	TextRevealCardDescription,
 	TextRevealCardTitle,
-} from '@/components/ui/text-reveal-card';
-import { cn } from '@/lib/utils';
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+} from "@/components/ui/text-reveal-card";
+import { cn } from "@/lib/utils";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Tilt = {
 	x: number;
 	y: number;
 };
 
-const DEFAULT_IMAGE = 'https://assets.aceternity.com/manu-red.png';
+const DEFAULT_IMAGE = "https://assets.aceternity.com/manu-red.png";
 
 const MAX_TILT_DEGREES = 12;
 
-const DEFAULT_BEFORE_AUDIO = '/calls/example-call-yt.mp3';
-const DEFAULT_AFTER_AUDIO = '/calls/example-call-yt.mp3';
+const DEFAULT_BEFORE_AUDIO = "/calls/example-call-yt.mp3";
+const DEFAULT_AFTER_AUDIO = "/calls/example-call-yt.mp3";
 
 const BEFORE_AUDIO_CAPTIONS_SRC = `data:text/vtt;charset=utf-8,${encodeURIComponent(
-	'WEBVTT\n\n00:00.000 --> 00:04.000\nOriginal seller script with monotone delivery.\n'
+	"WEBVTT\n\n00:00.000 --> 00:04.000\nOriginal seller script with monotone delivery.\n",
 )}`;
 
 const AFTER_AUDIO_CAPTIONS_SRC = `data:text/vtt;charset=utf-8,${encodeURIComponent(
-	'WEBVTT\n\n00:00.000 --> 00:04.000\nEnhanced expressive clone demonstrating improved tone and pacing.\n'
+	"WEBVTT\n\n00:00.000 --> 00:04.000\nEnhanced expressive clone demonstrating improved tone and pacing.\n",
 )}`;
 
 const CANVAS_CONFIG = {
@@ -35,14 +35,14 @@ const CANVAS_CONFIG = {
 	height: 560,
 	cellSize: 3,
 	dotScale: 0.9,
-	backgroundColor: '#000000',
+	backgroundColor: "#000000",
 	dropoutStrength: 0.35,
 	baseDistortionStrength: 3,
 	distortionRadius: 80,
 	followSpeed: 0.2,
 	jitterStrength: 4,
 	jitterSpeed: 4,
-	tintColor: '#FFFFFF',
+	tintColor: "#FFFFFF",
 	tintStrength: 0.2,
 	autoAnimateSpeed: 0.14,
 	autoAnimateRadius: 320,
@@ -63,13 +63,19 @@ const computeCanvasDimensions = (rawWidth: number): CanvasDimensions => {
 	const clampedWidth = Math.min(CANVAS_CONFIG.width, sanitizedWidth);
 	const baseCanvasHeight = Math.max(
 		Math.round(clampedWidth * CANVAS_ASPECT_RATIO),
-		MIN_CANVAS_HEIGHT
+		MIN_CANVAS_HEIGHT,
 	);
 	const responsiveBuffer =
-		clampedWidth >= 880 ? 120 : clampedWidth >= 720 ? 160 : clampedWidth >= 540 ? 200 : 280;
+		clampedWidth >= 880
+			? 120
+			: clampedWidth >= 720
+				? 160
+				: clampedWidth >= 540
+					? 200
+					: 280;
 	const containerHeight = Math.max(
 		baseCanvasHeight + responsiveBuffer,
-		MIN_CANVAS_HEIGHT + responsiveBuffer
+		MIN_CANVAS_HEIGHT + responsiveBuffer,
 	);
 
 	return {
@@ -117,10 +123,12 @@ const PixelatedVoiceCloneCardComponent = ({
 		imageUploadError: string | null;
 	} | null>(null);
 	const tiltRef = useRef<Tilt>({ x: 0, y: 0 });
-	const [activeTrack, setActiveTrack] = useState<'before' | 'after' | null>(null);
+	const [activeTrack, setActiveTrack] = useState<"before" | "after" | null>(
+		null,
+	);
 	const isPlayingRef = useRef(false);
 	const [canvasSize, setCanvasSize] = useState<CanvasDimensions>(() =>
-		computeCanvasDimensions(MIN_CANVAS_WIDTH)
+		computeCanvasDimensions(MIN_CANVAS_WIDTH),
 	);
 	const [isCanvasAutoAnimating, setIsCanvasAutoAnimating] = useState(false);
 	const [distortionMultiplier, setDistortionMultiplier] = useState(1);
@@ -144,7 +152,7 @@ const PixelatedVoiceCloneCardComponent = ({
 				applyTilt(nextTilt);
 			});
 		},
-		[applyTilt]
+		[applyTilt],
 	);
 
 	const handlePointerMove = useCallback(
@@ -163,7 +171,7 @@ const PixelatedVoiceCloneCardComponent = ({
 				y: normalizedX * 2 * MAX_TILT_DEGREES,
 			});
 		},
-		[isInView, scheduleTiltUpdate]
+		[isInView, scheduleTiltUpdate],
 	);
 
 	const resetTilt = useCallback(() => {
@@ -187,7 +195,7 @@ const PixelatedVoiceCloneCardComponent = ({
 
 		const node = containerRef.current;
 		if (!node) return;
-		if (typeof IntersectionObserver === 'undefined') {
+		if (typeof IntersectionObserver === "undefined") {
 			setIsInView(true);
 			setHasLoadedCanvas(true);
 			return;
@@ -203,7 +211,7 @@ const PixelatedVoiceCloneCardComponent = ({
 					observer.disconnect();
 				}
 			},
-			{ rootMargin: '200px 0px', threshold: [0, 0.1, 0.2, 0.3] }
+			{ rootMargin: "200px 0px", threshold: [0, 0.1, 0.2, 0.3] },
 		);
 
 		observer.observe(node);
@@ -212,7 +220,7 @@ const PixelatedVoiceCloneCardComponent = ({
 	}, [hasLoadedCanvas]);
 
 	useEffect(() => {
-		if (typeof window === 'undefined') {
+		if (typeof window === "undefined") {
 			return;
 		}
 		const checkMobile = () => {
@@ -220,8 +228,8 @@ const PixelatedVoiceCloneCardComponent = ({
 			setViewportHeight(window.innerHeight);
 		};
 		checkMobile();
-		window.addEventListener('resize', checkMobile);
-		return () => window.removeEventListener('resize', checkMobile);
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
 	}, []);
 
 	useEffect(() => {
@@ -245,19 +253,20 @@ const PixelatedVoiceCloneCardComponent = ({
 				prev.canvasHeight === nextDimensions.canvasHeight &&
 				prev.containerHeight === nextDimensions.containerHeight
 					? prev
-					: nextDimensions
+					: nextDimensions,
 			);
 		};
 
 		const fallbackWidth = wrapper.clientWidth;
 		updateSize(fallbackWidth);
 
-		if (typeof ResizeObserver === 'undefined') {
+		if (typeof ResizeObserver === "undefined") {
 			return;
 		}
 
 		const observer = new ResizeObserver((entries) => {
-			const widthFromEntry = entries?.[0]?.contentRect?.width ?? wrapper.clientWidth;
+			const widthFromEntry =
+				entries?.[0]?.contentRect?.width ?? wrapper.clientWidth;
 			updateSize(widthFromEntry);
 		});
 
@@ -270,17 +279,29 @@ const PixelatedVoiceCloneCardComponent = ({
 		const before = beforeAudioRef.current;
 		const after = afterAudioRef.current;
 		const beforeActive =
-			before && !before.paused && !Number.isNaN(before.currentTime) && before.currentTime > 0.05;
+			before &&
+			!before.paused &&
+			!Number.isNaN(before.currentTime) &&
+			before.currentTime > 0.05;
 		const afterActive =
-			after && !after.paused && !Number.isNaN(after.currentTime) && after.currentTime > 0.05;
+			after &&
+			!after.paused &&
+			!Number.isNaN(after.currentTime) &&
+			after.currentTime > 0.05;
 
 		if (!beforeActive && !afterActive && !isPlayingRef.current) {
 			return;
 		}
 
-		if (process.env.NODE_ENV !== 'production') {
-			console.debug('[PixelatedVoiceCloneCard] stopping before audio', before?.src);
-			console.debug('[PixelatedVoiceCloneCard] stopping after audio', after?.src);
+		if (process.env.NODE_ENV !== "production") {
+			console.debug(
+				"[PixelatedVoiceCloneCard] stopping before audio",
+				before?.src,
+			);
+			console.debug(
+				"[PixelatedVoiceCloneCard] stopping after audio",
+				after?.src,
+			);
 		}
 
 		before?.pause();
@@ -299,8 +320,8 @@ const PixelatedVoiceCloneCardComponent = ({
 		setIsCanvasAutoAnimating(false);
 		setDistortionMultiplier(1);
 
-		if (process.env.NODE_ENV !== 'production') {
-			console.debug('[PixelatedVoiceCloneCard] stopPlayback', {
+		if (process.env.NODE_ENV !== "production") {
+			console.debug("[PixelatedVoiceCloneCard] stopPlayback", {
 				beforeCurrent: before?.currentTime ?? null,
 				afterCurrent: after?.currentTime ?? null,
 			});
@@ -320,19 +341,21 @@ const PixelatedVoiceCloneCardComponent = ({
 				return;
 			}
 
-			if (process.env.NODE_ENV !== 'production') {
-				console.debug('[PixelatedVoiceCloneCard] before track ended, starting after track');
+			if (process.env.NODE_ENV !== "production") {
+				console.debug(
+					"[PixelatedVoiceCloneCard] before track ended, starting after track",
+				);
 			}
 
 			try {
-				setActiveTrack('after');
+				setActiveTrack("after");
 				after.currentTime = 0;
-				if (after.preload !== 'auto') after.load();
+				if (after.preload !== "auto") after.load();
 				await after.play();
 				setIsCanvasAutoAnimating(true);
 				setDistortionMultiplier(2.1);
 			} catch (error) {
-				console.error('Failed to transition to after audio', error, {
+				console.error("Failed to transition to after audio", error, {
 					afterSrc: after.src,
 				});
 				stopPlayback();
@@ -344,18 +367,18 @@ const PixelatedVoiceCloneCardComponent = ({
 				return;
 			}
 
-			if (process.env.NODE_ENV !== 'production') {
-				console.debug('[PixelatedVoiceCloneCard] after track ended');
+			if (process.env.NODE_ENV !== "production") {
+				console.debug("[PixelatedVoiceCloneCard] after track ended");
 			}
 			stopPlayback();
 		};
 
-		before.addEventListener('ended', handleBeforeEnded);
-		after.addEventListener('ended', handleAfterEnded);
+		before.addEventListener("ended", handleBeforeEnded);
+		after.addEventListener("ended", handleAfterEnded);
 
 		return () => {
-			before.removeEventListener('ended', handleBeforeEnded);
-			after.removeEventListener('ended', handleAfterEnded);
+			before.removeEventListener("ended", handleBeforeEnded);
+			after.removeEventListener("ended", handleAfterEnded);
 		};
 	}, [stopPlayback]);
 
@@ -363,42 +386,44 @@ const PixelatedVoiceCloneCardComponent = ({
 		const before = beforeAudioRef.current;
 		const after = afterAudioRef.current;
 		if (!before || !after) {
-			console.warn('[PixelatedVoiceCloneCard] audio elements missing', {
+			console.warn("[PixelatedVoiceCloneCard] audio elements missing", {
 				before: !!before,
 				after: !!after,
 			});
 			return;
 		}
 
-		before.crossOrigin = 'anonymous';
-		after.crossOrigin = 'anonymous';
+		before.crossOrigin = "anonymous";
+		after.crossOrigin = "anonymous";
 
 		try {
 			setIsLoadingAudio(true);
 			audioInteractiveRef.current = true;
 			setIsInteractive(true);
-			setActiveTrack('before');
-			if (process.env.NODE_ENV !== 'production') {
-				console.debug('[PixelatedVoiceCloneCard] attempting playback', {
+			setActiveTrack("before");
+			if (process.env.NODE_ENV !== "production") {
+				console.debug("[PixelatedVoiceCloneCard] attempting playback", {
 					beforeSrc: before.src,
 					afterSrc: after.src,
 				});
 			}
 			before.currentTime = 0;
 			after.currentTime = 0;
-			if (before.preload !== 'auto') before.load();
-			if (after.preload !== 'auto') after.load();
+			if (before.preload !== "auto") before.load();
+			if (after.preload !== "auto") after.load();
 			after.pause();
 			await before.play();
-			if (process.env.NODE_ENV !== 'production') {
-				console.debug('[PixelatedVoiceCloneCard] before track playback started');
+			if (process.env.NODE_ENV !== "production") {
+				console.debug(
+					"[PixelatedVoiceCloneCard] before track playback started",
+				);
 			}
 			setIsCanvasAutoAnimating(true);
 			setDistortionMultiplier(1.8);
 			isPlayingRef.current = true;
 			setIsPlaying(true);
 		} catch (error) {
-			console.error('Failed to play comparison audio', error, {
+			console.error("Failed to play comparison audio", error, {
 				beforeSrc: before.src,
 				afterSrc: after.src,
 			});
@@ -438,21 +463,21 @@ const PixelatedVoiceCloneCardComponent = ({
 	}, [stopPlayback]);
 
 	const handleFileChange = useCallback((file: File) => {
-		if (!file.type.includes('png')) {
-			setImageUploadError('Please upload a PNG image (alpha supported).');
+		if (!file.type.includes("png")) {
+			setImageUploadError("Please upload a PNG image (alpha supported).");
 			return;
 		}
 		setImageUploadError(null);
 		const reader = new FileReader();
 		reader.onload = (event) => {
 			const result = event.target?.result;
-			if (typeof result === 'string') {
+			if (typeof result === "string") {
 				setCustomImageSrc(result);
 				setIsInteractive(true);
 				setIsCanvasAutoAnimating(true);
 				setDistortionMultiplier(1.1);
-				if (process.env.NODE_ENV !== 'production') {
-					console.debug('[PixelatedVoiceCloneCard] custom image uploaded', {
+				if (process.env.NODE_ENV !== "production") {
+					console.debug("[PixelatedVoiceCloneCard] custom image uploaded", {
 						size: file.size,
 						name: file.name,
 					});
@@ -460,17 +485,17 @@ const PixelatedVoiceCloneCardComponent = ({
 			}
 		};
 		reader.onerror = (error) => {
-			console.error('Failed to read uploaded image', error);
-			setImageUploadError('Unable to read that file. Please try another PNG.');
+			console.error("Failed to read uploaded image", error);
+			setImageUploadError("Unable to read that file. Please try another PNG.");
 		};
 		reader.readAsDataURL(file);
 	}, []);
 
 	useEffect(() => {
-		if (process.env.NODE_ENV !== 'production') {
+		if (process.env.NODE_ENV !== "production") {
 			renderCountRef.current += 1;
 			if (renderCountRef.current < 5 || renderCountRef.current % 25 === 0) {
-				console.debug('[PixelatedVoiceCloneCard] render', {
+				console.debug("[PixelatedVoiceCloneCard] render", {
 					renderCount: renderCountRef.current,
 					isInteractive,
 					isPlaying,
@@ -494,13 +519,16 @@ const PixelatedVoiceCloneCardComponent = ({
 			const prev = prevSnapshotRef.current;
 			if (prev) {
 				const changed = Object.entries(snapshot).filter(
-					([key, value]) => prev[key as keyof typeof prev] !== value
+					([key, value]) => prev[key as keyof typeof prev] !== value,
 				);
 				if (changed.length > 0) {
-					console.debug('[PixelatedVoiceCloneCard] state changes', Object.fromEntries(changed));
+					console.debug(
+						"[PixelatedVoiceCloneCard] state changes",
+						Object.fromEntries(changed),
+					);
 				}
 			} else {
-				console.debug('[PixelatedVoiceCloneCard] initial snapshot', snapshot);
+				console.debug("[PixelatedVoiceCloneCard] initial snapshot", snapshot);
 			}
 			prevSnapshotRef.current = snapshot;
 		}
@@ -522,8 +550,8 @@ const PixelatedVoiceCloneCardComponent = ({
 		<div
 			ref={containerRef}
 			className={cn(
-				'relative mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-12 sm:px-6 lg:px-8',
-				className
+				"relative mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-12 sm:px-6 lg:px-8",
+				className,
 			)}
 		>
 			<div className="-z-10 absolute inset-0 rounded-[44px] bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_60%)] dark:bg-[radial-gradient(circle_at_top,_rgba(79,70,229,0.18),_transparent_60%)]" />
@@ -534,12 +562,12 @@ const PixelatedVoiceCloneCardComponent = ({
 				onPointerCancel={resetTilt}
 				onPointerMove={handlePointerMove}
 				className={cn(
-					'group relative w-full cursor-pointer rounded-3xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-100 to-slate-200/60 p-[2px] shadow-xl backdrop-blur transition-transform duration-200 ease-out dark:border-white/10 dark:from-slate-900/50 dark:via-indigo-900/40 dark:to-slate-950/60',
-					isInteractive && 'border-sky-400/60 dark:border-sky-400/60'
+					"group relative w-full cursor-pointer rounded-3xl border border-slate-200/70 bg-gradient-to-br from-white via-slate-100 to-slate-200/60 p-[2px] shadow-xl backdrop-blur transition-transform duration-200 ease-out dark:border-white/10 dark:from-slate-900/50 dark:via-indigo-900/40 dark:to-slate-950/60",
+					isInteractive && "border-sky-400/60 dark:border-sky-400/60",
 				)}
 				style={{
-					transform: 'perspective(1200px) rotateX(0deg) rotateY(0deg)',
-					willChange: 'transform',
+					transform: "perspective(1200px) rotateX(0deg) rotateY(0deg)",
+					willChange: "transform",
 				}}
 			>
 				<div
@@ -564,7 +592,9 @@ const PixelatedVoiceCloneCardComponent = ({
 								backgroundColor={CANVAS_CONFIG.backgroundColor}
 								dropoutStrength={CANVAS_CONFIG.dropoutStrength}
 								interactive={isInteractive}
-								distortionStrength={CANVAS_CONFIG.baseDistortionStrength * distortionMultiplier}
+								distortionStrength={
+									CANVAS_CONFIG.baseDistortionStrength * distortionMultiplier
+								}
 								distortionRadius={CANVAS_CONFIG.distortionRadius}
 								distortionMode="swirl"
 								followSpeed={CANVAS_CONFIG.followSpeed}
@@ -610,10 +640,10 @@ const PixelatedVoiceCloneCardComponent = ({
 						preload="none"
 						crossOrigin="anonymous"
 						onError={() => {
-							if (process.env.NODE_ENV !== 'production') {
+							if (process.env.NODE_ENV !== "production") {
 								console.warn(
-									'[PixelatedVoiceCloneCard] failed to load before audio',
-									beforeAudioSrc
+									"[PixelatedVoiceCloneCard] failed to load before audio",
+									beforeAudioSrc,
 								);
 							}
 						}}
@@ -632,8 +662,11 @@ const PixelatedVoiceCloneCardComponent = ({
 						preload="none"
 						crossOrigin="anonymous"
 						onError={() => {
-							if (process.env.NODE_ENV !== 'production') {
-								console.warn('[PixelatedVoiceCloneCard] failed to load after audio', afterAudioSrc);
+							if (process.env.NODE_ENV !== "production") {
+								console.warn(
+									"[PixelatedVoiceCloneCard] failed to load after audio",
+									afterAudioSrc,
+								);
 							}
 						}}
 					>
@@ -653,7 +686,9 @@ const PixelatedVoiceCloneCardComponent = ({
 				revealText="Sound unmistakably like you."
 				className="mx-auto max-w-3xl border-slate-200/70 bg-white/90 text-slate-900 dark:border-neutral-800/60 dark:bg-[#101014] dark:text-white"
 			>
-				<TextRevealCardTitle>Hover to see how we build authenticity at scale.</TextRevealCardTitle>
+				<TextRevealCardTitle>
+					Hover to see how we build authenticity at scale.
+				</TextRevealCardTitle>
 				<TextRevealCardDescription>
 					Track the shift from robotic to expressive delivery in real time.
 				</TextRevealCardDescription>
@@ -663,4 +698,4 @@ const PixelatedVoiceCloneCardComponent = ({
 };
 
 export const PixelatedVoiceCloneCard = memo(PixelatedVoiceCloneCardComponent);
-PixelatedVoiceCloneCard.displayName = 'PixelatedVoiceCloneCard';
+PixelatedVoiceCloneCard.displayName = "PixelatedVoiceCloneCard";

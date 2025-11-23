@@ -1,24 +1,26 @@
-'use client';
-import { CallCompleteModal } from '@/components/deal_scale/talkingCards/session/CallCompleteModal';
-import { useNavigationRouter } from '@/hooks/useNavigationRouter';
-import { useState } from 'react';
-import HeroSessionMonitorClient from './HeroSessionMonitorClient';
+"use client";
+import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
+import { useNavigationRouter } from "@/hooks/useNavigationRouter";
+import { useState } from "react";
+import HeroSessionMonitorClient from "./HeroSessionMonitorClient";
 
 export default function HeroSessionMonitorClientWithModal() {
 	const router = useNavigationRouter();
 	// State for controlling the call completion modal's visibility
 	const [showCallCompleteModal, setShowCallCompleteModal] = useState(false);
-	const [modalContent, setModalContent] = useState<'complete' | 'transfer'>('complete');
+	const [modalContent, setModalContent] = useState<"complete" | "transfer">(
+		"complete",
+	);
 
 	const [sessionReset, setSessionReset] = useState(() => () => {});
 
 	const handleCallEnd = () => {
-		setModalContent('complete');
+		setModalContent("complete");
 		setShowCallCompleteModal(true);
 	};
 
 	const handleTransfer = () => {
-		setModalContent('transfer');
+		setModalContent("transfer");
 		setShowCallCompleteModal(true);
 	};
 
@@ -33,17 +35,19 @@ export default function HeroSessionMonitorClientWithModal() {
 				badge="AI Powered Seller Lead Qualification & Appointment Setting"
 				ctaLabel="Request Founders Circle Access"
 				ctaLabel2="Get Free Ai Call Credits"
-				onCtaClick={() => router.push('/contact')}
+				onCtaClick={() => router.push("/contact")}
 				onCtaClick2={() => setShowCallCompleteModal(true)}
 				highlight="Dead-End Leads?"
 				highlightWords={[
 					{
-						word: 'AI suite does the grunt work',
-						gradient: 'from-violet-600 to-blue-500 dark:from-primary dark:to-accent',
+						word: "AI suite does the grunt work",
+						gradient:
+							"from-violet-600 to-blue-500 dark:from-primary dark:to-accent",
 					},
 					{
-						word: 'closing deals',
-						gradient: 'from-emerald-600 to-cyan-500 dark:from-secondary dark:to-accent',
+						word: "closing deals",
+						gradient:
+							"from-emerald-600 to-cyan-500 dark:from-secondary dark:to-accent",
 					},
 				]}
 			/>

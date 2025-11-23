@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import demoTranscript from '@/data/transcripts';
-import { cn } from '@/lib/utils';
-import type { Transcript } from '@/types/transcript';
-import { motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
-import type { StaticImageData } from 'next/image';
+import demoTranscript from "@/data/transcripts";
+import { cn } from "@/lib/utils";
+import type { Transcript } from "@/types/transcript";
+import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import type { StaticImageData } from "next/image";
 
 // Define words to highlight with their corresponding gradient colors
 const HIGHLIGHT_WORDS = [
-	{ word: 'real-time', gradient: 'from-primary to-focus' },
-	{ word: 'insights', gradient: 'from-blue-500 to-cyan-400' },
-	{ word: 'analytics', gradient: 'from-purple-500 to-pink-500' },
-	{ word: 'monitor', gradient: 'from-emerald-500 to-teal-400' },
+	{ word: "real-time", gradient: "from-primary to-focus" },
+	{ word: "insights", gradient: "from-blue-500 to-cyan-400" },
+	{ word: "analytics", gradient: "from-purple-500 to-pink-500" },
+	{ word: "monitor", gradient: "from-emerald-500 to-teal-400" },
 ];
 
 // Animation variants for framer-motion
@@ -51,11 +51,11 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 	transcript = demoTranscript,
 	className,
 	headline,
-	subheadline = '',
-	highlight = 'Appointments Delivered',
+	subheadline = "",
+	highlight = "Appointments Delivered",
 	highlightWords = HIGHLIGHT_WORDS,
-	ctaLabel = 'Get Started',
-	ctaLabel2 = 'Get Started',
+	ctaLabel = "Get Started",
+	ctaLabel2 = "Get Started",
 
 	onCtaClick,
 	onCtaClick2,
@@ -75,11 +75,11 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 		const parts: (string | JSX.Element)[] = [text];
 
 		for (const { word, gradient } of highlightWords) {
-			const regex = new RegExp(`\\b${word}\\b`, 'gi');
+			const regex = new RegExp(`\\b${word}\\b`, "gi");
 			const newParts: (string | JSX.Element)[] = [];
 
 			for (const part of parts) {
-				if (typeof part !== 'string') {
+				if (typeof part !== "string") {
 					newParts.push(part);
 					continue;
 				}
@@ -101,7 +101,7 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 							className={`bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
 						>
 							{match[0]}
-						</span>
+						</span>,
 					);
 
 					lastIndex = match.index + match[0].length;
@@ -120,16 +120,19 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 		return <>{parts.length > 0 ? parts : text}</>;
 	};
 
-	const DemoTabs = dynamic(() => import('@/components/deal_scale/demo/tabs/DemoTabs'), {
-		loading: () => <HeroDemoSkeleton />,
-		ssr: false,
-	});
+	const DemoTabs = dynamic(
+		() => import("@/components/deal_scale/demo/tabs/DemoTabs"),
+		{
+			loading: () => <HeroDemoSkeleton />,
+			ssr: false,
+		},
+	);
 	return (
 		<section
 			className={cn(
-				'mx-auto mt-16 mb-8 grid w-full max-w-[calc(100vw-3rem)] items-center gap-8 sm:mt-24 sm:mb-16 sm:max-w-2xl sm:px-6 md:max-w-3xl lg:my-16 lg:max-w-5xl lg:grid-cols-2 lg:gap-10 lg:px-8 xl:max-w-6xl 2xl:max-w-7xl',
-				'lg:min-h-[640px] xl:min-h-[720px]',
-				className
+				"mx-auto mt-16 mb-8 grid w-full max-w-[calc(100vw-3rem)] items-center gap-8 sm:mt-24 sm:mb-16 sm:max-w-2xl sm:px-6 md:max-w-3xl lg:my-16 lg:max-w-5xl lg:grid-cols-2 lg:gap-10 lg:px-8 xl:max-w-6xl 2xl:max-w-7xl",
+				"lg:min-h-[640px] xl:min-h-[720px]",
+				className,
 			)}
 			aria-labelledby="hero-heading"
 		>
@@ -179,13 +182,13 @@ const HeroSessionMonitor: React.FC<HeroSessionMonitorProps> = ({
 								onClick={onCtaClick2}
 								type="button"
 								className={cn(
-									'animate-pulse rounded-md px-3.5 py-2.5 font-semibold text-sm shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-yellow-400 focus-visible:outline-offset-2',
-									'bg-gradient-to-r from-pink-500 via-red-500 to-yellow-400 text-white hover:from-pink-600 hover:via-red-600 hover:to-yellow-500',
-									'dark:bg-gradient-to-r dark:from-pink-700 dark:via-red-700 dark:to-yellow-600 dark:text-black'
+									"animate-pulse rounded-md px-3.5 py-2.5 font-semibold text-sm shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-yellow-400 focus-visible:outline-offset-2",
+									"bg-gradient-to-r from-pink-500 via-red-500 to-yellow-400 text-white hover:from-pink-600 hover:via-red-600 hover:to-yellow-500",
+									"dark:bg-gradient-to-r dark:from-pink-700 dark:via-red-700 dark:to-yellow-600 dark:text-black",
 								)}
 								style={{
 									boxShadow:
-										'0 4px 24px 0 rgba(255, 128, 0, 0.17), 0 2px 4px 0 rgba(255, 0, 128, 0.13)',
+										"0 4px 24px 0 rgba(255, 128, 0, 0.17), 0 2px 4px 0 rgba(255, 0, 128, 0.13)",
 								}}
 							>
 								{ctaLabel2}

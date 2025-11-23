@@ -1,6 +1,6 @@
-import type { AgentConfig } from '../agents';
-import type { ABTest } from '../testing';
-import type { ProductShippingInfo } from './shipping';
+import type { AgentConfig } from "../agents";
+import type { ABTest } from "../testing";
+import type { ProductShippingInfo } from "./shipping";
 
 export type SizingChart = ReadonlyArray<{
 	label: string;
@@ -19,7 +19,7 @@ export interface Review {
 }
 
 interface SalesIncentive {
-	type: 'onSale' | 'limitedTime' | 'clearance' | 'bundle' | 'newArrival';
+	type: "onSale" | "limitedTime" | "clearance" | "bundle" | "newArrival";
 	description?: string;
 	discountPercent?: number;
 	expiresAt?: Date; // Changed from string to Date
@@ -32,16 +32,16 @@ export interface ProductFaq {
 }
 
 export enum LicenseType {
-	MIT = 'MIT',
-	Apache_2_0 = 'Apache-2.0',
-	GPL_3_0 = 'GPL-3.0',
-	BSD_2_Clause = 'BSD-2-Clause',
-	BSD_3_Clause = 'BSD-3-Clause',
-	MPL_2_0 = 'MPL-2.0',
-	LGPL_3_0 = 'LGPL-3.0',
-	EPL_2_0 = 'EPL-2.0',
-	Unlicense = 'Unlicense',
-	Proprietary = 'Proprietary',
+	MIT = "MIT",
+	Apache_2_0 = "Apache-2.0",
+	GPL_3_0 = "GPL-3.0",
+	BSD_2_Clause = "BSD-2-Clause",
+	BSD_3_Clause = "BSD-3-Clause",
+	MPL_2_0 = "MPL-2.0",
+	LGPL_3_0 = "LGPL-3.0",
+	EPL_2_0 = "EPL-2.0",
+	Unlicense = "Unlicense",
+	Proprietary = "Proprietary",
 	// Add more as needed for your catalog
 }
 export interface TechLicense {
@@ -63,28 +63,28 @@ export interface ProductFaq {
 }
 
 export enum ProductCategory {
-	Credits = 'credits',
-	Workflows = 'workflows',
-	Essentials = 'essentials',
-	Notion = 'notion',
-	Voices = 'voices',
-	TextAgents = 'text-agents',
-	Leads = 'leads',
-	Data = 'data',
-	Monetize = 'monetize',
-	Automation = 'automation',
-	AddOn = 'add-on',
-	Agents = 'agents',
-	FreeResources = 'free-resources',
-	SalesScripts = 'sales-scripts',
-	Prompts = 'prompts',
-	RemoteClosers = 'remote-closers',
+	Credits = "credits",
+	Workflows = "workflows",
+	Essentials = "essentials",
+	Notion = "notion",
+	Voices = "voices",
+	TextAgents = "text-agents",
+	Leads = "leads",
+	Data = "data",
+	Monetize = "monetize",
+	Automation = "automation",
+	AddOn = "add-on",
+	Agents = "agents",
+	FreeResources = "free-resources",
+	SalesScripts = "sales-scripts",
+	Prompts = "prompts",
+	RemoteClosers = "remote-closers",
 }
 
 /** Metadata describing an associated downloadable file or external free resource. */
 export interface ProductResource {
 	/** Determines whether the resource should be downloaded or opened in a new tab. */
-	type: 'download' | 'external';
+	type: "download" | "external";
 	/** Destination URL for the resource or file. */
 	url: string;
 	/** Optional human-readable filename presented to users for downloads. */

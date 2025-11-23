@@ -7,17 +7,19 @@ export type EventPageParamsInput = EventPageParams | Promise<EventPageParams>;
 export class ResolveEventParamsError extends Error {
 	constructor(message: string) {
 		super(message);
-		this.name = 'ResolveEventParamsError';
+		this.name = "ResolveEventParamsError";
 	}
 }
 
-export async function resolveEventParams(params: EventPageParamsInput): Promise<EventPageParams> {
+export async function resolveEventParams(
+	params: EventPageParamsInput,
+): Promise<EventPageParams> {
 	try {
 		const resolved = await params;
 		const slug = resolved?.slug?.trim();
 
 		if (!slug) {
-			throw new ResolveEventParamsError('Missing event slug');
+			throw new ResolveEventParamsError("Missing event slug");
 		}
 
 		return { slug };
@@ -26,6 +28,6 @@ export async function resolveEventParams(params: EventPageParamsInput): Promise<
 			throw error;
 		}
 
-		throw new ResolveEventParamsError('Failed to resolve event params');
+		throw new ResolveEventParamsError("Failed to resolve event params");
 	}
 }

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // TEMPORARILY DISABLED: Module-level dynamic() causes SSR serialization errors
 // This file is not being used - LiveDynamicHero is commented out in page.tsx

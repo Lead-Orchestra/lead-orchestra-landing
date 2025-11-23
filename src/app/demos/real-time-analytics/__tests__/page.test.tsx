@@ -1,12 +1,12 @@
-import '@testing-library/jest-dom/vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import "@testing-library/jest-dom/vitest";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
-import { FeatureShowcase } from '@/components/demos/real-time-analytics/FeatureShowcase';
-import { REAL_TIME_FEATURES } from '@/components/demos/real-time-analytics/feature-config';
+import { FeatureShowcase } from "@/components/demos/real-time-analytics/FeatureShowcase";
+import { REAL_TIME_FEATURES } from "@/components/demos/real-time-analytics/feature-config";
 
-vi.mock('@/components/ui/macbook-scroll', () => ({
+vi.mock("@/components/ui/macbook-scroll", () => ({
 	__esModule: true,
 	MacbookScroll: ({
 		src,
@@ -16,7 +16,7 @@ vi.mock('@/components/ui/macbook-scroll', () => ({
 		title?: string;
 	}) => (
 		<div data-testid="macbook-scroll">
-			{src ? <img src={src} alt={title ?? 'macbook-demo'} /> : null}
+			{src ? <img src={src} alt={title ?? "macbook-demo"} /> : null}
 		</div>
 	),
 }));
@@ -42,7 +42,7 @@ class IntersectionObserverMock {
 					target: element,
 				} as IntersectionObserverEntry,
 			],
-			this as unknown as IntersectionObserver
+			this as unknown as IntersectionObserver,
 		);
 	}
 
@@ -51,7 +51,9 @@ class IntersectionObserverMock {
 }
 
 let originalResizeObserver: typeof global.ResizeObserver | undefined;
-let originalIntersectionObserver: typeof global.IntersectionObserver | undefined;
+let originalIntersectionObserver:
+	| typeof global.IntersectionObserver
+	| undefined;
 
 beforeAll(() => {
 	originalResizeObserver = global.ResizeObserver;
@@ -73,8 +75,11 @@ let warnSpy: ReturnType<typeof vi.spyOn> | undefined;
 
 beforeAll(() => {
 	const originalWarn = console.warn.bind(console);
-	warnSpy = vi.spyOn(console, 'warn').mockImplementation((message, ...args) => {
-		if (typeof message === 'string' && message.includes('The width(0) and height(0) of chart')) {
+	warnSpy = vi.spyOn(console, "warn").mockImplementation((message, ...args) => {
+		if (
+			typeof message === "string" &&
+			message.includes("The width(0) and height(0) of chart")
+		) {
 			return;
 		}
 
@@ -102,50 +107,54 @@ afterAll(() => {
 	}
 });
 
-describe('RealTimeAnalytics demo showcase', () => {
-	it('renders the default feature with its Macbook media', async () => {
+describe("RealTimeAnalytics demo showcase", () => {
+	it("renders the default feature with its Macbook media", async () => {
 		render(<FeatureShowcase features={REAL_TIME_FEATURES} />);
 
 		const defaultFeature = REAL_TIME_FEATURES[0];
 
 		expect(
-			screen.getByRole('tab', {
+			screen.getByRole("tab", {
 				name: defaultFeature.label,
 				selected: true,
-			})
+			}),
 		).toBeInTheDocument();
 
-		expect(await screen.findByAltText(defaultFeature.media.alt)).toBeInTheDocument();
+		expect(
+			await screen.findByAltText(defaultFeature.media.alt),
+		).toBeInTheDocument();
 
-		expect(await screen.findByTestId('realtime-analytics-chart')).toBeInTheDocument();
+		expect(
+			await screen.findByTestId("realtime-analytics-chart"),
+		).toBeInTheDocument();
 
 		for (const highlight of defaultFeature.highlights) {
 			expect(await screen.findByText(highlight.title)).toBeInTheDocument();
 		}
 	});
 
-	it('allows switching between feature demos and updates the Macbook media', async () => {
+	it("allows switching between feature demos and updates the Macbook media", async () => {
 		const user = userEvent.setup();
 		render(<FeatureShowcase features={REAL_TIME_FEATURES} />);
 
 		const targetFeature = REAL_TIME_FEATURES[1];
 		await user.click(
-			screen.getByRole('tab', {
+			screen.getByRole("tab", {
 				name: targetFeature.label,
-			})
+			}),
 		);
 
 		expect(
-			screen.getByRole('tab', {
+			screen.getByRole("tab", {
 				name: targetFeature.label,
 				selected: true,
-			})
+			}),
 		).toBeInTheDocument();
 
 		expect(
 			await screen.findByAltText(targetFeature.media.alt, undefined, {
 				timeout: 5000,
-			})
+			}),
 		).toBeInTheDocument();
 
 		for (const highlight of targetFeature.highlights) {

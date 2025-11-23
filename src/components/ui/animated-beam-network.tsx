@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { Cloud, Globe, Layers, MessageCircle, Server, Zap } from 'lucide-react';
-import { motion } from 'motion/react';
-import { createRef, forwardRef, useMemo, useRef } from 'react';
-import type { ReactNode } from 'react';
+import { Cloud, Globe, Layers, MessageCircle, Server, Zap } from "lucide-react";
+import { motion } from "motion/react";
+import { createRef, forwardRef, useMemo, useRef } from "react";
+import type { ReactNode } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import { AnimatedBeam } from './animated-beam';
-import { BackgroundBeamsWithCollision } from './background-beams-with-collision';
-import { LightRays } from './light-rays';
+import { AnimatedBeam } from "./animated-beam";
+import { BackgroundBeamsWithCollision } from "./background-beams-with-collision";
+import { LightRays } from "./light-rays";
 
 export interface AnimatedBeamNetworkNode {
 	id: string;
@@ -24,46 +24,46 @@ export interface AnimatedBeamNetworkProps {
 	description?: string;
 	centerLabel?: string;
 	nodes?: AnimatedBeamNetworkNode[];
-	variant?: 'full' | 'background';
+	variant?: "full" | "background";
 	showLabels?: boolean;
 	showCenterLabel?: boolean;
 	centerContent?: ReactNode;
 }
 
-const DEFAULT_TITLE = 'Integrations on Autopilot';
+const DEFAULT_TITLE = "Integrations on Autopilot";
 const DEFAULT_DESCRIPTION =
-	'Visualize how DealScale orchestrates data through your stack. Each beam represents real-time sync between the platforms your team already trusts.';
-const DEFAULT_CENTER_LABEL = 'DealScale Core';
+	"Visualize how DealScale orchestrates data through your stack. Each beam represents real-time sync between the platforms your team already trusts.";
+const DEFAULT_CENTER_LABEL = "DealScale Core";
 
 const DEFAULT_NODES: AnimatedBeamNetworkNode[] = [
 	{
-		id: 'cloud-sync',
-		label: 'Cloud Storage',
+		id: "cloud-sync",
+		label: "Cloud Storage",
 		icon: <Cloud className="h-5 w-5 text-sky-500" />,
 	},
 	{
-		id: 'automation',
-		label: 'Automation',
+		id: "automation",
+		label: "Automation",
 		icon: <Zap className="h-5 w-5 text-amber-400" />,
 	},
 	{
-		id: 'messaging',
-		label: 'Messaging',
+		id: "messaging",
+		label: "Messaging",
 		icon: <MessageCircle className="h-5 w-5 text-rose-400" />,
 	},
 	{
-		id: 'workflow',
-		label: 'Workflow',
+		id: "workflow",
+		label: "Workflow",
 		icon: <Layers className="h-5 w-5 text-emerald-400" />,
 	},
 	{
-		id: 'api',
-		label: 'API Hub',
+		id: "api",
+		label: "API Hub",
 		icon: <Server className="h-5 w-5 text-indigo-400" />,
 	},
 	{
-		id: 'global',
-		label: 'Global Ops',
+		id: "global",
+		label: "Global Ops",
 		icon: <Globe className="h-5 w-5 text-purple-400" />,
 	},
 ];
@@ -94,8 +94,8 @@ const NodeCircle = forwardRef<HTMLDivElement, NodeCircleProps>(
 	({ icon, label, className, showLabel = true }, ref) => (
 		<div
 			className={cn(
-				'flex flex-col items-center gap-3 text-center text-muted-foreground text-xs sm:text-sm',
-				!showLabel && 'gap-0'
+				"flex flex-col items-center gap-3 text-center text-muted-foreground text-xs sm:text-sm",
+				!showLabel && "gap-0",
 			)}
 		>
 			<div
@@ -103,21 +103,23 @@ const NodeCircle = forwardRef<HTMLDivElement, NodeCircleProps>(
 				role="img"
 				aria-label={label}
 				className={cn(
-					'flex size-12 items-center justify-center rounded-full border border-white/50 bg-white/90 shadow-[0_0_35px_rgba(59,130,246,0.2)] backdrop-blur-sm dark:border-white/10 dark:bg-slate-900/80',
-					className
+					"flex size-12 items-center justify-center rounded-full border border-white/50 bg-white/90 shadow-[0_0_35px_rgba(59,130,246,0.2)] backdrop-blur-sm dark:border-white/10 dark:bg-slate-900/80",
+					className,
 				)}
 			>
 				<span className="sr-only">{label}</span>
 				{icon}
 			</div>
 			{showLabel ? (
-				<span className="font-medium text-foreground/80 dark:text-foreground/70">{label}</span>
+				<span className="font-medium text-foreground/80 dark:text-foreground/70">
+					{label}
+				</span>
 			) : null}
 		</div>
-	)
+	),
 );
 
-NodeCircle.displayName = 'NodeCircle';
+NodeCircle.displayName = "NodeCircle";
 
 export function AnimatedBeamNetwork({
 	className,
@@ -125,14 +127,14 @@ export function AnimatedBeamNetwork({
 	description = DEFAULT_DESCRIPTION,
 	centerLabel = DEFAULT_CENTER_LABEL,
 	nodes,
-	variant = 'full',
+	variant = "full",
 	showLabels,
 	showCenterLabel,
 	centerContent,
 }: AnimatedBeamNetworkProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const centerRef = useRef<HTMLDivElement>(null);
-	const isBackground = variant === 'background';
+	const isBackground = variant === "background";
 
 	const resolvedNodes = useMemo(() => {
 		if (!nodes || nodes.length === 0) {
@@ -148,7 +150,7 @@ export function AnimatedBeamNetwork({
 
 	const nodeRefs = useMemo(
 		() => resolvedNodes.map(() => createRef<HTMLDivElement>()),
-		[resolvedNodes]
+		[resolvedNodes],
 	);
 
 	const beamPathWidth = isBackground ? 2.6 : 1.8;
@@ -157,17 +159,17 @@ export function AnimatedBeamNetwork({
 	return (
 		<section
 			className={cn(
-				'relative w-full overflow-hidden rounded-3xl border border-border/50 bg-background/70 shadow-2xl backdrop-blur-xl',
+				"relative w-full overflow-hidden rounded-3xl border border-border/50 bg-background/70 shadow-2xl backdrop-blur-xl",
 				isBackground &&
-					'pointer-events-none border-transparent bg-transparent shadow-none backdrop-blur-none',
-				className
+					"pointer-events-none border-transparent bg-transparent shadow-none backdrop-blur-none",
+				className,
 			)}
 			data-testid="animated-beam-network"
 		>
 			<BackgroundBeamsWithCollision
 				className={cn(
-					'min-h-[32rem] rounded-[inherit] bg-gradient-to-b from-background via-background/60 to-background/90 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950',
-					isBackground && 'min-h-full'
+					"min-h-[32rem] rounded-[inherit] bg-gradient-to-b from-background via-background/60 to-background/90 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950",
+					isBackground && "min-h-full",
 				)}
 			>
 				<LightRays className="opacity-80" length="120%" blur={38} />
@@ -197,8 +199,8 @@ export function AnimatedBeamNetwork({
 
 				<div
 					className={cn(
-						'relative z-10 flex h-full w-full flex-col items-center gap-10 px-6 py-12 sm:px-10 md:gap-12 md:py-16',
-						isBackground && 'px-0 py-0 md:py-0'
+						"relative z-10 flex h-full w-full flex-col items-center gap-10 px-6 py-12 sm:px-10 md:gap-12 md:py-16",
+						isBackground && "px-0 py-0 md:py-0",
 					)}
 				>
 					{isBackground ? null : (
@@ -218,8 +220,8 @@ export function AnimatedBeamNetwork({
 					<div
 						ref={containerRef}
 						className={cn(
-							'relative flex w-full max-w-3xl flex-col gap-12',
-							isBackground && 'max-w-none px-6 py-12 sm:px-12'
+							"relative flex w-full max-w-3xl flex-col gap-12",
+							isBackground && "max-w-none px-6 py-12 sm:px-12",
 						)}
 					>
 						{resolvedNodes.map((_, index) => (
@@ -244,10 +246,10 @@ export function AnimatedBeamNetwork({
 						<div className="flex flex-col gap-10">
 							{layoutSlots.map((slotRow, rowIndex) => (
 								<div
-									key={slotRow.join('-')}
+									key={slotRow.join("-")}
 									className={cn(
-										'flex items-center justify-between gap-6',
-										rowIndex === 1 && 'relative'
+										"flex items-center justify-between gap-6",
+										rowIndex === 1 && "relative",
 									)}
 								>
 									{slotRow.map((slotIndex) => {
@@ -255,7 +257,12 @@ export function AnimatedBeamNetwork({
 										const nodeRef = nodeRefs[slotIndex];
 
 										if (!node || !nodeRef) {
-											return <div key={`placeholder-${slotIndex}`} className="flex-1" />;
+											return (
+												<div
+													key={`placeholder-${slotIndex}`}
+													className="flex-1"
+												/>
+											);
 										}
 
 										return (

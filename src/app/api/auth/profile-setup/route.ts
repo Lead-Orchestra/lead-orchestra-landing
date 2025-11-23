@@ -1,8 +1,8 @@
-import { authOptions } from '@/lib/authOptions';
-import { getServerSession } from 'next-auth';
-import { type NextRequest, NextResponse } from 'next/server';
-
-const DEALSCALE_API_BASE = process.env.DEALSCALE_API_BASE || 'https://api.dealscale.io';
+import { authOptions } from "@/lib/authOptions";
+import { getServerSession } from "next-auth";
+import { type NextRequest, NextResponse } from "next/server";
+const DEALSCALE_API_BASE =
+	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 interface ProfileSetupUpdateRequest {
 	basic_info_completed?: boolean;
@@ -19,32 +19,41 @@ export async function GET() {
 	try {
 		const session = await getServerSession(authOptions);
 		if (!session?.user || !session?.dsTokens?.access_token) {
-			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
 		// Call DealScale backend API to get profile setup progress
-		const profileResponse = await fetch(`${DEALSCALE_API_BASE}/api/v1/auth/profile-setup`, {
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${session.dsTokens.access_token}`,
-				'Content-Type': 'application/json',
+		const profileResponse = await fetch(
+			`${DEALSCALE_API_BASE}/api/v1/auth/profile-setup`,
+			{
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${session.dsTokens.access_token}`,
+					"Content-Type": "application/json",
+				},
 			},
-		});
+		);
 
 		if (!profileResponse.ok) {
 			console.error(
-				'Failed to get profile setup:',
+				"Failed to get profile setup:",
 				profileResponse.status,
-				await profileResponse.text()
+				await profileResponse.text(),
 			);
-			return NextResponse.json({ error: 'Failed to get profile setup' }, { status: 500 });
+			return NextResponse.json(
+				{ error: "Failed to get profile setup" },
+				{ status: 500 },
+			);
 		}
 
 		const data = await profileResponse.json();
 		return NextResponse.json(data);
 	} catch (error) {
-		console.error('Profile setup get error:', error);
-		return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+		console.error("Profile setup get error:", error);
+		return NextResponse.json(
+			{ error: "Internal server error" },
+			{ status: 500 },
+		);
 	}
 }
 
@@ -61,40 +70,49 @@ export async function PUT(req: NextRequest) {
 	try {
 		const session = await getServerSession(authOptions);
 		if (!session?.user || !session?.dsTokens?.access_token) {
-			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
 		const body: ProfileSetupUpdateRequest = await req.json();
 
 		// Call DealScale backend API to update profile setup progress
-		const updateResponse = await fetch(`${DEALSCALE_API_BASE}/api/v1/auth/profile-setup`, {
-			method: 'PUT',
-			headers: {
-				Authorization: `Bearer ${session.dsTokens.access_token}`,
-				'Content-Type': 'application/json',
+		const updateResponse = await fetch(
+			`${DEALSCALE_API_BASE}/api/v1/auth/profile-setup`,
+			{
+				method: "PUT",
+				headers: {
+					Authorization: `Bearer ${session.dsTokens.access_token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					basic_info_completed: body.basic_info_completed ?? false,
+					preferences_set: body.preferences_set ?? false,
+					payment_method_added: body.payment_method_added ?? false,
+					email_verified: body.email_verified ?? false,
+					phone_verified: body.phone_verified ?? false,
+				}),
 			},
-			body: JSON.stringify({
-				basic_info_completed: body.basic_info_completed ?? false,
-				preferences_set: body.preferences_set ?? false,
-				payment_method_added: body.payment_method_added ?? false,
-				email_verified: body.email_verified ?? false,
-				phone_verified: body.phone_verified ?? false,
-			}),
-		});
+		);
 
 		if (!updateResponse.ok) {
 			console.error(
-				'Failed to update profile setup:',
+				"Failed to update profile setup:",
 				updateResponse.status,
-				await updateResponse.text()
+				await updateResponse.text(),
 			);
-			return NextResponse.json({ error: 'Failed to update profile setup' }, { status: 500 });
+			return NextResponse.json(
+				{ error: "Failed to update profile setup" },
+				{ status: 500 },
+			);
 		}
 
 		const data = await updateResponse.json();
 		return NextResponse.json(data);
 	} catch (error) {
-		console.error('Profile setup update error:', error);
-		return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+		console.error("Profile setup update error:", error);
+		return NextResponse.json(
+			{ error: "Internal server error" },
+			{ status: 500 },
+		);
 	}
 }

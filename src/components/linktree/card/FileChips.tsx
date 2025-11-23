@@ -1,10 +1,10 @@
-'use client';
-import * as React from 'react';
+"use client";
+import * as React from "react";
 
 export type FileChip = {
 	name: string;
 	url: string;
-	kind?: 'image' | 'video' | 'other';
+	kind?: "image" | "video" | "other";
 };
 
 export type FileChipsProps = {
@@ -23,7 +23,13 @@ function isVideo(url: string): boolean {
 	return /(\.(mp4|webm|ogg|ogv|mov|m4v))(?:$|\?|#)/i.test(url);
 }
 
-export function FileChips({ files, pageId, slug, imageUrl, videoUrl }: FileChipsProps) {
+export function FileChips({
+	files,
+	pageId,
+	slug,
+	imageUrl,
+	videoUrl,
+}: FileChipsProps) {
 	if (!files || files.length === 0) return null;
 
 	const filtered = files.filter((f) => {
@@ -40,10 +46,15 @@ export function FileChips({ files, pageId, slug, imageUrl, videoUrl }: FileChips
 		<div className="mt-2 flex flex-wrap items-center gap-1.5">
 			{filtered.map((f) => {
 				const to = encodeURIComponent(f.url);
-				const pid = pageId ? `&pageId=${encodeURIComponent(pageId)}` : '';
-				const s = slug ? `&slug=${encodeURIComponent(slug)}` : '';
+				const pid = pageId ? `&pageId=${encodeURIComponent(pageId)}` : "";
+				const s = slug ? `&slug=${encodeURIComponent(slug)}` : "";
 				const url = `/api/redirect?isFile=1&to=${to}${pid}${s}`;
-				const icon = f.kind === 'video' || isVideo(f.url) ? '▶' : isImage(f.url) ? '🖼️' : '⬇';
+				const icon =
+					f.kind === "video" || isVideo(f.url)
+						? "▶"
+						: isImage(f.url)
+							? "🖼️"
+							: "⬇";
 				return (
 					<button
 						key={f.url}
@@ -51,7 +62,7 @@ export function FileChips({ files, pageId, slug, imageUrl, videoUrl }: FileChips
 						onClick={(e) => {
 							e.preventDefault();
 							e.stopPropagation();
-							window.open(url, '_self');
+							window.open(url, "_self");
 						}}
 						className="inline-flex max-w-[10rem] items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] text-muted-foreground leading-5 hover:bg-accent"
 						aria-label={`Open ${f.name}`}

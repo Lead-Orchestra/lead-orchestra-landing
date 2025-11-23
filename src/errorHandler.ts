@@ -1,4 +1,4 @@
-import { type NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from "next/server";
 
 type Handler = (req: NextRequest) => Promise<NextResponse>;
 
@@ -15,13 +15,13 @@ export default function apiHandler(handlers: Handlers) {
 				return await handlers[method](req);
 			} catch (error) {
 				// Log error and return a standard error response
-				console.error('[API Error]', error);
+				console.error("[API Error]", error);
 				return NextResponse.json(
 					{
 						success: false,
-						message: error instanceof Error ? error.message : 'Unknown error',
+						message: error instanceof Error ? error.message : "Unknown error",
 					},
-					{ status: 500 }
+					{ status: 500 },
 				);
 			}
 		};

@@ -1,20 +1,29 @@
-import type { MetadataRoute } from 'next';
+import type { MetadataRoute } from "next";
 
-const CANONICAL_ORIGIN = 'https://dealscale.io';
+const CANONICAL_ORIGIN = "https://dealscale.io";
 const ALLOWED_ROUTES = [
-	'/',
-	'/blogs',
-	'/case-studies',
-	'/events',
-	'/partners',
-	'/features',
-	'/pricing',
-	'/products',
+	"/",
+	"/blogs",
+	"/case-studies",
+	"/events",
+	"/partners",
+	"/features",
+	"/pricing",
+	"/products",
 ];
 // ! /careers is intentionally excluded because Next.js redirects to Zoho Recruit.
-const DISALLOWED_PATHS = ['/api/', '/admin/', '/drafts/', '/private/', '/sandbox/'];
+const DISALLOWED_PATHS = [
+	"/api/",
+	"/admin/",
+	"/drafts/",
+	"/private/",
+	"/sandbox/",
+];
 
-type RobotsRule = Extract<MetadataRoute.Robots['rules'], Array<unknown>> extends Array<infer Rule>
+type RobotsRule = Extract<
+	MetadataRoute.Robots["rules"],
+	Array<unknown>
+> extends Array<infer Rule>
 	? Rule
 	: never;
 
@@ -31,16 +40,16 @@ export default function robots(): MetadataRoute.Robots {
 	return {
 		sitemap: [`${CANONICAL_ORIGIN}/sitemap.xml`],
 		rules: [
-			createRule('*'),
-			createRule('Googlebot'),
-			createRule('Applebot'),
-			createRule('bingbot'),
-			createRule('CCBot'),
-			createRule('DuckDuckBot'),
-			createRule('AppleNewsBot'),
-			createRule('GPTBot', 10),
-			createRule('PerplexityBot', 10),
-			createRule('ClaudeBot', 10),
+			createRule("*"),
+			createRule("Googlebot"),
+			createRule("Applebot"),
+			createRule("bingbot"),
+			createRule("CCBot"),
+			createRule("DuckDuckBot"),
+			createRule("AppleNewsBot"),
+			createRule("GPTBot", 10),
+			createRule("PerplexityBot", 10),
+			createRule("ClaudeBot", 10),
 		],
 	};
 }

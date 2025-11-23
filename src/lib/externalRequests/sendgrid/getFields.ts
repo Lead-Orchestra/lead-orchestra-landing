@@ -1,4 +1,4 @@
-import client from '@sendgrid/client';
+import client from "@sendgrid/client";
 
 // ! Important: Type for API response
 // * Type-safe SendGrid field definition based on SendGrid API docs
@@ -22,13 +22,14 @@ export interface SendGridFieldDefinitions {
  * @returns {Promise<SendGridFieldDefinitions>}
  */
 export async function getSendGridFields(): Promise<SendGridFieldDefinitions> {
-	const apiKey = process.env.SENDGRID_API_KEY || process.env.SENDGRID_TEST_API_KEY;
-	if (!apiKey) throw new Error('SENDGRID_API_KEY is not set');
+	const apiKey =
+		process.env.SENDGRID_API_KEY || process.env.SENDGRID_TEST_API_KEY;
+	if (!apiKey) throw new Error("SENDGRID_API_KEY is not set");
 	client.setApiKey(apiKey);
 
-	const request: import('@sendgrid/client/src/request').ClientRequest = {
-		url: '/v3/marketing/field_definitions',
-		method: 'GET' as const,
+	const request: import("@sendgrid/client/src/request").ClientRequest = {
+		url: "/v3/marketing/field_definitions",
+		method: "GET" as const,
 	};
 
 	try {
@@ -39,7 +40,7 @@ export async function getSendGridFields(): Promise<SendGridFieldDefinitions> {
 		return body as SendGridFieldDefinitions;
 	} catch (error) {
 		// ! Error handling
-		console.error('[getSendGridFields] Error:', error);
+		console.error("[getSendGridFields] Error:", error);
 		throw error;
 	}
 }

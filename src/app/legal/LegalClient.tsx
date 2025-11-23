@@ -1,45 +1,54 @@
-'use client';
+"use client";
 
-import { MarkdownContent } from '@/components/legal/markdown';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { MarkdownContent } from "@/components/legal/markdown";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
 	type LegalDocument,
 	type LegalDocumentSource,
 	legalDocuments,
-} from '@/data/legal/legalDocuments';
-import { resolveLegalDocumentCanonical } from '@/utils/seo/legalSeo';
-import { Copy } from 'lucide-react';
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { toast } from 'sonner';
+} from "@/data/legal/legalDocuments";
+import { resolveLegalDocumentCanonical } from "@/utils/seo/legalSeo";
+import { Copy } from "lucide-react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 
 const STATUS_META: Record<
 	Exclude<LegalDocumentSource, undefined>,
 	{ badgeText: string; helperText: string; badgeClassName: string }
 > = {
 	live: {
-		badgeText: 'Live Template',
-		helperText: 'Synced from the Deal Scale knowledge base.',
-		badgeClassName: 'border-emerald-400/30 bg-emerald-500/10 text-emerald-400',
+		badgeText: "Live Template",
+		helperText: "Synced from the Deal Scale knowledge base.",
+		badgeClassName: "border-emerald-400/30 bg-emerald-500/10 text-emerald-400",
 	},
 	fallback: {
-		badgeText: 'Fallback Template',
-		helperText: 'Showing static backup copy until the live template is published.',
-		badgeClassName: 'border-muted-foreground/20 bg-muted text-muted-foreground',
+		badgeText: "Fallback Template",
+		helperText:
+			"Showing static backup copy until the live template is published.",
+		badgeClassName: "border-muted-foreground/20 bg-muted text-muted-foreground",
 	},
 };
 
-const resolveSource = (doc: LegalDocument): LegalDocumentSource => doc.source ?? 'fallback';
+const resolveSource = (doc: LegalDocument): LegalDocumentSource =>
+	doc.source ?? "fallback";
 
-const getTemplateUrl = (doc: LegalDocument): string => resolveLegalDocumentCanonical(doc);
+const getTemplateUrl = (doc: LegalDocument): string =>
+	resolveLegalDocumentCanonical(doc);
 
 const LegalClient = () => {
 	const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
@@ -58,32 +67,32 @@ const LegalClient = () => {
 	const handleCopy = useCallback(async () => {
 		const container = contentRef.current;
 		if (!container) {
-			toast.error('Unable to copy text. Try again.');
+			toast.error("Unable to copy text. Try again.");
 			return;
 		}
 
 		const rawText =
-			'innerText' in container && typeof container.innerText === 'string'
+			"innerText" in container && typeof container.innerText === "string"
 				? container.innerText
-				: (container.textContent ?? '');
+				: (container.textContent ?? "");
 		const textToCopy = rawText.trim();
 		if (!textToCopy) {
-			toast.error('There is no text to copy yet.');
+			toast.error("There is no text to copy yet.");
 			return;
 		}
 
 		const clipboard = navigator.clipboard;
-		if (!clipboard || typeof clipboard.writeText !== 'function') {
-			toast.error('Clipboard is unavailable in this browser.');
+		if (!clipboard || typeof clipboard.writeText !== "function") {
+			toast.error("Clipboard is unavailable in this browser.");
 			return;
 		}
 
 		try {
 			await clipboard.writeText(textToCopy);
-			toast.success('Legal document copied to clipboard.');
+			toast.success("Legal document copied to clipboard.");
 		} catch (error) {
-			console.error('[LegalClient] Failed to copy document', error);
-			toast.error('Unable to copy text. Try again.');
+			console.error("[LegalClient] Failed to copy document", error);
+			toast.error("Unable to copy text. Try again.");
 		}
 	}, []);
 
@@ -98,7 +107,9 @@ const LegalClient = () => {
 		<div className="container mx-auto px-6 py-24">
 			<div className="mb-12 text-center">
 				<h1 className="font-bold text-4xl">Legal Hub</h1>
-				<p className="mt-2 text-muted-foreground">All our legal documents in one place.</p>
+				<p className="mt-2 text-muted-foreground">
+					All our legal documents in one place.
+				</p>
 			</div>
 			<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 				{legalDocuments.map((doc) => {
@@ -118,14 +129,16 @@ const LegalClient = () => {
 									<div className="flex items-start justify-between gap-3">
 										<CardTitle>{doc.title}</CardTitle>
 										<Badge
-											variant={source === 'live' ? 'default' : 'secondary'}
+											variant={source === "live" ? "default" : "secondary"}
 											className={`whitespace-nowrap ${status.badgeClassName}`}
 										>
 											{status.badgeText}
 										</Badge>
 									</div>
 									<CardDescription>{doc.description}</CardDescription>
-									<p className="text-muted-foreground text-xs">Last updated: {doc.lastUpdated}</p>
+									<p className="text-muted-foreground text-xs">
+										Last updated: {doc.lastUpdated}
+									</p>
 								</CardHeader>
 								{templateUrl && (
 									<CardFooter className="pt-0">
@@ -136,7 +149,11 @@ const LegalClient = () => {
 											className="w-full whitespace-nowrap"
 											onClick={(event) => event.stopPropagation()}
 										>
-											<a href={templateUrl} target="_blank" rel="noopener noreferrer">
+											<a
+												href={templateUrl}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
 												Open template
 											</a>
 										</Button>
@@ -153,7 +170,9 @@ const LegalClient = () => {
 						<DialogHeader className="space-y-4">
 							<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 								<div className="space-y-2">
-									<DialogTitle className="text-2xl sm:text-3xl">{selectedDoc.title}</DialogTitle>
+									<DialogTitle className="text-2xl sm:text-3xl">
+										{selectedDoc.title}
+									</DialogTitle>
 									<DialogDescription className="text-sm">
 										Last updated: {selectedDoc.lastUpdated}
 									</DialogDescription>
@@ -163,7 +182,9 @@ const LegalClient = () => {
 								</div>
 								<div className="flex w-full flex-col gap-2 sm:w-auto sm:items-end">
 									<Badge
-										variant={selectedSource === 'live' ? 'default' : 'secondary'}
+										variant={
+											selectedSource === "live" ? "default" : "secondary"
+										}
 										className={`whitespace-nowrap ${selectedSourceMeta.badgeClassName}`}
 									>
 										{selectedSourceMeta.badgeText}
@@ -180,7 +201,9 @@ const LegalClient = () => {
 												target="_blank"
 												rel="noopener noreferrer"
 											>
-												{selectedSource === 'live' ? 'Open template' : 'View live template'}
+												{selectedSource === "live"
+													? "Open template"
+													: "View live template"}
 											</a>
 										</Button>
 									)}

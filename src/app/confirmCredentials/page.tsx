@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { ConfirmCredentialsForm } from '@/components/contact/form/ConfirmCredentialsForm';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { ConfirmCredentialsForm } from "@/components/contact/form/ConfirmCredentialsForm";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 function ConfirmCredentialsContent() {
 	const searchParams = useSearchParams();
-	const token = searchParams.get('token');
+	const token = searchParams.get("token");
 
 	if (!token) {
 		return (
@@ -36,7 +36,9 @@ export default function ConfirmCredentialsPage() {
 			<div className="lg:p-8">
 				<div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
 					<div className="flex flex-col space-y-2 text-center">
-						<h1 className="font-semibold text-2xl tracking-tight">Choose a New Password</h1>
+						<h1 className="font-semibold text-2xl tracking-tight">
+							Choose a New Password
+						</h1>
 						<p className="text-muted-foreground text-sm">
 							Enter and confirm your new password below.
 						</p>
@@ -45,8 +47,11 @@ export default function ConfirmCredentialsPage() {
 						<ConfirmCredentialsContent />
 					</Suspense>
 					<p className="px-8 text-center text-muted-foreground text-sm">
-						Remembered your password?{'	'}
-						<Link href="/signIn" className="underline underline-offset-4 hover:text-brand">
+						Remembered your password?{"	"}
+						<Link
+							href="/signIn"
+							className="underline underline-offset-4 hover:text-brand"
+						>
 							Sign in
 						</Link>
 					</p>

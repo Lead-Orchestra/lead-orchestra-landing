@@ -3,22 +3,25 @@ import {
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@/components/ui/accordion';
-import { cn } from '@/lib/utils';
-import { Fragment, useMemo } from 'react';
-import type { ProductSummaryProps } from './types';
+} from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
+import { Fragment, useMemo } from "react";
+import type { ProductSummaryProps } from "./types";
 
-const copyFields = ['pain_point', 'fear', 'hope', 'solution'] as const;
+const copyFields = ["pain_point", "fear", "hope", "solution"] as const;
 
 type CopyField = (typeof copyFields)[number];
-type InsightKey = 'fear' | 'hope' | 'pain_point' | 'solution';
+type InsightKey = "fear" | "hope" | "pain_point" | "solution";
 
-const extractCopyField = (field: CopyField, abTest?: ProductSummaryProps['abTest']) => {
+const extractCopyField = (
+	field: CopyField,
+	abTest?: ProductSummaryProps["abTest"],
+) => {
 	if (!abTest) return undefined;
 
 	for (const variant of abTest.variants ?? []) {
 		const value = variant.copy?.[field];
-		if (typeof value === 'string' && value.trim().length > 0) {
+		if (typeof value === "string" && value.trim().length > 0) {
 			return value.trim();
 		}
 	}
@@ -26,9 +29,14 @@ const extractCopyField = (field: CopyField, abTest?: ProductSummaryProps['abTest
 	return undefined;
 };
 
-const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapeRegExp = (value: string) =>
+	value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-const buildIcon = (titleText: string, className: string, paths: JSX.Element[]) => (
+const buildIcon = (
+	titleText: string,
+	className: string,
+	paths: JSX.Element[],
+) => (
 	<span role="img" aria-label={titleText} className="inline-flex">
 		<svg
 			className={className}
@@ -55,8 +63,8 @@ const insightAccents: Record<
 	}
 > = {
 	fear: {
-		label: 'Fear Signal',
-		icon: buildIcon('Fear signal', 'h-4 w-4 text-red-400', [
+		label: "Fear Signal",
+		icon: buildIcon("Fear signal", "h-4 w-4 text-red-400", [
 			<path
 				key="fear-x"
 				strokeLinecap="round"
@@ -71,13 +79,18 @@ const insightAccents: Record<
 			/>,
 		]),
 		trigger:
-			'px-4 text-left text-sm font-semibold uppercase tracking-wide text-red-200 data-[state=open]:bg-red-950/60',
-		content: 'px-4 text-sm leading-relaxed text-red-100',
+			"px-4 text-left text-sm font-semibold uppercase tracking-wide text-red-200 data-[state=open]:bg-red-950/60",
+		content: "px-4 text-sm leading-relaxed text-red-100",
 	},
 	hope: {
-		label: 'Hope Moment',
-		icon: buildIcon('Hope moment', 'h-4 w-4 text-sky-400', [
-			<path key="hope-hand" strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l3 3" />,
+		label: "Hope Moment",
+		icon: buildIcon("Hope moment", "h-4 w-4 text-sky-400", [
+			<path
+				key="hope-hand"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M12 6v6l3 3"
+			/>,
 			<path
 				key="hope-circle"
 				strokeLinecap="round"
@@ -86,12 +99,12 @@ const insightAccents: Record<
 			/>,
 		]),
 		trigger:
-			'px-4 text-left text-sm font-semibold uppercase tracking-wide text-sky-200 data-[state=open]:bg-sky-950/40',
-		content: 'px-4 text-sm leading-relaxed text-sky-100',
+			"px-4 text-left text-sm font-semibold uppercase tracking-wide text-sky-200 data-[state=open]:bg-sky-950/40",
+		content: "px-4 text-sm leading-relaxed text-sky-100",
 	},
 	pain_point: {
-		label: 'Problem',
-		icon: buildIcon('Problem insight', 'h-4 w-4 text-amber-400', [
+		label: "Problem",
+		icon: buildIcon("Problem insight", "h-4 w-4 text-amber-400", [
 			<path
 				key="pain-exclamation"
 				strokeLinecap="round"
@@ -106,38 +119,43 @@ const insightAccents: Record<
 			/>,
 		]),
 		trigger:
-			'px-4 text-left text-sm font-semibold uppercase tracking-wide text-amber-200 data-[state=open]:bg-amber-950/40',
-		content: 'px-4 text-sm leading-relaxed text-amber-100',
+			"px-4 text-left text-sm font-semibold uppercase tracking-wide text-amber-200 data-[state=open]:bg-amber-950/40",
+		content: "px-4 text-sm leading-relaxed text-amber-100",
 	},
 	solution: {
-		label: 'Solution',
-		icon: buildIcon('Solution insight', 'h-4 w-4 text-emerald-400', [
-			<path key="solution-check" strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" />,
+		label: "Solution",
+		icon: buildIcon("Solution insight", "h-4 w-4 text-emerald-400", [
+			<path
+				key="solution-check"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="m5 13 4 4L19 7"
+			/>,
 		]),
 		trigger:
-			'px-4 text-left text-sm font-semibold uppercase tracking-wide text-emerald-200 data-[state=open]:bg-emerald-950/30',
-		content: 'px-4 text-sm leading-relaxed text-emerald-100',
+			"px-4 text-left text-sm font-semibold uppercase tracking-wide text-emerald-200 data-[state=open]:bg-emerald-950/30",
+		content: "px-4 text-sm leading-relaxed text-emerald-100",
 	},
 };
 
 const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
-	const painPoint = extractCopyField('pain_point', abTest);
-	const solution = extractCopyField('solution', abTest);
-	const fear = extractCopyField('fear', abTest);
-	const hope = extractCopyField('hope', abTest);
+	const painPoint = extractCopyField("pain_point", abTest);
+	const solution = extractCopyField("solution", abTest);
+	const fear = extractCopyField("fear", abTest);
+	const hope = extractCopyField("hope", abTest);
 
 	const insightEntries = useMemo(
 		() =>
 			[
-				{ key: 'fear' as InsightKey, value: fear },
-				{ key: 'hope' as InsightKey, value: hope },
-				{ key: 'pain_point' as InsightKey, value: painPoint },
-				{ key: 'solution' as InsightKey, value: solution },
+				{ key: "fear" as InsightKey, value: fear },
+				{ key: "hope" as InsightKey, value: hope },
+				{ key: "pain_point" as InsightKey, value: painPoint },
+				{ key: "solution" as InsightKey, value: solution },
 			].filter((entry) => entry.value && entry.value.length > 0) as Array<{
 				key: InsightKey;
 				value: string;
 			}>,
-		[fear, hope, painPoint, solution]
+		[fear, hope, painPoint, solution],
 	);
 
 	const highlightWords = useMemo(() => {
@@ -167,7 +185,11 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 		}> = [];
 		const seen = new Set<string>();
 
-		const pushDescriptor = (key: string, phrase?: string, className?: string) => {
+		const pushDescriptor = (
+			key: string,
+			phrase?: string,
+			className?: string,
+		) => {
 			if (!phrase || !className) return;
 			const normalized = `${key}-${phrase.toLowerCase()}`;
 			if (seen.has(normalized)) return;
@@ -176,24 +198,24 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 		};
 
 		pushDescriptor(
-			'pain_point',
-			extractCopyField('pain_point', abTest),
-			'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-200'
+			"pain_point",
+			extractCopyField("pain_point", abTest),
+			"bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-200",
 		);
 		pushDescriptor(
-			'fear',
-			extractCopyField('fear', abTest),
-			'bg-red-100 text-red-900 dark:bg-red-600/40 dark:text-red-50'
+			"fear",
+			extractCopyField("fear", abTest),
+			"bg-red-100 text-red-900 dark:bg-red-600/40 dark:text-red-50",
 		);
 		pushDescriptor(
-			'hope',
-			extractCopyField('hope', abTest),
-			'bg-sky-100 text-sky-800 dark:bg-sky-500/10 dark:text-sky-200'
+			"hope",
+			extractCopyField("hope", abTest),
+			"bg-sky-100 text-sky-800 dark:bg-sky-500/10 dark:text-sky-200",
 		);
 		pushDescriptor(
-			'solution',
-			extractCopyField('solution', abTest),
-			'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200'
+			"solution",
+			extractCopyField("solution", abTest),
+			"bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200",
 		);
 
 		if (abTest.variants) {
@@ -206,7 +228,7 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 							pushDescriptor(
 								`keyword-${trimmed}`,
 								trimmed,
-								'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-200'
+								"bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-200",
 							);
 						}
 					}
@@ -214,9 +236,9 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 
 				const cta = variant.copy?.cta;
 				pushDescriptor(
-					'cta',
+					"cta",
 					cta,
-					'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-200'
+					"bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-200",
 				);
 			}
 		}
@@ -238,12 +260,12 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 		}> = [];
 
 		for (const descriptor of highlightDescriptors) {
-			const pattern = new RegExp(escapeRegExp(descriptor.phrase), 'gi');
+			const pattern = new RegExp(escapeRegExp(descriptor.phrase), "gi");
 			for (const match of description.matchAll(pattern)) {
 				const start = match.index ?? 0;
 				const end = start + match[0].length;
 				const overlaps = occupied.some(
-					(range) => Math.max(range.start, start) < Math.min(range.end, end)
+					(range) => Math.max(range.start, start) < Math.min(range.end, end),
 				);
 
 				if (overlaps) {
@@ -273,23 +295,27 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 				nodes.push(
 					<Fragment key={`text-${index}-${cursor}`}>
 						{description.slice(cursor, item.start)}
-					</Fragment>
+					</Fragment>,
 				);
 			}
 
 			nodes.push(
 				<mark
 					key={`highlight-${item.key}-${index}`}
-					className={cn('rounded-sm px-1 py-0.5 font-semibold', item.className)}
+					className={cn("rounded-sm px-1 py-0.5 font-semibold", item.className)}
 				>
 					{item.match}
-				</mark>
+				</mark>,
 			);
 			cursor = item.end;
 		});
 
 		if (cursor < description.length) {
-			nodes.push(<Fragment key={`text-tail-${cursor}`}>{description.slice(cursor)}</Fragment>);
+			nodes.push(
+				<Fragment key={`text-tail-${cursor}`}>
+					{description.slice(cursor)}
+				</Fragment>,
+			);
 		}
 
 		return nodes;
@@ -336,7 +362,10 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 								className="border-slate-200/30 border-b dark:border-slate-800/40"
 							>
 								<AccordionTrigger
-									className={cn(accent.trigger, 'bg-slate-50/30 dark:bg-slate-900/40')}
+									className={cn(
+										accent.trigger,
+										"bg-slate-50/30 dark:bg-slate-900/40",
+									)}
 								>
 									<span className="flex items-center gap-2">
 										{accent.icon}
@@ -344,7 +373,10 @@ const ProductSummary = ({ description, abTest }: ProductSummaryProps) => {
 									</span>
 								</AccordionTrigger>
 								<AccordionContent
-									className={cn(accent.content, 'bg-slate-50/20 dark:bg-slate-900/20')}
+									className={cn(
+										accent.content,
+										"bg-slate-50/20 dark:bg-slate-900/20",
+									)}
 								>
 									{value}
 								</AccordionContent>

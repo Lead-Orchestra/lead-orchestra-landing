@@ -1,13 +1,13 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export type AnalyticsField =
-	| 'clarityId'
-	| 'gaId'
-	| 'gtmId'
-	| 'zohoCode'
-	| 'facebookPixelId'
-	| 'plausibleDomain'
-	| 'plausibleEndpoint';
+	| "clarityId"
+	| "gaId"
+	| "gtmId"
+	| "zohoCode"
+	| "facebookPixelId"
+	| "plausibleDomain"
+	| "plausibleEndpoint";
 
 export interface AnalyticsConfig {
 	clarityId?: string;
@@ -33,28 +33,40 @@ export interface AnalyticsConfigResult {
 }
 
 const analyticsSchema = z.object({
-	clarityId: z.string().trim().min(1, 'Clarity project ID must be a non-empty string').optional(),
-	gaId: z.string().trim().min(1, 'Google Analytics ID must be a non-empty string').optional(),
-	gtmId: z.string().trim().min(1, 'Google Tag Manager ID must be a non-empty string').optional(),
+	clarityId: z
+		.string()
+		.trim()
+		.min(1, "Clarity project ID must be a non-empty string")
+		.optional(),
+	gaId: z
+		.string()
+		.trim()
+		.min(1, "Google Analytics ID must be a non-empty string")
+		.optional(),
+	gtmId: z
+		.string()
+		.trim()
+		.min(1, "Google Tag Manager ID must be a non-empty string")
+		.optional(),
 	zohoCode: z
 		.string()
 		.trim()
-		.min(1, 'Zoho SalesIQ widget code must be a non-empty string')
+		.min(1, "Zoho SalesIQ widget code must be a non-empty string")
 		.optional(),
 	facebookPixelId: z
 		.string()
 		.trim()
-		.min(1, 'Facebook Pixel ID must be a non-empty string')
+		.min(1, "Facebook Pixel ID must be a non-empty string")
 		.optional(),
 	plausibleDomain: z
 		.string()
 		.trim()
-		.min(1, 'Plausible domain must be a non-empty string')
+		.min(1, "Plausible domain must be a non-empty string")
 		.optional(),
 	plausibleEndpoint: z
 		.string()
 		.trim()
-		.min(1, 'Plausible endpoint must be a non-empty string')
+		.min(1, "Plausible endpoint must be a non-empty string")
 		.optional(),
 });
 
@@ -69,32 +81,53 @@ interface EnvDescriptor {
 
 const fieldDescriptors: EnvDescriptor[] = [
 	{
-		field: 'clarityId',
-		sources: [{ key: 'NEXT_PUBLIC_CLARITY_PROJECT_ID' }, { key: 'CLARITY_PROJECT_ID' }],
+		field: "clarityId",
+		sources: [
+			{ key: "NEXT_PUBLIC_CLARITY_PROJECT_ID" },
+			{ key: "CLARITY_PROJECT_ID" },
+		],
 	},
 	{
-		field: 'gaId',
-		sources: [{ key: 'NEXT_PUBLIC_GOOGLE_ANALYTICS' }, { key: 'GOOGLE_ANALYTICS_ID' }],
+		field: "gaId",
+		sources: [
+			{ key: "NEXT_PUBLIC_GOOGLE_ANALYTICS" },
+			{ key: "GOOGLE_ANALYTICS_ID" },
+		],
 	},
 	{
-		field: 'gtmId',
-		sources: [{ key: 'NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID' }, { key: 'GOOGLE_TAG_MANAGER_ID' }],
+		field: "gtmId",
+		sources: [
+			{ key: "NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID" },
+			{ key: "GOOGLE_TAG_MANAGER_ID" },
+		],
 	},
 	{
-		field: 'zohoCode',
-		sources: [{ key: 'NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE' }, { key: 'ZOHO_SALES_IQ_WIDGET_CODE' }],
+		field: "zohoCode",
+		sources: [
+			{ key: "NEXT_PUBLIC_ZOHOSALESIQ_WIDGETCODE" },
+			{ key: "ZOHO_SALES_IQ_WIDGET_CODE" },
+		],
 	},
 	{
-		field: 'facebookPixelId',
-		sources: [{ key: 'NEXT_PUBLIC_FACEBOOK_PIXEL_ID' }, { key: 'FACEBOOK_PIXEL_ID' }],
+		field: "facebookPixelId",
+		sources: [
+			{ key: "NEXT_PUBLIC_FACEBOOK_PIXEL_ID" },
+			{ key: "FACEBOOK_PIXEL_ID" },
+		],
 	},
 	{
-		field: 'plausibleDomain',
-		sources: [{ key: 'NEXT_PUBLIC_PLAUSIBLE_DOMAIN' }, { key: 'PLAUSIBLE_DOMAIN' }],
+		field: "plausibleDomain",
+		sources: [
+			{ key: "NEXT_PUBLIC_PLAUSIBLE_DOMAIN" },
+			{ key: "PLAUSIBLE_DOMAIN" },
+		],
 	},
 	{
-		field: 'plausibleEndpoint',
-		sources: [{ key: 'NEXT_PUBLIC_PLAUSIBLE_ENDPOINT' }, { key: 'PLAUSIBLE_ENDPOINT' }],
+		field: "plausibleEndpoint",
+		sources: [
+			{ key: "NEXT_PUBLIC_PLAUSIBLE_ENDPOINT" },
+			{ key: "PLAUSIBLE_ENDPOINT" },
+		],
 	},
 ];
 
@@ -145,7 +178,7 @@ export function getAnalyticsConfig(): AnalyticsConfigResult {
 	if (!parsed.success) {
 		for (const issue of parsed.error.issues) {
 			const field = issue.path[0];
-			if (typeof field === 'string' && field in config) {
+			if (typeof field === "string" && field in config) {
 				errors.push({
 					field: field as AnalyticsField,
 					message: issue.message,

@@ -11,7 +11,7 @@ export interface FlowChartNode {
 	label: string;
 	positionLabel: string;
 	payload: PayloadItem[];
-	indicator?: 'line' | 'dot' | 'dashed';
+	indicator?: "line" | "dot" | "dashed";
 	hideLabel?: boolean;
 	hideIndicator?: boolean;
 	className?: string;

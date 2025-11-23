@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { GlassCard } from '@/components/ui/glass-card';
-import { cn } from '@/lib/utils';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { GlassCard } from "@/components/ui/glass-card";
+import { cn } from "@/lib/utils";
 import type {
 	PricingInterval,
 	RecurringPlan,
 	SeatAllocation,
 	UnlimitedValue,
-} from '@/types/service/plans';
-import { Check, Users } from 'lucide-react';
-import Link from 'next/link';
-import type { ReactNode } from 'react';
+} from "@/types/service/plans";
+import { Check, Users } from "lucide-react";
+import Link from "next/link";
+import type { ReactNode } from "react";
 
 export interface RecurringPlanCardProps {
 	plan: RecurringPlan;
@@ -26,32 +26,35 @@ export interface RecurringPlanCardProps {
 	};
 	badge?: ReactNode;
 	badgeLabel?: string;
-	badgeVariant?: 'basic' | 'starter' | 'enterprise';
+	badgeVariant?: "basic" | "starter" | "enterprise";
 }
 
 const formatCurrency = (amount: number) =>
-	new Intl.NumberFormat('en-US', {
-		style: 'currency',
-		currency: 'USD',
+	new Intl.NumberFormat("en-US", {
+		style: "currency",
+		currency: "USD",
 		maximumFractionDigits: 0,
 	}).format(amount);
 
 const formatSeatAllocation = (seats?: SeatAllocation) => {
 	if (!seats) return null;
-	if (typeof seats === 'number') {
-		return `${seats} seat${seats === 1 ? '' : 's'}`;
+	if (typeof seats === "number") {
+		return `${seats} seat${seats === 1 ? "" : "s"}`;
 	}
 	const { included, additionalSeat } = seats;
-	const includedLabel = typeof included === 'number' ? `${included}` : included.toString();
+	const includedLabel =
+		typeof included === "number" ? `${included}` : included.toString();
 	const seatLabel =
-		additionalSeat && additionalSeat > 0 ? `, $${additionalSeat}/mo per additional seat` : '';
+		additionalSeat && additionalSeat > 0
+			? `, $${additionalSeat}/mo per additional seat`
+			: "";
 	return `${includedLabel} seats${seatLabel}`;
 };
 
 const formatCredits = (value?: UnlimitedValue) => {
 	if (value === undefined) return null;
-	if (value === 'unlimited') return 'Unlimited';
-	return new Intl.NumberFormat('en-US').format(value);
+	if (value === "unlimited") return "Unlimited";
+	return new Intl.NumberFormat("en-US").format(value);
 };
 
 export const RecurringPlanCard = ({
@@ -65,12 +68,14 @@ export const RecurringPlanCard = ({
 	badgeVariant,
 }: RecurringPlanCardProps) => {
 	const priceLabel =
-		view === 'monthly' ? `${formatCurrency(plan.price)}/mo` : `${formatCurrency(plan.price)}/yr`;
+		view === "monthly"
+			? `${formatCurrency(plan.price)}/mo`
+			: `${formatCurrency(plan.price)}/yr`;
 
 	const credits = plan.credits
 		? [
-				{ label: 'AI', value: formatCredits(plan.credits.ai) ?? '0' },
-				{ label: 'Lead', value: formatCredits(plan.credits.lead) ?? '0' },
+				{ label: "AI", value: formatCredits(plan.credits.ai) ?? "0" },
+				{ label: "Lead", value: formatCredits(plan.credits.lead) ?? "0" },
 			]
 		: [];
 
@@ -83,25 +88,30 @@ export const RecurringPlanCard = ({
 
 	const ctaLabel =
 		ctaOverride?.label ??
-		(plan.ctaType === 'subscribe'
+		(plan.ctaType === "subscribe"
 			? `Choose ${plan.name}`
-			: plan.ctaType === 'contactSales'
-				? 'Contact Sales'
-				: plan.ctaType === 'upgrade'
-					? 'Start Free Trial'
-					: plan.ctaType === 'link'
-						? (plan.ctaLabel ?? 'Learn More')
-						: 'Learn More');
+			: plan.ctaType === "contactSales"
+				? "Contact Sales"
+				: plan.ctaType === "upgrade"
+					? "Start Free Trial"
+					: plan.ctaType === "link"
+						? (plan.ctaLabel ?? "Learn More")
+						: "Learn More");
 
 	const actionButton =
-		ctaOverride?.href || plan.ctaType === 'contactSales' || plan.ctaType === 'link' ? (
+		ctaOverride?.href ||
+		plan.ctaType === "contactSales" ||
+		plan.ctaType === "link" ? (
 			<Button
 				asChild
 				className="mt-4 w-full"
-				variant={plan.ctaType === 'contactSales' ? 'secondary' : 'default'}
+				variant={plan.ctaType === "contactSales" ? "secondary" : "default"}
 			>
 				<Link
-					href={ctaOverride?.href ?? (plan.ctaType === 'link' ? 'https://github.com' : '/contact')}
+					href={
+						ctaOverride?.href ??
+						(plan.ctaType === "link" ? "https://github.com" : "/contact")
+					}
 				>
 					{ctaLabel}
 				</Link>
@@ -112,7 +122,7 @@ export const RecurringPlanCard = ({
 				onClick={ctaOverride?.onClick ?? handleSubscribe}
 				disabled={loading}
 			>
-				{loading ? 'Processing...' : ctaLabel}
+				{loading ? "Processing..." : ctaLabel}
 			</Button>
 		);
 
@@ -121,11 +131,11 @@ export const RecurringPlanCard = ({
 		if (!badgeLabel) return null;
 
 		const badgeClass =
-			badgeVariant === 'starter'
-				? 'bg-gradient-to-r from-orange-500/10 to-orange-500/20 text-orange-400'
-				: badgeVariant === 'enterprise'
-					? 'bg-gradient-to-r from-emerald-500/10 to-emerald-500/20 text-emerald-400'
-					: 'bg-gradient-to-r from-sky-500/10 to-sky-500/20 text-sky-400';
+			badgeVariant === "starter"
+				? "bg-gradient-to-r from-orange-500/10 to-orange-500/20 text-orange-400"
+				: badgeVariant === "enterprise"
+					? "bg-gradient-to-r from-emerald-500/10 to-emerald-500/20 text-emerald-400"
+					: "bg-gradient-to-r from-sky-500/10 to-sky-500/20 text-sky-400";
 
 		return (
 			<Badge className={badgeClass} variant="secondary">
@@ -137,25 +147,27 @@ export const RecurringPlanCard = ({
 	return (
 		<GlassCard
 			className={cn(
-				'flex flex-col justify-between p-6',
-				plan.ctaType === 'contactSales' ? 'border-primary/40' : undefined
+				"flex flex-col justify-between p-6",
+				plan.ctaType === "contactSales" ? "border-primary/40" : undefined,
 			)}
-			highlighted={plan.ctaType === 'subscribe' && plan.price >= 5000}
+			highlighted={plan.ctaType === "subscribe" && plan.price >= 5000}
 		>
 			<div className="space-y-4">
 				<div className="flex items-start justify-between gap-2">
 					<div>
-						<p className={cn('text-sm', 'text-muted-foreground', 'uppercase')}>
-							{view === 'monthly' ? 'Monthly Plan' : 'Annual Plan'}
+						<p className={cn("text-sm", "text-muted-foreground", "uppercase")}>
+							{view === "monthly" ? "Monthly Plan" : "Annual Plan"}
 						</p>
-						<h3 className={cn('mt-1', 'text-2xl', 'font-semibold')}>{plan.name}</h3>
+						<h3 className={cn("mt-1", "text-2xl", "font-semibold")}>
+							{plan.name}
+						</h3>
 					</div>
 					{renderBadge()}
 				</div>
 				<div>
-					<p className={cn('text-4xl', 'font-bold')}>{priceLabel}</p>
+					<p className={cn("text-4xl", "font-bold")}>{priceLabel}</p>
 					{plan.idealFor ? (
-						<p className={cn('mt-1', 'text-sm', 'text-muted-foreground')}>
+						<p className={cn("mt-1", "text-sm", "text-muted-foreground")}>
 							Ideal for {plan.idealFor.toLowerCase()}
 						</p>
 					) : null}
@@ -179,7 +191,8 @@ export const RecurringPlanCard = ({
 						<div className="mt-2 grid grid-cols-1 gap-2 text-muted-foreground sm:grid-cols-2">
 							{credits.map((credit) => (
 								<div key={credit.label}>
-									<span className="font-semibold">{credit.value}</span> {credit.label} credits
+									<span className="font-semibold">{credit.value}</span>{" "}
+									{credit.label} credits
 								</div>
 							))}
 							{seats ? <div>{seats}</div> : null}

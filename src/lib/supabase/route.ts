@@ -1,1 +1,1 @@
-export { createSupabaseServiceClient as createSupabaseRouteClient } from './server';
+export { createSupabaseServiceClient as createSupabaseRouteClient } from "./server";

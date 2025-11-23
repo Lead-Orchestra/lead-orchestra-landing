@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { create } from 'zustand';
+import { create } from "zustand";
 
-import { DEFAULT_HERO_VIDEO } from '../components/hero-video-preview';
-import type { HeroVideoConfig } from '../types/video';
+import { DEFAULT_HERO_VIDEO } from "../components/hero-video-preview";
+import type { HeroVideoConfig } from "../types/video";
 
 interface HeroVideoStoreState {
 	config: HeroVideoConfig | null;
@@ -20,10 +20,11 @@ const useHeroVideoStoreBase = create<HeroVideoStoreState>((set) => ({
 export const setHeroVideoConfig = (config: HeroVideoConfig | null) =>
 	useHeroVideoStoreBase.getState().setConfig(config);
 
-export const resetHeroVideoConfig = () => useHeroVideoStoreBase.getState().reset();
+export const resetHeroVideoConfig = () =>
+	useHeroVideoStoreBase.getState().reset();
 
 export const useHeroVideoConfig = (
-	fallback: HeroVideoConfig = DEFAULT_HERO_VIDEO
+	fallback: HeroVideoConfig = DEFAULT_HERO_VIDEO,
 ): HeroVideoConfig => {
 	const config = useHeroVideoStoreBase((state) => state.config);
 	return config ?? fallback;

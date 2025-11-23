@@ -1,6 +1,6 @@
-import { longTermAbsenteeOwnerNurtureDsl } from '@/data/worklow/dsl';
-import type React from 'react';
-import VariablesComponent from './VariablesComponent';
+import { longTermAbsenteeOwnerNurtureDsl } from "@/data/worklow/dsl";
+import type React from "react";
+import VariablesComponent from "./VariablesComponent";
 
 interface AiCardProps {
 	aiPrompt: string;
@@ -23,7 +23,7 @@ const AiCard: React.FC<AiCardProps> = ({
 }) => (
 	<div className="flex animate-fadein flex-col gap-2">
 		<label htmlFor="ai-prompt" className="mb-1 block font-medium">
-			AI Prompt{' '}
+			AI Prompt{" "}
 			<span className="text-gray-500 text-xs">
 				(describe logic, click a tool or variable to insert)
 			</span>
@@ -34,7 +34,7 @@ const AiCard: React.FC<AiCardProps> = ({
 			ref={aiPromptRef}
 			className="min-h-[100px] rounded border bg-white px-3 py-2 font-mono dark:bg-[#181825]"
 			placeholder={
-				'Write a Lua script or describe your automation logic.\nE.g., use send_email, update_lead, etc.'
+				"Write a Lua script or describe your automation logic.\nE.g., use send_email, update_lead, etc."
 			}
 			value={aiPrompt}
 			onChange={(e) => setAiPrompt(e.target.value)}
@@ -56,7 +56,7 @@ const AiCard: React.FC<AiCardProps> = ({
 				className="mb-1 font-semibold text-primary text-xs underline hover:text-primary/80"
 				onClick={() => setShowExamplePrompt(!showExamplePrompt)}
 			>
-				{showExamplePrompt ? 'Hide Example' : 'Show Example'}
+				{showExamplePrompt ? "Hide Example" : "Show Example"}
 			</button>
 			{showExamplePrompt && (
 				<>

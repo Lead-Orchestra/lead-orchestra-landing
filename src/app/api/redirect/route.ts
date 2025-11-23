@@ -1,17 +1,17 @@
-import { NextResponse } from 'next/server';
-
-const NOTION_API_BASE = 'https://api.notion.com/v1';
-const NOTION_VERSION = '2022-06-28';
+import { NextResponse } from "next/server";
+const NOTION_API_BASE = "https://api.notion.com/v1";
+const NOTION_VERSION = "2022-06-28";
 
 async function getNotionPage(pageId: string) {
 	const resp = await fetch(`${NOTION_API_BASE}/pages/${pageId}`, {
 		headers: {
 			Authorization: `Bearer ${process.env.NOTION_KEY}`,
-			'Notion-Version': NOTION_VERSION,
+			"Notion-Version": NOTION_VERSION,
 		},
-		cache: 'no-store',
+		cache: "no-store",
 	});
-	if (!resp.ok) throw new Error(`Failed to retrieve page ${pageId}: ${resp.status}`);
+	if (!resp.ok)
+		throw new Error(`Failed to retrieve page ${pageId}: ${resp.status}`);
 	return resp.json();
 }
 
@@ -20,16 +20,16 @@ async function incrementCalls(pageId: string) {
 	try {
 		const data = await getNotionPage(pageId);
 		const props = data?.properties ?? {};
-		const fieldName = 'Redirects (Calls)';
+		const fieldName = "Redirects (Calls)";
 		const current = Number(props?.[fieldName]?.number ?? 0);
 		const nextVal = current + 1;
 
 		await fetch(`${NOTION_API_BASE}/pages/${pageId}`, {
-			method: 'PATCH',
+			method: "PATCH",
 			headers: {
 				Authorization: `Bearer ${process.env.NOTION_KEY}`,
-				'Notion-Version': NOTION_VERSION,
-				'Content-Type': 'application/json',
+				"Notion-Version": NOTION_VERSION,
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
 				properties: {
@@ -39,19 +39,23 @@ async function incrementCalls(pageId: string) {
 		});
 	} catch (err) {
 		// Swallow errors to not block the redirect
-		console.error('[redirect] incrementCalls error', err);
+		console.error("[redirect] incrementCalls error", err);
 	}
 }
 
+export const runtime = 'edge';
 export async function GET(req: Request) {
 	try {
 		const url = new URL(req.url);
-		const to = url.searchParams.get('to');
-		const pageId = url.searchParams.get('pageId');
-		const isFile = url.searchParams.get('isFile');
+		const to = url.searchParams.get("to");
+		const pageId = url.searchParams.get("pageId");
+		const isFile = url.searchParams.get("isFile");
 
 		if (!to) {
-			return NextResponse.json({ ok: false, error: "missing 'to'" }, { status: 400 });
+			return NextResponse.json(
+				{ ok: false, error: "missing 'to'" },
+				{ status: 400 },
+			);
 		}
 
 		if (pageId) {
@@ -62,7 +66,7 @@ export async function GET(req: Request) {
 		// Build 302 redirect safely
 		// 1) Only decode relative paths (e.g., %2Fsignup). Keep absolute URLs as-is to avoid breaking signatures.
 		let location = to;
-		if (to.startsWith('%2F')) {
+		if (to.startsWith("%2F")) {
 			try {
 				location = decodeURIComponent(to);
 			} catch {
@@ -81,7 +85,12 @@ export async function GET(req: Request) {
 				// Preserve any query params from the incoming request (except 'to', 'pageId', 'slug', 'isFile')
 				// Priority: Destination URL params > Incoming request params
 				for (const [key, value] of requestParams.entries()) {
-					if (key !== 'to' && key !== 'pageId' && key !== 'slug' && key !== 'isFile') {
+					if (
+						key !== "to" &&
+						key !== "pageId" &&
+						key !== "slug" &&
+						key !== "isFile"
+					) {
 						// Only add if destination URL doesn't already have this parameter
 						if (!destUrl.searchParams.has(key)) {
 							destUrl.searchParams.set(key, value);
@@ -102,13 +111,16 @@ export async function GET(req: Request) {
 			location = `https:${location}`;
 		}
 		const hasScheme = /^(https?:)\/\//i.test(location);
-		const isRelative = location.startsWith('/');
+		const isRelative = location.startsWith("/");
 		// bare host -> https://host
 		if (!isRelative && !hasScheme) {
 			if (/^[a-z0-9.-]+\.[a-z]{2,}(?:\/.*)?$/i.test(location)) {
 				location = `https://${location}`;
 			} else {
-				return NextResponse.json({ ok: false, error: "invalid 'to'" }, { status: 400 });
+				return NextResponse.json(
+					{ ok: false, error: "invalid 'to'" },
+					{ status: 400 },
+				);
 			}
 		}
 
@@ -116,7 +128,10 @@ export async function GET(req: Request) {
 		const isValidAbsoluteHttpUrl = (s: string): boolean => {
 			try {
 				const u = new URL(s);
-				return (u.protocol === 'http:' || u.protocol === 'https:') && Boolean(u.hostname);
+				return (
+					(u.protocol === "http:" || u.protocol === "https:") &&
+					Boolean(u.hostname)
+				);
 			} catch {
 				return false;
 			}
@@ -124,9 +139,14 @@ export async function GET(req: Request) {
 
 		// 4) Build absolute URL for internal paths to satisfy Next.js requirement
 		const reqUrl = new URL(req.url);
-		const redirectTarget = isRelative ? new URL(location, reqUrl.origin) : location;
+		const redirectTarget = isRelative
+			? new URL(location, reqUrl.origin)
+			: location;
 		if (!isRelative && !isValidAbsoluteHttpUrl(String(redirectTarget))) {
-			return NextResponse.json({ ok: false, error: 'invalid absolute URL' }, { status: 400 });
+			return NextResponse.json(
+				{ ok: false, error: "invalid absolute URL" },
+				{ status: 400 },
+			);
 		}
 
 		// For file downloads, just 302 so the origin's headers control Content-Disposition
@@ -134,12 +154,12 @@ export async function GET(req: Request) {
 
 		// Hint to browsers for downloads when possible (non-authoritative)
 		if (isFile) {
-			res.headers.set('Cache-Control', 'no-store');
+			res.headers.set("Cache-Control", "no-store");
 		}
 
 		return res;
 	} catch (err) {
-		const msg = err instanceof Error ? err.message : 'internal error';
+		const msg = err instanceof Error ? err.message : "internal error";
 		return NextResponse.json({ ok: false, error: msg }, { status: 500 });
 	}
 }

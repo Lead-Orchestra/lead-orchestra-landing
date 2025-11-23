@@ -1,17 +1,17 @@
-'use client';
-import { GlassCard } from '@/components/ui/glass-card';
-import type { CaseStudy } from '@/types/case-study';
-import { motion } from 'framer-motion';
-import { ChevronRight, FileText } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useMemo } from 'react';
+"use client";
+import { GlassCard } from "@/components/ui/glass-card";
+import type { CaseStudy } from "@/types/case-study";
+import { motion } from "framer-motion";
+import { ChevronRight, FileText } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useMemo } from "react";
 
 // Accepts caseStudies and categoryFilter as props
-import { useCategoryFilter } from '@/hooks/use-category-filter';
-import { useDataModuleGuardTelemetry } from '@/hooks/useDataModuleGuardTelemetry';
-import { useDataModule } from '@/stores/useDataModuleStore';
-import Header from '../common/Header';
+import { useCategoryFilter } from "@/hooks/use-category-filter";
+import { useDataModuleGuardTelemetry } from "@/hooks/useDataModuleGuardTelemetry";
+import { useDataModule } from "@/stores/useDataModuleStore";
+import Header from "../common/Header";
 
 interface CaseStudyGridProps {
 	caseStudies: CaseStudy[];
@@ -31,9 +31,9 @@ interface CaseStudyGridProps {
 	showCategoryFilter?: boolean;
 }
 
-const DEFAULT_TITLE = 'Case Studies';
+const DEFAULT_TITLE = "Case Studies";
 const DEFAULT_SUBTITLE =
-	'See real success stories and ways to leverage Deal Scale to grow your business.';
+	"See real success stories and ways to leverage Deal Scale to grow your business.";
 
 const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 	caseStudies,
@@ -48,7 +48,7 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 		categories: moduleCategories,
 		caseStudies: moduleCaseStudies,
 		error: caseStudyError,
-	} = useDataModule('caseStudy/caseStudies', ({ status, data, error }) => ({
+	} = useDataModule("caseStudy/caseStudies", ({ status, data, error }) => ({
 		status,
 		categories: data?.caseStudyCategories ?? [],
 		caseStudies: data?.caseStudies ?? [],
@@ -58,27 +58,29 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 	const hasModuleCaseStudies = moduleCaseStudies.length > 0;
 	const guardDetail = useMemo(
 		() => ({ providedViaProp: caseStudies.length > 0 }),
-		[caseStudies.length]
+		[caseStudies.length],
 	);
 
 	useDataModuleGuardTelemetry({
-		key: 'caseStudy/caseStudies',
-		surface: 'CaseStudyGrid',
+		key: "caseStudy/caseStudies",
+		surface: "CaseStudyGrid",
 		status: caseStudyStatus,
 		hasData: hasModuleCaseStudies,
 		error: caseStudyError,
 		detail: guardDetail,
 	});
 
-	const resolvedCaseStudies = caseStudies.length > 0 ? caseStudies : moduleCaseStudies;
+	const resolvedCaseStudies =
+		caseStudies.length > 0 ? caseStudies : moduleCaseStudies;
 
-	const { activeCategory, CategoryFilter } = useCategoryFilter(moduleCategories);
+	const { activeCategory, CategoryFilter } =
+		useCategoryFilter(moduleCategories);
 
 	// * If limit is set, ignore category filtering and show latest case studies
 	let visibleStudies: CaseStudy[];
 	let showViewAll = false;
 
-	if (typeof limit === 'number') {
+	if (typeof limit === "number") {
 		// todo: If caseStudies have a 'date' or 'createdAt', sort by newest first. Otherwise, use array order.
 		visibleStudies = [...resolvedCaseStudies]
 			// .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Uncomment if date exists
@@ -89,33 +91,41 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 		// * Robust filtering: show all if no category, 'All' (any case), empty string, or empty array
 		const isAll =
 			!activeCategory ||
-			(typeof activeCategory === 'string' && activeCategory.toLowerCase() === 'all') ||
-			activeCategory === '' ||
+			(typeof activeCategory === "string" &&
+				activeCategory.toLowerCase() === "all") ||
+			activeCategory === "" ||
 			(Array.isArray(activeCategory) && activeCategory.length === 0);
 
 		const filteredStudies = isAll
 			? resolvedCaseStudies
-			: resolvedCaseStudies.filter((cs) => cs.categories.includes(activeCategory));
+			: resolvedCaseStudies.filter((cs) =>
+					cs.categories.includes(activeCategory),
+				);
 		visibleStudies = filteredStudies;
 		showViewAll = showViewAllButton && filteredStudies.length > 0;
 	}
 
 	if (
 		resolvedCaseStudies.length === 0 &&
-		(caseStudyStatus === 'idle' || caseStudyStatus === 'loading')
+		(caseStudyStatus === "idle" || caseStudyStatus === "loading")
 	) {
 		return (
 			<section className="bg-background-dark px-6 py-20 lg:px-8">
 				<div className="mx-auto mb-10 max-w-4xl text-center">
 					<Header title={title} subtitle={subtitle} size="lg" />
 				</div>
-				<div className="py-16 text-center text-muted-foreground">Loading case studies…</div>
+				<div className="py-16 text-center text-muted-foreground">
+					Loading case studies…
+				</div>
 			</section>
 		);
 	}
 
-	if (resolvedCaseStudies.length === 0 && caseStudyStatus === 'error') {
-		console.error('[CaseStudyGrid] Failed to load case studies', caseStudyError);
+	if (resolvedCaseStudies.length === 0 && caseStudyStatus === "error") {
+		console.error(
+			"[CaseStudyGrid] Failed to load case studies",
+			caseStudyError,
+		);
 		return (
 			<section className="bg-background-dark px-6 py-20 lg:px-8">
 				<div className="mx-auto mb-10 max-w-4xl text-center">
@@ -128,13 +138,15 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 		);
 	}
 
-	if (resolvedCaseStudies.length === 0 && caseStudyStatus === 'ready') {
+	if (resolvedCaseStudies.length === 0 && caseStudyStatus === "ready") {
 		return (
 			<section className="bg-background-dark px-6 py-20 lg:px-8">
 				<div className="mx-auto mb-10 max-w-4xl text-center">
 					<Header title={title} subtitle={subtitle} size="lg" />
 				</div>
-				<div className="py-16 text-center text-muted-foreground">Case studies coming soon.</div>
+				<div className="py-16 text-center text-muted-foreground">
+					Case studies coming soon.
+				</div>
 			</section>
 		);
 	}
@@ -179,7 +191,7 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 												src={study.thumbnailImage}
 												alt={study.title}
 												fill
-												style={{ objectFit: 'cover' }}
+												style={{ objectFit: "cover" }}
 												sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
 												className="transition-transform duration-500 group-hover:scale-105"
 											/>
@@ -226,7 +238,8 @@ const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({
 				{visibleStudies.length === 0 && (
 					<div className="py-16 text-center">
 						<p className="text-black dark:text-white/70">
-							No case studies found for this category. Please try another filter.
+							No case studies found for this category. Please try another
+							filter.
 						</p>
 					</div>
 				)}

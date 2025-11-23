@@ -1,10 +1,10 @@
-'use client';
-import { NewsletterFooter } from '@/components/contact/newsletter/NewsletterFooter';
-import type { LinkTreeItem } from '@/utils/linktree-redis';
-import * as React from 'react';
-import LinkCard from './LinkCard';
-import { groupItems } from './tree/grouping';
-import { resolveLink } from './tree/linkResolution';
+"use client";
+import { NewsletterFooter } from "@/components/contact/newsletter/NewsletterFooter";
+import type { LinkTreeItem } from "@/utils/linktree-redis";
+import * as React from "react";
+import LinkCard from "./LinkCard";
+import { groupItems } from "./tree/grouping";
+import { resolveLink } from "./tree/linkResolution";
 
 export type LinkTreeProps = {
 	items: LinkTreeItem[];
@@ -12,10 +12,16 @@ export type LinkTreeProps = {
 	subtitle?: string;
 };
 
-export function LinkTree({ items, title = 'Link Tree', subtitle }: LinkTreeProps) {
-	const [query, setQuery] = React.useState('');
+export function LinkTree({
+	items,
+	title = "Link Tree",
+	subtitle,
+}: LinkTreeProps) {
+	const [query, setQuery] = React.useState("");
 	const [pending, setPending] = React.useState(false);
-	const [clientItems, setClientItems] = React.useState<LinkTreeItem[] | null>(null);
+	const [clientItems, setClientItems] = React.useState<LinkTreeItem[] | null>(
+		null,
+	);
 	const displayItems = clientItems ?? items;
 
 	// Client-side fallback: if server-rendered items are stale/short, hydrate from API
@@ -23,7 +29,7 @@ export function LinkTree({ items, title = 'Link Tree', subtitle }: LinkTreeProps
 		let cancelled = false;
 		(async () => {
 			try {
-				const res = await fetch('/api/linktree', { cache: 'no-store' });
+				const res = await fetch("/api/linktree", { cache: "no-store" });
 				if (!res.ok) return;
 				const data = await res.json();
 				const apiItems: LinkTreeItem[] = Array.isArray(data?.items)
@@ -58,20 +64,20 @@ export function LinkTree({ items, title = 'Link Tree', subtitle }: LinkTreeProps
 		return copy.filter((it) =>
 			[it.title, it.destination, it.category]
 				.filter(Boolean)
-				.some((s) => String(s).toLowerCase().includes(q))
+				.some((s) => String(s).toLowerCase().includes(q)),
 		);
 	}, [displayItems, query]);
 
 	const { highlightedLabeled, normalEntries } = React.useMemo(
 		() => groupItems(normalized),
-		[normalized]
+		[normalized],
 	);
 
 	async function handleRefresh() {
 		try {
 			setPending(true);
-			await fetch('/api/linktree/revalidate', { method: 'POST' });
-			if (typeof window !== 'undefined') window.location.reload();
+			await fetch("/api/linktree/revalidate", { method: "POST" });
+			if (typeof window !== "undefined") window.location.reload();
 		} finally {
 			setPending(false);
 		}
@@ -83,7 +89,9 @@ export function LinkTree({ items, title = 'Link Tree', subtitle }: LinkTreeProps
 				<div className="flex items-center justify-between">
 					<div className="flex-1 text-center">
 						<h1 className="font-bold text-3xl tracking-tight">{title}</h1>
-						{subtitle ? <p className="mt-2 text-muted-foreground">{subtitle}</p> : null}
+						{subtitle ? (
+							<p className="mt-2 text-muted-foreground">{subtitle}</p>
+						) : null}
 					</div>
 					<button
 						type="button"
@@ -209,7 +217,9 @@ export function LinkTree({ items, title = 'Link Tree', subtitle }: LinkTreeProps
 			)}
 
 			<section className="mt-10 space-y-4">
-				<h2 className="text-center font-semibold text-xl">Subscribe to our newsletter</h2>
+				<h2 className="text-center font-semibold text-xl">
+					Subscribe to our newsletter
+				</h2>
 				<NewsletterFooter />
 			</section>
 		</div>

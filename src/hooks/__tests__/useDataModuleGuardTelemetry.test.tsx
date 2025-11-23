@@ -1,19 +1,19 @@
-import { render } from '@testing-library/react';
-import React from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render } from "@testing-library/react";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { DataModuleStatus } from '@/stores/useDataModuleStore';
+import type { DataModuleStatus } from "@/stores/useDataModuleStore";
 
 const observabilityMocks = vi.hoisted(() => ({
 	reportDataModuleGuard: vi.fn(),
 }));
 
-vi.mock('@/utils/observability/dataModuleGuards', () => observabilityMocks);
+vi.mock("@/utils/observability/dataModuleGuards", () => observabilityMocks);
 
-import { reportDataModuleGuard } from '@/utils/observability/dataModuleGuards';
-import { useDataModuleGuardTelemetry } from '../useDataModuleGuardTelemetry';
+import { reportDataModuleGuard } from "@/utils/observability/dataModuleGuards";
+import { useDataModuleGuardTelemetry } from "../useDataModuleGuardTelemetry";
 
-describe('useDataModuleGuardTelemetry', () => {
+describe("useDataModuleGuardTelemetry", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
@@ -28,8 +28,8 @@ describe('useDataModuleGuardTelemetry', () => {
 		error?: unknown;
 	}) {
 		useDataModuleGuardTelemetry({
-			key: 'caseStudy/caseStudies',
-			surface: 'TestSurface',
+			key: "caseStudy/caseStudies",
+			surface: "TestSurface",
 			status,
 			hasData,
 			error,
@@ -38,36 +38,46 @@ describe('useDataModuleGuardTelemetry', () => {
 		return null;
 	}
 
-	it('reports when the module stays idle', () => {
+	it("reports when the module stays idle", () => {
 		render(<TestHarness status="idle" hasData={false} />);
 
 		expect(reportDataModuleGuard).toHaveBeenCalledWith(
 			expect.objectContaining({
-				key: 'caseStudy/caseStudies',
-				status: 'idle',
-				surface: 'TestSurface',
+				key: "caseStudy/caseStudies",
+				status: "idle",
+				surface: "TestSurface",
 				hasData: false,
-			})
+			}),
 		);
 	});
 
-	it('reports when the module enters an error state', () => {
-		const { rerender } = render(<TestHarness status="loading" hasData={false} />);
+	it("reports when the module enters an error state", () => {
+		const { rerender } = render(
+			<TestHarness status="loading" hasData={false} />,
+		);
 
 		vi.clearAllMocks();
 
-		rerender(<TestHarness status="error" hasData={false} error={new Error('load failed')} />);
+		rerender(
+			<TestHarness
+				status="error"
+				hasData={false}
+				error={new Error("load failed")}
+			/>,
+		);
 
 		expect(reportDataModuleGuard).toHaveBeenCalledWith(
 			expect.objectContaining({
-				status: 'error',
-				error: 'load failed',
-			})
+				status: "error",
+				error: "load failed",
+			}),
 		);
 	});
 
-	it('does not re-emit identical loading states', () => {
-		const { rerender } = render(<TestHarness status="loading" hasData={false} />);
+	it("does not re-emit identical loading states", () => {
+		const { rerender } = render(
+			<TestHarness status="loading" hasData={false} />,
+		);
 
 		expect(reportDataModuleGuard).toHaveBeenCalledTimes(1);
 
@@ -78,11 +88,11 @@ describe('useDataModuleGuardTelemetry', () => {
 		expect(reportDataModuleGuard).not.toHaveBeenCalled();
 	});
 
-	it('reports empty ready payloads once', () => {
+	it("reports empty ready payloads once", () => {
 		const { rerender } = render(<TestHarness status="ready" hasData={false} />);
 
 		expect(reportDataModuleGuard).toHaveBeenCalledWith(
-			expect.objectContaining({ status: 'ready', hasData: false })
+			expect.objectContaining({ status: "ready", hasData: false }),
 		);
 
 		vi.clearAllMocks();

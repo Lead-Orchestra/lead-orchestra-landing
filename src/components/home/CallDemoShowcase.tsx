@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Image from "next/image";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import SessionMonitor from '@/components/deal_scale/talkingCards/SessionMonitor';
-import { CallCompleteModal } from '@/components/deal_scale/talkingCards/session/CallCompleteModal';
-import { useDeferredLoad } from '@/components/providers/useDeferredLoad';
+import SessionMonitor from "@/components/deal_scale/talkingCards/SessionMonitor";
+import { CallCompleteModal } from "@/components/deal_scale/talkingCards/session/CallCompleteModal";
+import { useDeferredLoad } from "@/components/providers/useDeferredLoad";
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@/components/ui/accordion';
-import { AnimatedList } from '@/components/ui/animatedList';
-import { Iphone } from '@/components/ui/iphone';
-import { LayoutGrid } from '@/components/ui/layout-grid';
-import { SparklesText } from '@/components/ui/sparkles-text';
-import { TypingAnimation } from '@/components/ui/typing-animation';
+} from "@/components/ui/accordion";
+import { AnimatedList } from "@/components/ui/animatedList";
+import { Iphone } from "@/components/ui/iphone";
+import { LayoutGrid } from "@/components/ui/layout-grid";
+import { SparklesText } from "@/components/ui/sparkles-text";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 import {
 	AI_OUTREACH_STUDIO_ANCHOR,
 	AI_OUTREACH_STUDIO_DESCRIPTION,
@@ -24,18 +24,18 @@ import {
 	AI_OUTREACH_STUDIO_HEADING,
 	AI_OUTREACH_STUDIO_TAGLINE,
 	buildPersonaAiOutreachStudioSeo,
-} from '@/data/home/aiOutreachStudio';
-import { DEFAULT_PERSONA_KEY, PERSONA_LABELS } from '@/data/personas/catalog';
-import demoTranscript from '@/data/transcripts';
-import { cn } from '@/lib/utils';
-import { usePersonaStore } from '@/stores/usePersonaStore';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { useShallow } from 'zustand/react/shallow';
+} from "@/data/home/aiOutreachStudio";
+import { DEFAULT_PERSONA_KEY, PERSONA_LABELS } from "@/data/personas/catalog";
+import demoTranscript from "@/data/transcripts";
+import { cn } from "@/lib/utils";
+import { usePersonaStore } from "@/stores/usePersonaStore";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { useShallow } from "zustand/react/shallow";
 
-type PreviewType = 'call' | 'text';
-type CallDemoMode = 'video' | 'live' | 'handoff';
-type AttachmentType = 'image' | 'gif' | 'video' | 'file';
+type PreviewType = "call" | "text";
+type CallDemoMode = "video" | "live" | "handoff";
+type AttachmentType = "image" | "gif" | "video" | "file";
 
 type MessageAttachment = {
 	id: string;
@@ -47,99 +47,100 @@ type MessageAttachment = {
 };
 
 type TextDemoMessage = {
-	sender: 'AI' | 'Lead';
+	sender: "AI" | "Lead";
 	text: string;
 	attachments?: MessageAttachment[];
 };
 
 const CALL_DEMO_PLAYLIST_SRC =
-	'https://www.youtube.com/embed/videoseries?list=PL2qdNLbKGbJB3_UFHA0Xc3-5tk2d7oUEt&index=0&controls=1&autoplay=0&mute=1&rel=0&playsinline=1&modestbranding=1';
+	"https://www.youtube.com/embed/videoseries?list=PL2qdNLbKGbJB3_UFHA0Xc3-5tk2d7oUEt&index=0&controls=1&autoplay=0&mute=1&rel=0&playsinline=1&modestbranding=1";
 
 const CALL_DEMO_PLAYLIST_AUTOPLAY_SRC =
-	'https://www.youtube.com/embed/videoseries?list=PL2qdNLbKGbJB3_UFHA0Xc3-5tk2d7oUEt&index=0&controls=1&autoplay=1&mute=0&rel=0&playsinline=1&modestbranding=1';
+	"https://www.youtube.com/embed/videoseries?list=PL2qdNLbKGbJB3_UFHA0Xc3-5tk2d7oUEt&index=0&controls=1&autoplay=1&mute=0&rel=0&playsinline=1&modestbranding=1";
 
 const TEXT_DEMO_MESSAGES: readonly TextDemoMessage[] = [
 	{
-		sender: 'AI',
-		text: '🔍 Scraping job complete! Extracted 247 fresh leads from Zillow search results. All data normalized and ready for export. View results: https://app.leadorchestra.io/jobs/abc123',
+		sender: "AI",
+		text: "🔍 Scraping job complete! Extracted 247 fresh leads from Zillow search results. All data normalized and ready for export. View results: https://app.leadorchestra.io/jobs/abc123",
 		attachments: [
 			{
-				id: 'scrape-results',
-				type: 'image',
-				title: 'Scraping results summary',
-				meta: '3 screenshots • 1.8 MB',
-				description: 'Lead count, data quality metrics, export options.',
-				previewGradient: 'from-sky-400/25 via-sky-500/15 to-indigo-500/20',
+				id: "scrape-results",
+				type: "image",
+				title: "Scraping results summary",
+				meta: "3 screenshots • 1.8 MB",
+				description: "Lead count, data quality metrics, export options.",
+				previewGradient: "from-sky-400/25 via-sky-500/15 to-indigo-500/20",
 			},
 			{
-				id: 'data-preview',
-				type: 'gif',
-				title: 'Data normalization preview.gif',
-				meta: 'Loop • 8 sec',
-				description: 'Shows address parsing, phone extraction, and deduplication in action.',
-				previewGradient: 'from-emerald-400/25 via-cyan-400/20 to-slate-900/30',
+				id: "data-preview",
+				type: "gif",
+				title: "Data normalization preview.gif",
+				meta: "Loop • 8 sec",
+				description:
+					"Shows address parsing, phone extraction, and deduplication in action.",
+				previewGradient: "from-emerald-400/25 via-cyan-400/20 to-slate-900/30",
 			},
 		],
 	},
 	{
-		sender: 'Lead',
-		text: 'Nice! Can I export this to my CRM?',
+		sender: "Lead",
+		text: "Nice! Can I export this to my CRM?",
 		attachments: [
 			{
-				id: 'export-config',
-				type: 'file',
-				title: 'Database schema.json',
-				meta: 'JSON • 2.4 KB',
-				description: 'CRM connection config and field mapping.',
-				previewGradient: 'from-amber-400/25 via-orange-500/20 to-stone-900/25',
+				id: "export-config",
+				type: "file",
+				title: "Database schema.json",
+				meta: "JSON • 2.4 KB",
+				description: "CRM connection config and field mapping.",
+				previewGradient: "from-amber-400/25 via-orange-500/20 to-stone-900/25",
 			},
 		],
 	},
 	{
-		sender: 'AI',
+		sender: "AI",
 		text: "✅ Export started! 247 leads are being synced to your CRM. ETA: 2 minutes. You'll get a webhook notification when it's complete.",
 		attachments: [
 			{
-				id: 'export-progress',
-				type: 'video',
-				title: 'Export progress.mp4',
-				meta: 'Video • 15 sec',
-				description: 'Real-time export status showing records being inserted.',
-				previewGradient: 'from-indigo-400/25 via-purple-500/20 to-slate-900/30',
+				id: "export-progress",
+				type: "video",
+				title: "Export progress.mp4",
+				meta: "Video • 15 sec",
+				description: "Real-time export status showing records being inserted.",
+				previewGradient: "from-indigo-400/25 via-purple-500/20 to-slate-900/30",
 			},
 		],
 	},
 	{
-		sender: 'Lead',
-		text: 'Perfect! Can I schedule this scrape to run daily?',
+		sender: "Lead",
+		text: "Perfect! Can I schedule this scrape to run daily?",
 	},
 	{
-		sender: 'AI',
+		sender: "AI",
 		text: "Absolutely! I've set up a recurring job to scrape this Zillow search every day at 6 AM. You'll get a notification with fresh leads each morning. Want me to auto-export to your CRM too?",
 	},
 	{
-		sender: 'Lead',
-		text: 'Yes, auto-export would be great. Thanks!',
+		sender: "Lead",
+		text: "Yes, auto-export would be great. Thanks!",
 	},
 	{
-		sender: 'AI',
+		sender: "AI",
 		text: "✅ Done! Your scheduled scrape is active. Daily runs at 6 AM with automatic CRM export. You'll receive notifications for each completed job.",
 	},
 ];
 const TEXT_DEMO_MESSAGES_COUNT = TEXT_DEMO_MESSAGES.length;
 
 const SESSION_MONITOR_DIALOG = [
-	'🔍 Scraping 247 leads from Zillow search results...',
-	'📊 Normalizing data: addresses, phone numbers, emails extracted.',
-	'💾 Exporting 1,234 leads to CRM...',
-	'🚀 Scheduled scrape job completed: 892 fresh leads from Realtor.com',
+	"🔍 Scraping 247 leads from Zillow search results...",
+	"📊 Normalizing data: addresses, phone numbers, emails extracted.",
+	"💾 Exporting 1,234 leads to CRM...",
+	"🚀 Scheduled scrape job completed: 892 fresh leads from Realtor.com",
 ] as const;
 
 const SESSION_MONITOR_STATUS = [
-	'✅ Scraping job active, extracting data from 3 sources.',
-	'🔄 Data normalization in progress, cleaning 500+ records.',
-	'📤 Export ready: 1,234 leads formatted for CSV download.',
-	'⚡ MCP plugin loaded: LinkedIn scraping pipeline initialized.',
+	"✅ Scraping job active, extracting data from 3 sources.",
+	"🔄 Data normalization in progress, cleaning 500+ records.",
+	"📤 Export ready: 1,234 leads formatted for CSV download.",
+	"⚡ MCP plugin loaded: LinkedIn scraping pipeline initialized.",
 ] as const;
 
 const PhoneShell = ({
@@ -151,8 +152,8 @@ const PhoneShell = ({
 }) => (
 	<div
 		className={cn(
-			'relative w-full max-w-[22rem] rounded-[3.25rem] bg-slate-900/45 p-3 shadow-[0_35px_80px_rgba(15,23,42,0.55)] ring-1 ring-slate-800/45 backdrop-blur-md sm:max-w-[24rem] md:max-w-[26rem] dark:bg-slate-900/70 dark:ring-white/12',
-			className
+			"relative w-full max-w-[22rem] rounded-[3.25rem] bg-slate-900/45 p-3 shadow-[0_35px_80px_rgba(15,23,42,0.55)] ring-1 ring-slate-800/45 backdrop-blur-md sm:max-w-[24rem] md:max-w-[26rem] dark:bg-slate-900/70 dark:ring-white/12",
+			className,
 		)}
 	>
 		<div className="pointer-events-none absolute inset-0 rounded-[3.25rem] bg-gradient-to-b from-white/8 via-transparent to-black/40 dark:from-white/12 dark:via-transparent dark:to-black/65" />
@@ -186,10 +187,12 @@ const CallHandoffCard = ({
 							className="size-full object-cover"
 						/>
 					</div>
-					<h3 className="font-semibold text-lg">Lead Orchestra Data Pipeline</h3>
+					<h3 className="font-semibold text-lg">
+						Lead Orchestra Data Pipeline
+					</h3>
 					<p className="text-slate-300 text-sm">
-						Scraped leads ready for export. Accept and we&apos;ll sync the data to your system in
-						CSV/JSON format.
+						Scraped leads ready for export. Accept and we&apos;ll sync the data
+						to your system in CSV/JSON format.
 					</p>
 				</div>
 			</div>
@@ -222,7 +225,7 @@ const CallHandoffCard = ({
 
 const PixelatedVoiceCloneCard = dynamic(
 	() =>
-		import('@/components/ui/pixelated-voice-clone-card').then((module) => ({
+		import("@/components/ui/pixelated-voice-clone-card").then((module) => ({
 			default: module.PixelatedVoiceCloneCard,
 		})),
 	{
@@ -232,7 +235,7 @@ const PixelatedVoiceCloneCard = dynamic(
 				<div className="h-[28rem] w-full max-w-5xl animate-pulse rounded-3xl bg-slate-900/20" />
 			</div>
 		),
-	}
+	},
 );
 
 function useInterval(callback: () => void, delay: number | null): void {
@@ -257,17 +260,19 @@ function useInterval(callback: () => void, delay: number | null): void {
 
 const CallDemoInteractive = () => {
 	const [callDemoKey, setCallDemoKey] = useState(() => Date.now());
-	const [callDemoMode, setCallDemoMode] = useState<CallDemoMode>('video');
-	const [activePreview, setActivePreview] = useState<PreviewType>('text');
+	const [callDemoMode, setCallDemoMode] = useState<CallDemoMode>("video");
+	const [activePreview, setActivePreview] = useState<PreviewType>("text");
 	const [activeTextIndex, setActiveTextIndex] = useState(0);
 	const [isLeadCaptureOpen, setIsLeadCaptureOpen] = useState(false);
-	const [leadCaptureOrigin, setLeadCaptureOrigin] = useState<'call' | 'text'>('text');
+	const [leadCaptureOrigin, setLeadCaptureOrigin] = useState<"call" | "text">(
+		"text",
+	);
 	const [isTextDemoPlaying, setIsTextDemoPlaying] = useState(false);
 	const [shouldAutoplayVideo, setShouldAutoplayVideo] = useState(false);
 
 	// Debug: Log state changes
 	useEffect(() => {
-		console.log('[CallDemo] State changed', {
+		console.log("[CallDemo] State changed", {
 			callDemoMode,
 			activePreview,
 			shouldAutoplayVideo,
@@ -278,7 +283,7 @@ const CallDemoInteractive = () => {
 	const textLeadCaptureTimeoutRef = useRef<number | null>(null);
 	const textScrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-	const openLeadCaptureModal = useCallback((origin: 'call' | 'text') => {
+	const openLeadCaptureModal = useCallback((origin: "call" | "text") => {
 		setLeadCaptureOrigin(origin);
 		setIsLeadCaptureOpen(true);
 	}, []);
@@ -292,16 +297,16 @@ const CallDemoInteractive = () => {
 	}, []);
 
 	const handleRestartCallDemo = useCallback(() => {
-		setActivePreview('call');
+		setActivePreview("call");
 		setCallDemoKey(Date.now());
-		setCallDemoMode('live');
+		setCallDemoMode("live");
 		setShouldAutoplayVideo(false);
 	}, []);
 
 	const handleSwitchPreview = useCallback((type: PreviewType) => {
 		setActivePreview(type);
-		if (type === 'text') {
-			setCallDemoMode('video');
+		if (type === "text") {
+			setCallDemoMode("video");
 			// Reset autoplay when switching away from video
 			setShouldAutoplayVideo(false);
 		}
@@ -313,21 +318,23 @@ const CallDemoInteractive = () => {
 			window.clearTimeout(textLeadCaptureTimeoutRef.current);
 			textLeadCaptureTimeoutRef.current = null;
 		}
-		openLeadCaptureModal('text');
+		openLeadCaptureModal("text");
 	}, [openLeadCaptureModal]);
 
 	const handleCancelTextDemo = useCallback(() => {
-		console.log('[CallDemo] Cancel text demo - returning to shorts with autoplay');
+		console.log(
+			"[CallDemo] Cancel text demo - returning to shorts with autoplay",
+		);
 		hasTriggeredTextLeadCaptureRef.current = false;
 		if (textLeadCaptureTimeoutRef.current) {
 			window.clearTimeout(textLeadCaptureTimeoutRef.current);
 			textLeadCaptureTimeoutRef.current = null;
 		}
-		setActivePreview('call');
-		setCallDemoMode('video');
+		setActivePreview("call");
+		setCallDemoMode("video");
 		// Enable autoplay when returning to shorts from text demo
 		setTimeout(() => {
-			console.log('[CallDemo] Enabling autoplay for shorts');
+			console.log("[CallDemo] Enabling autoplay for shorts");
 			setShouldAutoplayVideo(true);
 		}, 300);
 	}, []);
@@ -347,7 +354,7 @@ const CallDemoInteractive = () => {
 	}, []);
 
 	useEffect(() => {
-		if (activePreview !== 'text') {
+		if (activePreview !== "text") {
 			setActiveTextIndex(0);
 			setIsTextDemoPlaying(false);
 			hasTriggeredTextLeadCaptureRef.current = false;
@@ -361,35 +368,47 @@ const CallDemoInteractive = () => {
 	// Listen for custom event to play YouTube shorts
 	useEffect(() => {
 		const handlePlayShorts = (event: CustomEvent) => {
-			console.log('[CallDemo] play-youtube-shorts event received', event.detail);
+			console.log(
+				"[CallDemo] play-youtube-shorts event received",
+				event.detail,
+			);
 
 			// First switch to video mode
-			console.log('[CallDemo] Switching to call preview and video mode');
-			setActivePreview('call');
-			setCallDemoMode('video');
+			console.log("[CallDemo] Switching to call preview and video mode");
+			setActivePreview("call");
+			setCallDemoMode("video");
 
 			// Wait a moment for the mode switch to complete, then enable autoplay
 			// This ensures the iframe container is ready before we switch to autoplay URL
 			setTimeout(() => {
-				console.log('[CallDemo] Enabling autoplay');
+				console.log("[CallDemo] Enabling autoplay");
 				setShouldAutoplayVideo(true);
 				// Keep autoplay enabled - don't reset it automatically
 				// It will only reset when user switches to a different mode
 			}, 500);
 		};
 
-		window.addEventListener('play-youtube-shorts', handlePlayShorts as EventListener);
-		console.log('[CallDemo] Event listener registered for play-youtube-shorts');
+		window.addEventListener(
+			"play-youtube-shorts",
+			handlePlayShorts as EventListener,
+		);
+		console.log("[CallDemo] Event listener registered for play-youtube-shorts");
 
 		return () => {
-			window.removeEventListener('play-youtube-shorts', handlePlayShorts as EventListener);
+			window.removeEventListener(
+				"play-youtube-shorts",
+				handlePlayShorts as EventListener,
+			);
 		};
 	}, []);
 
-	useInterval(advanceTextMessage, activePreview === 'text' && isTextDemoPlaying ? 3200 : null);
+	useInterval(
+		advanceTextMessage,
+		activePreview === "text" && isTextDemoPlaying ? 3200 : null,
+	);
 
 	useEffect(() => {
-		if (activePreview !== 'text') {
+		if (activePreview !== "text") {
 			return;
 		}
 		const container = textScrollContainerRef.current;
@@ -397,28 +416,35 @@ const CallDemoInteractive = () => {
 			return;
 		}
 		const activeMessage = container.querySelector<HTMLElement>(
-			`[data-message-index="${activeTextIndex}"]`
+			`[data-message-index="${activeTextIndex}"]`,
 		);
 		if (!activeMessage) {
 			return;
 		}
 		const containerRect = container.getBoundingClientRect();
-		const isContainerVisible = containerRect.bottom > 0 && containerRect.top < window.innerHeight;
+		const isContainerVisible =
+			containerRect.bottom > 0 && containerRect.top < window.innerHeight;
 		if (!isContainerVisible) {
 			return;
 		}
 		const messageRect = activeMessage.getBoundingClientRect();
 		const messageHeight =
-			messageRect.height || activeMessage.offsetHeight || messageRect.bottom - messageRect.top;
-		const scrollOffset = messageRect.top - containerRect.top + container.scrollTop;
-		const targetScrollTop = Math.max(0, scrollOffset + messageHeight - container.clientHeight);
+			messageRect.height ||
+			activeMessage.offsetHeight ||
+			messageRect.bottom - messageRect.top;
+		const scrollOffset =
+			messageRect.top - containerRect.top + container.scrollTop;
+		const targetScrollTop = Math.max(
+			0,
+			scrollOffset + messageHeight - container.clientHeight,
+		);
 		if (Math.abs(container.scrollTop - targetScrollTop) <= 1) {
 			return;
 		}
-		if (typeof container.scrollTo === 'function') {
+		if (typeof container.scrollTo === "function") {
 			container.scrollTo({
 				top: targetScrollTop,
-				behavior: 'smooth',
+				behavior: "smooth",
 			});
 		} else {
 			container.scrollTop = targetScrollTop;
@@ -426,7 +452,7 @@ const CallDemoInteractive = () => {
 	}, [activePreview, activeTextIndex]);
 
 	useEffect(() => {
-		if (activePreview !== 'text' || !isTextDemoPlaying) {
+		if (activePreview !== "text" || !isTextDemoPlaying) {
 			return;
 		}
 
@@ -439,7 +465,7 @@ const CallDemoInteractive = () => {
 				window.clearTimeout(textLeadCaptureTimeoutRef.current);
 			}
 			textLeadCaptureTimeoutRef.current = window.setTimeout(() => {
-				openLeadCaptureModal('text');
+				openLeadCaptureModal("text");
 				textLeadCaptureTimeoutRef.current = null;
 			}, 900);
 		}
@@ -453,38 +479,42 @@ const CallDemoInteractive = () => {
 	}, [activePreview, activeTextIndex, isTextDemoPlaying, openLeadCaptureModal]);
 
 	const handleCallDemoComplete = useCallback(() => {
-		setCallDemoMode('handoff');
-		openLeadCaptureModal('call');
+		setCallDemoMode("handoff");
+		openLeadCaptureModal("call");
 	}, [openLeadCaptureModal]);
 
 	const handleCallHandoffAccept = useCallback(() => {
-		setCallDemoMode('handoff');
-		openLeadCaptureModal('call');
+		setCallDemoMode("handoff");
+		openLeadCaptureModal("call");
 	}, [openLeadCaptureModal]);
 
 	const handleCallHandoffQueue = useCallback(() => {
-		setCallDemoMode('handoff');
-		openLeadCaptureModal('call');
+		setCallDemoMode("handoff");
+		openLeadCaptureModal("call");
 	}, [openLeadCaptureModal]);
 
 	const handleCallHandoffCancel = useCallback(() => {
-		setCallDemoMode('video');
+		setCallDemoMode("video");
 		closeLeadCaptureModal();
 	}, [closeLeadCaptureModal]);
 
 	const renderPreview = useCallback(() => {
-		if (activePreview === 'text') {
+		if (activePreview === "text") {
 			return (
 				<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
 					<PhoneShell>
-						<Iphone aria-label="Text demo preview" className="w-full" colorScheme="dark">
+						<Iphone
+							aria-label="Text demo preview"
+							className="w-full"
+							colorScheme="dark"
+						>
 							<>
 								<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
 									<div
 										className={cn(
-											'rounded-full px-3 py-1',
-											'font-semibold text-[10px] text-white uppercase tracking-[0.3em]',
-											'bg-slate-900/70 backdrop-blur'
+											"rounded-full px-3 py-1",
+											"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
+											"bg-slate-900/70 backdrop-blur",
 										)}
 									>
 										Scraping Demo
@@ -497,34 +527,44 @@ const CallDemoInteractive = () => {
 											data-testid="text-demo-scroll-container"
 											className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-slate-600/40 flex h-full flex-col gap-3 overflow-y-auto pr-1"
 										>
-											<AnimatedList delay={220} className="flex w-full flex-col gap-3">
+											<AnimatedList
+												delay={220}
+												className="flex w-full flex-col gap-3"
+											>
 												{TEXT_DEMO_MESSAGES.map((message, index) => {
-													const hasAttachments = Boolean(message.attachments?.length);
+													const hasAttachments = Boolean(
+														message.attachments?.length,
+													);
 													return (
 														<div
 															key={`${message.sender}-${index}`}
 															data-message-index={index}
 															className={cn(
-																'flex w-full',
-																message.sender === 'AI' ? 'justify-start' : 'justify-end'
+																"flex w-full",
+																message.sender === "AI"
+																	? "justify-start"
+																	: "justify-end",
 															)}
 														>
 															<div
 																className={cn(
-																	'rounded-2xl px-4 py-3 text-sm leading-snug shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-all duration-500',
-																	message.sender === 'AI'
-																		? 'bg-sky-100 text-slate-900 dark:bg-sky-900/70 dark:text-sky-100'
-																		: 'bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-200',
+																	"rounded-2xl px-4 py-3 text-sm leading-snug shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-all duration-500",
+																	message.sender === "AI"
+																		? "bg-sky-100 text-slate-900 dark:bg-sky-900/70 dark:text-sky-100"
+																		: "bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-200",
 																	hasAttachments
-																		? 'w-full max-w-[22.5rem] sm:max-w-[25rem]'
-																		: 'max-w-[85%]',
-																	activeTextIndex === index && 'ring-2 ring-sky-300/70',
-																	activeTextIndex === index && 'scale-[1.02]',
+																		? "w-full max-w-[22.5rem] sm:max-w-[25rem]"
+																		: "max-w-[85%]",
 																	activeTextIndex === index &&
-																		'shadow-[0_12px_24px_rgba(56,189,248,0.25)]'
+																		"ring-2 ring-sky-300/70",
+																	activeTextIndex === index && "scale-[1.02]",
+																	activeTextIndex === index &&
+																		"shadow-[0_12px_24px_rgba(56,189,248,0.25)]",
 																)}
 															>
-																<p className="whitespace-pre-line">{message.text}</p>
+																<p className="whitespace-pre-line">
+																	{message.text}
+																</p>
 																{hasAttachments ? (
 																	<Accordion
 																		type="single"
@@ -539,10 +579,10 @@ const CallDemoInteractive = () => {
 																			>
 																				<AccordionTrigger className="w-full gap-3 rounded-xl px-4 py-3 text-left font-medium text-[13px] text-slate-700 hover:no-underline focus:outline-none focus:ring-0 dark:text-slate-200">
 																					<span className="flex size-8 items-center justify-center rounded-full bg-slate-900/10 text-base dark:bg-white/15">
-																						{attachment.type === 'image' && '🖼️'}
-																						{attachment.type === 'gif' && '🎞️'}
-																						{attachment.type === 'video' && '▶️'}
-																						{attachment.type === 'file' && '📄'}
+																						{attachment.type === "image" && "🖼️"}
+																						{attachment.type === "gif" && "🎞️"}
+																						{attachment.type === "video" && "▶️"}
+																						{attachment.type === "file" && "📄"}
 																					</span>
 																					<span className="flex w-full flex-1 flex-col items-start">
 																						<span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap font-semibold text-slate-900 text-sm dark:text-white">
@@ -556,17 +596,21 @@ const CallDemoInteractive = () => {
 																				<AccordionContent className="w-full px-4 pb-4">
 																					<div
 																						className={cn(
-																							'relative w-full overflow-hidden rounded-xl border border-slate-200/60 bg-gradient-to-br p-4 text-slate-800 text-sm shadow-inner dark:border-white/10 dark:text-slate-100',
+																							"relative w-full overflow-hidden rounded-xl border border-slate-200/60 bg-gradient-to-br p-4 text-slate-800 text-sm shadow-inner dark:border-white/10 dark:text-slate-100",
 																							attachment.previewGradient ??
-																								'from-slate-200/70 via-white/70 to-slate-300/60 dark:from-slate-800/70 dark:via-slate-900/70 dark:to-black/80'
+																								"from-slate-200/70 via-white/70 to-slate-300/60 dark:from-slate-800/70 dark:via-slate-900/70 dark:to-black/80",
 																						)}
 																					>
 																						<div className="flex items-start gap-3">
 																							<span className="text-xl">
-																								{attachment.type === 'image' && '🖼️'}
-																								{attachment.type === 'gif' && '🎬'}
-																								{attachment.type === 'video' && '🎥'}
-																								{attachment.type === 'file' && '📎'}
+																								{attachment.type === "image" &&
+																									"🖼️"}
+																								{attachment.type === "gif" &&
+																									"🎬"}
+																								{attachment.type === "video" &&
+																									"🎥"}
+																								{attachment.type === "file" &&
+																									"📎"}
 																							</span>
 																							<div className="flex flex-1 flex-col">
 																								<span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap font-semibold text-slate-900 text-sm dark:text-white">
@@ -604,7 +648,7 @@ const CallDemoInteractive = () => {
 										<SparklesText
 											className="font-semibold text-[10px] text-sky-500 uppercase tracking-[0.35em] dark:text-sky-200"
 											sparklesCount={8}
-											colors={{ first: '#38bdf8', second: '#f97316' }}
+											colors={{ first: "#38bdf8", second: "#f97316" }}
 										>
 											Job Notifications
 										</SparklesText>
@@ -659,12 +703,12 @@ const CallDemoInteractive = () => {
 			);
 		}
 
-		if (callDemoMode === 'video') {
+		if (callDemoMode === "video") {
 			const videoSrc = shouldAutoplayVideo
 				? CALL_DEMO_PLAYLIST_AUTOPLAY_SRC
 				: CALL_DEMO_PLAYLIST_SRC;
 
-			console.log('[CallDemo] Rendering video mode', {
+			console.log("[CallDemo] Rendering video mode", {
 				shouldAutoplayVideo,
 				videoSrc: `${videoSrc.substring(0, 100)}...`,
 			});
@@ -679,12 +723,12 @@ const CallDemoInteractive = () => {
 						>
 							<>
 								<iframe
-									key={`video-${shouldAutoplayVideo ? 'autoplay' : 'default'}-${callDemoKey}`}
+									key={`video-${shouldAutoplayVideo ? "autoplay" : "default"}-${callDemoKey}`}
 									title="Call demo playlist preview"
 									className="size-full"
 									src={videoSrc}
 									onLoad={() => {
-										console.log('[CallDemo] YouTube iframe loaded', {
+										console.log("[CallDemo] YouTube iframe loaded", {
 											shouldAutoplayVideo,
 										});
 									}}
@@ -698,9 +742,9 @@ const CallDemoInteractive = () => {
 								<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
 									<div
 										className={cn(
-											'rounded-full px-3 py-1',
-											'font-semibold text-[10px] text-white uppercase tracking-[0.3em]',
-											'bg-slate-950/55 backdrop-blur'
+											"rounded-full px-3 py-1",
+											"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
+											"bg-slate-950/55 backdrop-blur",
 										)}
 									>
 										Shorts
@@ -712,7 +756,7 @@ const CallDemoInteractive = () => {
 				</div>
 			);
 		}
-		if (callDemoMode === 'handoff') {
+		if (callDemoMode === "handoff") {
 			return (
 				<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
 					<PhoneShell>
@@ -725,9 +769,9 @@ const CallDemoInteractive = () => {
 								<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
 									<div
 										className={cn(
-											'rounded-full px-3 py-1',
-											'font-semibold text-[10px] text-white uppercase tracking-[0.3em]',
-											'bg-emerald-500/40 backdrop-blur'
+											"rounded-full px-3 py-1",
+											"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
+											"bg-emerald-500/40 backdrop-blur",
 										)}
 									>
 										Handoff Ready
@@ -744,7 +788,7 @@ const CallDemoInteractive = () => {
 				</div>
 			);
 		}
-		if (callDemoMode === 'live') {
+		if (callDemoMode === "live") {
 			return (
 				<div className="flex w-full items-center justify-center text-slate-900 dark:text-white">
 					<PhoneShell>
@@ -757,9 +801,9 @@ const CallDemoInteractive = () => {
 								<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
 									<div
 										className={cn(
-											'rounded-full px-3 py-1',
-											'font-semibold text-[10px] text-white uppercase tracking-[0.3em]',
-											'bg-slate-950/65 backdrop-blur'
+											"rounded-full px-3 py-1",
+											"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
+											"bg-slate-950/65 backdrop-blur",
 										)}
 									>
 										Live Call Demo
@@ -788,7 +832,7 @@ const CallDemoInteractive = () => {
 			? CALL_DEMO_PLAYLIST_AUTOPLAY_SRC
 			: CALL_DEMO_PLAYLIST_SRC;
 
-		console.log('[CallDemo] Rendering fallback video mode', {
+		console.log("[CallDemo] Rendering fallback video mode", {
 			shouldAutoplayVideo,
 			videoSrc: `${fallbackVideoSrc.substring(0, 100)}...`,
 		});
@@ -803,12 +847,12 @@ const CallDemoInteractive = () => {
 					>
 						<>
 							<iframe
-								key={`video-fallback-${shouldAutoplayVideo ? 'autoplay' : 'default'}-${callDemoKey}`}
+								key={`video-fallback-${shouldAutoplayVideo ? "autoplay" : "default"}-${callDemoKey}`}
 								title="Call demo playlist preview"
 								className="size-full"
 								src={fallbackVideoSrc}
 								onLoad={() => {
-									console.log('[CallDemo] YouTube iframe (fallback) loaded', {
+									console.log("[CallDemo] YouTube iframe (fallback) loaded", {
 										shouldAutoplayVideo,
 									});
 								}}
@@ -822,9 +866,9 @@ const CallDemoInteractive = () => {
 							<div className="pointer-events-none absolute inset-x-8 top-6 flex justify-center">
 								<div
 									className={cn(
-										'rounded-full px-3 py-1',
-										'font-semibold text-[10px] text-white uppercase tracking-[0.3em]',
-										'bg-slate-950/55 backdrop-blur'
+										"rounded-full px-3 py-1",
+										"font-semibold text-[10px] text-white uppercase tracking-[0.3em]",
+										"bg-slate-950/55 backdrop-blur",
 									)}
 								>
 									Shorts
@@ -856,30 +900,32 @@ const CallDemoInteractive = () => {
 		useShallow((state) => ({
 			persona: state.persona,
 			goal: state.goal,
-		}))
+		})),
 	);
-	const personaLabel = PERSONA_LABELS[persona] ?? PERSONA_LABELS[DEFAULT_PERSONA_KEY];
-	const resolvedGoal = goal ?? 'Scrape, normalize, and export lead data';
+	const personaLabel =
+		PERSONA_LABELS[persona] ?? PERSONA_LABELS[DEFAULT_PERSONA_KEY];
+	const resolvedGoal = goal ?? "Scrape, normalize, and export lead data";
 	const resolvedGoalLower = resolvedGoal.toLowerCase();
 	const personaSeo = useMemo(
 		() => buildPersonaAiOutreachStudioSeo({ persona, goal: resolvedGoal }),
-		[persona, resolvedGoal]
+		[persona, resolvedGoal],
 	);
 	const heroTagline = personaSeo.headline ?? AI_OUTREACH_STUDIO_TAGLINE;
-	const heroDescription = personaSeo.description ?? AI_OUTREACH_STUDIO_DESCRIPTION;
+	const heroDescription =
+		personaSeo.description ?? AI_OUTREACH_STUDIO_DESCRIPTION;
 	const leadCaptureCopy = useMemo(() => {
-		if (leadCaptureOrigin === 'text') {
+		if (leadCaptureOrigin === "text") {
 			return {
-				title: 'Ready to start scraping leads?',
+				title: "Ready to start scraping leads?",
 				description:
 					"Drop in your details and we'll send over the full scraping workflow alongside early access to MCP plugins.",
 			};
 		}
 
 		return {
-			title: 'Ready to start scraping with Lead Orchestra?',
+			title: "Ready to start scraping with Lead Orchestra?",
 			description:
-				'Get started free with open-source scraping. View on GitHub or request enterprise access for self-hosted licensing.',
+				"Get started free with open-source scraping. View on GitHub or request enterprise access for self-hosted licensing.",
 		};
 	}, [leadCaptureOrigin]);
 
@@ -887,8 +933,9 @@ const CallDemoInteractive = () => {
 		() => [
 			{
 				id: 1,
-				className: 'relative col-span-1 flex flex-col p-6 md:col-span-2 xl:col-span-2',
-				contentClassName: 'flex h-full flex-col gap-6',
+				className:
+					"relative col-span-1 flex flex-col p-6 md:col-span-2 xl:col-span-2",
+				contentClassName: "flex h-full flex-col gap-6",
 				content: (
 					<div className="relative z-20 flex h-full flex-col gap-8">
 						<div className="flex flex-col items-center gap-3 text-balance text-center md:items-center md:text-center">
@@ -911,9 +958,9 @@ const CallDemoInteractive = () => {
 									<div
 										key={feature.title}
 										className={cn(
-											'h-auto self-start rounded-xl border border-slate-200/70 bg-white/75 p-4 text-center shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5',
+											"h-auto self-start rounded-xl border border-slate-200/70 bg-white/75 p-4 text-center shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5",
 											// Center the 4th card (index 3) when it's on its own row
-											index === 3 && 'lg:col-start-2 lg:col-end-3'
+											index === 3 && "lg:col-start-2 lg:col-end-3",
 										)}
 									>
 										<h3 className="font-semibold text-slate-900 text-sm uppercase tracking-[0.18em] dark:text-white">
@@ -933,8 +980,9 @@ const CallDemoInteractive = () => {
 									Scrape any source, export to any system.
 								</h3>
 								<p className="mt-3 text-center text-slate-600 text-sm sm:text-left dark:text-white/70">
-									Build scraping workflows in minutes. Paste a URL → scrape all the leads → clean
-									them → export to CSV/JSON. Focus on {resolvedGoalLower}.
+									Build scraping workflows in minutes. Paste a URL → scrape all
+									the leads → clean them → export to CSV/JSON. Focus on{" "}
+									{resolvedGoalLower}.
 								</p>
 								<div className="mt-4 flex flex-col items-center gap-4 rounded-xl bg-slate-900/5 p-4 text-slate-700 text-sm sm:flex-row sm:items-start dark:bg-black/30 dark:text-white/70">
 									<Image
@@ -978,21 +1026,21 @@ const CallDemoInteractive = () => {
 											type="button"
 											onClick={handleRestartCallDemo}
 											className={cn(
-												'inline-flex items-center justify-center rounded-full border border-transparent bg-gradient-to-r from-sky-500 to-indigo-500 px-6 py-2 font-semibold text-sm text-white shadow-lg shadow-sky-500/40 transition hover:from-sky-400 hover:to-indigo-400',
-												activePreview === 'call' && callDemoMode !== 'video'
-													? 'brightness-105'
-													: 'opacity-90 hover:opacity-100'
+												"inline-flex items-center justify-center rounded-full border border-transparent bg-gradient-to-r from-sky-500 to-indigo-500 px-6 py-2 font-semibold text-sm text-white shadow-lg shadow-sky-500/40 transition hover:from-sky-400 hover:to-indigo-400",
+												activePreview === "call" && callDemoMode !== "video"
+													? "brightness-105"
+													: "opacity-90 hover:opacity-100",
 											)}
 										>
 											Start a Call Demo
 										</button>
 										<button
 											type="button"
-											onClick={() => handleSwitchPreview('text')}
+											onClick={() => handleSwitchPreview("text")}
 											className={cn(
-												'rounded-full border border-slate-900/25 px-5 py-2 font-semibold text-slate-900 text-sm transition hover:bg-slate-900/5 dark:border-white/20 dark:text-white dark:hover:bg-white/10',
-												activePreview === 'text' &&
-													'border-slate-900/60 bg-slate-900/10 dark:border-white/30'
+												"rounded-full border border-slate-900/25 px-5 py-2 font-semibold text-slate-900 text-sm transition hover:bg-slate-900/5 dark:border-white/20 dark:text-white dark:hover:bg-white/10",
+												activePreview === "text" &&
+													"border-slate-900/60 bg-slate-900/10 dark:border-white/30",
 											)}
 										>
 											Try a Text Demo
@@ -1013,8 +1061,9 @@ const CallDemoInteractive = () => {
 			{
 				id: 2,
 				className:
-					'col-span-1 flex min-h-[26rem] items-center justify-center md:col-span-2 md:min-h-[34rem] xl:col-span-1 xl:col-start-3',
-				contentClassName: 'flex w-full items-center justify-center bg-transparent',
+					"col-span-1 flex min-h-[26rem] items-center justify-center md:col-span-2 md:min-h-[34rem] xl:col-span-1 xl:col-start-3",
+				contentClassName:
+					"flex w-full items-center justify-center bg-transparent",
 				content: renderPreview(),
 			},
 		],
@@ -1028,12 +1077,15 @@ const CallDemoInteractive = () => {
 			personaLabel,
 			renderPreview,
 			resolvedGoalLower,
-		]
+		],
 	);
 
 	return (
 		<>
-			<section id={AI_OUTREACH_STUDIO_ANCHOR} className="relative isolate overflow-hidden py-24">
+			<section
+				id={AI_OUTREACH_STUDIO_ANCHOR}
+				className="relative isolate overflow-hidden py-24"
+			>
 				<div className="-z-10 pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.15),_transparent_55%)]" />
 				<div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
 					<LayoutGrid
@@ -1059,7 +1111,7 @@ const CallDemoInteractive = () => {
 
 const StaticCallDemoPreview = () => {
 	useEffect(() => {
-		console.log('[StaticCallDemoPreview] rendered');
+		console.log("[StaticCallDemoPreview] rendered");
 	}, []);
 
 	// Compute static hero text using current persona/goal, matching interactive version
@@ -1067,15 +1119,16 @@ const StaticCallDemoPreview = () => {
 		useShallow((state) => ({
 			persona: state.persona,
 			goal: state.goal,
-		}))
+		})),
 	);
-	const resolvedGoal = goal ?? 'Scrape, normalize, and export lead data';
+	const resolvedGoal = goal ?? "Scrape, normalize, and export lead data";
 	const personaSeo = useMemo(
 		() => buildPersonaAiOutreachStudioSeo({ persona, goal: resolvedGoal }),
-		[persona, resolvedGoal]
+		[persona, resolvedGoal],
 	);
 	const heroTagline = personaSeo.headline ?? AI_OUTREACH_STUDIO_TAGLINE;
-	const heroDescription = personaSeo.description ?? AI_OUTREACH_STUDIO_DESCRIPTION;
+	const heroDescription =
+		personaSeo.description ?? AI_OUTREACH_STUDIO_DESCRIPTION;
 
 	return (
 		<section
@@ -1129,26 +1182,31 @@ const StaticCallDemoPreview = () => {
 				</div>
 				<div className="rounded-3xl border border-white/10 bg-slate-950/60 p-6 shadow-black/30 shadow-inner">
 					<div className="space-y-4">
-						<p className="text-slate-400 text-xs uppercase tracking-[0.3em]">Example SMS Assist</p>
+						<p className="text-slate-400 text-xs uppercase tracking-[0.3em]">
+							Example SMS Assist
+						</p>
 						<div className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/70 p-6 text-sm leading-relaxed">
 							<p className="text-emerald-300">
-								<span className="font-semibold">System</span>: 🔍 Scraping job complete! Extracted
-								247 fresh leads from Zillow. All data normalized and ready for export.
+								<span className="font-semibold">System</span>: 🔍 Scraping job
+								complete! Extracted 247 fresh leads from Zillow. All data
+								normalized and ready for export.
 							</p>
 							<p className="text-white/90">
-								<span className="font-semibold">User</span>: Can I export this to my CRM?
+								<span className="font-semibold">User</span>: Can I export this
+								to my CRM?
 							</p>
 							<p className="text-emerald-300">
-								<span className="font-semibold">System</span>: Export started! 247 leads are being
-								synced to your CRM. ETA: 2 minutes. understandable. Homes nearby are closing at
-								$420K–$435K. Want Jordan to confirm a cash offer today?
+								<span className="font-semibold">System</span>: Export started!
+								247 leads are being synced to your CRM. ETA: 2 minutes.
+								understandable. Homes nearby are closing at $420K–$435K. Want
+								Jordan to confirm a cash offer today?
 							</p>
 						</div>
 						<div className="rounded-2xl border border-white/5 bg-white/10 p-4 text-slate-200 text-sm">
 							<p className="font-semibold">Live Call Handoff</p>
 							<p className="mt-1">
-								We’ll keep Ava on the line, sync the transcript to your CRM, and trigger follow-up
-								workflows automatically.
+								We’ll keep Ava on the line, sync the transcript to your CRM, and
+								trigger follow-up workflows automatically.
 							</p>
 						</div>
 					</div>
@@ -1171,4 +1229,4 @@ export const CallDemoShowcase = () => {
 	return <CallDemoInteractive />;
 };
 
-CallDemoShowcase.displayName = 'CallDemoShowcase';
+CallDemoShowcase.displayName = "CallDemoShowcase";

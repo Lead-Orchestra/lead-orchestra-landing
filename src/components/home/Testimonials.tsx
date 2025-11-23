@@ -1,21 +1,25 @@
-'use client';
+"use client";
 
-import { MagicCard } from '@/components/magicui/magic-card';
-import { Button } from '@/components/ui/button';
-import { DEFAULT_PERSONA_KEY, PERSONA_LABELS, type PersonaKey } from '@/data/personas/catalog';
-import { getTestimonialsForPersona } from '@/data/personas/testimonialsByPersona';
-import { useGpuOptimizations } from '@/hooks/useGpuOptimizations';
-import { usePersonaStore } from '@/stores/usePersonaStore';
-import type { Testimonial } from '@/types/testimonial';
-import { type Variants, motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import Header from '../common/Header';
-import { TestimonialAvatar } from './testimonials/TestimonialAvatar';
-import { PersonaSwitcher } from './testimonials/TestimonialPersonaSwitcher';
-import { TestimonialStars } from './testimonials/TestimonialStars';
-import { TestimonialTabs } from './testimonials/TestimonialTabs';
-import type { TabKey } from './testimonials/tabConfig';
+import { MagicCard } from "@/components/magicui/magic-card";
+import { Button } from "@/components/ui/button";
+import {
+	DEFAULT_PERSONA_KEY,
+	PERSONA_LABELS,
+	type PersonaKey,
+} from "@/data/personas/catalog";
+import { getTestimonialsForPersona } from "@/data/personas/testimonialsByPersona";
+import { useGpuOptimizations } from "@/hooks/useGpuOptimizations";
+import { usePersonaStore } from "@/stores/usePersonaStore";
+import type { Testimonial } from "@/types/testimonial";
+import { type Variants, motion, useReducedMotion } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Header from "../common/Header";
+import { TestimonialAvatar } from "./testimonials/TestimonialAvatar";
+import { PersonaSwitcher } from "./testimonials/TestimonialPersonaSwitcher";
+import { TestimonialStars } from "./testimonials/TestimonialStars";
+import { TestimonialTabs } from "./testimonials/TestimonialTabs";
+import type { TabKey } from "./testimonials/tabConfig";
 
 interface TestimonialsProps {
 	testimonials: Testimonial[];
@@ -25,7 +29,10 @@ interface TestimonialsProps {
 
 const fallbackTestimonials = getTestimonialsForPersona(DEFAULT_PERSONA_KEY);
 
-const usePersonaTestimonials = (persona: PersonaKey, externalTestimonials: Testimonial[]) => {
+const usePersonaTestimonials = (
+	persona: PersonaKey,
+	externalTestimonials: Testimonial[],
+) => {
 	return useMemo(() => {
 		const personaSpecific = getTestimonialsForPersona(persona);
 		if (personaSpecific && personaSpecific.length > 0) {
@@ -46,16 +53,22 @@ const usePersonaTestimonials = (persona: PersonaKey, externalTestimonials: Testi
 const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 	const persona = usePersonaStore((state) => state.persona);
 	const goal = usePersonaStore((state) => state.goal);
-	const personaLabel = PERSONA_LABELS[persona] ?? PERSONA_LABELS[DEFAULT_PERSONA_KEY];
-	const personaSpecificTestimonials = usePersonaTestimonials(persona, testimonials);
+	const personaLabel =
+		PERSONA_LABELS[persona] ?? PERSONA_LABELS[DEFAULT_PERSONA_KEY];
+	const personaSpecificTestimonials = usePersonaTestimonials(
+		persona,
+		testimonials,
+	);
 	const [currentIndex, setCurrentIndex] = useState(0);
-	const [activeTab, setActiveTab] = useState<TabKey>('review');
+	const [activeTab, setActiveTab] = useState<TabKey>("review");
 	const shouldReduceMotion = useReducedMotion();
 	const enableGpu = useGpuOptimizations();
-	const gpuShellClass = enableGpu ? 'transform-gpu will-change-transform will-change-opacity' : '';
+	const gpuShellClass = enableGpu
+		? "transform-gpu will-change-transform will-change-opacity"
+		: "";
 	const gpuDepthClass = enableGpu
-		? 'transform-gpu will-change-transform will-change-opacity translate-z-0'
-		: '';
+		? "transform-gpu will-change-transform will-change-opacity translate-z-0"
+		: "";
 
 	const totalTestimonials = personaSpecificTestimonials.length || 1;
 
@@ -64,14 +77,17 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 	}, [totalTestimonials]);
 
 	const prevTestimonial = useCallback(() => {
-		setCurrentIndex((prevIndex) => (prevIndex - 1 + totalTestimonials) % totalTestimonials);
+		setCurrentIndex(
+			(prevIndex) => (prevIndex - 1 + totalTestimonials) % totalTestimonials,
+		);
 	}, [totalTestimonials]);
 
-	const currentTestimonial = personaSpecificTestimonials[currentIndex] ?? fallbackTestimonials[0];
+	const currentTestimonial =
+		personaSpecificTestimonials[currentIndex] ?? fallbackTestimonials[0];
 
 	useEffect(() => {
 		setCurrentIndex(0);
-		setActiveTab('review');
+		setActiveTab("review");
 	}, [persona]);
 
 	const fadeInUp = useMemo(
@@ -89,7 +105,7 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 						exit: { opacity: 0, y: -20 },
 						transition: { duration: 0.3 },
 					},
-		[shouldReduceMotion]
+		[shouldReduceMotion],
 	) as Variants;
 
 	const fadeIn = useMemo(
@@ -107,14 +123,14 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 						exit: { opacity: 0 },
 						transition: { duration: 0.3 },
 					},
-		[shouldReduceMotion]
+		[shouldReduceMotion],
 	) as Variants;
 
 	return (
 		<motion.section
 			id="testimonials"
 			className={`relative w-full overflow-visible bg-background-dark px-4 py-12 sm:px-6 lg:px-8 ${gpuShellClass}`}
-			style={{ overflowClipMargin: '24px' }}
+			style={{ overflowClipMargin: "24px" }}
 			initial={shouldReduceMotion ? undefined : { opacity: 0 }}
 			animate={shouldReduceMotion ? undefined : { opacity: 1 }}
 			transition={shouldReduceMotion ? undefined : { duration: 0.5 }}
@@ -143,7 +159,7 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 							: {
 									duration: 6,
 									repeat: Number.POSITIVE_INFINITY,
-									repeatType: 'reverse',
+									repeatType: "reverse",
 									delay: 1.5,
 								}
 					}
@@ -156,8 +172,12 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 					<PersonaSwitcher />
 					{goal ? (
 						<p className="font-medium text-black/70 text-sm dark:text-white/70">
-							<span className="mr-1 text-black/60 dark:text-white/60">Primary goal:</span>
-							<span className="font-semibold text-black dark:text-white">{goal}</span>
+							<span className="mr-1 text-black/60 dark:text-white/60">
+								Primary goal:
+							</span>
+							<span className="font-semibold text-black dark:text-white">
+								{goal}
+							</span>
 						</p>
 					) : null}
 				</div>
@@ -196,7 +216,9 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 									image={currentTestimonial.image}
 								/>
 								<div className="text-center sm:text-left">
-									<h4 className="font-semibold text-base sm:text-lg">{currentTestimonial.name}</h4>
+									<h4 className="font-semibold text-base sm:text-lg">
+										{currentTestimonial.name}
+									</h4>
 									<p className="text-black text-sm sm:text-sm dark:text-white/60">
 										{currentTestimonial.role}
 									</p>
@@ -208,24 +230,29 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 
 							<div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:justify-between sm:gap-8">
 								<div className="flex items-center justify-center gap-2">
-									{personaSpecificTestimonials.slice(0, 5).map((testimonial, index) => (
-										<motion.button
-											key={testimonial.id}
-											className={`h-2 w-2 rounded-full border border-white/20 transition-all duration-300 sm:h-3 sm:w-3 ${
-												currentIndex === index
-													? 'w-4 bg-primary sm:w-6'
-													: 'bg-white/10 hover:bg-white/20'
-											}`}
-											onClick={() => setCurrentIndex(index)}
-											aria-label={`View testimonial ${index + 1}`}
-											whileHover={{ scale: 1.2 }}
-											whileTap={{ scale: 0.9 }}
-										/>
-									))}
+									{personaSpecificTestimonials
+										.slice(0, 5)
+										.map((testimonial, index) => (
+											<motion.button
+												key={testimonial.id}
+												className={`h-2 w-2 rounded-full border border-white/20 transition-all duration-300 sm:h-3 sm:w-3 ${
+													currentIndex === index
+														? "w-4 bg-primary sm:w-6"
+														: "bg-white/10 hover:bg-white/20"
+												}`}
+												onClick={() => setCurrentIndex(index)}
+												aria-label={`View testimonial ${index + 1}`}
+												whileHover={{ scale: 1.2 }}
+												whileTap={{ scale: 0.9 }}
+											/>
+										))}
 								</div>
 
 								<div className="flex items-center justify-center gap-2">
-									<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+									<motion.div
+										whileHover={{ scale: 1.05 }}
+										whileTap={{ scale: 0.95 }}
+									>
 										<Button
 											variant="outline"
 											size="sm"
@@ -236,7 +263,10 @@ const Testimonials = ({ testimonials, title, subtitle }: TestimonialsProps) => {
 											<ArrowLeft className="h-4 w-4" />
 										</Button>
 									</motion.div>
-									<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+									<motion.div
+										whileHover={{ scale: 1.05 }}
+										whileTap={{ scale: 0.95 }}
+									>
 										<Button
 											variant="outline"
 											size="sm"

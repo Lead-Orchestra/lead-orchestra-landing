@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
 	HeroHeadline,
 	type HeroVideoPreviewHandle,
 	resolveHeroThumbnailSrc,
 	useHeroVideoConfig,
-} from '@external/dynamic-hero';
-import { useInView } from 'motion/react';
+} from "@external/dynamic-hero";
+import { useInView } from "motion/react";
 
-import PersonaCTA from '@/components/cta/PersonaCTA';
-import { useHeroTrialCheckout } from '@/components/home/heros/useHeroTrialCheckout';
-import { AvatarCircles } from '@/components/ui/avatar-circles';
-import { InteractiveGridPattern } from '@/components/ui/interactive-grid-pattern';
-import { Separator } from '@/components/ui/separator';
+import PersonaCTA from "@/components/cta/PersonaCTA";
+import { useHeroTrialCheckout } from "@/components/home/heros/useHeroTrialCheckout";
+import { AvatarCircles } from "@/components/ui/avatar-circles";
+import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern";
+import { Separator } from "@/components/ui/separator";
 
-import { MetricBlock } from './_components/metric-block';
+import { MetricBlock } from "./_components/metric-block";
 import {
 	LIVE_COPY,
 	LIVE_MICROCOPY,
@@ -28,28 +28,34 @@ import {
 	LIVE_VIDEO,
 	PERSONA_GOAL,
 	PERSONA_LABEL,
-} from './_config';
+} from "./_config";
 
-const HERO_POSTER_FALLBACK = resolveHeroThumbnailSrc(LIVE_VIDEO, LIVE_VIDEO.poster);
+const HERO_POSTER_FALLBACK = resolveHeroThumbnailSrc(
+	LIVE_VIDEO,
+	LIVE_VIDEO.poster,
+);
 
 const HeroAuroraDynamic = dynamic(
-	() => import('@external/dynamic-hero').then((mod) => mod.HeroAurora),
-	{ ssr: false, loading: () => null }
+	() => import("@external/dynamic-hero").then((mod) => mod.HeroAurora),
+	{ ssr: false, loading: () => null },
 );
 
 const HeroVideoPreviewDynamic = dynamic(
-	() => import('@external/dynamic-hero').then((mod) => mod.HeroVideoPreview),
+	() => import("@external/dynamic-hero").then((mod) => mod.HeroVideoPreview),
 	{
 		ssr: false,
 		loading: () => (
-			<HeroVideoPreviewSkeleton posterSrc={HERO_POSTER_FALLBACK} alt="Product demo preview" />
+			<HeroVideoPreviewSkeleton
+				posterSrc={HERO_POSTER_FALLBACK}
+				alt="Product demo preview"
+			/>
 		),
-	}
+	},
 );
 
 const PricingCheckoutDialog = dynamic(
-	() => import('@/components/home/pricing/PricingCheckoutDialog'),
-	{ ssr: false, loading: () => null }
+	() => import("@/components/home/pricing/PricingCheckoutDialog"),
+	{ ssr: false, loading: () => null },
 );
 
 function HeroVideoPreviewSkeleton({
@@ -83,10 +89,11 @@ export default function LiveDynamicHeroClient(): JSX.Element {
 	const videoPreviewRef = useRef<HeroVideoPreviewHandle>(null);
 	const isHeroInView = useInView(heroRef, {
 		amount: 0.35,
-		margin: '0px 0px -20% 0px',
+		margin: "0px 0px -20% 0px",
 	});
 	const [isHeroAnimating, setIsHeroAnimating] = useState(true);
-	const { isTrialLoading, checkoutState, startTrial, closeCheckout } = useHeroTrialCheckout();
+	const { isTrialLoading, checkoutState, startTrial, closeCheckout } =
+		useHeroTrialCheckout();
 
 	useEffect(() => {
 		setIsHeroAnimating((previous) => {
@@ -99,15 +106,18 @@ export default function LiveDynamicHeroClient(): JSX.Element {
 
 	const handlePreviewDemo = useCallback(() => {
 		const node = videoSectionRef.current;
-		if (node && typeof node.scrollIntoView === 'function') {
-			node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		if (node && typeof node.scrollIntoView === "function") {
+			node.scrollIntoView({ behavior: "smooth", block: "center" });
 		}
 
 		const playVideo = () => {
 			videoPreviewRef.current?.play();
 		};
 
-		if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+		if (
+			typeof window !== "undefined" &&
+			typeof window.requestAnimationFrame === "function"
+		) {
 			window.requestAnimationFrame(playVideo);
 		} else {
 			playVideo();
@@ -163,8 +173,8 @@ export default function LiveDynamicHeroClient(): JSX.Element {
 						data-beam-collider="true"
 					>
 						<p className="max-w-3xl text-center text-base text-muted-foreground sm:text-lg md:text-xl dark:text-neutral-300">
-							Automated investor deal flow from your CRM and market data, so you can focus on
-							evaluating profitable opportunities.
+							Automated investor deal flow from your CRM and market data, so you
+							can focus on evaluating profitable opportunities.
 						</p>
 						<PersonaCTA
 							className="w-full max-w-5xl"
@@ -177,7 +187,11 @@ export default function LiveDynamicHeroClient(): JSX.Element {
 							onSecondaryClick={handlePreviewDemo}
 							primaryLoading={isTrialLoading}
 						/>
-						<div ref={videoSectionRef} className="w-full max-w-5xl" data-beam-collider="true">
+						<div
+							ref={videoSectionRef}
+							className="w-full max-w-5xl"
+							data-beam-collider="true"
+						>
 							<HeroVideoPreviewDynamic
 								ref={videoPreviewRef}
 								video={heroVideo}
@@ -187,11 +201,12 @@ export default function LiveDynamicHeroClient(): JSX.Element {
 
 						<div className="w-full max-w-2xl rounded-3xl border border-border/45 bg-background/85 px-5 py-5 text-center shadow-[0_16px_55px_-35px_rgba(37,99,235,0.35)] backdrop-blur-md sm:px-6 md:px-10">
 							<p className="font-medium text-foreground text-sm sm:text-base">
-								Start with a 90-second walkthrough of the investor pipeline control center.
+								Start with a 90-second walkthrough of the investor pipeline
+								control center.
 							</p>
 							<p className="mt-2 text-muted-foreground text-sm sm:text-base">
-								Watch the demo, then review the rollout checklist below to keep your deal sourcing
-								consistent across acquisitions.
+								Watch the demo, then review the rollout checklist below to keep
+								your deal sourcing consistent across acquisitions.
 							</p>
 						</div>
 
@@ -215,16 +230,22 @@ export default function LiveDynamicHeroClient(): JSX.Element {
 										Keep motivated sellers warm with always-on deal follow-up
 									</p>
 									<p className="text-muted-foreground text-xs sm:text-sm">
-										Automatically nurture leads from first interest to signed contract without
-										burning time.
+										Automatically nurture leads from first interest to signed
+										contract without burning time.
 									</p>
 								</div>
 							</div>
 							<Separator className="md:hidden" />
 							<div className="grid w-full grid-cols-1 gap-4 text-center font-semibold text-foreground text-sm sm:grid-cols-3 sm:text-base">
-								<MetricBlock label="Seller Touchpoints" value="Daily AI outreach" />
+								<MetricBlock
+									label="Seller Touchpoints"
+									value="Daily AI outreach"
+								/>
 								<MetricBlock label="Deal Screening" value="24/7 automation" />
-								<MetricBlock label="Pipeline Visibility" value="Real-time dashboards" />
+								<MetricBlock
+									label="Pipeline Visibility"
+									value="Real-time dashboards"
+								/>
 							</div>
 						</div>
 					</div>

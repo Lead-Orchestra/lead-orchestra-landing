@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import type React from 'react';
-import { type FC, type ReactNode, useEffect, useRef } from 'react';
+import type React from "react";
+import { type FC, type ReactNode, useEffect, useRef } from "react";
 
 // ! This modal is SSR-safe and accessible. It supports YouTube and other video embeds.
 // * Use for any video modal needs. Add extra actions with the optional `footer` prop.
@@ -18,7 +18,9 @@ export interface VideoModalProps {
 
 // ! Converts standard YouTube URLs to the embed format (https://www.youtube.com/embed/VIDEO_ID)
 function getYouTubeEmbedUrl(url: string): string | null {
-	const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/);
+	const match = url.match(
+		/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/,
+	);
 	return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 }
 
@@ -39,21 +41,25 @@ const VideoModal: FC<VideoModalProps> = ({
 	useEffect(() => {
 		if (!isOpen || !modalRef.current) return;
 		const focusable = modalRef.current.querySelectorAll<HTMLElement>(
-			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
 		);
 		focusable[0]?.focus();
 		const trap = (e: KeyboardEvent) => {
-			if (e.key !== 'Tab') return;
+			if (e.key !== "Tab") return;
 			const first = focusable[0];
 			const last = focusable[focusable.length - 1];
 			if (!first || !last) return;
-			if (e.shiftKey ? document.activeElement === first : document.activeElement === last) {
+			if (
+				e.shiftKey
+					? document.activeElement === first
+					: document.activeElement === last
+			) {
 				e.preventDefault();
 				(e.shiftKey ? last : first).focus();
 			}
 		};
-		modalRef.current.addEventListener('keydown', trap);
-		return () => modalRef.current?.removeEventListener('keydown', trap);
+		modalRef.current.addEventListener("keydown", trap);
+		return () => modalRef.current?.removeEventListener("keydown", trap);
 	}, [isOpen]);
 
 	// Close modal on outside click
@@ -91,14 +97,16 @@ const VideoModal: FC<VideoModalProps> = ({
 							allowFullScreen
 							className="h-full w-full border-0"
 							style={{
-								aspectRatio: '16/9',
+								aspectRatio: "16/9",
 								minHeight: 220,
-								background: 'black',
+								background: "black",
 							}}
 						/>
 					) : (
 						<div className="my-5 flex h-full w-full flex-col items-center justify-center">
-							<p className="mb-2 text-red-500">Video unavailable for embedding.</p>
+							<p className="mb-2 text-red-500">
+								Video unavailable for embedding.
+							</p>
 							<a
 								href={videoUrl}
 								target="_blank"
@@ -116,7 +124,9 @@ const VideoModal: FC<VideoModalProps> = ({
 				</h2>
 				{/* Subtitle */}
 				{subtitle && (
-					<p className="p-10 text-black dark:text-gray-300 dark:text-white">{subtitle}</p>
+					<p className="p-10 text-black dark:text-gray-300 dark:text-white">
+						{subtitle}
+					</p>
 				)}
 				{/* Got it Button */}
 				<div className="my-4">
@@ -131,7 +141,7 @@ const VideoModal: FC<VideoModalProps> = ({
 				{/* Terms of Use */}
 				{termsUrl && (
 					<p className="mt-4 text-gray-400 text-sm dark:text-gray-400">
-						The use of this feature is subject to our{' '}
+						The use of this feature is subject to our{" "}
 						<a
 							href={termsUrl}
 							className="text-blue-500 underline dark:text-blue-400"

@@ -1,14 +1,14 @@
-'use client';
+"use client";
 // * AboutUsClient: Composes all About page sections using Magic UI and theme-compliant layout
 // ! This file is the main About page client component
 
-import { CTASection } from '../common/CTASection';
-import AboutFunFacts from './AboutFunFacts';
-import AboutHero from './AboutHero';
-import { MarqueeDemo } from './AboutMarquee';
-import AboutTeam from './AboutTeam';
-import AboutTimeline from './AboutTimeline';
-import AboutValues from './AboutValues';
+import { CTASection } from "../common/CTASection";
+import AboutFunFacts from "./AboutFunFacts";
+import AboutHero from "./AboutHero";
+import { MarqueeDemo } from "./AboutMarquee";
+import AboutTeam from "./AboutTeam";
+import AboutTimeline from "./AboutTimeline";
+import AboutValues from "./AboutValues";
 
 export default function AboutUsClient() {
 	return (

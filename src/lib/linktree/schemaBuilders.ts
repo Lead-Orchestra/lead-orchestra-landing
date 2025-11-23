@@ -1,6 +1,6 @@
-import type { LinkTreeItem } from '@/utils/linktree-redis';
-import { buildAbsoluteUrl } from '@/utils/seo/schema/helpers';
-import { SCHEMA_CONTEXT } from '@/utils/seo/schema/helpers';
+import type { LinkTreeItem } from "@/utils/linktree-redis";
+import { buildAbsoluteUrl } from "@/utils/seo/schema/helpers";
+import { SCHEMA_CONTEXT } from "@/utils/seo/schema/helpers";
 
 /**
  * Builds an ItemList schema for the linktree page.
@@ -9,58 +9,58 @@ import { SCHEMA_CONTEXT } from '@/utils/seo/schema/helpers';
  */
 export function buildLinkTreeItemListSchema(
 	items: LinkTreeItem[],
-	baseUrl = 'https://dealscale.io/linktree'
+	baseUrl = "https://dealscale.io/linktree",
 ): {
-	'@context': typeof SCHEMA_CONTEXT;
-	'@type': 'ItemList';
+	"@context": typeof SCHEMA_CONTEXT;
+	"@type": "ItemList";
 	name: string;
 	description?: string;
 	itemListOrder: string;
 	itemListElement: Array<{
-		'@type': 'ListItem';
+		"@type": "ListItem";
 		position: number;
 		url: string;
 		name: string;
 		description?: string;
 		item?: {
-			'@type': 'WebPage' | 'CreativeWork';
+			"@type": "WebPage" | "CreativeWork";
 			name: string;
 			url: string;
 			description?: string;
 		};
 	}>;
 } {
-	const base = baseUrl.replace(/\/$/, '');
+	const base = baseUrl.replace(/\/$/, "");
 
 	return {
-		'@context': SCHEMA_CONTEXT,
-		'@type': 'ItemList',
-		name: 'DealScale Link Tree',
+		"@context": SCHEMA_CONTEXT,
+		"@type": "ItemList",
+		name: "DealScale Link Tree",
 		description:
 			"Quick access to DealScale's most important links, resources, and pages. Browse our products, services, events, blog posts, and more.",
-		itemListOrder: 'https://schema.org/ItemListOrderAscending',
+		itemListOrder: "https://schema.org/ItemListOrderAscending",
 		itemListElement: items.map((item, index) => {
 			// Resolve the actual destination URL
 			// For external URLs, use them directly; for internal, build absolute URL
 			let itemUrl = item.destination;
-			if (itemUrl && !itemUrl.startsWith('http')) {
+			if (itemUrl && !itemUrl.startsWith("http")) {
 				itemUrl = buildAbsoluteUrl(itemUrl);
 			}
 
 			const listItem: {
-				'@type': 'ListItem';
+				"@type": "ListItem";
 				position: number;
 				url: string;
 				name: string;
 				description?: string;
 				item?: {
-					'@type': 'WebPage' | 'CreativeWork';
+					"@type": "WebPage" | "CreativeWork";
 					name: string;
 					url: string;
 					description?: string;
 				};
 			} = {
-				'@type': 'ListItem',
+				"@type": "ListItem",
 				position: index + 1,
 				url: itemUrl || `${base}#${item.slug || index}`,
 				name: item.title || item.slug || `Link ${index + 1}`,
@@ -74,7 +74,7 @@ export function buildLinkTreeItemListSchema(
 			// Add nested item for richer schema
 			if (itemUrl) {
 				listItem.item = {
-					'@type': 'WebPage',
+					"@type": "WebPage",
 					name: item.title || item.slug || `Link ${index + 1}`,
 					url: itemUrl,
 					...(item.description && { description: item.description }),

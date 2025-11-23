@@ -1,10 +1,14 @@
-'use client';
-import type { PriorityPilotFormValues } from '@/data/contact/pilotFormFields';
-import { mockDiscountCodes } from '@/data/discount/mockDiscountCodes';
-import type { DiscountCode } from '@/types/discount/discountCode'; // * Discount code type
-import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { useState } from 'react';
-import { toast } from 'sonner';
+"use client";
+import type { PriorityPilotFormValues } from "@/data/contact/pilotFormFields";
+import { mockDiscountCodes } from "@/data/discount/mockDiscountCodes";
+import type { DiscountCode } from "@/types/discount/discountCode"; // * Discount code type
+import {
+	PaymentElement,
+	useElements,
+	useStripe,
+} from "@stripe/react-stripe-js";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface ContactPilotPaymentFormProps {
 	clientSecret: string;
@@ -21,9 +25,11 @@ export default function ContactPilotPaymentForm({
 	const stripe = useStripe();
 	const elements = useElements();
 	const [isProcessing, setIsProcessing] = useState(false);
-	const [discountCode, setDiscountCode] = useState('');
+	const [discountCode, setDiscountCode] = useState("");
 	const [discountError, setDiscountError] = useState<string | null>(null);
-	const [discountApplied, setDiscountApplied] = useState<DiscountCode | null>(null);
+	const [discountApplied, setDiscountApplied] = useState<DiscountCode | null>(
+		null,
+	);
 	const [isCheckingCode, setIsCheckingCode] = useState(false);
 
 	// * Validate discount code using mockDiscountCodes
@@ -32,22 +38,24 @@ export default function ContactPilotPaymentForm({
 		setDiscountError(null);
 		await new Promise((r) => setTimeout(r, 400));
 		const code = discountCode.trim().toUpperCase();
-		const found = mockDiscountCodes.find((dc) => dc.code.toUpperCase() === code);
+		const found = mockDiscountCodes.find(
+			(dc) => dc.code.toUpperCase() === code,
+		);
 		if (!found) {
 			setDiscountApplied(null);
-			setDiscountError('Discount code not found.');
+			setDiscountError("Discount code not found.");
 			setIsCheckingCode(false);
 			return;
 		}
 		if (!found.isActive) {
 			setDiscountApplied(null);
-			setDiscountError('This discount code is no longer active.');
+			setDiscountError("This discount code is no longer active.");
 			setIsCheckingCode(false);
 			return;
 		}
 		if (found.expires && new Date(found.expires) < new Date()) {
 			setDiscountApplied(null);
-			setDiscountError('This discount code has expired.');
+			setDiscountError("This discount code has expired.");
 			setIsCheckingCode(false);
 			return;
 		}
@@ -59,7 +67,9 @@ export default function ContactPilotPaymentForm({
 	const handlePayment = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!stripe || !elements) {
-			toast.error('Payment system is still loading. Please wait a moment and try again.');
+			toast.error(
+				"Payment system is still loading. Please wait a moment and try again.",
+			);
 			return;
 		}
 		setIsProcessing(true);
@@ -69,20 +79,23 @@ export default function ContactPilotPaymentForm({
 				confirmParams: {
 					return_url: `${window.location.origin}/contact-pilot?paid=1`,
 				},
-				redirect: 'if_required',
+				redirect: "if_required",
 			});
 			if (error) throw error;
 			// SendGrid email after payment
-			const sgRes = await fetch('/api/contact', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const sgRes = await fetch("/api/contact", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(formData),
 			});
-			if (!sgRes.ok) throw new Error('Failed to send confirmation email');
-			toast.success('Payment and application successful! Check your email.');
+			if (!sgRes.ok) throw new Error("Failed to send confirmation email");
+			toast.success("Payment and application successful! Check your email.");
 			onSuccess();
 		} catch (err: unknown) {
-			const message = err instanceof Error ? err.message : 'Submission failed. Please try again.';
+			const message =
+				err instanceof Error
+					? err.message
+					: "Submission failed. Please try again.";
 			toast.error(message);
 		} finally {
 			setIsProcessing(false);
@@ -102,8 +115,8 @@ export default function ContactPilotPaymentForm({
 					Secure your place in the Deal Scale Priority Pilot Program.
 				</p>
 				<p className="text-gray-500 text-sm dark:text-zinc-400">
-					Pay your $50 deposit to unlock early access, premium onboarding, and exclusive pilot
-					features.
+					Pay your $50 deposit to unlock early access, premium onboarding, and
+					exclusive pilot features.
 				</p>
 			</div>
 
@@ -115,21 +128,26 @@ export default function ContactPilotPaymentForm({
 						</span>
 						<span className="font-bold text-2xl text-green-600 dark:text-green-400">
 							{discountApplied.discountPercent === 100
-								? '$0'
+								? "$0"
 								: discountApplied.discountAmount
 									? `$${((5000 - discountApplied.discountAmount) / 100).toFixed(2)}`
 									: discountApplied.discountPercent
 										? `$${(50 * (1 - discountApplied.discountPercent / 100)).toFixed(2)}`
-										: '$50'}
+										: "$50"}
 						</span>
 					</>
 				) : (
-					<span className="font-bold text-2xl text-primary dark:text-blue-400">$50</span>
+					<span className="font-bold text-2xl text-primary dark:text-blue-400">
+						$50
+					</span>
 				)}
 			</div>
 
 			<div className="space-y-2">
-				<label htmlFor="discount" className="block font-semibold text-black dark:text-zinc-100">
+				<label
+					htmlFor="discount"
+					className="block font-semibold text-black dark:text-zinc-100"
+				>
 					Discount Code
 				</label>
 				<div className="flex gap-2">
@@ -149,11 +167,17 @@ export default function ContactPilotPaymentForm({
 						onClick={handleCheckDiscount}
 						disabled={isCheckingCode || !!discountApplied || !discountCode}
 					>
-						{discountApplied ? 'Applied' : isCheckingCode ? 'Checking...' : 'Apply'}
+						{discountApplied
+							? "Applied"
+							: isCheckingCode
+								? "Checking..."
+								: "Apply"}
 					</button>
 				</div>
 				{discountError && (
-					<p className="mt-1 text-red-600 text-xs dark:text-red-400">{discountError}</p>
+					<p className="mt-1 text-red-600 text-xs dark:text-red-400">
+						{discountError}
+					</p>
 				)}
 				{discountApplied && (
 					<div className="mt-1 flex items-center gap-2 text-green-600 text-xs dark:text-green-400">
@@ -164,7 +188,9 @@ export default function ContactPilotPaymentForm({
 							<span>({discountApplied.discountPercent}% off)</span>
 						)}
 						{discountApplied.discountAmount && (
-							<span>(${(discountApplied.discountAmount / 100).toFixed(2)} off)</span>
+							<span>
+								(${(discountApplied.discountAmount / 100).toFixed(2)} off)
+							</span>
 						)}
 					</div>
 				)}
@@ -172,14 +198,21 @@ export default function ContactPilotPaymentForm({
 
 			<div className="my-6">
 				<div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 shadow-sm transition-colors dark:border-zinc-700 dark:bg-zinc-800">
-					<PaymentElement options={{ layout: 'tabs' }} />
+					<PaymentElement options={{ layout: "tabs" }} />
 				</div>
 			</div>
 
 			<ul className="mb-4 list-disc pl-5 text-gray-600 text-xs dark:text-zinc-400">
-				<li>Fully refundable if not accepted or if you cancel before onboarding.</li>
-				<li>Deposit applies toward your first month if you continue after the pilot.</li>
-				<li>Exclusive features, hands-on support, and priority feedback channel.</li>
+				<li>
+					Fully refundable if not accepted or if you cancel before onboarding.
+				</li>
+				<li>
+					Deposit applies toward your first month if you continue after the
+					pilot.
+				</li>
+				<li>
+					Exclusive features, hands-on support, and priority feedback channel.
+				</li>
 			</ul>
 
 			<button
@@ -188,10 +221,10 @@ export default function ContactPilotPaymentForm({
 				disabled={isProcessing}
 			>
 				{isProcessing
-					? 'Processing...'
+					? "Processing..."
 					: discountApplied
-						? 'Pay Discounted & Submit'
-						: 'Pay $50 & Submit'}
+						? "Pay Discounted & Submit"
+						: "Pay $50 & Submit"}
 			</button>
 		</form>
 	);

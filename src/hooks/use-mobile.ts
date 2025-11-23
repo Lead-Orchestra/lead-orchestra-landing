@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export const useIsMobile = (breakpoint = 768) => {
 	const [isMobile, setIsMobile] = useState(false);
 
 	useEffect(() => {
-		if (typeof window !== 'undefined') {
+		if (typeof window !== "undefined") {
 			const checkIfMobile = () => {
 				setIsMobile(window.innerWidth < breakpoint);
 			};
@@ -19,18 +19,18 @@ export const useIsMobile = (breakpoint = 768) => {
 				resizeTimer = setTimeout(checkIfMobile, 100);
 			};
 
-			window.addEventListener('resize', handleResize);
+			window.addEventListener("resize", handleResize);
 
 			// Cleanup
 			return () => {
 				clearTimeout(resizeTimer);
-				window.removeEventListener('resize', handleResize);
+				window.removeEventListener("resize", handleResize);
 			};
 		}
 	}, [breakpoint]);
 
 	// During SSR, assume not mobile to match initial render
-	if (typeof window === 'undefined') return false;
+	if (typeof window === "undefined") return false;
 
 	return isMobile;
 };

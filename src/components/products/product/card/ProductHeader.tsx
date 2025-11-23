@@ -1,12 +1,19 @@
-import { ProductCategory } from '@/types/products';
-import Link from 'next/link';
-import type { ProductHeaderProps } from './types';
+import { ProductCategory } from "@/types/products";
+import Link from "next/link";
+import type { ProductHeaderProps } from "./types";
 
-const ProductHeader = ({ id, slug, name, salesIncentive, categories }: ProductHeaderProps) => {
+const ProductHeader = ({
+	id,
+	slug,
+	name,
+	salesIncentive,
+	categories,
+}: ProductHeaderProps) => {
 	const productPath = slug ?? id;
 	// Redirect Virtual Assistants products to application page
-	const isRemoteCloser = categories?.includes(ProductCategory.RemoteClosers) ?? false;
-	const href = isRemoteCloser ? '/vas/apply' : `/products/${productPath}`;
+	const isRemoteCloser =
+		categories?.includes(ProductCategory.RemoteClosers) ?? false;
+	const href = isRemoteCloser ? "/vas/apply" : `/products/${productPath}`;
 
 	return (
 		<div className="relative text-center">

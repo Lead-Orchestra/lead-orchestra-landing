@@ -1,7 +1,11 @@
-'use client';
+"use client";
 
-import { DEFAULT_PERSONA_KEY, PERSONA_GOALS, type PersonaKey } from '@/data/personas/catalog';
-import { create } from 'zustand';
+import {
+	DEFAULT_PERSONA_KEY,
+	PERSONA_GOALS,
+	type PersonaKey,
+} from "@/data/personas/catalog";
+import { create } from "zustand";
 
 const deriveGoal = (persona: PersonaKey): string =>
 	PERSONA_GOALS[persona] ?? PERSONA_GOALS[DEFAULT_PERSONA_KEY];

@@ -1,6 +1,6 @@
-'use client';
-import Image from 'next/image';
-import type { FC, ReactNode } from 'react';
+"use client";
+import Image from "next/image";
+import type { FC, ReactNode } from "react";
 
 // * Props for FloatingImageSection component
 type FloatingImageSectionProps = {
@@ -25,7 +25,7 @@ const FloatingImageSection: FC<FloatingImageSectionProps> = ({
 	return (
 		<div
 			className={`my-4 flex w-full flex-col gap-5 p-2 ${
-				imageOnLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'
+				imageOnLeft ? "lg:flex-row" : "lg:flex-row-reverse"
 			}`}
 		>
 			{/* Image Section */}
@@ -34,7 +34,7 @@ const FloatingImageSection: FC<FloatingImageSectionProps> = ({
 					<Image
 						className="rounded-lg"
 						src={image.src}
-						alt={image.alt ?? `${index ?? ''}-section`}
+						alt={image.alt ?? `${index ?? ""}-section`}
 						height={500}
 						width={500}
 						priority={index === 0}

@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import React, { useState, useRef, useEffect, type ReactNode } from 'react';
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import React, { useState, useRef, useEffect, type ReactNode } from "react";
 
 type CustomCarouselProps = {
 	children: ReactNode[];
@@ -15,7 +15,7 @@ type CarouselItemProps = {
 export function CustomCarousel({
 	children,
 	visibleItemsCount,
-	className = '',
+	className = "",
 }: CustomCarouselProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -28,7 +28,7 @@ export function CustomCarousel({
 
 		containerRef.current.scrollTo({
 			left: targetIndex * (containerRef.current.scrollWidth / children.length),
-			behavior: 'smooth',
+			behavior: "smooth",
 		});
 		setActiveIndex(targetIndex);
 	};
@@ -49,8 +49,8 @@ export function CustomCarousel({
 	useEffect(() => {
 		const container = containerRef.current;
 		if (container) {
-			container.addEventListener('scroll', handleScroll, { passive: true });
-			return () => container.removeEventListener('scroll', handleScroll);
+			container.addEventListener("scroll", handleScroll, { passive: true });
+			return () => container.removeEventListener("scroll", handleScroll);
 		}
 	}, []);
 
@@ -92,14 +92,16 @@ export function CustomCarousel({
 					<div className="flex gap-2">
 						{React.Children.map(children, (child, i) => {
 							const key =
-								React.isValidElement(child) && child.key != null ? child.key : `carousel-dot-${i}`;
+								React.isValidElement(child) && child.key != null
+									? child.key
+									: `carousel-dot-${i}`;
 							return (
 								<button
 									key={key}
 									type="button"
 									onClick={() => scrollToIndex(i)}
 									className={`h-3 w-3 rounded-full transition-all ${
-										i === activeIndex ? 'w-6 bg-primary' : 'bg-gray-400'
+										i === activeIndex ? "w-6 bg-primary" : "bg-gray-400"
 									}`}
 									aria-label={`Go to item ${i + 1}`}
 								/>

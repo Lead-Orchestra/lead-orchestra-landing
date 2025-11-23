@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { useHasMounted } from '@/hooks/useHasMounted';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { Button } from "@/components/ui/button";
+import { useHasMounted } from "@/hooks/useHasMounted";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const formSchema = z.object({
-	email: z.string().email({ message: 'Please enter a valid email address' }),
+	email: z.string().email({ message: "Please enter a valid email address" }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -22,9 +22,9 @@ export const NewsletterSidebar = () => {
 
 	useEffect(() => {
 		if (!hasMounted) return;
-		if (typeof document !== 'undefined') {
+		if (typeof document !== "undefined") {
 			const match = document.cookie.match(/userSubscribedNewsletter=([^;]+)/);
-			if (match && match[1] === 'true') {
+			if (match && match[1] === "true") {
 				setIsSubscribed(true);
 			}
 		}
@@ -37,28 +37,29 @@ export const NewsletterSidebar = () => {
 		formState: { errors },
 	} = useForm<FormValues>({
 		resolver: zodResolver(formSchema),
-		defaultValues: { email: '' },
+		defaultValues: { email: "" },
 	});
 
 	const onSubmit = async (data: FormValues) => {
 		setIsSubmitting(true);
 		try {
-			const response = await fetch('/api/beehiiv/subscribe', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const response = await fetch("/api/beehiiv/subscribe", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ email: data.email }),
 			});
 			if (!response.ok) {
-				throw new Error('Subscription failed');
+				throw new Error("Subscription failed");
 			}
-			toast.success('Thank you for subscribing to our newsletter!');
+			toast.success("Thank you for subscribing to our newsletter!");
 			reset();
 			setIsSubscribed(true);
 			if (hasMounted) {
-				document.cookie = 'userSubscribedNewsletter=true; expires=Fri, 31 Dec 9999 23:59:59 GMT';
+				document.cookie =
+					"userSubscribedNewsletter=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
 			}
 		} catch (err) {
-			toast.error('An unexpected error occurred');
+			toast.error("An unexpected error occurred");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -85,7 +86,7 @@ export const NewsletterSidebar = () => {
 							setIsSubscribed(false);
 							if (hasMounted) {
 								document.cookie =
-									'userSubscribedNewsletter=false; expires=Fri, 31 Dec 9999 23:59:59 GMT';
+									"userSubscribedNewsletter=false; expires=Fri, 31 Dec 9999 23:59:59 GMT";
 							}
 						}}
 						type="button"
@@ -101,16 +102,20 @@ export const NewsletterSidebar = () => {
 							placeholder="Enter your email"
 							required
 							className="mb-3 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-black placeholder:text-black focus:border-primary focus:outline-none dark:text-white dark:text-white/40"
-							{...register('email')}
+							{...register("email")}
 						/>
-						{errors.email && <p className="mb-3 text-red-500 text-xs">{errors.email.message}</p>}
+						{errors.email && (
+							<p className="mb-3 text-red-500 text-xs">
+								{errors.email.message}
+							</p>
+						)}
 					</div>
 					<Button
 						type="submit"
 						className="w-full bg-gradient-to-r from-primary to-focus hover:opacity-90"
 						disabled={isSubmitting}
 					>
-						{isSubmitting ? 'Subscribing...' : 'Subscribe'}
+						{isSubmitting ? "Subscribing..." : "Subscribe"}
 					</Button>
 				</form>
 			)}

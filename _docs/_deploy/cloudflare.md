@@ -7,6 +7,12 @@ Deploy DealScale to Cloudflare's global network for maximum performance and reli
 ### 1. Cloudflare Pages (Static Site)
 Best for: Static Next.js site, global CDN performance
 
+**Deployment Methods:**
+- **🐳 Docker Build** (Recommended) - Consistent builds using Docker containers
+  - See: [Docker + Cloudflare Pages Guide](./docker-cloudflare-pages.md)
+- **⚡ Direct Build** - Build directly on Cloudflare's infrastructure
+  - See: [Cloudflare Pages Deployment](#-cloudflare-pages-deployment) below
+
 ### 2. Cloudflare Workers (Serverless)
 Best for: API routes, dynamic content, edge computing
 

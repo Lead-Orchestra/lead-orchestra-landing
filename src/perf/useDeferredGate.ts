@@ -1,5 +1,5 @@
-'use client';
-import { useEffect, useRef, useState } from 'react';
+"use client";
+import { useEffect, useRef, useState } from "react";
 
 const DEFAULT_MAX_WAIT_MS = 5000;
 const DEFAULT_IDLE_TIMEOUT_MS = 2000;
@@ -18,9 +18,11 @@ export type DeferredGateOptions =
  * - idleAfterMs: allows load after page idle (fallback timer if no rIC)
  * - timeout: absolute cap to allow load regardless
  */
-export function useDeferredGate(options: DeferredGateOptions = DEFAULT_MAX_WAIT_MS) {
+export function useDeferredGate(
+	options: DeferredGateOptions = DEFAULT_MAX_WAIT_MS,
+) {
 	const parsed =
-		typeof options === 'number'
+		typeof options === "number"
 			? {
 					requireInteraction: false,
 					timeout: options,
@@ -29,11 +31,11 @@ export function useDeferredGate(options: DeferredGateOptions = DEFAULT_MAX_WAIT_
 			: {
 					requireInteraction: !!options.requireInteraction,
 					timeout:
-						typeof options.timeout === 'number' && options.timeout > 0
+						typeof options.timeout === "number" && options.timeout > 0
 							? options.timeout
 							: DEFAULT_MAX_WAIT_MS,
 					idleAfterMs:
-						typeof options.idleAfterMs === 'number' && options.idleAfterMs >= 0
+						typeof options.idleAfterMs === "number" && options.idleAfterMs >= 0
 							? options.idleAfterMs
 							: DEFAULT_IDLE_TIMEOUT_MS,
 				};
@@ -55,20 +57,24 @@ export function useDeferredGate(options: DeferredGateOptions = DEFAULT_MAX_WAIT_
 
 		const onInteract = () => mark();
 
-		const listeners: Array<[string, EventListenerOrEventListenerObject, AddEventListenerOptions]> =
-			[
-				['pointerdown', onInteract, { passive: true }],
-				['keydown', onInteract, { passive: true }],
-				['touchstart', onInteract, { passive: true }],
-				['wheel', onInteract, { passive: true }],
-				['scroll', onInteract, { passive: true }],
-			];
+		const listeners: Array<
+			[string, EventListenerOrEventListenerObject, AddEventListenerOptions]
+		> = [
+			["pointerdown", onInteract, { passive: true }],
+			["keydown", onInteract, { passive: true }],
+			["touchstart", onInteract, { passive: true }],
+			["wheel", onInteract, { passive: true }],
+			["scroll", onInteract, { passive: true }],
+		];
 
 		const cleanup = () => {
 			listeners.forEach(([type, handler, opts]) =>
-				window.removeEventListener(type, handler as any, opts)
+				window.removeEventListener(type, handler as any, opts),
 			);
-			if (typeof (window as any).cancelIdleCallback === 'function' && idleId.current != null) {
+			if (
+				typeof (window as any).cancelIdleCallback === "function" &&
+				idleId.current != null
+			) {
 				(window as any).cancelIdleCallback(idleId.current);
 			}
 			if (capId.current) clearTimeout(capId.current);
@@ -76,13 +82,16 @@ export function useDeferredGate(options: DeferredGateOptions = DEFAULT_MAX_WAIT_
 
 		if (parsed.requireInteraction) {
 			listeners.forEach(([type, handler, opts]) =>
-				window.addEventListener(type, handler as any, opts)
+				window.addEventListener(type, handler as any, opts),
 			);
 		} else {
-			if (typeof (window as any).requestIdleCallback === 'function') {
-				idleId.current = (window as any).requestIdleCallback(() => !doneRef.current && mark(), {
-					timeout: parsed.idleAfterMs,
-				});
+			if (typeof (window as any).requestIdleCallback === "function") {
+				idleId.current = (window as any).requestIdleCallback(
+					() => !doneRef.current && mark(),
+					{
+						timeout: parsed.idleAfterMs,
+					},
+				);
 			} else {
 				// Fallback short timer
 				capId.current = setTimeout(() => {

@@ -1,45 +1,194 @@
-import { v2 as cloudinary } from 'cloudinary';
+/**
+ * Cloudinary API client using fetch (Edge Runtime compatible)
+ * Replaces the cloudinary SDK which requires Node.js built-ins
+ */
 
-cloudinary.config({
-	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET,
-	secure: true,
-});
+/**
+ * Get Cloudinary credentials (lazy evaluation to avoid build-time errors)
+ */
+function getCloudinaryConfig() {
+	const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+	const apiKey = process.env.CLOUDINARY_API_KEY;
+	const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
-export async function uploadFile(file: string, type: 'image' | 'video' | 'raw' | 'auto' = 'raw') {
+	if (!cloudName || !apiKey || !apiSecret) {
+		throw new Error(
+			"Missing Cloudinary environment variables: CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET",
+		);
+	}
+
+	return { cloudName, apiKey, apiSecret };
+}
+
+/**
+ * Generate Cloudinary signature for authenticated requests
+ */
+function generateSignature(params: Record<string, string>): string {
+	// Sort parameters by key
+	const sortedParams = Object.keys(params)
+		.sort()
+		.map((key) => `${key}=${params[key]}`)
+		.join("&");
+
+	// Create signature string
+	const signatureString = `${sortedParams}${API_SECRET}`;
+
+	// Generate SHA-1 hash using Web Crypto API (Edge compatible)
+	// Note: This is a simplified version - in production, you'd use crypto.subtle.digest
+	// For now, we'll use the timestamp-based approach which is simpler
+	return "";
+}
+
+/**
+ * Upload file to Cloudinary using REST API
+ */
+export async function uploadFile(
+	file: string,
+	type: "image" | "video" | "raw" | "auto" = "raw",
+) {
 	// Add prefix if file is a base64 string and not already prefixed
 	let uploadInput = file;
-	if (typeof file === 'string' && /^[A-Za-z0-9+/=]+$/.test(file) && file.length > 100) {
+	if (
+		typeof file === "string" &&
+		/^[A-Za-z0-9+/=]+$/.test(file) &&
+		file.length > 100 &&
+		!file.startsWith("data:")
+	) {
 		uploadInput = `data:image/png;base64,${file}`;
 	}
-	const response = await cloudinary.uploader.upload(uploadInput, {
+
+	// Get Cloudinary config
+	const { cloudName, apiKey, apiSecret } = getCloudinaryConfig();
+
+	// Create form data
+	const formData = new FormData();
+	formData.append("file", uploadInput);
+	formData.append("api_key", apiKey);
+	formData.append("resource_type", type);
+
+	// Generate timestamp for signature
+	const timestamp = Math.floor(Date.now() / 1000).toString();
+
+	// Create signature parameters
+	const signatureParams: Record<string, string> = {
+		timestamp,
 		resource_type: type,
-	});
-	return response;
+	};
+
+	// Generate signature using crypto.subtle (Edge compatible)
+	const sortedParams = Object.keys(signatureParams)
+		.sort()
+		.map((key) => `${key}=${signatureParams[key]}`)
+		.join("&");
+	const signatureString = `${sortedParams}${apiSecret}`;
+
+	// Use Web Crypto API to generate SHA-1 hash
+	const encoder = new TextEncoder();
+	const data = encoder.encode(signatureString);
+	const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+	const hashArray = Array.from(new Uint8Array(hashBuffer));
+	const signature = hashArray
+		.map((b) => b.toString(16).padStart(2, "0"))
+		.join("");
+
+	formData.append("timestamp", timestamp);
+	formData.append("signature", signature);
+
+	// Upload to Cloudinary
+	const { cloudName } = getCloudinaryConfig();
+	const response = await fetch(
+		`https://api.cloudinary.com/v1_1/${cloudName}/${type}/upload`,
+		{
+			method: "POST",
+			body: formData,
+		},
+	);
+
+	if (!response.ok) {
+		const errorText = await response.text();
+		throw new Error(
+			`Cloudinary upload failed: ${response.status} ${response.statusText} - ${errorText}`,
+		);
+	}
+
+	const result = await response.json();
+	return result;
 }
 
-// include file extension when raw file
+/**
+ * Delete file from Cloudinary using REST API
+ */
 export async function deleteFile(
 	file_id: string,
-	type: 'image' | 'video' | 'raw' | 'auto' = 'raw'
+	type: "image" | "video" | "raw" | "auto" = "raw",
 ) {
-	const response = await cloudinary.uploader.destroy(file_id, {
+	// Get Cloudinary config
+	const { cloudName, apiKey, apiSecret } = getCloudinaryConfig();
+
+	// Generate timestamp for signature
+	const timestamp = Math.floor(Date.now() / 1000).toString();
+
+	// Create signature parameters
+	const signatureParams: Record<string, string> = {
+		public_id: file_id,
+		timestamp,
 		resource_type: type,
-	});
-	return response;
+	};
+
+	// Generate signature
+	const sortedParams = Object.keys(signatureParams)
+		.sort()
+		.map((key) => `${key}=${signatureParams[key]}`)
+		.join("&");
+	const signatureString = `${sortedParams}${apiSecret}`;
+
+	// Use Web Crypto API to generate SHA-1 hash
+	const encoder = new TextEncoder();
+	const data = encoder.encode(signatureString);
+	const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+	const hashArray = Array.from(new Uint8Array(hashBuffer));
+	const signature = hashArray
+		.map((b) => b.toString(16).padStart(2, "0"))
+		.join("");
+
+	// Create form data
+	const formData = new FormData();
+	formData.append("public_id", file_id);
+	formData.append("api_key", apiKey);
+	formData.append("timestamp", timestamp);
+	formData.append("signature", signature);
+	formData.append("resource_type", type);
+
+	// Delete from Cloudinary
+	const response = await fetch(
+		`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${type}/destroy`,
+		{
+			method: "POST",
+			body: formData,
+		},
+	);
+
+	if (!response.ok) {
+		const errorText = await response.text();
+		throw new Error(
+			`Cloudinary delete failed: ${response.status} ${response.statusText} - ${errorText}`,
+		);
+	}
+
+	const result = await response.json();
+	return result;
 }
 
+/**
+ * Upload image to Cloudinary (convenience wrapper)
+ */
 export async function uploadImage(file: string) {
-	const response = await cloudinary.uploader.upload(file, {
-		resource_type: 'image',
-	});
-	return response;
+	return uploadFile(file, "image");
 }
 
+/**
+ * Delete image from Cloudinary (convenience wrapper)
+ */
 export async function deleteImage(file_id: string) {
-	const response = await cloudinary.uploader.destroy(file_id, {
-		resource_type: 'image',
-	});
-	return response;
+	return deleteFile(file_id, "image");
 }

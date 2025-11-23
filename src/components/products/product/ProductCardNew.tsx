@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import BecomeACloserCard from '@/components/closers/BecomeACloserCard';
-import ClosersMarketplaceModal from '@/components/closers/ClosersMarketplaceModal';
-import { useWaitCursor } from '@/hooks/useWaitCursor';
-import { startStripeToast } from '@/lib/ui/stripeToast';
-import { cn } from '@/lib/utils';
-import { useCartStore } from '@/stores/useCartStore';
-import { ProductCategory } from '@/types/products';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
-import toast from 'react-hot-toast';
-import MonetizeCard from '../workflow/MonetizeCard';
+import BecomeACloserCard from "@/components/closers/BecomeACloserCard";
+import ClosersMarketplaceModal from "@/components/closers/ClosersMarketplaceModal";
+import { useWaitCursor } from "@/hooks/useWaitCursor";
+import { startStripeToast } from "@/lib/ui/stripeToast";
+import { cn } from "@/lib/utils";
+import { useCartStore } from "@/stores/useCartStore";
+import { ProductCategory } from "@/types/products";
+import { motion, useReducedMotion } from "framer-motion";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
+import toast from "react-hot-toast";
+import MonetizeCard from "../workflow/MonetizeCard";
 import {
 	ProductCard as Card,
 	type ProductCardProps as CardProps,
@@ -21,22 +21,25 @@ import {
 	ProductImage,
 	ProductMetadata,
 	ProductSummary,
-} from './card';
+} from "./card";
 
-const MONETIZE_PORTAL_URL = 'https://app.dealscale.io';
+const MONETIZE_PORTAL_URL = "https://app.dealscale.io";
 
-const MONETIZE_CATEGORY_INFO: Record<string, { title: string; subtitle: string }> = {
-	'sales-scripts-marketplace': {
-		title: 'Sell Your Sales Scripts',
-		subtitle: 'Publish proven cadences to thousands of Deal Scale operators',
+const MONETIZE_CATEGORY_INFO: Record<
+	string,
+	{ title: string; subtitle: string }
+> = {
+	"sales-scripts-marketplace": {
+		title: "Sell Your Sales Scripts",
+		subtitle: "Publish proven cadences to thousands of Deal Scale operators",
 	},
-	'workflows-marketplace': {
-		title: 'Monetize Your Workflow',
-		subtitle: 'Share your automation with the world and earn revenue',
+	"workflows-marketplace": {
+		title: "Monetize Your Workflow",
+		subtitle: "Share your automation with the world and earn revenue",
 	},
-	'voices-marketplace': {
-		title: 'Monetize Your Voice Agent',
-		subtitle: 'Tap into our network and deploy your concierge for clients',
+	"voices-marketplace": {
+		title: "Monetize Your Voice Agent",
+		subtitle: "Tap into our network and deploy your concierge for clients",
 	},
 };
 
@@ -77,41 +80,42 @@ const ProductCardNew = (props: CardProps) => {
 	// Only show BecomeACloserCard for the marketplace product itself
 	const isRemoteCloserMarketplace =
 		(categories?.includes(ProductCategory.RemoteClosers) ?? false) &&
-		(id === 'virtual-assistants-marketplace' ||
-			slug === 'virtual-assistants' ||
-			sku === 'LO-VA-MARKETPLACE');
+		(id === "virtual-assistants-marketplace" ||
+			slug === "virtual-assistants" ||
+			sku === "LO-VA-MARKETPLACE");
 
 	// Check if this is a monetization marketplace entry point (Sales Scripts, Workflows, Voices marketplaces)
 	const isMonetizeMarketplace =
 		(categories?.includes(ProductCategory.Monetize) ?? false) &&
-		(id?.includes('marketplace') || sku?.includes('MARKETPLACE')) &&
+		(id?.includes("marketplace") || sku?.includes("MARKETPLACE")) &&
 		!isRemoteCloserMarketplace;
 
 	// Get monetize card info for marketplace products
-	const monetizeInfo = isMonetizeMarketplace && id ? MONETIZE_CATEGORY_INFO[id] : null;
+	const monetizeInfo =
+		isMonetizeMarketplace && id ? MONETIZE_CATEGORY_INFO[id] : null;
 
 	// Handle monetize marketplace click
 	const handleMonetizeMarketplaceClick = useCallback(() => {
 		if (!id) return;
 
 		// Determine category for UTM params
-		let category = '';
-		if (id.includes('sales-scripts')) category = 'sales-scripts';
-		else if (id.includes('workflows')) category = 'workflows';
-		else if (id.includes('voices')) category = 'voices';
+		let category = "";
+		if (id.includes("sales-scripts")) category = "sales-scripts";
+		else if (id.includes("workflows")) category = "workflows";
+		else if (id.includes("voices")) category = "voices";
 
 		// Redirect to monetization portal
 		const url = new URL(MONETIZE_PORTAL_URL);
-		url.searchParams.set('category', category);
-		url.searchParams.set('action', 'monetize');
-		window.open(url.toString(), '_blank', 'noopener');
+		url.searchParams.set("category", category);
+		url.searchParams.set("action", "monetize");
+		window.open(url.toString(), "_blank", "noopener");
 	}, [id]);
 
 	// Check if this is an individual VA product (has RemoteClosers category but is not the marketplace product)
 	const isIndividualCloser =
 		(categories?.includes(ProductCategory.RemoteClosers) ?? false) &&
 		!isRemoteCloserMarketplace &&
-		(id?.startsWith('va-') || sku?.startsWith('LO-VA-'));
+		(id?.startsWith("va-") || sku?.startsWith("LO-VA-"));
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	const handleAddToCart = useCallback(() => {
@@ -125,7 +129,7 @@ const ProductCardNew = (props: CardProps) => {
 		if (isIndividualCloser) {
 			// TODO: Open VA messaging/booking modal or redirect to booking page
 			toast.success(`Messaging ${name}...`);
-			console.log('Message VA:', id || sku);
+			console.log("Message VA:", id || sku);
 			return;
 		}
 
@@ -133,8 +137,8 @@ const ProductCardNew = (props: CardProps) => {
 			name: productName,
 			price,
 			images: productImages = [],
-			description: productDescription = '',
-			slug: productSlug = '',
+			description: productDescription = "",
+			slug: productSlug = "",
 			sku: productSku,
 			categories: productCategories = [],
 		} = props;
@@ -145,7 +149,7 @@ const ProductCardNew = (props: CardProps) => {
 			name,
 			description,
 			price,
-			sku: sku || '',
+			sku: sku || "",
 			slug,
 			images,
 			reviews: [],
@@ -157,7 +161,16 @@ const ProductCardNew = (props: CardProps) => {
 
 		addToCart(cartItem, 1); // Pass quantity as second argument
 		toast.success(`${name} added to cart`);
-	}, [addToCart, props, isRemoteCloserMarketplace, isIndividualCloser, id, sku, name, router]);
+	}, [
+		addToCart,
+		props,
+		isRemoteCloserMarketplace,
+		isIndividualCloser,
+		id,
+		sku,
+		name,
+		router,
+	]);
 
 	const handleInitiateCheckout = async () => {
 		// Open VA marketplace modal for Virtual Assistants marketplace product only
@@ -170,23 +183,23 @@ const ProductCardNew = (props: CardProps) => {
 		if (isIndividualCloser) {
 			// TODO: Open VA hiring/booking modal or redirect to booking page
 			toast.success(`Hiring ${name}...`);
-			console.log('Hire VA:', id || sku);
+			console.log("Hire VA:", id || sku);
 			// Could open a booking modal or redirect to booking page
 			// router.push(`/vas/${slug || id}/book`);
 			return;
 		}
 
 		if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-			toast.error('Checkout is currently unavailable. Please contact support.');
+			toast.error("Checkout is currently unavailable. Please contact support.");
 			return;
 		}
 
 		setIsCheckoutLoading(true);
-		const stripeToast = startStripeToast('Preparing checkout…');
+		const stripeToast = startStripeToast("Preparing checkout…");
 		try {
-			const response = await fetch('/api/stripe/intent', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+			const response = await fetch("/api/stripe/intent", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					price: Math.round(price * 100),
 					...(callbackUrl && { callbackUrl }),
@@ -194,35 +207,38 @@ const ProductCardNew = (props: CardProps) => {
 					metadata: {
 						sku,
 						name,
-						productCategory: categories?.join(','),
+						productCategory: categories?.join(","),
 					},
 				}),
 			});
 
 			if (!response.ok) {
 				const errorData = await response.json().catch(() => ({
-					message: 'Failed to create payment intent',
+					message: "Failed to create payment intent",
 				}));
-				throw new Error(errorData.message || 'Failed to create payment intent');
+				throw new Error(errorData.message || "Failed to create payment intent");
 			}
 
 			const { clientSecret } = await response.json();
-			if (!clientSecret) throw new Error('Unable to initialize checkout. Please try again.');
+			if (!clientSecret)
+				throw new Error("Unable to initialize checkout. Please try again.");
 			setClientSecret(clientSecret);
-			stripeToast.success('Checkout ready. Complete your purchase in the payment form.');
+			stripeToast.success(
+				"Checkout ready. Complete your purchase in the payment form.",
+			);
 		} catch (error) {
-			console.error('Checkout initiation failed:', error);
+			console.error("Checkout initiation failed:", error);
 			stripeToast.error(
 				error instanceof Error
 					? error.message
-					: 'Stripe checkout failed to initialize. Please try again.'
+					: "Stripe checkout failed to initialize. Please try again.",
 			);
 		} finally {
 			setIsCheckoutLoading(false);
 		}
 	};
 
-	const imageUrl = images?.[0] || '/placeholder-product.png';
+	const imageUrl = images?.[0] || "/placeholder-product.png";
 	const productSlug = slug ?? sku;
 
 	// Render BecomeACloserCard for Remote Closers marketplace product only
@@ -239,7 +255,7 @@ const ProductCardNew = (props: CardProps) => {
 				<ClosersMarketplaceModal
 					isOpen={isClosersModalOpen}
 					onClose={() => setIsClosersModalOpen(false)}
-					onApplyClick={() => router.push('/closers/apply')}
+					onApplyClick={() => router.push("/closers/apply")}
 				/>
 			</>
 		);
@@ -262,14 +278,19 @@ const ProductCardNew = (props: CardProps) => {
 		<motion.div
 			layout
 			className={cn(
-				'relative flex h-full flex-col rounded-xl border border-slate-200 bg-gradient-to-b from-white via-white to-slate-50 p-6 text-slate-900 shadow-md transition-all duration-200',
-				'dark:border-slate-800 dark:bg-gradient-to-b dark:from-slate-900 dark:via-slate-900/80 dark:to-slate-950 dark:text-slate-100 dark:shadow-lg/20',
-				className
+				"relative flex h-full flex-col rounded-xl border border-slate-200 bg-gradient-to-b from-white via-white to-slate-50 p-6 text-slate-900 shadow-md transition-all duration-200",
+				"dark:border-slate-800 dark:bg-gradient-to-b dark:from-slate-900 dark:via-slate-900/80 dark:to-slate-950 dark:text-slate-100 dark:shadow-lg/20",
+				className,
 			)}
 			whileHover={{ scale: shouldReduceMotion ? 1 : 1.03 }}
-			transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+			transition={{ type: "spring", stiffness: 300, damping: 20 }}
 		>
-			<ProductImage imageUrl={imageUrl} alt={name} slug={productSlug} categories={categories} />
+			<ProductImage
+				imageUrl={imageUrl}
+				alt={name}
+				slug={productSlug}
+				categories={categories}
+			/>
 
 			<div className="mt-4 flex-1">
 				<ProductHeader
@@ -368,7 +389,11 @@ const ProductCardNew = (props: CardProps) => {
 								aria-labelledby="addToCartTitle"
 							>
 								<title id="addToCartTitle">Add to Cart</title>
-								<path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+								/>
 							</svg>
 							<span>Add to Cart</span>
 						</button>

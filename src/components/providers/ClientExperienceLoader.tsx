@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type { ComponentType } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import type { ComponentType } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import type { AnalyticsConfig } from '@/lib/analytics/config';
+import type { AnalyticsConfig } from "@/lib/analytics/config";
 
 type ClientExperienceProps = {
 	clarityProjectId?: string;
@@ -21,30 +21,35 @@ type ClientExperienceProps = {
 export function ClientExperienceLoader(props: ClientExperienceProps) {
 	// This should NEVER execute during SSR because this component is only
 	// imported/rendered on client. But add safety check anyway.
-	if (typeof window === 'undefined') {
+	if (typeof window === "undefined") {
 		console.error(
-			'[ClientExperienceLoader PRERENDER ERROR] Rendered during SSR! This should never happen.'
+			"[ClientExperienceLoader PRERENDER ERROR] Rendered during SSR! This should never happen.",
 		);
-		console.error('[ClientExperienceLoader PRERENDER] props:', props);
-		console.error('[ClientExperienceLoader PRERENDER] Stack trace:', new Error().stack);
+		console.error("[ClientExperienceLoader PRERENDER] props:", props);
+		console.error(
+			"[ClientExperienceLoader PRERENDER] Stack trace:",
+			new Error().stack,
+		);
 		return null;
 	}
 
-	console.error('[ClientExperienceLoader] Rendering on client');
+	console.error("[ClientExperienceLoader] Rendering on client");
 
 	const [isLoaded, setIsLoaded] = useState(false);
-	const ComponentRef = useRef<ComponentType<ClientExperienceProps> | null>(null);
+	const ComponentRef = useRef<ComponentType<ClientExperienceProps> | null>(
+		null,
+	);
 
 	useEffect(() => {
-		console.log('[ClientExperienceLoader] Loading ClientExperienceWrapper...');
-		import('./ClientExperienceWrapper')
+		console.log("[ClientExperienceLoader] Loading ClientExperienceWrapper...");
+		import("./ClientExperienceWrapper")
 			.then((mod) => {
-				console.log('[ClientExperienceLoader] ClientExperienceWrapper loaded');
+				console.log("[ClientExperienceLoader] ClientExperienceWrapper loaded");
 				ComponentRef.current = mod.ClientExperienceWrapper;
 				setIsLoaded(true);
 			})
 			.catch((error) => {
-				console.error('[ClientExperienceLoader] Failed to load:', error);
+				console.error("[ClientExperienceLoader] Failed to load:", error);
 			});
 	}, []);
 

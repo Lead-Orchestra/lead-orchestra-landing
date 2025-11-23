@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import type { PlanType } from '@/types/service/plans';
+import type { PlanType } from "@/types/service/plans";
 
 export interface AnnualDiscountSummary {
 	percent?: number;
@@ -14,18 +14,18 @@ interface PlanTypeToggleProps {
 	onChange: (type: PlanType) => void;
 }
 
-const PLAN_TYPE_ORDER: PlanType[] = ['monthly', 'annual', 'oneTime'];
+const PLAN_TYPE_ORDER: PlanType[] = ["monthly", "annual", "oneTime"];
 
 const PLAN_TYPE_LABEL: Record<PlanType, string> = {
-	monthly: 'Monthly',
-	annual: 'Annual',
-	oneTime: 'One-Time',
+	monthly: "Monthly",
+	annual: "Annual",
+	oneTime: "One-Time",
 };
 
 function formatCurrency(amount: number) {
-	return new Intl.NumberFormat('en-US', {
-		style: 'currency',
-		currency: 'USD',
+	return new Intl.NumberFormat("en-US", {
+		style: "currency",
+		currency: "USD",
 		maximumFractionDigits: 0,
 	}).format(amount);
 }
@@ -60,7 +60,9 @@ export function PlanTypeToggle({
 	annualDiscountSummary,
 	onChange,
 }: PlanTypeToggleProps) {
-	const orderedTypes = PLAN_TYPE_ORDER.filter((type) => availableTypes.includes(type));
+	const orderedTypes = PLAN_TYPE_ORDER.filter((type) =>
+		availableTypes.includes(type),
+	);
 
 	if (orderedTypes.length === 0) {
 		return null;
@@ -70,14 +72,16 @@ export function PlanTypeToggle({
 		<div className="flex flex-wrap items-center justify-center gap-2 pt-4 pb-2">
 			{orderedTypes.map((type) => (
 				<div key={type} className="relative">
-					{type === 'annual' ? <AnnualDiscountBadge summary={annualDiscountSummary} /> : null}
+					{type === "annual" ? (
+						<AnnualDiscountBadge summary={annualDiscountSummary} />
+					) : null}
 
 					<button
 						type="button"
 						className={`rounded-lg px-4 py-2 transition-all ${
 							planType === type
-								? 'bg-gradient-to-r from-primary/20 to-focus/20 text-black dark:text-white'
-								: 'text-black hover:text-black dark:text-white dark:text-white/60'
+								? "bg-gradient-to-r from-primary/20 to-focus/20 text-black dark:text-white"
+								: "text-black hover:text-black dark:text-white dark:text-white/60"
 						}`}
 						onClick={() => onChange(type)}
 					>

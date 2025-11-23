@@ -1,17 +1,17 @@
 // src/components/services/ServiceFilter.tsx
-'use client';
+"use client";
 
-import { Input } from '@/components/ui/input';
-import { useCategoryFilter } from '@/hooks/use-category-filter';
-import type { ServiceCategoryValue } from '@/types/service/services';
-import React from 'react';
+import { Input } from "@/components/ui/input";
+import { useCategoryFilter } from "@/hooks/use-category-filter";
+import type { ServiceCategoryValue } from "@/types/service/services";
+import React from "react";
 
 interface ServiceFilterProps {
 	categories: Array<{ id: string; name: string }>;
-	activeCategory: ServiceCategoryValue | '';
+	activeCategory: ServiceCategoryValue | "";
 	searchTerm: string;
 	onSearch: (term: string) => void;
-	onCategoryChange: (category: ServiceCategoryValue | '') => void;
+	onCategoryChange: (category: ServiceCategoryValue | "") => void;
 	showSearch?: boolean;
 	showCategories?: boolean;
 }
@@ -25,14 +25,24 @@ export default function ServiceFilter({
 	showSearch = true,
 	showCategories = true,
 }: ServiceFilterProps) {
-	const { CategoryFilter } = useCategoryFilter(categories, activeCategory, onCategoryChange);
+	const { CategoryFilter } = useCategoryFilter(
+		categories,
+		activeCategory,
+		onCategoryChange,
+	);
 
 	return (
 		<div className="mb-8 flex w-full flex-col gap-4">
 			{showSearch && (
 				<div className="relative mx-auto w-full max-w-xs md:max-w-sm">
 					<span className="-translate-y-1/2 absolute top-1/2 left-3 text-purple-400">
-						<svg aria-label="Search" width={18} height={18} fill="none" viewBox="0 0 24 24">
+						<svg
+							aria-label="Search"
+							width={18}
+							height={18}
+							fill="none"
+							viewBox="0 0 24 24"
+						>
 							<title>Search</title>
 							<path
 								stroke="currentColor"

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Affiliate Contact Form
 // This component renders a contact form bound to `affiliateFormSchema` & `affiliateFormFields`.
@@ -7,24 +7,28 @@
 // Multiselect fields use MultiSelectDropdown.
 // todo Integrate real submission endpoint once available.
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FileIcon, Loader2 } from 'lucide-react';
-import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
-import { type ControllerRenderProps, FormProvider, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FileIcon, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+import {
+	type ControllerRenderProps,
+	FormProvider,
+	useForm,
+} from "react-hook-form";
+import { toast } from "sonner";
 
 import {
 	type AffiliateFormValues,
 	affiliateFormFields,
 	affiliateFormSchema,
-} from '@/data/contact/affiliate';
-import type { FieldConfig, RenderFieldProps } from '@/types/contact/formFields';
+} from "@/data/contact/affiliate";
+import type { FieldConfig, RenderFieldProps } from "@/types/contact/formFields";
 
-import Header from '@/components/common/Header';
-import MultiSelectDropdown from '@/components/ui/MultiSelectDropdown';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import Header from "@/components/common/Header";
+import MultiSelectDropdown from "@/components/ui/MultiSelectDropdown";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Form,
 	FormControl,
@@ -32,41 +36,46 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { createFieldProps, renderFormField } from './formFieldHelpers';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { createFieldProps, renderFormField } from "./formFieldHelpers";
 
 type AffiliateFormProps = {
 	onSuccess?: (affiliateId: string, social: string) => void;
 	prefill?: Partial<AffiliateFormValues>;
 };
 
-export default function AffiliateForm({ onSuccess, prefill }: AffiliateFormProps) {
+export default function AffiliateForm({
+	onSuccess,
+	prefill,
+}: AffiliateFormProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	// Base defaults derived from field config values
 	const baseDefaults = useMemo(() => {
 		return Object.fromEntries(
-			affiliateFormFields.map((f) => [f.name, f.value])
+			affiliateFormFields.map((f) => [f.name, f.value]),
 		) as Partial<AffiliateFormValues>;
 	}, []);
 
 	// Merge defaults with prefill and remove empty arrays for multiselect fields
-	const computeMergedDefaults = (seed?: Partial<AffiliateFormValues>): AffiliateFormValues => {
+	const computeMergedDefaults = (
+		seed?: Partial<AffiliateFormValues>,
+	): AffiliateFormValues => {
 		const merged: Partial<AffiliateFormValues> = {
 			...baseDefaults,
 			...(seed ?? {}),
 		};
 		for (const field of affiliateFormFields) {
-			if (field.type === 'multiselect') {
+			if (field.type === "multiselect") {
 				const name = field.name as keyof AffiliateFormValues;
 				const val = merged[name] as unknown;
 				if (Array.isArray(val) && val.length === 0) {
@@ -91,20 +100,21 @@ export default function AffiliateForm({ onSuccess, prefill }: AffiliateFormProps
 	}, [JSON.stringify(prefill)]);
 
 	const onSubmit = async (data: AffiliateFormValues) => {
-		console.log('[AffiliateForm] onSubmit called', data);
+		console.log("[AffiliateForm] onSubmit called", data);
 		setIsSubmitting(true);
 		try {
 			// todo: Replace with real API endpoint
 			await new Promise((resolve) => setTimeout(resolve, 1200));
-			toast.success('Affiliate application submitted!');
+			toast.success("Affiliate application submitted!");
 			form.reset();
 			if (onSuccess) {
 				// Pass both affiliateId and social handle
-				onSuccess('AFFILIATE-12345', data.social); // todo: Replace with real affiliateId from backend
+				onSuccess("AFFILIATE-12345", data.social); // todo: Replace with real affiliateId from backend
 			}
 		} catch (err) {
-			console.error('[AffiliateForm] Error in onSubmit', err);
-			const message = err instanceof Error ? err.message : 'An unknown error occurred.';
+			console.error("[AffiliateForm] Error in onSubmit", err);
+			const message =
+				err instanceof Error ? err.message : "An unknown error occurred.";
 			toast.error(message);
 		} finally {
 			setIsSubmitting(false);
@@ -125,7 +135,7 @@ export default function AffiliateForm({ onSuccess, prefill }: AffiliateFormProps
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit((data) => {
-							console.log('[AffiliateForm] handleSubmit called', data);
+							console.log("[AffiliateForm] handleSubmit called", data);
 							onSubmit(data);
 						})}
 						className="space-y-4"
@@ -137,20 +147,22 @@ export default function AffiliateForm({ onSuccess, prefill }: AffiliateFormProps
 								name={fieldConfig.name as keyof AffiliateFormValues}
 								render={({ field: formField }) => (
 									<FormItem className="space-y-1">
-										{fieldConfig.type !== 'checkbox' && (
+										{fieldConfig.type !== "checkbox" && (
 											<FormLabel className="text-black dark:text-white/70">
 												{fieldConfig.label}
 											</FormLabel>
 										)}
 										<FormControl>
-											{renderFormField(createFieldProps(fieldConfig, formField))}
+											{renderFormField(
+												createFieldProps(fieldConfig, formField),
+											)}
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 						))}
-						{process.env.STAGING_ENVIRONMENT === 'DEV' && (
+						{process.env.STAGING_ENVIRONMENT === "DEV" && (
 							<pre className="mb-2 max-h-40 overflow-auto rounded bg-white/80 p-2 text-red-600 text-xs">
 								{JSON.stringify(form.formState.errors, null, 2)}
 							</pre>
@@ -165,7 +177,7 @@ export default function AffiliateForm({ onSuccess, prefill }: AffiliateFormProps
 									<Loader2 className="h-4 w-4 animate-spin" /> Submitting...
 								</span>
 							) : (
-								'Submit Application'
+								"Submit Application"
 							)}
 						</Button>
 					</form>

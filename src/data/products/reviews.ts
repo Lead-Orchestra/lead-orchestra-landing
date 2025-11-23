@@ -1,19 +1,20 @@
-import type { Review } from '@/types/products';
+import type { Review } from "@/types/products";
 
 // Example product reviews
 export const reviews: Review[] = [
 	{
 		id: 1,
-		author: 'Emily Chen',
+		author: "Emily Chen",
 		rating: 5,
-		date: '2024-01-15',
-		content: 'Perfect fit and amazing quality! The fabric is so soft and comfortable.',
+		date: "2024-01-15",
+		content:
+			"Perfect fit and amazing quality! The fabric is so soft and comfortable.",
 	},
 	{
 		id: 2,
-		author: 'Michael Rodriguez',
+		author: "Michael Rodriguez",
 		rating: 4,
-		date: '2024-01-10',
-		content: 'Great value for a 6-pack. Colors are exactly as described.',
+		date: "2024-01-10",
+		content: "Great value for a 6-pack. Colors are exactly as described.",
 	},
 ];

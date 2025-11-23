@@ -1,8 +1,8 @@
-import CheckoutForm from '@/components/checkout/CheckoutForm';
-import { Button } from '@/components/ui/button';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import type { CheckoutDialogProps } from './types';
+import CheckoutForm from "@/components/checkout/CheckoutForm";
+import { Button } from "@/components/ui/button";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import type { CheckoutDialogProps } from "./types";
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 	? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
@@ -34,13 +34,13 @@ const CheckoutDialog = ({
 							price: {
 								oneTime: {
 									amount: price,
-									description: 'One-time payment',
+									description: "One-time payment",
 									features: [],
 								},
-								monthly: { amount: 0, description: '', features: [] },
-								annual: { amount: 0, description: '', features: [] },
+								monthly: { amount: 0, description: "", features: [] },
+								annual: { amount: 0, description: "", features: [] },
 							},
-							cta: { text: 'Complete Purchase', type: 'checkout' },
+							cta: { text: "Complete Purchase", type: "checkout" },
 						}}
 						planType="oneTime"
 						productCategories={categories}

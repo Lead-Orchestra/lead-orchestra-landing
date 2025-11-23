@@ -1,12 +1,12 @@
-import { act, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { BetaStickyBanner } from '../BetaStickyBanner';
+import { BetaStickyBanner } from "../BetaStickyBanner";
 
-describe('BetaStickyBanner', () => {
+describe("BetaStickyBanner", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
-		const fixedNow = new Date('2025-11-13T00:00:00Z');
+		const fixedNow = new Date("2025-11-13T00:00:00Z");
 		vi.setSystemTime(fixedNow);
 	});
 
@@ -14,17 +14,16 @@ describe('BetaStickyBanner', () => {
 		vi.useRealTimers();
 	});
 
-	it('renders beta access CTA copy', () => {
+	it("renders beta access CTA copy", () => {
 		render(<BetaStickyBanner />);
 
 		expect(screen.getByText(/founders circle access/i)).toBeInTheDocument();
-		expect(screen.getByRole('link', { name: /request early access/i })).toHaveAttribute(
-			'href',
-			'/contact?utm_source=founders-circle'
-		);
+		expect(
+			screen.getByRole("link", { name: /request early access/i }),
+		).toHaveAttribute("href", "/contact?utm_source=founders-circle");
 	});
 
-	it('updates countdown with remaining time', async () => {
+	it("updates countdown with remaining time", async () => {
 		render(<BetaStickyBanner />);
 
 		await act(async () => {

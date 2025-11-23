@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import type { LineStatus } from '@/types/transcript';
-import { useEffect, useRef, useState } from 'react';
+import type { LineStatus } from "@/types/transcript";
+import { useEffect, useRef, useState } from "react";
 
 interface AudioManagerProps {
 	callStatus: LineStatus;
@@ -12,7 +12,7 @@ interface AudioManagerProps {
 
 export const AudioManager = ({
 	callStatus,
-	audioUrl = '/calls/example-call-yt.mp3',
+	audioUrl = "/calls/example-call-yt.mp3",
 	playAudio: shouldPlay,
 	onAudioEnd,
 }: AudioManagerProps) => {
@@ -23,32 +23,32 @@ export const AudioManager = ({
 	// Initialize audio element
 	useEffect(() => {
 		const audio = new Audio(audioUrl);
-		audio.preload = 'auto';
+		audio.preload = "auto";
 		audio.loop = false; // Don't loop the audio
 		audioRef.current = audio;
 
-		console.log('Audio element initialized');
+		console.log("Audio element initialized");
 
 		const handleCanPlay = () => {
-			console.log('Audio can play through');
+			console.log("Audio can play through");
 			setIsLoaded(true);
 		};
 
 		const handleEnded = () => {
-			console.log('Audio playback ended');
+			console.log("Audio playback ended");
 			isPlayingRef.current = false;
 			onAudioEnd?.();
 		};
 
-		audio.addEventListener('canplaythrough', handleCanPlay);
-		audio.addEventListener('ended', handleEnded);
+		audio.addEventListener("canplaythrough", handleCanPlay);
+		audio.addEventListener("ended", handleEnded);
 
 		// Cleanup
 		return () => {
-			console.log('Cleaning up audio');
+			console.log("Cleaning up audio");
 			audio.pause();
-			audio.removeEventListener('canplaythrough', handleCanPlay);
-			audio.removeEventListener('ended', handleEnded);
+			audio.removeEventListener("canplaythrough", handleCanPlay);
+			audio.removeEventListener("ended", handleEnded);
 			audioRef.current = null;
 			isPlayingRef.current = false;
 		};
@@ -57,22 +57,27 @@ export const AudioManager = ({
 	// Handle audio playback based on playAudio prop
 	useEffect(() => {
 		if (!audioRef.current || !isLoaded) {
-			console.log('Audio not ready or not loaded yet');
+			console.log("Audio not ready or not loaded yet");
 			return;
 		}
 
 		const audio = audioRef.current;
-		console.log('Audio state - shouldPlay:', shouldPlay, 'currentTime:', audio.currentTime);
+		console.log(
+			"Audio state - shouldPlay:",
+			shouldPlay,
+			"currentTime:",
+			audio.currentTime,
+		);
 		if (shouldPlay) {
 			if (!isPlayingRef.current) {
 				audio
 					.play()
 					.then(() => {
 						isPlayingRef.current = true;
-						console.log('Audio playback started successfully via prop.');
+						console.log("Audio playback started successfully via prop.");
 					})
 					.catch((error) => {
-						console.error('Error playing audio via prop:', error);
+						console.error("Error playing audio via prop:", error);
 						isPlayingRef.current = false; // Ensure state is correct on error
 					});
 			}
@@ -80,7 +85,7 @@ export const AudioManager = ({
 			if (isPlayingRef.current) {
 				audio.pause();
 				isPlayingRef.current = false;
-				console.log('Audio playback paused via prop.');
+				console.log("Audio playback paused via prop.");
 				// Optionally reset currentTime if desired when playAudio becomes false
 				// audio.currentTime = 0;
 			}

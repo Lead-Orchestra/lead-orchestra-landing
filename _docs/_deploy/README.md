@@ -64,6 +64,7 @@ curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash
 ## 📁 Platform-Specific Guides
 
 - [Cloudflare Deployment](./cloudflare.md) - CDN/Edge performance
+- [Docker + Cloudflare Pages](./docker-cloudflare-pages.md) - 🐳 Docker-based builds for Cloudflare Pages
 - [Hetzner Deployment](./hetzner.md) - Cost-effective VPS hosting
 - [Vercel Deployment](./vercel.md) - Next.js optimized platform
 - [Fly.io Deployment](./flyio.md) - Global application platform

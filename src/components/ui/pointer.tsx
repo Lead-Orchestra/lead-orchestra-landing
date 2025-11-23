@@ -1,23 +1,29 @@
-'use client';
+"use client";
 
-import type { HTMLMotionProps } from 'motion/react';
-import { AnimatePresence, motion, useMotionValue } from 'motion/react';
-import { useEffect, useRef, useState } from 'react';
+import type { HTMLMotionProps } from "motion/react";
+import { AnimatePresence, motion, useMotionValue } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-type PointerProps = HTMLMotionProps<'span'> & {
+type PointerProps = HTMLMotionProps<"span"> & {
 	enabled?: boolean;
 };
 
-export function Pointer({ className, style, children, enabled = true, ...props }: PointerProps) {
+export function Pointer({
+	className,
+	style,
+	children,
+	enabled = true,
+	...props
+}: PointerProps) {
 	const x = useMotionValue(0);
 	const y = useMotionValue(0);
 	const [isActive, setIsActive] = useState(false);
 	const containerRef = useRef<HTMLSpanElement>(null);
 
 	useEffect(() => {
-		if (!enabled || typeof window === 'undefined') {
+		if (!enabled || typeof window === "undefined") {
 			return;
 		}
 
@@ -42,17 +48,17 @@ export function Pointer({ className, style, children, enabled = true, ...props }
 		};
 
 		const originalCursor = parentElement.style.cursor;
-		parentElement.style.cursor = 'none';
+		parentElement.style.cursor = "none";
 
-		parentElement.addEventListener('mousemove', handleMouseMove);
-		parentElement.addEventListener('mouseenter', handleMouseEnter);
-		parentElement.addEventListener('mouseleave', handleMouseLeave);
+		parentElement.addEventListener("mousemove", handleMouseMove);
+		parentElement.addEventListener("mouseenter", handleMouseEnter);
+		parentElement.addEventListener("mouseleave", handleMouseLeave);
 
 		return () => {
 			parentElement.style.cursor = originalCursor;
-			parentElement.removeEventListener('mousemove', handleMouseMove);
-			parentElement.removeEventListener('mouseenter', handleMouseEnter);
-			parentElement.removeEventListener('mouseleave', handleMouseLeave);
+			parentElement.removeEventListener("mousemove", handleMouseMove);
+			parentElement.removeEventListener("mouseenter", handleMouseEnter);
+			parentElement.removeEventListener("mouseleave", handleMouseLeave);
 		};
 	}, [enabled, x, y]);
 
@@ -76,8 +82,8 @@ export function Pointer({ className, style, children, enabled = true, ...props }
 						{children ?? (
 							<span
 								className={cn(
-									'flex h-10 w-10 items-center justify-center rounded-full border border-primary/50 bg-primary/30 text-primary shadow-lg backdrop-blur',
-									className
+									"flex h-10 w-10 items-center justify-center rounded-full border border-primary/50 bg-primary/30 text-primary shadow-lg backdrop-blur",
+									className,
 								)}
 							>
 								<svg
