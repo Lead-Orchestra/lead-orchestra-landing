@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+export const config = {
+	runtime: 'edge',
+};
+
 const BEEHIIV_FEED = "https://rss.beehiiv.com/feeds/th0QQipR7J.xml";
 const CACHE_CONTROL = "s-maxage=3600, stale-while-revalidate=86400";
 

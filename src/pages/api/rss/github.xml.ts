@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+export const config = {
+	runtime: 'edge',
+};
+
 const GITHUB_FEED =
 	process.env.GITHUB_ATOM_FEED_URL ||
 	"https://github.com/organizations/Deal-Scale/TechWithTy.private.atom?token=AI72D5O5LGXJVYOGAX5W7WGHFMVCY";

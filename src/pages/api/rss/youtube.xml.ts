@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+export const config = {
+	runtime: 'edge',
+};
+
 const YOUTUBE_FEED = process.env.YOUTUBE_CHANNEL_ID
 	? `https://www.youtube.com/feeds/videos.xml?channel_id=${process.env.YOUTUBE_CHANNEL_ID}`
 	: "https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ-A";

@@ -1,7 +1,6 @@
-// Note: Cannot use edge runtime - @slack/web-api requires Node.js built-ins (fs, os, path, querystring, stream)
-// export const runtime = 'edge'; // Cannot use edge runtime due to @slack/web-api dependency
+export const runtime = 'edge';
+
 import { mapNotionPageToLinkTree } from "@/utils/notion/linktreeMapper";
-import { WebClient } from "@slack/web-api";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { revalidateTag } from "next/cache";
@@ -9,11 +8,7 @@ import { type NextRequest, NextResponse } from "next/server";
 const NOTION_API_BASE = "https://api.notion.com/v1";
 const NOTION_VERSION = "2022-06-28";
 
-
-// Initialize Slack
-const slack = process.env.SLACK_TOKEN
-	? new WebClient(process.env.SLACK_TOKEN)
-	: null;
+const slackToken = process.env.SLACK_TOKEN;
 const slackChannel =
 	process.env.SLACK_REDIRECT_CHANNEL || "notion-webhook-errors";
 
@@ -76,12 +71,29 @@ function boolFromSelectOrCheckbox(v: unknown): boolean {
 }
 
 async function sendSlackAlert(error: string, pageId?: string) {
-	if (!slack) return;
+	if (!slackToken) return;
 	try {
-		await slack.chat.postMessage({
-			channel: slackChannel,
-			text: `Notion webhook failed: ${error}${pageId ? `\nPage: ${pageId}` : ""}`,
+		const response = await fetch("https://slack.com/api/chat.postMessage", {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${slackToken}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				channel: slackChannel,
+				text: `Notion webhook failed: ${error}${pageId ? `\nPage: ${pageId}` : ""}`,
+			}),
 		});
+
+		if (!response.ok) {
+			const text = await response.text();
+			throw new Error(`Slack API returned ${response.status}: ${text}`);
+		}
+
+		const result = await response.json();
+		if (!result.ok) {
+			throw new Error(`Slack API error: ${result.error || 'Unknown error'}`);
+		}
 	} catch (err) {
 		console.error("Slack alert failed:", err);
 	}

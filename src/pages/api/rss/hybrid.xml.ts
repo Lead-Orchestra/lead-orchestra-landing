@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+export const config = {
+	runtime: 'edge',
+};
+
 import { XMLParser } from "fast-xml-parser";
 
 const SITE_URL = "https://dealscale.io";
