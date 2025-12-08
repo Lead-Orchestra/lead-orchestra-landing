@@ -10,8 +10,6 @@ interface RouteParams {
 	key_id: string;
 }
 
-export const runtime = "edge";
-
 export async function DELETE(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },

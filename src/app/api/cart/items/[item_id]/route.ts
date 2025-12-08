@@ -29,8 +29,6 @@ interface RouteParams {
  * - quantity > 0: Updates item quantity
  * - quantity = 0: Removes item from cart
  */
-export const runtime = "edge";
-
 export async function PUT(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },

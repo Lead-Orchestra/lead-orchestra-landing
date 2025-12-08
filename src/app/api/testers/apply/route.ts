@@ -24,8 +24,6 @@ const DEALSCALE_API_BASE =
  * - Creates tester record with 'applied' status
  * - Triggers notification to admins
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

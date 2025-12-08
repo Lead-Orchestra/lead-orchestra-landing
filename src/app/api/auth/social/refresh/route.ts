@@ -21,8 +21,6 @@ type OAuthProvider = "FACEBOOK" | "INSTAGRAM" | "LINKEDIN" | "TWITTER";
  * - LinkedIn: Uses OAuth 2.0 refresh flow
  * - Facebook: Uses OAuth 2.0 refresh flow
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		// Authenticate the caller (requires Auth.js JWT)

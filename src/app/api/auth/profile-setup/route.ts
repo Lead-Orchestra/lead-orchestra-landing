@@ -16,8 +16,6 @@ interface ProfileSetupUpdateRequest {
 /**
  * Get profile setup progress
  */
-export const runtime = "edge";
-
 export async function GET(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

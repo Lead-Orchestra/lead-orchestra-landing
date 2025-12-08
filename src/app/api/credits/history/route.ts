@@ -8,8 +8,6 @@ export const runtime = 'edge';
 /**
  * Get user's credit transaction history.
  */
-export const runtime = "edge";
-
 export async function GET(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

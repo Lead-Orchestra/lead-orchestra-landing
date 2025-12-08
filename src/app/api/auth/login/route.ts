@@ -8,8 +8,6 @@ import { type NextRequest, NextResponse } from "next/server";
 export const runtime = 'edge';
 
 
-export const runtime = "edge";
-
 /**
  * Login endpoint - Edge-compatible replacement for next-auth
  */

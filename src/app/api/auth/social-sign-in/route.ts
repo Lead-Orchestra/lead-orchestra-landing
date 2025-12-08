@@ -8,8 +8,6 @@ export const runtime = 'edge';
 
 // Social OAuth linkage endpoint - No session creation
 // POST /api/auth/social-sign-in
-export const runtime = "edge";
-
 export async function POST(request: NextRequest) {
 	try {
 		// Authenticate the caller (requires Auth.js JWT)

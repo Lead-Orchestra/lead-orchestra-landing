@@ -41,8 +41,6 @@ function normalizeRequest(body: AddToCartRequest): AddToCartRequest | null {
  * - Creates cart if none exists
  * - Adds item or updates quantity if item already exists
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

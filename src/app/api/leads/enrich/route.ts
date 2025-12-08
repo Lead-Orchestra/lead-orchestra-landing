@@ -42,8 +42,6 @@ function validateRequest(body: EnrichmentRequestBody): string | null {
 /**
  * Enrich an existing lead using the specified OSINT tool.
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

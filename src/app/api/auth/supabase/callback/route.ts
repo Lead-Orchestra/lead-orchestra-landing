@@ -44,8 +44,6 @@ function redirectWithParams(
 	return NextResponse.redirect(url);
 }
 
-export const runtime = "edge";
-
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
 	const supabaseError = searchParams.get("error");

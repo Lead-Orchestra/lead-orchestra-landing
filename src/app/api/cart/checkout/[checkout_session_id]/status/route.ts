@@ -17,8 +17,6 @@ interface RouteParams {
  * - Must be logged in
  * - Must own the checkout session
  */
-export const runtime = "edge";
-
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },

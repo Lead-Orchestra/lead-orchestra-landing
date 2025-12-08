@@ -8,8 +8,6 @@ export const runtime = 'edge';
 /**
  * Transfer credits between users or accounts.
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

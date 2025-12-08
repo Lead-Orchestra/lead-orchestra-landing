@@ -10,8 +10,6 @@ export const runtime = 'edge';
  *
  * Returns current balance for each credit type with detailed breakdown.
  */
-export const runtime = "edge";
-
 export async function GET(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

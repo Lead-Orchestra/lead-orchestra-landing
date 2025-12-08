@@ -16,8 +16,6 @@ export const runtime = 'edge';
  * - Advanced Lead Scoring
  * - Automated Follow-up Sequences
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

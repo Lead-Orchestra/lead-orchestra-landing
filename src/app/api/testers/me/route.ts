@@ -13,8 +13,6 @@ export const runtime = 'edge';
  * - Pilot tester status and dates
  * - Feature voting eligibility
  */
-export const runtime = "edge";
-
 export async function GET(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

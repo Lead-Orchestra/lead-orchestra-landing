@@ -26,8 +26,6 @@ interface RouteParams {
  * - Pilot testers: 20 AI credits
  * - Credits are immediately available
  */
-export const runtime = "edge";
-
 export async function POST(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },

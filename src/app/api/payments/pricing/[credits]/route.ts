@@ -16,8 +16,6 @@ interface RouteParams {
  * Uses centralized pricing utility for DRY implementation
  * Returns calculated price, savings, and discount information.
  */
-export const runtime = "edge";
-
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },

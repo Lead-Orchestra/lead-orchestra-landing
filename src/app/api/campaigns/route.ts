@@ -8,8 +8,6 @@ export const runtime = 'edge';
 /**
  * Create a new campaign.
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

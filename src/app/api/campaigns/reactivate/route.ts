@@ -26,8 +26,6 @@ const TIME_PER_CONTACT_HOURS = 0.25; // Estimated time per contact in hours (15 
 /**
  * Batch activate contacts for campaign reactivation
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

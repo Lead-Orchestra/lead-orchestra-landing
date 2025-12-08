@@ -11,8 +11,6 @@ export const runtime = 'edge';
  * Uses centralized pricing utility to show available bulk discounts
  * Returns comprehensive information about pricing tiers for promotional use.
  */
-export const runtime = "edge";
-
 export async function GET(request: NextRequest) {
 	try {
 		const session = await getServerSession(request);

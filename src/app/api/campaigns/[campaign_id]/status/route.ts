@@ -12,8 +12,6 @@ interface RouteParams {
 /**
  * Get campaign status by campaign ID.
  */
-export const runtime = "edge";
-
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },

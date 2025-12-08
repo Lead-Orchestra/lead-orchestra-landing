@@ -15,8 +15,6 @@ type RouteContext = {
  * Handles admin affiliate approval requests by forwarding them to the DealScale backend API.
  * Ensures the caller is authenticated with the necessary DealScale access tokens.
  */
-export const runtime = "edge";
-
 export async function POST(request: NextRequest, { params }: RouteContext) {
 	try {
 		const session = await getServerSession(request);

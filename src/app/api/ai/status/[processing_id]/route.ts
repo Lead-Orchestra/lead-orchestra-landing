@@ -12,8 +12,6 @@ interface RouteParams {
 /**
  * Get AI processing status by processing ID.
  */
-export const runtime = "edge";
-
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },

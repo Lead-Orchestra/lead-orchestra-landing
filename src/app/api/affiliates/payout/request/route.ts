@@ -5,8 +5,6 @@ const DEALSCALE_API_BASE =
 export const runtime = 'edge';
 
 
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	const session = await getServerSession(req);
 	if (!session?.user || !session?.dsTokens?.access_token) {

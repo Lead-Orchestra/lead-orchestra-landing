@@ -21,8 +21,6 @@ type OAuthProvider = "FACEBOOK" | "INSTAGRAM" | "LINKEDIN" | "TWITTER";
  * - Audit trail logging
  * - Optional provider-side revocation (future)
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		// Authenticate the caller (requires Auth.js JWT)

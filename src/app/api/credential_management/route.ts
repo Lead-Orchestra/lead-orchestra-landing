@@ -5,8 +5,6 @@ const DEALSCALE_API_BASE =
 export const runtime = 'edge';
 
 
-export const runtime = "edge";
-
 export async function GET(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

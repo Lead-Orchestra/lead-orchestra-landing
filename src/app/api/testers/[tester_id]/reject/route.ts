@@ -14,8 +14,6 @@ interface RouteParams {
  *
  * Admin Only
  */
-export const runtime = "edge";
-
 export async function POST(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },

@@ -28,8 +28,6 @@ interface AIActivationRequest {
  *
  * Request payload for AI activation endpoint with contact information and context.
  */
-export const runtime = "edge";
-
 export async function POST(
 	req: NextRequest,
 	{ params }: { params: Promise<{ contact_id: string }> },

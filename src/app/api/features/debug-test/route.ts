@@ -8,8 +8,6 @@ export const runtime = 'edge';
 /**
  * Simple debug endpoint to test if routing works.
  */
-export const runtime = "edge";
-
 export async function GET(request: NextRequest) {
 	try {
 		const session = await getServerSession(request);

@@ -26,8 +26,6 @@ interface RouteParams {
  * - Subsequent votes: Updates existing vote (idempotent)
  * - Vote weight is recalculated based on current tester status
  */
-export const runtime = "edge";
-
 export async function POST(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },

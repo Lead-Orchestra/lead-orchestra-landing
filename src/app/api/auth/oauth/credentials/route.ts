@@ -13,8 +13,6 @@ export const runtime = 'edge';
  * - Never exposes actual tokens
  * - Shows token expiration status
  */
-export const runtime = "edge";
-
 export async function GET(request: NextRequest) {
 	try {
 		const session = await getServerSession(request);

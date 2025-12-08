@@ -15,8 +15,6 @@ export const runtime = 'edge';
  * - Cart summary with totals
  * - Creates empty cart if none exists
  */
-export const runtime = "edge";
-
 export async function GET(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

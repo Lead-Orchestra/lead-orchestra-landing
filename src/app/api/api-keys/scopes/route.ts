@@ -8,8 +8,6 @@ export const runtime = 'edge';
 /**
  * Get all available API key scopes with descriptions.
  */
-export const runtime = "edge";
-
 export async function GET(request: NextRequest) {
 	try {
 		const session = await getServerSession(request);

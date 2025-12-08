@@ -13,8 +13,6 @@ export const runtime = 'edge';
  * - Must be logged in
  * - Must have items in cart
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

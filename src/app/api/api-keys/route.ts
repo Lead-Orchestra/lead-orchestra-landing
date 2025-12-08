@@ -59,8 +59,6 @@ function validateCreateRequest(body: CreateApiKeyRequest): string | null {
 /**
  * Create a new API key for the authenticated user with specified scopes.
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

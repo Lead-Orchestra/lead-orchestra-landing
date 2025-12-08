@@ -13,8 +13,6 @@ export const runtime = 'edge';
  * - Vote weights and timestamps
  * - Total vote count
  */
-export const runtime = "edge";
-
 export async function GET(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

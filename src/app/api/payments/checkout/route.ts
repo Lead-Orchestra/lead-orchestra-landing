@@ -34,8 +34,6 @@ interface CheckoutSessionResponse {
  * Creates a Stripe checkout session with dynamic pricing based on credit amount.
  * Returns session URL for redirect to Stripe payment page.
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

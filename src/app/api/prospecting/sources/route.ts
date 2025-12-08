@@ -20,8 +20,6 @@ async function parseRequiredScopes(req: NextRequest): Promise<string[]> {
 /**
  * Get list of all available data sources for prospecting.
  */
-export const runtime = "edge";
-
 export async function GET(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);

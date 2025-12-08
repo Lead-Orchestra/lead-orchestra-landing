@@ -8,8 +8,6 @@ export const runtime = 'edge';
 /**
  * Use credits for a specific operation.
  */
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(req);
