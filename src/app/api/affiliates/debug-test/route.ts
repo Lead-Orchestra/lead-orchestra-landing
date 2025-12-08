@@ -1,11 +1,12 @@
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { getServerSession } from "@/lib/auth-edge";
+import { type NextRequest, NextResponse } from "next/server";
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
-export async function GET() {
-	const session = await getServerSession(authOptions);
+export const runtime = "edge";
+
+export async function GET(request: NextRequest) {
+	const session = await getServerSession(request);
 	if (!session?.user || !session?.dsTokens?.access_token) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}

@@ -1,10 +1,9 @@
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { getServerSession } from "@/lib/auth-edge";
+import { type NextRequest, NextResponse } from "next/server";
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
-async function parseRequiredScopes(req: Request): Promise<string[]> {
+async function parseRequiredScopes(req: NextRequest): Promise<string[]> {
 	try {
 		const clone = req.clone();
 		const body = await clone.json();
@@ -19,9 +18,11 @@ async function parseRequiredScopes(req: Request): Promise<string[]> {
 /**
  * Get list of all available data sources for prospecting.
  */
-export async function GET(req: Request) {
+export const runtime = "edge";
+
+export async function GET(req: NextRequest) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 		if (!session?.user || !session?.dsTokens?.access_token) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}

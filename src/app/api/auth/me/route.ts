@@ -1,6 +1,8 @@
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "@/lib/auth-edge";
 import { type NextRequest, NextResponse } from "next/server";
+
+export const runtime = "edge";
+
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
@@ -25,11 +27,11 @@ interface UserProfileResponse {
 }
 
 /**
- * Get current user profile with real database data - supports both JWT and API key authentication
+ * Get current user profile - Edge-compatible replacement for next-auth session
  */
 export async function GET(req: NextRequest) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 		if (!session?.user || !session?.dsTokens?.access_token) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}

@@ -1,5 +1,4 @@
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "@/lib/auth-edge";
 import { type NextRequest, NextResponse } from "next/server";
 import type { TesterType } from "../../../../types/testers";
 const DEALSCALE_API_BASE =
@@ -10,9 +9,11 @@ const DEALSCALE_API_BASE =
  *
  * Admin Only
  */
+export const runtime = "edge";
+
 export async function GET(req: NextRequest) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 		if (!session?.user || !session?.dsTokens?.access_token) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}

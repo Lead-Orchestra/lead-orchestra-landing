@@ -21,25 +21,6 @@ function getCloudinaryConfig() {
 }
 
 /**
- * Generate Cloudinary signature for authenticated requests
- */
-function generateSignature(params: Record<string, string>): string {
-	// Sort parameters by key
-	const sortedParams = Object.keys(params)
-		.sort()
-		.map((key) => `${key}=${params[key]}`)
-		.join("&");
-
-	// Create signature string
-	const signatureString = `${sortedParams}${API_SECRET}`;
-
-	// Generate SHA-1 hash using Web Crypto API (Edge compatible)
-	// Note: This is a simplified version - in production, you'd use crypto.subtle.digest
-	// For now, we'll use the timestamp-based approach which is simpler
-	return "";
-}
-
-/**
  * Upload file to Cloudinary using REST API
  */
 export async function uploadFile(
@@ -95,7 +76,6 @@ export async function uploadFile(
 	formData.append("signature", signature);
 
 	// Upload to Cloudinary
-	const { cloudName } = getCloudinaryConfig();
 	const response = await fetch(
 		`https://api.cloudinary.com/v1_1/${cloudName}/${type}/upload`,
 		{
@@ -161,7 +141,7 @@ export async function deleteFile(
 
 	// Delete from Cloudinary
 	const response = await fetch(
-		`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${type}/destroy`,
+		`https://api.cloudinary.com/v1_1/${cloudName}/${type}/destroy`,
 		{
 			method: "POST",
 			body: formData,

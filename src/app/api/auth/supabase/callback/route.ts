@@ -1,8 +1,7 @@
-import { getServerSession } from "next-auth";
+import { getServerSession } from "@/lib/auth-edge";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { authOptions } from "@/lib/authOptions";
 import { encryptOAuthToken } from "@/lib/security";
 import type { Database } from "@/types/_postgresql/supabase";
 
@@ -42,6 +41,8 @@ function redirectWithParams(
 	}
 	return NextResponse.redirect(url);
 }
+
+export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
@@ -156,7 +157,7 @@ export async function GET(request: NextRequest) {
 			});
 		}
 
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(request);
 
 		if (!session?.dsTokens?.access_token || !session.user?.id) {
 			return redirectWithParams(origin, redirectDestination, {
@@ -184,9 +185,9 @@ export async function GET(request: NextRequest) {
 				body: JSON.stringify({
 					provider,
 					provider_user_id: providerUserId,
-					access_token: encryptOAuthToken(providerAccessToken),
+					access_token: await encryptOAuthToken(providerAccessToken),
 					refresh_token: providerRefreshToken
-						? encryptOAuthToken(providerRefreshToken)
+						? await encryptOAuthToken(providerRefreshToken)
 						: null,
 					expires_in: expiresIn ?? 3600,
 					scope,

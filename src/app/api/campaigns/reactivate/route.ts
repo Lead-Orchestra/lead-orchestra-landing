@@ -1,6 +1,5 @@
-import { authOptions } from "@/lib/authOptions";
 import type { ContactData } from "@/utils/csvParser";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "@/lib/auth-edge";
 import { type NextRequest, NextResponse } from "next/server";
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
@@ -25,9 +24,11 @@ const TIME_PER_CONTACT_HOURS = 0.25; // Estimated time per contact in hours (15 
 /**
  * Batch activate contacts for campaign reactivation
  */
+export const runtime = "edge";
+
 export async function POST(req: NextRequest) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 
 		// Allow unauthenticated requests in development mode for testing
 		const isDevelopment = process.env.NODE_ENV === "development";

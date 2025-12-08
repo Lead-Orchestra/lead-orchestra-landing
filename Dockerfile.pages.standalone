@@ -4,12 +4,17 @@
 # Build context: landing/ directory
 # Usage: cd landing && docker build -f Dockerfile.pages.standalone -t dealscale-pages .
 
-FROM node:20-alpine AS base
+# Use Debian-based image for better compatibility (avoids Alpine architecture issues)
+FROM --platform=linux/amd64 node:20-slim AS base
 
 # Install dependencies
 FROM base AS deps
 # Install bash (required by next-on-pages) and other dependencies
-RUN apk add --no-cache libc6-compat git bash
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    bash \
+    git \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 # Install pnpm
@@ -38,8 +43,7 @@ RUN pnpm install --frozen-lockfile --prod=false --ignore-scripts && \
 
 # Build stage
 FROM base AS builder
-# Install bash (required by next-on-pages)
-RUN apk add --no-cache bash
+# Bash is already installed in base image
 WORKDIR /app
 
 # Install pnpm

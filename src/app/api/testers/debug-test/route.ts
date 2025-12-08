@@ -1,15 +1,16 @@
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { getServerSession } from "@/lib/auth-edge";
+import { type NextRequest, NextResponse } from "next/server";
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 /**
  * Simple debug endpoint to test if testers router works.
  */
-export async function GET() {
+export const runtime = "edge";
+
+export async function GET(request: NextRequest) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(request);
 		if (!session?.user || !session?.dsTokens?.access_token) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}

@@ -1,5 +1,4 @@
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "@/lib/auth-edge";
 import { type NextRequest, NextResponse } from "next/server";
 import type {
 	CreateApiKeyRequest,
@@ -58,9 +57,11 @@ function validateCreateRequest(body: CreateApiKeyRequest): string | null {
 /**
  * Create a new API key for the authenticated user with specified scopes.
  */
+export const runtime = "edge";
+
 export async function POST(req: NextRequest) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 		if (!session?.user || !session?.dsTokens?.access_token) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
@@ -117,7 +118,7 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 		if (!session?.user || !session?.dsTokens?.access_token) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}

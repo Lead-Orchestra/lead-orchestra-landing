@@ -1,5 +1,4 @@
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "@/lib/auth-edge";
 import { type NextRequest, NextResponse } from "next/server";
 import type { AddToCartRequest, CartResponse } from "../../../../types/cart";
 const DEALSCALE_API_BASE =
@@ -40,9 +39,11 @@ function normalizeRequest(body: AddToCartRequest): AddToCartRequest | null {
  * - Creates cart if none exists
  * - Adds item or updates quantity if item already exists
  */
+export const runtime = "edge";
+
 export async function POST(req: NextRequest) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 		if (!session?.user || !session?.dsTokens?.access_token) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}

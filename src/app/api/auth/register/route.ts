@@ -1,4 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
+
+export const runtime = "edge";
+
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 

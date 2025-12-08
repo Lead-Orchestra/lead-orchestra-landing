@@ -1,16 +1,17 @@
-import { authOptions } from "@/lib/authOptions";
 import { encryptOAuthToken } from "@/lib/security";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "@/lib/auth-edge";
 import { type NextRequest, NextResponse } from "next/server";
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 // Social OAuth linkage endpoint - No session creation
 // POST /api/auth/social-sign-in
+export const runtime = "edge";
+
 export async function POST(request: NextRequest) {
 	try {
 		// Authenticate the caller (requires Auth.js JWT)
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(request);
 		if (!session?.user) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
@@ -42,7 +43,11 @@ export async function POST(request: NextRequest) {
 
 		try {
 			// Save to backend DB
-			const encryptedToken = encryptOAuthToken(accessToken);
+			const encryptedToken = await encryptOAuthToken(accessToken);
+			const encryptedRefreshToken = refreshToken
+				? await encryptOAuthToken(refreshToken)
+				: null;
+
 			const response = await fetch(
 				`${DEALSCALE_API_BASE}/api/v1/auth/oauth/credentials`,
 				{
@@ -54,9 +59,7 @@ export async function POST(request: NextRequest) {
 					body: JSON.stringify({
 						provider: provider.toUpperCase(),
 						access_token: encryptedToken,
-						refresh_token: refreshToken
-							? encryptOAuthToken(refreshToken)
-							: null,
+						refresh_token: encryptedRefreshToken,
 						expires_at: expiresAt,
 						user_id: session.user.id,
 					}),

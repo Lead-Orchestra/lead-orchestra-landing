@@ -1,6 +1,5 @@
-import { authOptions } from "@/lib/authOptions";
 import type { CreditType } from "@/types/payments";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "@/lib/auth-edge";
 import { type NextRequest, NextResponse } from "next/server";
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
@@ -15,12 +14,14 @@ interface RouteParams {
  * Uses centralized pricing utility for DRY implementation
  * Returns calculated price, savings, and discount information.
  */
+export const runtime = "edge";
+
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },
 ) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 		if (!session?.user || !session?.dsTokens?.access_token) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}

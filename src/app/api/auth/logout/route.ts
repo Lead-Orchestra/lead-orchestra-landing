@@ -1,21 +1,17 @@
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { clearSessionCookie, getServerSession } from "@/lib/auth-edge";
+import { type NextRequest, NextResponse } from "next/server";
+
+export const runtime = "edge";
+
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
 
 /**
- * User logout with session invalidation
- *
- * BDD Scenario: Secure Session Termination
- * Given an authenticated user
- * When they choose to logout
- * Then their session is invalidated
- * And access tokens are revoked
+ * Logout endpoint - Edge-compatible replacement for next-auth logout
  */
-export async function POST() {
+export async function POST(req: NextRequest) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 
 		if (session?.dsTokens?.access_token) {
 			// Call DealScale logout endpoint to invalidate backend session
@@ -33,11 +29,15 @@ export async function POST() {
 			}
 		}
 
-		// Return success response
-		return NextResponse.json({
+		// Create response and clear session cookie
+		const response = NextResponse.json({
 			message: "Logged out successfully",
 			success: true,
 		});
+
+		clearSessionCookie(response);
+
+		return response;
 	} catch (error) {
 		console.error("Logout error:", error);
 		return NextResponse.json(

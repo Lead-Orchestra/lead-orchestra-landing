@@ -1,5 +1,4 @@
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "@/lib/auth-edge";
 // src/app/api/api-keys/[key_id]/route.ts
 import { type NextRequest, NextResponse } from "next/server";
 const DEALSCALE_API_BASE =
@@ -9,12 +8,14 @@ interface RouteParams {
 	key_id: string;
 }
 
+export const runtime = "edge";
+
 export async function DELETE(
 	req: NextRequest,
 	{ params }: { params: Promise<RouteParams> },
 ) {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 		if (!session?.user || !session?.dsTokens?.access_token) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}

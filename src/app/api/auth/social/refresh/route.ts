@@ -1,5 +1,4 @@
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "@/lib/auth-edge";
 import { type NextRequest, NextResponse } from "next/server";
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
@@ -20,10 +19,12 @@ type OAuthProvider = "FACEBOOK" | "INSTAGRAM" | "LINKEDIN" | "TWITTER";
  * - LinkedIn: Uses OAuth 2.0 refresh flow
  * - Facebook: Uses OAuth 2.0 refresh flow
  */
+export const runtime = "edge";
+
 export async function POST(req: NextRequest) {
 	try {
 		// Authenticate the caller (requires Auth.js JWT)
-		const session = await getServerSession(authOptions);
+		const session = await getServerSession(req);
 		if (!session?.user || !session?.dsTokens?.access_token) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
