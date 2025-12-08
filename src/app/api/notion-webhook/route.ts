@@ -1,4 +1,5 @@
 // Note: Cannot use edge runtime - @slack/web-api requires Node.js built-ins (fs, os, path, querystring, stream)
+// export const runtime = 'edge'; // Cannot use edge runtime due to @slack/web-api dependency
 import { mapNotionPageToLinkTree } from "@/utils/notion/linktreeMapper";
 import { WebClient } from "@slack/web-api";
 import { Ratelimit } from "@upstash/ratelimit";
@@ -7,7 +8,6 @@ import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 const NOTION_API_BASE = "https://api.notion.com/v1";
 const NOTION_VERSION = "2022-06-28";
-export const runtime = 'edge';
 
 
 // Initialize Slack
