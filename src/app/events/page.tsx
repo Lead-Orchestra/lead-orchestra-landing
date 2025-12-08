@@ -3,6 +3,8 @@ import { buildEventsItemListSchema } from "@/lib/events/schemaBuilders";
 import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
+export const runtime = 'edge';
+
 
 import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
 

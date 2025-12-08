@@ -6,6 +6,8 @@ import type {
 	ProspectingSearchResponse,
 	ProspectingSource,
 } from "../../../../types/prospecting";
+export const runtime = 'edge';
+
 
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";

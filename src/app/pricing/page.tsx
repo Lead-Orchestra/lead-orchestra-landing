@@ -8,6 +8,8 @@ import {
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+export const runtime = 'edge';
+
 
 // * Centralized SEO for /pricing using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {

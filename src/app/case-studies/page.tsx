@@ -2,6 +2,8 @@ import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import CaseStudiesClient from "./CaseStudiesClient";
+export const runtime = 'edge';
+
 
 // * Centralized SEO for /case-studies using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {

@@ -2,6 +2,8 @@ import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+export const runtime = 'edge';
+
 
 const CAREERS_PORTAL_URL = "https://dealscale.zohorecruit.com/jobs/Careers";
 

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 export default function SettingsIntegrationsPage() {
 	return (
 		<main className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center gap-4 px-6 text-center">

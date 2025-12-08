@@ -5,6 +5,8 @@ import type {
 	CreateApiKeyResponse,
 	ListApiKeysResponse,
 } from "../../../types/api-keys";
+export const runtime = 'edge';
+
 
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";

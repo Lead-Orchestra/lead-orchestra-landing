@@ -25,6 +25,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+// Edge runtime not compatible with generateStaticParams
+// export const runtime = 'edge';
+
 
 export const revalidate = 1800;
 // ! Keep this value in sync with EVENTS_REVALIDATE_SECONDS in src/lib/events/constants.ts

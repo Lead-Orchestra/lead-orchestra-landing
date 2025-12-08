@@ -2,6 +2,8 @@ import { getServerSession } from "@/lib/auth-edge";
 import { type NextRequest, NextResponse } from "next/server";
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
+export const runtime = 'edge';
+
 
 /**
  * Get user's credit balances for all credit types.

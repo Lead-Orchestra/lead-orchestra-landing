@@ -3,6 +3,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import type { CartResponse } from "../../../types/cart";
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
+export const runtime = 'edge';
+
 
 /**
  * Get user's current shopping cart.

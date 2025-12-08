@@ -2,6 +2,8 @@ import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import FaqClinet from "./FaqClinet";
+export const runtime = 'edge';
+
 
 // * Centralized SEO for /faqs using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {

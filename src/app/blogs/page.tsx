@@ -4,6 +4,8 @@ import { SchemaInjector, buildBlogSchema } from "@/utils/seo/schema";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import BlogClient from "./BlogClient";
+export const runtime = 'edge';
+
 
 // * Centralized SEO for /blogs using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {

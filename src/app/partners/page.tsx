@@ -7,6 +7,8 @@ import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
+export const runtime = 'edge';
+
 
 import PartnersClient from "./PartnersClient";
 

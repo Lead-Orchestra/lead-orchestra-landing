@@ -2,6 +2,8 @@ import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import ContactClientPilot from "./ContactClientPilot";
+export const runtime = 'edge';
+
 
 // * Centralized SEO for /contact using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {

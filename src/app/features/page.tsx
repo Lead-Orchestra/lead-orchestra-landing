@@ -4,6 +4,8 @@ import { SchemaInjector, buildFAQPageSchema } from "@/utils/seo/schema";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import ServiceHomeClient from "./ServiceHomeClient";
+export const runtime = 'edge';
+
 
 // * Centralized SEO for /services using getStaticSeo helper
 export async function generateMetadata(): Promise<Metadata> {

@@ -4,6 +4,8 @@ import { ConfirmCredentialsForm } from "@/components/contact/form/ConfirmCredent
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+export const runtime = 'edge';
+
 
 function ConfirmCredentialsContent() {
 	const searchParams = useSearchParams();

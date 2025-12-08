@@ -9,6 +9,8 @@ import { toast } from "@/components/ui/use-toast";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+export const runtime = 'edge';
+
 
 export default function SignUpPage() {
 	const searchParams = useSearchParams();

@@ -4,6 +4,8 @@ import type {
 	TesterApplicationRequest,
 	TesterType,
 } from "../../../../types/testers";
+export const runtime = 'edge';
+
 
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";

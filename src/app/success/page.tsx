@@ -1,5 +1,7 @@
 import StatusPageClient from "@/components/ui/StatusPageClient";
 import type { Metadata } from "next";
+export const runtime = 'edge';
+
 
 export const metadata: Metadata = {
 	title: "Success | Lead Orchestra",

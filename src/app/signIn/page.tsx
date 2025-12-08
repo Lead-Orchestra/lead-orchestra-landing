@@ -10,6 +10,8 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback } from "react";
+export const runtime = 'edge';
+
 
 export default function SignInPage() {
 	const searchParams = useSearchParams();

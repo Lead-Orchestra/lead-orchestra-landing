@@ -7,6 +7,8 @@ import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 const NOTION_API_BASE = "https://api.notion.com/v1";
 const NOTION_VERSION = "2022-06-28";
+export const runtime = 'edge';
+
 
 // Initialize Slack
 const slack = process.env.SLACK_TOKEN

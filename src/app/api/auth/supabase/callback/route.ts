@@ -4,6 +4,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { encryptOAuthToken } from "@/lib/security";
 import type { Database } from "@/types/_postgresql/supabase";
+export const runtime = 'edge';
+
 
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";

@@ -3,6 +3,8 @@
 import { ForgotPasswordForm } from "@/components/contact/form/ForgotPassword";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+export const runtime = 'edge';
+
 
 export default function ForgotPasswordPage() {
 	const searchParams = useSearchParams();

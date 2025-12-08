@@ -4,6 +4,8 @@ import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
 import NewsletterClient from "./NewsletterClient";
+export const runtime = 'edge';
+
 
 export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/newsletter");

@@ -4,6 +4,8 @@ import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { SchemaInjector, buildManifestoSchema } from "@/utils/seo/schema";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
+export const runtime = 'edge';
+
 
 const MANIFESTO_SCHEMA = buildManifestoSchema(timelineSummary, {
 	url: "/about",

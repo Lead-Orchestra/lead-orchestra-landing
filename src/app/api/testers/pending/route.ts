@@ -3,6 +3,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import type { TesterType } from "../../../../types/testers";
 const DEALSCALE_API_BASE =
 	process.env.DEALSCALE_API_BASE || "https://api.dealscale.io";
+export const runtime = 'edge';
+
 
 /**
  * Get pending tester applications for admin review.

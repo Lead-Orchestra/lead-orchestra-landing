@@ -10,6 +10,8 @@ export async function generateMetadata(): Promise<Metadata> {
 	const seo = getStaticSeo("/cookies");
 	return mapSeoMetaToMetadata(seo);
 }
+export const runtime = 'edge';
+
 
 const CookiePolicy = () => {
 	const cookieDocument = getLegalDocumentByPath("/cookies");
