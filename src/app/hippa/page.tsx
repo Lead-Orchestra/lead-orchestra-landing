@@ -5,7 +5,8 @@ import { mapSeoMetaToMetadata } from "@/utils/seo/mapSeoMetaToMetadata";
 import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
 import { getStaticSeo } from "@/utils/seo/staticSeo";
 import type { Metadata } from "next";
-export const runtime = 'edge';
+// Cannot use edge runtime - uses MarkdownContent client component with react-markdown
+// export const runtime = 'edge';
 
 
 // * Centralized SEO for /hipaa using getStaticSeo helper
