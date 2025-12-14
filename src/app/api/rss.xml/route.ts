@@ -1,16 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 
-export const config = {
-	runtime: 'edge',
-};
+export const runtime = "edge";
 
 const BEEHIIV_FEED = "https://rss.beehiiv.com/feeds/th0QQipR7J.xml";
 const CACHE_CONTROL = "s-maxage=3600, stale-while-revalidate=86400";
 
-export default async function handler(
-	_req: NextApiRequest,
-	res: NextApiResponse,
-) {
+export async function GET() {
 	try {
 		const response = await fetch(BEEHIIV_FEED, {
 			headers: {
@@ -25,27 +20,32 @@ export default async function handler(
 
 		const xml = await response.text();
 
-		res.setHeader("Content-Type", "application/rss+xml; charset=utf-8");
-		res.setHeader("Cache-Control", CACHE_CONTROL);
-		res.status(200).send(xml);
-
 		void notifyIndexNow().catch((error) => {
 			console.warn("[rss] IndexNow notification failed:", error);
 		});
+
+		return new NextResponse(xml, {
+			status: 200,
+			headers: {
+				"Content-Type": "application/rss+xml; charset=utf-8",
+				"Cache-Control": CACHE_CONTROL,
+			},
+		});
 	} catch (error) {
 		console.error("Error fetching RSS:", error);
-		res
-			.status(502)
-			.send(
-				'<?xml version="1.0" encoding="UTF-8"?><rss><channel><title>DealScale Feed Error</title><description>RSS temporarily unavailable.</description></channel></rss>',
-			);
+		return new NextResponse(
+			'<?xml version="1.0" encoding="UTF-8"?><rss><channel><title>DealScale Feed Error</title><description>RSS temporarily unavailable.</description></channel></rss>',
+			{
+				status: 502,
+				headers: { "Content-Type": "application/rss+xml; charset=utf-8" },
+			},
+		);
 	}
 }
 
 async function notifyIndexNow(): Promise<void> {
 	const key =
-		process.env.PRIVATE_INDEX_NOW_KEY?.trim() ??
-		process.env.INDEXNOW_KEY?.trim();
+		process.env.PRIVATE_INDEX_NOW_KEY?.trim() ?? process.env.INDEXNOW_KEY?.trim();
 
 	if (!key) {
 		console.warn("[rss] IndexNow key missing; skipping notification.");
@@ -72,3 +72,5 @@ async function notifyIndexNow(): Promise<void> {
 		);
 	}
 }
+
+

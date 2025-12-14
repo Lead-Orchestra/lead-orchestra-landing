@@ -1,18 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 
-export const config = {
-	runtime: 'edge',
-};
+export const runtime = "edge";
 
 const GITHUB_FEED =
 	process.env.GITHUB_ATOM_FEED_URL ||
 	"https://github.com/organizations/Deal-Scale/TechWithTy.private.atom?token=AI72D5O5LGXJVYOGAX5W7WGHFMVCY";
 const CACHE_CONTROL = "s-maxage=900, stale-while-revalidate=3600";
 
-export default async function handler(
-	_req: NextApiRequest,
-	res: NextApiResponse,
-) {
+export async function GET() {
 	try {
 		const response = await fetch(GITHUB_FEED, {
 			headers: {
@@ -27,15 +22,23 @@ export default async function handler(
 
 		const xml = await response.text();
 
-		res.setHeader("Content-Type", "application/atom+xml; charset=utf-8");
-		res.setHeader("Cache-Control", CACHE_CONTROL);
-		res.status(200).send(xml);
+		return new NextResponse(xml, {
+			status: 200,
+			headers: {
+				"Content-Type": "application/atom+xml; charset=utf-8",
+				"Cache-Control": CACHE_CONTROL,
+			},
+		});
 	} catch (error) {
 		console.error("Error fetching GitHub RSS feed:", error);
-		res
-			.status(502)
-			.send(
-				'<?xml version="1.0" encoding="UTF-8"?><feed><title>DealScale GitHub Feed Error</title><subtitle>GitHub RSS temporarily unavailable.</subtitle></feed>',
-			);
+		return new NextResponse(
+			'<?xml version="1.0" encoding="UTF-8"?><feed><title>DealScale GitHub Feed Error</title><subtitle>GitHub RSS temporarily unavailable.</subtitle></feed>',
+			{
+				status: 502,
+				headers: { "Content-Type": "application/atom+xml; charset=utf-8" },
+			},
+		);
 	}
 }
+
+

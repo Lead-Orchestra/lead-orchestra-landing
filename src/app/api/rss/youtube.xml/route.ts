@@ -1,18 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 
-export const config = {
-	runtime: 'edge',
-};
+export const runtime = "edge";
 
 const YOUTUBE_FEED = process.env.YOUTUBE_CHANNEL_ID
 	? `https://www.youtube.com/feeds/videos.xml?channel_id=${process.env.YOUTUBE_CHANNEL_ID}`
 	: "https://www.youtube.com/feeds/videos.xml?channel_id=UCphkra97DMNIAIvA1y8hZ-A";
 const CACHE_CONTROL = "s-maxage=900, stale-while-revalidate=3600";
 
-export default async function handler(
-	_req: NextApiRequest,
-	res: NextApiResponse,
-) {
+export async function GET() {
 	try {
 		const response = await fetch(YOUTUBE_FEED, {
 			headers: {
@@ -27,15 +22,23 @@ export default async function handler(
 
 		const xml = await response.text();
 
-		res.setHeader("Content-Type", "application/atom+xml; charset=utf-8");
-		res.setHeader("Cache-Control", CACHE_CONTROL);
-		res.status(200).send(xml);
+		return new NextResponse(xml, {
+			status: 200,
+			headers: {
+				"Content-Type": "application/atom+xml; charset=utf-8",
+				"Cache-Control": CACHE_CONTROL,
+			},
+		});
 	} catch (error) {
 		console.error("Error fetching YouTube RSS feed:", error);
-		res
-			.status(502)
-			.send(
-				'<?xml version="1.0" encoding="UTF-8"?><feed><title>DealScale YouTube Feed Error</title><subtitle>YouTube RSS temporarily unavailable.</subtitle></feed>',
-			);
+		return new NextResponse(
+			'<?xml version="1.0" encoding="UTF-8"?><feed><title>DealScale YouTube Feed Error</title><subtitle>YouTube RSS temporarily unavailable.</subtitle></feed>',
+			{
+				status: 502,
+				headers: { "Content-Type": "application/atom+xml; charset=utf-8" },
+			},
+		);
 	}
 }
+
+

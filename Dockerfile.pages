@@ -10,7 +10,7 @@
 # - landing/package.json, landing/pnpm-lock.yaml
 # - packages/ directory (if monorepo)
 
-FROM node:20-alpine AS base
+FROM node:20.19.0-alpine AS base
 
 # Install dependencies
 FROM base AS deps

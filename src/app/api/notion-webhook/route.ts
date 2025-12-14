@@ -3,7 +3,6 @@ export const runtime = 'edge';
 import { mapNotionPageToLinkTree } from "@/utils/notion/linktreeMapper";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 const NOTION_API_BASE = "https://api.notion.com/v1";
 const NOTION_VERSION = "2022-06-28";
@@ -274,13 +273,6 @@ export async function POST(req: NextRequest) {
 			console.log("[notion-webhook] redis payload", payload);
 		}
 		await redis.hset(key, payload);
-
-		// Trigger UI revalidation (ensure your data fetch uses this tag)
-		try {
-			revalidateTag("link-tree");
-		} catch (e) {
-			if (debug) console.log("[notion-webhook] revalidate error", e);
-		}
 
 		if (debug) {
 			const saved = await redis.hgetall(key);

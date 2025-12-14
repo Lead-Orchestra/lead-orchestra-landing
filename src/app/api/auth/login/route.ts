@@ -1,15 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import {
-	type DealScaleTokens,
-	type SessionUser,
 	authenticateWithDealScale,
 	authenticateWithPhone,
 	createSessionToken,
+	type DealScaleTokens,
+	type SessionUser,
 	setSessionCookie,
 } from "@/lib/auth-edge";
 
 export const runtime = "edge";
+
 /**
  * Login endpoint - Edge-compatible replacement for next-auth
  */
@@ -30,8 +31,9 @@ export async function POST(req: NextRequest) {
 		if (phoneAuth && email?.startsWith("phone:")) {
 			// Phone-based authentication
 			const phoneNumber = email.replace("phone:", "");
-			user = await authenticateWithPhone(phoneNumber, phoneAuth);
-			dsTokens = user.dsTokens;
+			const authResult = await authenticateWithPhone(phoneNumber, phoneAuth);
+			user = authResult.user;
+			dsTokens = authResult.dsTokens;
 		} else if (email && password) {
 			// Email/password authentication
 			const authResult = await authenticateWithDealScale(email, password);
@@ -68,10 +70,3 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json({ error: message }, { status: 401 });
 	}
 }
-
-
-
-
-
-
-
