@@ -25,8 +25,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-export const runtime = "edge";
 export const dynamicParams = false;
+export const dynamic = "force-static";
 
 export const revalidate = 1800;
 // ! Keep this value in sync with EVENTS_REVALIDATE_SECONDS in src/lib/events/constants.ts
