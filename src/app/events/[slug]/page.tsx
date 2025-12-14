@@ -1,14 +1,3 @@
-import { CTASection } from "@/components/common/CTASection";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { GlassCard } from "@/components/ui/glass-card";
-import { Separator } from "@/components/ui/separator";
-import type { NormalizedEvent } from "@/lib/events/eventSchemas";
-import { fetchEvents } from "@/lib/events/fetchEvents";
-import { type EventPageParams, resolveEventParams } from "@/lib/events/params";
-import { buildEventSchema, buildEventUrl } from "@/lib/events/schemaBuilders";
-import { formatDate } from "@/utils/date-formatter";
-import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
 import {
 	ArrowRight,
 	Calendar,
@@ -25,6 +14,19 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+import { CTASection } from "@/components/common/CTASection";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { GlassCard } from "@/components/ui/glass-card";
+import { Separator } from "@/components/ui/separator";
+import type { NormalizedEvent } from "@/lib/events/eventSchemas";
+import { fetchEvents } from "@/lib/events/fetchEvents";
+import { type EventPageParams, resolveEventParams } from "@/lib/events/params";
+import { buildEventSchema, buildEventUrl } from "@/lib/events/schemaBuilders";
+import { formatDate } from "@/utils/date-formatter";
+import { SchemaInjector } from "@/utils/seo/schema/SchemaInjector";
+
 export const dynamicParams = false;
 export const dynamic = "force-static";
 
