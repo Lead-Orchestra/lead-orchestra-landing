@@ -1,9 +1,10 @@
-export const runtime = "edge";
-
-import { mapNotionPageToLinkTree } from "@/utils/notion/linktreeMapper";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { type NextRequest, NextResponse } from "next/server";
+
+import { mapNotionPageToLinkTree } from "@/utils/notion/linktreeMapper";
+
+export const runtime = "edge";
 const NOTION_API_BASE = "https://api.notion.com/v1";
 const NOTION_VERSION = "2022-06-28";
 
