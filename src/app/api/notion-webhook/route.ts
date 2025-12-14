@@ -1,4 +1,4 @@
-export const runtime = 'edge';
+export const runtime = "edge";
 
 import { mapNotionPageToLinkTree } from "@/utils/notion/linktreeMapper";
 import { Ratelimit } from "@upstash/ratelimit";
@@ -45,24 +45,24 @@ function getRichTextPlain(
 
 type NotionCheckbox = { type: "checkbox"; checkbox?: boolean };
 type NotionSelect = { type: "select"; select?: { name?: string } };
-function isCheckbox(v: unknown): v is NotionCheckbox {
+function _isCheckbox(v: unknown): v is NotionCheckbox {
 	return (
 		typeof v === "object" &&
 		v !== null &&
 		(v as { type?: string }).type === "checkbox"
 	);
 }
-function isSelect(v: unknown): v is NotionSelect {
+function _isSelect(v: unknown): v is NotionSelect {
 	return (
 		typeof v === "object" &&
 		v !== null &&
 		(v as { type?: string }).type === "select"
 	);
 }
-function boolFromSelectOrCheckbox(v: unknown): boolean {
+function _boolFromSelectOrCheckbox(v: unknown): boolean {
 	if (!v) return false;
-	if (isCheckbox(v)) return Boolean(v.checkbox);
-	if (isSelect(v)) {
+	if (_isCheckbox(v)) return Boolean(v.checkbox);
+	if (_isSelect(v)) {
 		const name = (v.select?.name ?? "").toString().toLowerCase();
 		return name === "true" || name === "yes" || name === "enabled";
 	}
@@ -75,7 +75,7 @@ async function sendSlackAlert(error: string, pageId?: string) {
 		const response = await fetch("https://slack.com/api/chat.postMessage", {
 			method: "POST",
 			headers: {
-				"Authorization": `Bearer ${slackToken}`,
+				Authorization: `Bearer ${slackToken}`,
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
@@ -91,7 +91,7 @@ async function sendSlackAlert(error: string, pageId?: string) {
 
 		const result = await response.json();
 		if (!result.ok) {
-			throw new Error(`Slack API error: ${result.error || 'Unknown error'}`);
+			throw new Error(`Slack API error: ${result.error || "Unknown error"}`);
 		}
 	} catch (err) {
 		console.error("Slack alert failed:", err);
@@ -133,11 +133,11 @@ export async function POST(req: NextRequest) {
 	let pageId: string | undefined;
 	try {
 		// Verify secret
-		const provided =
+		const _provided =
 			req.headers.get("x-webhook-secret") ||
 			req.headers.get("X-Webhook-Secret");
 		// Allow providing secret via query only in debug to aid testing
-		const expected =
+		const _expected =
 			process.env.NOTION_WEBHOOK_SECRET ||
 			(debug
 				? (req.nextUrl.searchParams.get("secret") ?? undefined)

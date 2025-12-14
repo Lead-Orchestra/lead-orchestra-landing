@@ -1,7 +1,12 @@
 import { XMLParser } from "fast-xml-parser";
 
 import type { RssEntry } from "./rssTypes";
-import { ensureArray, sanitizeXml, stripHtml, toUtcDateString } from "./rssUtils";
+import {
+	ensureArray,
+	sanitizeXml,
+	stripHtml,
+	toUtcDateString,
+} from "./rssUtils";
 
 const parser = new XMLParser({
 	ignoreAttributes: false,
@@ -23,12 +28,16 @@ export function parseBeehiivRss(feedXml: string): RssEntry[] {
 	return items
 		.map((item) => {
 			const node = item as Record<string, unknown>;
-			const title = (node.title ?? "").toString().trim() || "DealScale Blog Update";
+			const title =
+				(node.title ?? "").toString().trim() || "DealScale Blog Update";
 			const link = (node.link ?? "").toString().trim() || `${SITE_URL}/blog`;
-			const description =
-				(node.description ?? node["content:encoded"] ?? "Latest update from DealScale.")
-					.toString()
-					.trim();
+			const description = (
+				node.description ??
+				node["content:encoded"] ??
+				"Latest update from DealScale."
+			)
+				.toString()
+				.trim();
 			const guid = (node.guid ?? link ?? title).toString();
 			const pubDate = toUtcDateString(node.pubDate?.toString());
 			const categories = ensureArray(node.category)
@@ -52,13 +61,26 @@ type AtomParsed = {
 	feed?: { entry?: unknown | unknown[] };
 };
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null;
+}
+
 function pickAtomText(value: unknown): string {
 	if (!value) return "";
 	if (typeof value === "string") return value;
-	if (typeof value === "object" && value !== null && "#text" in (value as any)) {
-		return String((value as any)["#text"] ?? "");
+	if (isRecord(value) && "#text" in value) {
+		return String((value as { "#text"?: unknown })["#text"] ?? "");
 	}
 	return String(value);
+}
+
+function pickHref(value: unknown): string {
+	if (typeof value === "string") return value;
+	if (isRecord(value)) {
+		const href = value["@_href"];
+		if (typeof href === "string") return href;
+	}
+	return "";
 }
 
 export function parseYouTubeAtom(feedXml: string): RssEntry[] {
@@ -67,16 +89,25 @@ export function parseYouTubeAtom(feedXml: string): RssEntry[] {
 
 	return entries
 		.map((entry) => {
-			const node = entry as any;
+			const node = isRecord(entry) ? entry : {};
 			const title = pickAtomText(node.title).trim() || "DealScale Video Update";
-			const href = (node.link?.["@_href"] ?? node.link)?.toString?.() ?? "";
+			const href = pickHref(node.link);
 			const link = href || "https://www.youtube.com/@DealScaleRealEstate";
-			const published = (node.published ?? node.updated)?.toString?.();
+			const published =
+				pickAtomText(node.published ?? node.updated) || undefined;
 			const pubDate = toUtcDateString(published);
-			const guid = `youtube-${(node["yt:videoId"]?.["#text"] ?? node["yt:videoId"] ?? node.id ?? link).toString()}`;
+			const videoId = pickAtomText(node["yt:videoId"]).trim();
+			const guidSeed = videoId || pickAtomText(node.id).trim() || link;
+			const guid = `youtube-${guidSeed}`;
+			const mediaGroup = isRecord(node["media:group"])
+				? node["media:group"]
+				: {};
+			const mediaDescription = isRecord(mediaGroup)
+				? mediaGroup["media:description"]
+				: undefined;
 			const description =
 				pickAtomText(node.summary).trim() ||
-				pickAtomText(node["media:group"]?.["media:description"]).trim() ||
+				pickAtomText(mediaDescription).trim() ||
 				"Watch the latest automation insights from DealScale.";
 
 			return {
@@ -98,18 +129,21 @@ export function parseGitHubAtom(feedXml: string): RssEntry[] {
 
 	return entries
 		.map((entry) => {
-			const node = entry as any;
+			const node = isRecord(entry) ? entry : {};
 			const rawTitle = pickAtomText(node.title).trim() || "GitHub Activity";
-			const href = (node.link?.["@_href"] ?? node.link)?.toString?.() ?? "";
+			const href = pickHref(node.link);
 			const link = href || "https://github.com/Deal-Scale";
-			const published = (node.published ?? node.updated)?.toString?.();
+			const published =
+				pickAtomText(node.published ?? node.updated) || undefined;
 			const pubDate = toUtcDateString(published);
 			const id = pickAtomText(node.id).trim() || link;
 			const content = pickAtomText(node.content).trim();
 			const description =
 				stripHtml(content).slice(0, 500) ||
 				"Latest activity from Deal-Scale organization on GitHub.";
-			const author = node.author?.name?.toString?.() ?? "TechWithTy";
+			const author =
+				(isRecord(node.author) ? pickAtomText(node.author.name).trim() : "") ||
+				"TechWithTy";
 			const guid = `github-${id}`;
 
 			return {
@@ -176,5 +210,3 @@ ${itemsXml}
 </channel>
 </rss>`;
 }
-
-
