@@ -43,7 +43,11 @@ export function AuthModal() {
 	const { isOpen, view, setView, close } = useAuthModal();
 	const searchParams = useSearchParams();
 	const callbackUrl = searchParams?.get("callbackUrl") || undefined;
-	const supabase = createClientComponentClient();
+
+	// Important for Cloudflare/SSG builds:
+	// this component is rendered during SSR even though it's a client component.
+	// Only initialize Supabase when we actually need it (i.e., after open / on click).
+	if (!isOpen) return null;
 
 	const buildRedirectTo = useCallback(
 		(provider: "linkedin" | "facebook") => {
@@ -68,15 +72,26 @@ export function AuthModal() {
 				return;
 			}
 
-			await supabase.auth.signInWithOAuth({
-				provider: "linkedin_oidc",
-				options: { redirectTo: destination },
-			});
-			toast({
-				title: "LinkedIn OAuth",
-				description: "LinkedIn account connected. Finishing sign-in...",
-			});
-			return;
+			try {
+				const supabase = createClientComponentClient();
+				await supabase.auth.signInWithOAuth({
+					provider: "linkedin_oidc",
+					options: { redirectTo: destination },
+				});
+				toast({
+					title: "LinkedIn OAuth",
+					description: "LinkedIn account connected. Finishing sign-in...",
+				});
+				return;
+			} catch (err) {
+				console.error("[auth-modal] supabase oauth init failed", err);
+				toast({
+					title: "LinkedIn OAuth",
+					description:
+						"Supabase is not configured. Falling back to standard sign-in.",
+					variant: "destructive",
+				});
+			}
 		}
 
 		toast({
@@ -85,7 +100,7 @@ export function AuthModal() {
 				"LinkedIn account connected. We'll finish setting things up.",
 		});
 		await signIn("linkedin", callbackUrl ? { callbackUrl } : undefined);
-	}, [view, buildRedirectTo, supabase, callbackUrl]);
+	}, [view, buildRedirectTo, callbackUrl]);
 
 	const handleFacebook = useCallback(async () => {
 		if (view === "signin") {
@@ -94,15 +109,26 @@ export function AuthModal() {
 				return;
 			}
 
-			await supabase.auth.signInWithOAuth({
-				provider: "facebook",
-				options: { redirectTo: destination },
-			});
-			toast({
-				title: "Facebook OAuth",
-				description: "Facebook account connected. Finishing sign-in...",
-			});
-			return;
+			try {
+				const supabase = createClientComponentClient();
+				await supabase.auth.signInWithOAuth({
+					provider: "facebook",
+					options: { redirectTo: destination },
+				});
+				toast({
+					title: "Facebook OAuth",
+					description: "Facebook account connected. Finishing sign-in...",
+				});
+				return;
+			} catch (err) {
+				console.error("[auth-modal] supabase oauth init failed", err);
+				toast({
+					title: "Facebook OAuth",
+					description:
+						"Supabase is not configured. Falling back to standard sign-in.",
+					variant: "destructive",
+				});
+			}
 		}
 
 		toast({
@@ -111,9 +137,7 @@ export function AuthModal() {
 				"Facebook account connected. We'll finish setting things up.",
 		});
 		await signIn("facebook", callbackUrl ? { callbackUrl } : undefined);
-	}, [view, buildRedirectTo, supabase, callbackUrl]);
-
-	if (!isOpen) return null;
+	}, [view, buildRedirectTo, callbackUrl]);
 
 	const { title, subtitle } = viewConfig[view];
 

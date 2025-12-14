@@ -16,7 +16,6 @@ export const runtime = 'edge';
 export default function SignInPage() {
 	const searchParams = useSearchParams();
 	const callbackUrl = searchParams.get("callbackUrl") || undefined;
-	const supabase = createClientComponentClient();
 
 	const buildRedirectTo = useCallback(
 		(provider: "linkedin" | "facebook") => {
@@ -40,15 +39,25 @@ export default function SignInPage() {
 			return;
 		}
 
-		await supabase.auth.signInWithOAuth({
-			provider: "linkedin_oidc",
-			options: { redirectTo: destination },
-		});
-		toast({
-			title: "LinkedIn OAuth",
-			description: "LinkedIn account connected. Finishing sign-in...",
-		});
-	}, [buildRedirectTo, supabase]);
+		try {
+			const supabase = createClientComponentClient();
+			await supabase.auth.signInWithOAuth({
+				provider: "linkedin_oidc",
+				options: { redirectTo: destination },
+			});
+			toast({
+				title: "LinkedIn OAuth",
+				description: "LinkedIn account connected. Finishing sign-in...",
+			});
+		} catch (err) {
+			console.error("[sign-in] supabase oauth init failed", err);
+			toast({
+				title: "LinkedIn OAuth",
+				description: "Supabase is not configured. Please try again later.",
+				variant: "destructive",
+			});
+		}
+	}, [buildRedirectTo]);
 
 	const handleFacebook = useCallback(async () => {
 		const destination = buildRedirectTo("facebook");
@@ -56,15 +65,25 @@ export default function SignInPage() {
 			return;
 		}
 
-		await supabase.auth.signInWithOAuth({
-			provider: "facebook",
-			options: { redirectTo: destination },
-		});
-		toast({
-			title: "Facebook OAuth",
-			description: "Facebook account connected. Finishing sign-in...",
-		});
-	}, [buildRedirectTo, supabase]);
+		try {
+			const supabase = createClientComponentClient();
+			await supabase.auth.signInWithOAuth({
+				provider: "facebook",
+				options: { redirectTo: destination },
+			});
+			toast({
+				title: "Facebook OAuth",
+				description: "Facebook account connected. Finishing sign-in...",
+			});
+		} catch (err) {
+			console.error("[sign-in] supabase oauth init failed", err);
+			toast({
+				title: "Facebook OAuth",
+				description: "Supabase is not configured. Please try again later.",
+				variant: "destructive",
+			});
+		}
+	}, [buildRedirectTo]);
 	return (
 		<div className="container grid min-h-screen w-screen flex-col items-center py-12 lg:max-w-none lg:grid-cols-2 lg:px-0 lg:py-20">
 			<div className="hidden h-full bg-muted lg:block" />
