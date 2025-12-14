@@ -1,22 +1,31 @@
+import { type NextRequest, NextResponse } from "next/server";
+
 import {
+	type DealScaleTokens,
+	type SessionUser,
 	authenticateWithDealScale,
 	authenticateWithPhone,
 	createSessionToken,
 	setSessionCookie,
 } from "@/lib/auth-edge";
-import { type NextRequest, NextResponse } from "next/server";
-export const runtime = 'edge';
 
-
+export const runtime = "edge";
 /**
  * Login endpoint - Edge-compatible replacement for next-auth
  */
 export async function POST(req: NextRequest) {
 	try {
-		const body = await req.json();
+		type LoginBody = {
+			email?: string;
+			password?: string;
+			phoneAuth?: Parameters<typeof authenticateWithPhone>[1];
+		};
+
+		const body = (await req.json()) as LoginBody;
 		const { email, password, phoneAuth } = body;
 
-		let user, dsTokens;
+		let user: SessionUser;
+		let dsTokens: DealScaleTokens;
 
 		if (phoneAuth && email?.startsWith("phone:")) {
 			// Phone-based authentication
@@ -59,6 +68,8 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json({ error: message }, { status: 401 });
 	}
 }
+
+
 
 
 
