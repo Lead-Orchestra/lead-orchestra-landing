@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 import { useAuthModal } from "@/components/auth/use-auth-store";
 import { ForgotPasswordForm } from "@/components/contact/form/ForgotPassword";
@@ -47,7 +47,18 @@ export function AuthModal() {
 	// Important for Cloudflare/SSG builds:
 	// this component is rendered during SSR even though it's a client component.
 	// Only initialize Supabase when we actually need it (i.e., after open / on click).
-	if (!isOpen) return null;
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				close();
+			}
+		};
+
+		window.addEventListener("keydown", onKeyDown);
+		return () => window.removeEventListener("keydown", onKeyDown);
+	}, [close, isOpen]);
 
 	const buildRedirectTo = useCallback(
 		(provider: "linkedin" | "facebook") => {
@@ -141,12 +152,6 @@ export function AuthModal() {
 
 	const { title, subtitle } = viewConfig[view];
 
-	const handleKeyDown = (event: React.KeyboardEvent) => {
-		if (event.key === "Escape") {
-			close();
-		}
-	};
-
 	const renderForm = () => {
 		switch (view) {
 			case "signin":
@@ -163,17 +168,15 @@ export function AuthModal() {
 		}
 	};
 
+	if (!isOpen) return null;
+
 	return (
-		<div
-			className="fixed inset-0 z-50 flex items-center justify-center p-4"
-			onKeyDown={handleKeyDown}
-		>
-			<div
-				role="button"
-				tabIndex={0}
+		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+			<button
+				type="button"
+				aria-label="Close modal"
 				className="fixed inset-0 bg-background/80 backdrop-blur-sm"
 				onClick={close}
-				onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && close()}
 			/>
 			<div className="relative z-50 w-full max-w-md overflow-hidden rounded-lg border bg-background p-6 shadow-lg">
 				<button
