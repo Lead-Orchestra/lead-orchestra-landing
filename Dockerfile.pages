@@ -76,7 +76,8 @@ RUN pnpm run build
 RUN pnpm run build:cf
 
 # Output stage - minimal image with just the build output
-FROM scratch AS output
+# Use a tiny base image so `docker create <image>` works in CI (scratch has no CMD/ENTRYPOINT).
+FROM busybox:1.36.1 AS output
 
 # Copy the Cloudflare Pages build output
 COPY --from=builder /app/landing/.vercel/output/static /output
@@ -85,6 +86,9 @@ COPY --from=builder /app/landing/.vercel/output/static /output
 # - Static HTML/CSS/JS files
 # - _worker.js for Cloudflare Pages Functions
 # - All assets optimized for Cloudflare's edge network
+
+# Allow `docker create dealscale-pages:latest` without specifying a command.
+CMD ["true"]
 
 
 
