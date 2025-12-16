@@ -60,7 +60,8 @@ jobs:
           # - CLOUDFLARE_ACCOUNT_ID
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.CLOUDFLARE_PAGES_API_TOKEN || secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || secrets.CF_ACCOUNT_ID }}
-          projectName: dealscale
+          # Must match an existing Pages project name in Cloudflare exactly
+          projectName: lead-orchestra
           directory: cloudflare-output
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           # This action does not accept a `production` input.
