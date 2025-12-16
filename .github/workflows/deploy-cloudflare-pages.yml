@@ -40,17 +40,32 @@ jobs:
           # Verify output exists
           ls -la cloudflare-output/ || (echo "Build output not found!" && exit 1)
 
+      - name: Verify Cloudflare secrets
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ] && [ -z "${{ secrets.CLOUDFLARE_PAGES_API_TOKEN }}" ] && [ -z "${{ secrets.CF_API_TOKEN }}" ]; then
+            echo "Missing Cloudflare API token. Set one of: CLOUDFLARE_API_TOKEN, CLOUDFLARE_PAGES_API_TOKEN, CF_API_TOKEN"
+            exit 1
+          fi
+          if [ -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ] && [ -z "${{ secrets.CF_ACCOUNT_ID }}" ]; then
+            echo "Missing Cloudflare account ID. Set one of: CLOUDFLARE_ACCOUNT_ID, CF_ACCOUNT_ID"
+            exit 1
+          fi
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Support a few common secret names so the workflow works with existing setups.
+          # Recommended secrets:
+          # - CLOUDFLARE_API_TOKEN
+          # - CLOUDFLARE_ACCOUNT_ID
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.CLOUDFLARE_PAGES_API_TOKEN || secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || secrets.CF_ACCOUNT_ID }}
           projectName: dealscale
           directory: cloudflare-output
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          # Deploy to production only on main/cloudflare-deploy branch pushes
-          # Preview deployments for PRs
-          production: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/cloudflare-deploy') }}
+          # This action does not accept a `production` input.
+          # Cloudflare Pages decides "production vs preview" based on the configured production branch.
+          branch: ${{ github.head_ref || github.ref_name }}
 
       - name: Cleanup
         if: always()
