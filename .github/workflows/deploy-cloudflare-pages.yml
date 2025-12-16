@@ -1,5 +1,9 @@
 name: Deploy to Cloudflare Pages
 
+permissions:
+  contents: read
+  deployments: write
+
 on:
   push:
     branches:
@@ -52,6 +56,8 @@ jobs:
           fi
 
       - name: Deploy to Cloudflare Pages
+        # Prevent forks from trying to create GitHub Deployments (will 403).
+        if: ${{ github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork }}
         uses: cloudflare/pages-action@v1
         with:
           # Support a few common secret names so the workflow works with existing setups.
