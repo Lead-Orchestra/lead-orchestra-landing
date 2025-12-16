@@ -1,0 +1,32 @@
+﻿2025-12-16T04:17:11.3314024Z Current runner version: '2.329.0'
+2025-12-16T04:17:11.3349324Z ##[group]Runner Image Provisioner
+2025-12-16T04:17:11.3350770Z Hosted Compute Agent
+2025-12-16T04:17:11.3351958Z Version: 20251202.455
+2025-12-16T04:17:11.3352994Z Commit: 6c10caca4910e198df60de23adf20ad317c474e3
+2025-12-16T04:17:11.3354358Z Build Date: 2025-12-02T15:56:59Z
+2025-12-16T04:17:11.3355550Z Worker ID: {514b460d-3b85-49ff-9137-e890d7b8e6a0}
+2025-12-16T04:17:11.3356826Z ##[endgroup]
+2025-12-16T04:17:11.3357821Z ##[group]Operating System
+2025-12-16T04:17:11.3358840Z Ubuntu
+2025-12-16T04:17:11.3359713Z 24.04.3
+2025-12-16T04:17:11.3360550Z LTS
+2025-12-16T04:17:11.3361417Z ##[endgroup]
+2025-12-16T04:17:11.3362567Z ##[group]Runner Image
+2025-12-16T04:17:11.3363607Z Image: ubuntu-24.04
+2025-12-16T04:17:11.3364538Z Version: 20251208.163.1
+2025-12-16T04:17:11.3366425Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251208.163/images/ubuntu/Ubuntu2404-Readme.md
+2025-12-16T04:17:11.3369007Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251208.163
+2025-12-16T04:17:11.3371203Z ##[endgroup]
+2025-12-16T04:17:11.3373361Z ##[group]GITHUB_TOKEN Permissions
+2025-12-16T04:17:11.3376637Z Contents: read
+2025-12-16T04:17:11.3377697Z Metadata: read
+2025-12-16T04:17:11.3378609Z Packages: read
+2025-12-16T04:17:11.3379554Z ##[endgroup]
+2025-12-16T04:17:11.3382768Z Secret source: Actions
+2025-12-16T04:17:11.3384305Z Prepare workflow directory
+2025-12-16T04:17:11.3768780Z Prepare all required actions
+2025-12-16T04:17:11.3825149Z Getting action download info
+2025-12-16T04:17:11.7275972Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2025-12-16T04:17:11.8248097Z Download action repository 'docker/setup-buildx-action@v3' (SHA:e468171a9de216ec08956ac3ada2f0791b6bd435)
+2025-12-16T04:17:12.4496450Z Download action repository 'cloudflare/pages-action@v1' (SHA:f0a1cd58cd66095dee69bfa18fa5efd1dde93bca)
+2025-12-16T04:17:12.9976875Z Complete job name: build-and-deploy

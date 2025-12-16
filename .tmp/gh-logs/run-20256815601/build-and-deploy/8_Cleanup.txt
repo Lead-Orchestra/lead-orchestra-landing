@@ -1,0 +1,4 @@
+﻿2025-12-16T04:53:48.4861674Z ##[group]Run rm -rf cloudflare-output || true
+2025-12-16T04:53:48.4862058Z [36;1mrm -rf cloudflare-output || true[0m
+2025-12-16T04:53:48.4895748Z shell: /usr/bin/bash -e {0}
+2025-12-16T04:53:48.4895988Z ##[endgroup]

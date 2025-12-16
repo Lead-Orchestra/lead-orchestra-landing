@@ -176,11 +176,16 @@ const RentalMarketAnalyzer = () => {
 
 			{demoStage === "video" && (
 				<div className="flex h-full items-center justify-center">
-					<img
-						src="/demos/rental_analysis.gif"
-						alt="Rental Market Analyzer in action"
-						className="w-full rounded-lg"
-					/>
+					<div className="flex flex-col items-center gap-4">
+						<ClientLottie
+							animationData={marketAnalysisAnimation}
+							loop={true}
+							className="h-56 w-56"
+						/>
+						<p className="font-semibold text-sm text-muted-foreground">
+							Rental Market Analyzer in action (interactive demo)
+						</p>
+					</div>
 				</div>
 			)}
 

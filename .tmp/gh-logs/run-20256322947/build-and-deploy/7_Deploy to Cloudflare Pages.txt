@@ -1,0 +1,109 @@
+﻿2025-12-16T04:24:27.0079370Z ##[group]Run cloudflare/pages-action@v1
+2025-12-16T04:24:27.0079643Z with:
+2025-12-16T04:24:27.0079955Z   apiToken: ***
+2025-12-16T04:24:27.0080179Z   accountId: ***
+2025-12-16T04:24:27.0080375Z   projectName: lead-orchestra
+2025-12-16T04:24:27.0080608Z   directory: cloudflare-output
+2025-12-16T04:24:27.0080981Z   gitHubToken: ***
+2025-12-16T04:24:27.0081183Z   branch: cloudflare-deploy
+2025-12-16T04:24:27.0081399Z   wranglerVersion: 2
+2025-12-16T04:24:27.0081593Z ##[endgroup]
+2025-12-16T04:24:27.7936165Z /home/runner/work/_actions/cloudflare/pages-action/v1/index.js:5857
+2025-12-16T04:24:27.7937166Z           const error = new requestError.RequestError(toErrorMessage(data), status, {
+2025-12-16T04:24:27.7937875Z                         ^
+2025-12-16T04:24:27.7938140Z 
+2025-12-16T04:24:27.7938451Z RequestError [HttpError]: Resource not accessible by integration
+2025-12-16T04:24:27.7939241Z     at /home/runner/work/_actions/cloudflare/pages-action/v1/index.js:5857:25
+2025-12-16T04:24:27.7939997Z     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-12-16T04:24:27.7940801Z     at async createGitHubDeployment (/home/runner/work/_actions/cloudflare/pages-action/v1/index.js:22110:24)
+2025-12-16T04:24:27.7941517Z     at async /home/runner/work/_actions/cloudflare/pages-action/v1/index.js:22173:26 {
+2025-12-16T04:24:27.7942178Z   status: 403,
+2025-12-16T04:24:27.7942381Z   response: {
+2025-12-16T04:24:27.7942801Z     url: 'https://api.github.com/repos/Lead-Orchestra/lead-orchestra-landing/deployments',
+2025-12-16T04:24:27.7943261Z     status: 403,
+2025-12-16T04:24:27.7943459Z     headers: {
+2025-12-16T04:24:27.7943686Z       'access-control-allow-origin': '*',
+2025-12-16T04:24:27.7945108Z       'access-control-expose-headers': 'ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset',
+2025-12-16T04:24:27.7946539Z       'content-encoding': 'gzip',
+2025-12-16T04:24:27.7946854Z       'content-security-policy': "default-src 'none'",
+2025-12-16T04:24:27.7947237Z       'content-type': 'application/json; charset=utf-8',
+2025-12-16T04:24:27.7947574Z       date: 'Tue, 16 Dec 2025 04:24:27 GMT',
+2025-12-16T04:24:27.7948240Z       'referrer-policy': 'origin-when-cross-origin, strict-origin-when-cross-origin',
+2025-12-16T04:24:27.7948959Z       server: 'github.com',
+2025-12-16T04:24:27.7949600Z       'strict-transport-security': 'max-age=31536000; includeSubdomains; preload',
+2025-12-16T04:24:27.7950285Z       'transfer-encoding': 'chunked',
+2025-12-16T04:24:27.7950742Z       vary: 'Accept-Encoding, Accept, X-Requested-With',
+2025-12-16T04:24:27.7951605Z       'x-accepted-github-permissions': 'deployments=write',
+2025-12-16T04:24:27.7952266Z       'x-content-type-options': 'nosniff',
+2025-12-16T04:24:27.7952685Z       'x-frame-options': 'deny',
+2025-12-16T04:24:27.7953104Z       'x-github-api-version-selected': '2022-11-28',
+2025-12-16T04:24:27.7953681Z       'x-github-media-type': 'github.v3; format=json',
+2025-12-16T04:24:27.7954229Z       'x-github-request-id': '9C10:B44F9:9BBF65:294AF84:6940DEFB',
+2025-12-16T04:24:27.7954729Z       'x-ratelimit-limit': '5000',
+2025-12-16T04:24:27.7955120Z       'x-ratelimit-remaining': '4999',
+2025-12-16T04:24:27.7955520Z       'x-ratelimit-reset': '1765862667',
+2025-12-16T04:24:27.7955924Z       'x-ratelimit-resource': 'core',
+2025-12-16T04:24:27.7956305Z       'x-ratelimit-used': '1',
+2025-12-16T04:24:27.7956662Z       'x-xss-protection': '0'
+2025-12-16T04:24:27.7956990Z     },
+2025-12-16T04:24:27.7957235Z     data: {
+2025-12-16T04:24:27.7957573Z       message: 'Resource not accessible by integration',
+2025-12-16T04:24:27.7958370Z       documentation_url: 'https://docs.github.com/rest/deployments/deployments#create-a-deployment',
+2025-12-16T04:24:27.7959072Z       status: '403'
+2025-12-16T04:24:27.7959348Z     }
+2025-12-16T04:24:27.7959586Z   },
+2025-12-16T04:24:27.7960091Z   request: {
+2025-12-16T04:24:27.7960353Z     method: 'POST',
+2025-12-16T04:24:27.7960889Z     url: 'https://api.github.com/repos/Lead-Orchestra/lead-orchestra-landing/deployments',
+2025-12-16T04:24:27.7961537Z     headers: {
+2025-12-16T04:24:27.7962007Z       accept: 'application/vnd.github.v3+json',
+2025-12-16T04:24:27.7962565Z       'user-agent': 'octokit-core.js/3.6.0 Node.js/20.19.5 (linux; x64)',
+2025-12-16T04:24:27.7963109Z       authorization: 'token [REDACTED]',
+2025-12-16T04:24:27.7963576Z       'content-type': 'application/json; charset=utf-8'
+2025-12-16T04:24:27.7964009Z     },
+2025-12-16T04:24:27.7964998Z     body: '{"ref":"cloudflare-deploy","auto_merge":false,"description":"Cloudflare Pages","required_contexts":[],"environment":"lead-orchestra (Preview)","production_environment":false}',
+2025-12-16T04:24:27.7966089Z     request: {
+2025-12-16T04:24:27.7966369Z       agent: Agent {
+2025-12-16T04:24:27.7966693Z         _events: [Object: null prototype] {
+2025-12-16T04:24:27.7967079Z           free: [Function (anonymous)],
+2025-12-16T04:24:27.7967479Z           newListener: [Function: maybeEnableKeylog]
+2025-12-16T04:24:27.7967861Z         },
+2025-12-16T04:24:27.7968110Z         _eventsCount: 2,
+2025-12-16T04:24:27.7968427Z         _maxListeners: undefined,
+2025-12-16T04:24:27.7968773Z         defaultPort: 443,
+2025-12-16T04:24:27.7969075Z         protocol: 'https:',
+2025-12-16T04:24:27.7969421Z         options: [Object: null prototype] {
+2025-12-16T04:24:27.7969821Z           keepAlive: true,
+2025-12-16T04:24:27.7970144Z           scheduling: 'lifo',
+2025-12-16T04:24:27.7970471Z           timeout: 5000,
+2025-12-16T04:24:27.7970777Z           noDelay: true,
+2025-12-16T04:24:27.7971079Z           path: null
+2025-12-16T04:24:27.7971364Z         },
+2025-12-16T04:24:27.7971809Z         requests: [Object: null prototype] {},
+2025-12-16T04:24:27.7972237Z         sockets: [Object: null prototype] {},
+2025-12-16T04:24:27.7972671Z         freeSockets: [Object: null prototype] {
+2025-12-16T04:24:27.7973224Z           'api.github.com:443:::::::::::::::::::::': [ [TLSSocket] ]
+2025-12-16T04:24:27.7973654Z         },
+2025-12-16T04:24:27.7973911Z         keepAliveMsecs: 1000,
+2025-12-16T04:24:27.7974251Z         keepAlive: true,
+2025-12-16T04:24:27.7974573Z         maxSockets: Infinity,
+2025-12-16T04:24:27.7974908Z         maxFreeSockets: 256,
+2025-12-16T04:24:27.7975252Z         scheduling: 'lifo',
+2025-12-16T04:24:27.7975590Z         maxTotalSockets: Infinity,
+2025-12-16T04:24:27.7975956Z         totalSocketCount: 1,
+2025-12-16T04:24:27.7976300Z         maxCachedSessions: 100,
+2025-12-16T04:24:27.7976650Z         _sessionCache: {
+2025-12-16T04:24:27.7976948Z           map: {
+2025-12-16T04:24:27.7977341Z             'api.github.com:443:::::::::::::::::::::': [Buffer [Uint8Array]]
+2025-12-16T04:24:27.7978004Z           },
+2025-12-16T04:24:27.7978319Z           list: [ 'api.github.com:443:::::::::::::::::::::' ]
+2025-12-16T04:24:27.7978729Z         },
+2025-12-16T04:24:27.7979008Z         [Symbol(shapeMode)]: false,
+2025-12-16T04:24:27.7979384Z         [Symbol(kCapture)]: false
+2025-12-16T04:24:27.7979729Z       },
+2025-12-16T04:24:27.7980012Z       hook: [Function: bound bound register]
+2025-12-16T04:24:27.7980381Z     }
+2025-12-16T04:24:27.7980610Z   }
+2025-12-16T04:24:27.7980842Z }
+2025-12-16T04:24:27.7980972Z 
+2025-12-16T04:24:27.7981081Z Node.js v20.19.5

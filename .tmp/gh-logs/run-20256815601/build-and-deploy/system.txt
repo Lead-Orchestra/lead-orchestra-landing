@@ -1,0 +1,5 @@
+2025-12-16T04:46:00.0370000Z Requested labels: ubuntu-latest
+2025-12-16T04:46:00.0370000Z Job defined at: Lead-Orchestra/lead-orchestra-landing/.github/workflows/deploy-cloudflare-pages.yml@refs/heads/cloudflare-deploy
+2025-12-16T04:46:00.0370000Z Waiting for a runner to pick up this job...
+2025-12-16T04:46:00.5400000Z Job is about to start running on the hosted runner: GitHub Actions 1000000176
+2025-12-16T04:46:00.5400000Z Job is waiting for a hosted runner to come online.

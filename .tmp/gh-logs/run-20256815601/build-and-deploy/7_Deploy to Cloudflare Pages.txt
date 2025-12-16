@@ -1,0 +1,117 @@
+﻿2025-12-16T04:53:32.7604999Z ##[group]Run cloudflare/pages-action@v1
+2025-12-16T04:53:32.7605284Z with:
+2025-12-16T04:53:32.7605570Z   apiToken: ***
+2025-12-16T04:53:32.7605791Z   accountId: ***
+2025-12-16T04:53:32.7605980Z   projectName: lead-orchestra
+2025-12-16T04:53:32.7606212Z   directory: cloudflare-output
+2025-12-16T04:53:32.7606597Z   gitHubToken: ***
+2025-12-16T04:53:32.7606796Z   branch: cloudflare-deploy
+2025-12-16T04:53:32.7607017Z   wranglerVersion: 2
+2025-12-16T04:53:32.7607214Z ##[endgroup]
+2025-12-16T04:53:37.8536454Z npm warn exec The following package was not found and will be installed: wrangler@2.21.3
+2025-12-16T04:53:42.6550538Z npm warn deprecated rollup-plugin-inject@3.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-inject.
+2025-12-16T04:53:42.8024393Z npm warn deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-codec instead
+2025-12-16T04:53:42.8749363Z npm warn deprecated @miniflare/scheduler@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:42.9062637Z npm warn deprecated @miniflare/sites@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:42.9130225Z npm warn deprecated @miniflare/runner-vm@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:42.9425979Z npm warn deprecated @miniflare/html-rewriter@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:42.9550679Z npm warn deprecated @miniflare/kv@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:42.9915044Z npm warn deprecated @miniflare/cli-parser@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:42.9919067Z npm warn deprecated @miniflare/http-server@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.0538507Z npm warn deprecated @miniflare/cache@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.0648171Z npm warn deprecated @miniflare/storage-memory@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.0679730Z npm warn deprecated @miniflare/r2@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.0689106Z npm warn deprecated @miniflare/queues@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.0692702Z npm warn deprecated @miniflare/storage-file@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.0823682Z npm warn deprecated @miniflare/watcher@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.0862535Z npm warn deprecated @miniflare/shared@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.1097053Z npm warn deprecated @miniflare/web-sockets@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.1099274Z npm warn deprecated @miniflare/durable-objects@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.1119404Z npm warn deprecated miniflare@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.1132655Z npm warn deprecated @miniflare/d1@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:43.1475190Z npm warn deprecated @miniflare/core@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:44.5505409Z npm warn deprecated wrangler@2.21.3: Wrangler v2 is no longer supported. Please upgrade to Wrangler v4
+2025-12-16T04:53:47.7783298Z [33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mWarning: Your working directory is a git repo and has uncommitted changes[0m
+2025-12-16T04:53:47.7784386Z 
+2025-12-16T04:53:47.7784794Z   To silence this warning, pass in --commit-dirty=true
+2025-12-16T04:53:47.7785790Z 
+2025-12-16T04:53:47.7786590Z 
+2025-12-16T04:53:48.3114127Z ✨ Compiled Worker successfully
+2025-12-16T04:53:48.4242966Z 
+2025-12-16T04:53:48.4252688Z [31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mError: Pages only supports files up to 26.2 MB in size[0m
+2025-12-16T04:53:48.4253261Z 
+2025-12-16T04:53:48.4253446Z   demos/market_analysis.gif is 39.4 MB in size
+2025-12-16T04:53:48.4253737Z 
+2025-12-16T04:53:48.4253743Z 
+2025-12-16T04:53:48.4256707Z [32mIf you think this is a bug then please create an issue at https://github.com/cloudflare/workers-sdk/issues/new/choose[0m
+2025-12-16T04:53:48.4460094Z npm notice
+2025-12-16T04:53:48.4460976Z npm notice New major version of npm available! 10.8.2 -> 11.7.0
+2025-12-16T04:53:48.4461722Z npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.7.0
+2025-12-16T04:53:48.4462370Z npm notice To update run: npm install -g npm@11.7.0
+2025-12-16T04:53:48.4462813Z npm notice
+2025-12-16T04:53:48.4750978Z EXIT WHEN NOT EXPECTED
+2025-12-16T04:53:48.4751344Z 
+2025-12-16T04:53:48.4751505Z SHELLAC COMMAND FAILED!
+2025-12-16T04:53:48.4752730Z Executing: npx wrangler@2 pages publish "cloudflare-output" --project-name="lead-orchestra" --branch="cloudflare-deploy" in /home/runner/work/lead-orchestra-landing/lead-orchestra-landing
+2025-12-16T04:53:48.4753835Z 
+2025-12-16T04:53:48.4753943Z STDOUT:
+2025-12-16T04:53:48.4754080Z 
+2025-12-16T04:53:48.4754401Z ✨ Compiled Worker successfully
+2025-12-16T04:53:48.4754568Z 
+2025-12-16T04:53:48.4755000Z [32mIf you think this is a bug then please create an issue at https://github.com/cloudflare/workers-sdk/issues/new/choose[0m
+2025-12-16T04:53:48.4755624Z 
+2025-12-16T04:53:48.4755629Z 
+2025-12-16T04:53:48.4755699Z STDERR:
+2025-12-16T04:53:48.4755791Z 
+2025-12-16T04:53:48.4756011Z npm warn exec The following package was not found and will be installed: wrangler@2.21.3
+2025-12-16T04:53:48.4756710Z npm warn deprecated rollup-plugin-inject@3.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-inject.
+2025-12-16T04:53:48.4757629Z npm warn deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-codec instead
+2025-12-16T04:53:48.4758288Z npm warn deprecated @miniflare/scheduler@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4758963Z npm warn deprecated @miniflare/sites@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4759737Z npm warn deprecated @miniflare/runner-vm@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4760423Z npm warn deprecated @miniflare/html-rewriter@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4761069Z npm warn deprecated @miniflare/kv@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4761713Z npm warn deprecated @miniflare/cli-parser@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4762721Z npm warn deprecated @miniflare/http-server@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4763379Z npm warn deprecated @miniflare/cache@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4764047Z npm warn deprecated @miniflare/storage-memory@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4764790Z npm warn deprecated @miniflare/r2@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4765413Z npm warn deprecated @miniflare/queues@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4766075Z npm warn deprecated @miniflare/storage-file@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4766733Z npm warn deprecated @miniflare/watcher@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4767368Z npm warn deprecated @miniflare/shared@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4768426Z npm warn deprecated @miniflare/web-sockets@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4769409Z npm warn deprecated @miniflare/durable-objects@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4770577Z npm warn deprecated miniflare@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4771632Z npm warn deprecated @miniflare/d1@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4772666Z npm warn deprecated @miniflare/core@2.14.4: Miniflare v2 is no longer supported. Please upgrade to Miniflare v4
+2025-12-16T04:53:48.4773265Z npm warn deprecated wrangler@2.21.3: Wrangler v2 is no longer supported. Please upgrade to Wrangler v4
+2025-12-16T04:53:48.4774062Z [33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mWarning: Your working directory is a git repo and has uncommitted changes[0m
+2025-12-16T04:53:48.4774461Z 
+2025-12-16T04:53:48.4774593Z   To silence this warning, pass in --commit-dirty=true
+2025-12-16T04:53:48.4774806Z 
+2025-12-16T04:53:48.4774810Z 
+2025-12-16T04:53:48.4775113Z [31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mError: Pages only supports files up to 26.2 MB in size[0m
+2025-12-16T04:53:48.4775413Z 
+2025-12-16T04:53:48.4775520Z   demos/market_analysis.gif is 39.4 MB in size
+2025-12-16T04:53:48.4775702Z 
+2025-12-16T04:53:48.4775706Z 
+2025-12-16T04:53:48.4775772Z npm notice
+2025-12-16T04:53:48.4776009Z npm notice New major version of npm available! 10.8.2 -> 11.7.0
+2025-12-16T04:53:48.4776422Z npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.7.0
+2025-12-16T04:53:48.4776787Z npm notice To update run: npm install -g npm@11.7.0
+2025-12-16T04:53:48.4777050Z npm notice
+2025-12-16T04:53:48.4777144Z 
+2025-12-16T04:53:48.4777148Z 
+2025-12-16T04:53:48.4781546Z node:internal/process/promises:389
+2025-12-16T04:53:48.4782043Z       new UnhandledPromiseRejection(reason);
+2025-12-16T04:53:48.4782459Z       ^
+2025-12-16T04:53:48.4782611Z 
+2025-12-16T04:53:48.4783709Z UnhandledPromiseRejection: This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason "#<Object>".
+2025-12-16T04:53:48.4785355Z     at throwUnhandledRejectionsMode (node:internal/process/promises:389:7)
+2025-12-16T04:53:48.4785928Z     at processPromiseRejections (node:internal/process/promises:470:17)
+2025-12-16T04:53:48.4786432Z     at process.processTicksAndRejections (node:internal/process/task_queues:96:32) {
+2025-12-16T04:53:48.4786842Z   code: 'ERR_UNHANDLED_REJECTION'
+2025-12-16T04:53:48.4787059Z }
+2025-12-16T04:53:48.4787148Z 
+2025-12-16T04:53:48.4830134Z Node.js v20.19.5

@@ -1,0 +1,65 @@
+﻿2025-12-16T04:24:26.2813317Z ##[group]Run docker create --name temp-dealscale dealscale-pages:latest
+2025-12-16T04:24:26.2813888Z [36;1mdocker create --name temp-dealscale dealscale-pages:latest[0m
+2025-12-16T04:24:26.2814300Z [36;1mdocker cp temp-dealscale:/output ./cloudflare-output[0m
+2025-12-16T04:24:26.2814610Z [36;1mdocker rm temp-dealscale[0m
+2025-12-16T04:24:26.2814830Z [36;1m[0m
+2025-12-16T04:24:26.2815004Z [36;1m# Verify output exists[0m
+2025-12-16T04:24:26.2815341Z [36;1mls -la cloudflare-output/ || (echo "Build output not found!" && exit 1)[0m
+2025-12-16T04:24:26.2864059Z shell: /usr/bin/bash -e {0}
+2025-12-16T04:24:26.2864293Z ##[endgroup]
+2025-12-16T04:24:26.3146716Z c67f637e7e693d8a6462405ffed8ae0fab2b9dd6db1726a27e2c9436eefe873c
+2025-12-16T04:24:26.9765603Z temp-dealscale
+2025-12-16T04:24:26.9797715Z total 6028
+2025-12-16T04:24:26.9798173Z drwxr-xr-x 21 runner runner    4096 Dec 16 04:24 .
+2025-12-16T04:24:26.9801917Z drwxr-xr-x 35 runner runner    4096 Dec 16 04:24 ..
+2025-12-16T04:24:26.9802871Z -rw-r--r--  1 runner runner      54 Dec 16 04:17 06663aa83dc949d6bde61889ae81d42f.txt
+2025-12-16T04:24:26.9803971Z -rw-r--r--  1 runner runner   61385 Dec 16 04:23 404.html
+2025-12-16T04:24:26.9804569Z -rw-r--r--  1 runner runner       2 Dec 16 04:23 404.rsc.json
+2025-12-16T04:24:26.9805135Z -rw-r--r--  1 runner runner    2007 Dec 16 04:23 500.html
+2025-12-16T04:24:26.9805674Z -rw-r--r--  1 runner runner   68581 Dec 16 04:23 GDPR.html
+2025-12-16T04:24:26.9806216Z -rw-r--r--  1 runner runner   34653 Dec 16 04:23 GDPR.rsc
+2025-12-16T04:24:26.9806746Z -rw-r--r--  1 runner runner   68601 Dec 16 04:23 PII.html
+2025-12-16T04:24:26.9807277Z -rw-r--r--  1 runner runner   34602 Dec 16 04:23 PII.rsc
+2025-12-16T04:24:26.9807868Z -rw-r--r--  1 runner runner       2 Dec 16 04:23 __next_data_catchall.json
+2025-12-16T04:24:26.9808504Z -rw-r--r--  1 runner runner       2 Dec 16 04:23 _app.rsc.json
+2025-12-16T04:24:26.9809122Z -rw-r--r--  1 runner runner       2 Dec 16 04:23 _document.rsc.json
+2025-12-16T04:24:26.9809719Z -rw-r--r--  1 runner runner       2 Dec 16 04:23 _error.rsc.json
+2025-12-16T04:24:26.9810290Z -rw-r--r--  1 runner runner     214 Dec 16 04:24 _headers
+2025-12-16T04:24:26.9810832Z drwxr-xr-x  3 runner runner    4096 Dec 16 04:23 _next
+2025-12-16T04:24:26.9811388Z -rw-r--r--  1 runner runner     122 Dec 16 04:24 _routes.json
+2025-12-16T04:24:26.9812220Z drwxr-xr-x  3 runner runner    4096 Dec 16 04:24 _worker.js
+2025-12-16T04:24:26.9812848Z drwxr-xr-x  2 runner runner    4096 Dec 16 04:23 avatars
+2025-12-16T04:24:26.9813406Z drwxr-xr-x  2 runner runner    4096 Dec 16 04:23 banners
+2025-12-16T04:24:26.9813942Z drwxr-xr-x  2 runner runner    4096 Dec 16 04:23 calls
+2025-12-16T04:24:26.9814520Z drwxr-xr-x  2 runner runner    4096 Dec 16 04:23 case-studies
+2025-12-16T04:24:26.9815095Z drwxr-xr-x  3 runner runner    4096 Dec 16 04:24 cdn-cgi
+2025-12-16T04:24:26.9815624Z drwxr-xr-x  5 runner runner    4096 Dec 16 04:23 company
+2025-12-16T04:24:26.9816174Z -rw-r--r--  1 runner runner   68609 Dec 16 04:23 cookies.html
+2025-12-16T04:24:26.9816751Z -rw-r--r--  1 runner runner   34652 Dec 16 04:23 cookies.rsc
+2025-12-16T04:24:26.9817290Z drwxr-xr-x  3 runner runner    4096 Dec 16 04:23 demo
+2025-12-16T04:24:26.9817829Z drwxr-xr-x  2 runner runner    4096 Dec 16 04:23 demos
+2025-12-16T04:24:26.9818355Z drwxr-xr-x  2 runner runner    4096 Dec 16 04:23 events
+2025-12-16T04:24:26.9818893Z -rw-r--r--  1 runner runner    1905 Dec 16 04:17 favicon.ico
+2025-12-16T04:24:26.9819445Z drwxr-xr-x  2 runner runner    4096 Dec 16 04:23 favicons
+2025-12-16T04:24:26.9820115Z -rw-r--r--  1 runner runner      37 Dec 16 04:17 fccf3556b5fa455699db2554f79a235e.txt
+2025-12-16T04:24:26.9820834Z -rw-r--r--  1 runner runner   69745 Dec 16 04:23 hippa.html
+2025-12-16T04:24:26.9821398Z -rw-r--r--  1 runner runner   35106 Dec 16 04:23 hippa.rsc
+2025-12-16T04:24:26.9822156Z drwxr-xr-x  3 runner runner    4096 Dec 16 04:23 images
+2025-12-16T04:24:26.9822698Z -rw-r--r--  1 runner runner   39502 Dec 16 04:17 logo.png
+2025-12-16T04:24:26.9823225Z drwxr-xr-x  5 runner runner    4096 Dec 16 04:23 logos
+2025-12-16T04:24:26.9824107Z -rw-r--r--  1 runner runner 5141136 Dec 16 04:17 og-image.png
+2025-12-16T04:24:26.9824690Z drwxr-xr-x  2 runner runner    4096 Dec 16 04:23 partners
+2025-12-16T04:24:26.9825300Z -rw-r--r--  1 runner runner    3253 Dec 16 04:17 placeholder.svg
+2025-12-16T04:24:26.9825905Z -rw-r--r--  1 runner runner   71275 Dec 16 04:23 privacy.html
+2025-12-16T04:24:26.9826473Z -rw-r--r--  1 runner runner   37272 Dec 16 04:23 privacy.rsc
+2025-12-16T04:24:26.9827064Z drwxr-xr-x  2 runner runner    4096 Dec 16 04:23 products
+2025-12-16T04:24:26.9827630Z -rw-r--r--  1 runner runner    2501 Dec 16 04:23 robots.txt
+2025-12-16T04:24:26.9828186Z drwxr-xr-x  3 runner runner    4096 Dec 16 04:23 sales
+2025-12-16T04:24:26.9828761Z -rw-r--r--  1 runner runner     327 Dec 16 04:17 site.webmanifest
+2025-12-16T04:24:26.9829359Z -rw-r--r--  1 runner runner   15131 Dec 16 04:23 sitemap.xml
+2025-12-16T04:24:26.9829962Z drwxr-xr-x  4 runner runner    4096 Dec 16 04:23 supademos
+2025-12-16T04:24:26.9830946Z -rw-r--r--  1 runner runner   69431 Dec 16 04:23 tcpCompliance.html
+2025-12-16T04:24:26.9831845Z -rw-r--r--  1 runner runner   35383 Dec 16 04:23 tcpCompliance.rsc
+2025-12-16T04:24:26.9832481Z -rw-r--r--  1 runner runner   70976 Dec 16 04:23 tos.html
+2025-12-16T04:24:26.9833054Z -rw-r--r--  1 runner runner   36981 Dec 16 04:23 tos.rsc
+2025-12-16T04:24:26.9833631Z drwxr-xr-x  2 runner runner    4096 Dec 16 04:23 videos
